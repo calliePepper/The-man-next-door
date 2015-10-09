@@ -1,0 +1,85 @@
+$majorColour:#910101;
+$darkerColor:#600000;
+$shadowVals:0 -1px 0 #888;
+$sponWidth:250px;
+$sideWidth:150px;
+$paddingVal:10px;
+@mixin cardDeets {
+	border:1px solid;
+	border-color:#e5e6e9 #dfe0e4 #d0d1d5;
+	border-radius:3px;
+	background:#fff;
+	padding:$paddingVal;
+}
+/* 
+	Soldevi Reset file v1.0
+*/
+
+html, body, div, span, applet, object, iframe,h1, h2, h3, h4, h5, h6, p, blockquote, pre,a, abbr, acronym, address, big, cite, code,del, dfn, em, img, ins, kbd, q, s, samp,small, strike, sub, sup, tt, var,b, u, i, center,dl, dt, dd, ol, ul, li,fieldset, form, label, legend,table, caption, tbody, tfoot, thead, tr, th, td,article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary,time, mark, audio, video {	margin: 0;	padding: 0;	border: 0;	font-size: 100%;	font: inherit;	vertical-align: baseline;}/* HTML5 display-role reset for older browsers */article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {	display: block;}body {	line-height: 1;}ol, ul {	list-style: none;}blockquote, q {	quotes: none;}blockquote:before, blockquote:after,q:before, q:after {	content: '';	content: none;}table {	border-collapse: collapse;	border-spacing: 0;}p {line-height:1.5;margin-bottom:18px;color:#333;}.muted {color:#666;}h1, h2, h3, h4, h5, h6 {line-height:1.1;color:#000;letter-spacing:-0.025em;}
+ul{list-style:disc;margin-bottom:1.5em;}ol{list-style:decimal;margin-bottom:1.5em;}strong{font-weight:bold;}em{font-style:italic;}body, caption, th, td, input, textarea, select, option, legend, fieldset, h1, h2, h3, h4, h5, h6 {font-size-adjust: 0.5;}
+html {box-sizing: border-box;}*, *:before, *:after {box-sizing: inherit;}
+body{font-size:120%; line-height: 1.25;}
+h1 {font-size: 2em;line-height: 1.25;margin-top: 0.9375em;margin-bottom: 0.3125em;}
+h2 {font-size: 1.625em;line-height: 1.15384615;margin-top: 1.15384616em;margin-bottom: 0.38461539em;}
+h3 {font-size: 1.375em; line-height: 1.13636364;margin-top: 1.37500001em;margin-bottom: 0.45833334em;}
+h4 {font-size: 1.125em;line-height: 1.11111111;margin-top: 1.66666667em; margin-bottom: 0.55555556em;}
+blockquote {font-size: 1.25em; line-height: 1.25;}
+abbr {text-transform:uppercase;font-size:0.8em;letter-spacing:0.1em;}
+
+@media (min-width: 43.75em) {
+	body {font-size: 1em;line-height: 1.375;}
+    h1 {font-size: 2.5em;line-height: 1.125;margin-top: 0.73333334em;margin-bottom: 0.24444445em;}
+    h2 {font-size: 2em;line-height: 1.25; margin-top: 1.03125em;margin-bottom: 0.34375em;}
+    h3 {font-size: 1.5em;line-height: 1.25;margin-top: 1.37500001em;margin-bottom: 0.45833334em;}
+    h4 {line-height: 1.22222222;margin-top: 1.83333333em; margin-bottom: 0.61111111em;}
+	blockquote {font-size: 1.5em;line-height: 1.45833333;}
+}
+
+@media (min-width: 56.25em) {
+	h1 {font-size: 3em;line-height: 1.05;margin-top: 0.6875em;margin-bottom: 0.22916667em;}
+	h2 {font-size: 2.25em;line-height: 1.25;margin-top: 1.03125em;margin-bottom: 0.34375em;}
+	h3 {font-size: 1.75em;line-height: 1.25;margin-top: 1.37500001em;margin-bottom: 0.45833334em;}
+}
+
+/*
+	 Generic Stuff
+*/
+body{background:#e9eaed;font-family: helvetica, arial, san-serif;}
+header{width:100%;padding:4px 12px;background:$majorColour;background-image:url(../img/topBar.png);background-repeat:repeat;border-bottom:1px solid $darkerColor;box-shadow:0 2px 2px -2px rgba(0,0,0,0.52);}
+header:after{clear:both;display:block;height:1px;visibility:none;content:"";}
+.logo{font-family:lobster;color:#fff;text-shadow:$shadowVals;float:left;font-size:1.6em;}
+.navigation{float:right;color:#fff;text-shadow:$shadowVals;font-size:1.6em;}
+.navigation i{margin:0 10px;}
+.wrapper{width:100%;max-width:960px;margin:0 auto;position:relative;}
+.sideLink{font-size:0.8em;}
+.mainContent{width:100%;padding: $paddingVal $sponWidth 0 $sideWidth;}
+.sideBar{width:$sideWidth;position:absolute;left:0px;top:0px;padding:$paddingVal $paddingVal 0 0;}
+.sponsored{width:$sponWidth;position:absolute;right:0px;top:0px;padding:$paddingVal 0 0 $paddingVal;}
+.trending{@include cardDeets}
+.feedObject{margin-bottom:$paddingVal;@include cardDeets}
+.sideHeader{color:#777;text-transform: uppercase;}
+.sideLink i{margin-right:10px;}
+.colouredText{color:$majorColour;}
+
+/*
+     Specific
+*/
+
+.feedHeader{zoom:1;padding-bottom: $paddingVal;}
+.feedHeader:after{content:"";display:block;height:1px;visibility: 0;clear:both;}
+.feedAvatar{width:50px;height:50px;background:$majorColour;float:left;margin-right:$paddingVal;}
+.postedBy{color:$majorColour;font-size:1.2em;}
+.date{font-size:0.8em;}
+.trender{font-size:0.7em;color:#777;margin-bottom:$paddingVal;}
+.likedSection{border-top:1px solid #dfe0e4;font-size:0.8em;padding-top:$paddingVal;}
+.games{padding-top:$paddingVal;border-top:1px solid #dfe0e4;position:relative;width:100%;}
+.gameBlock{width:50%;display:inline;height:100px;}
+.gameImg{background:#majorColour;width:100%;height:100%;}
+
+
+
+
+
+
+
+

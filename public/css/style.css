@@ -309,6 +309,9 @@ header:after {
   font-size: 0.8em;
   padding-top: 10px; }
 
+.feedImage {
+  width: 100%; }
+
 .games {
   padding-top: 10px;
   border-top: 1px solid #dfe0e4;

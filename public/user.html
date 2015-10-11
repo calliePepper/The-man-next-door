@@ -3,8 +3,7 @@
     <head> 
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1">   
-        <title>Twaddle - A social media for the everyman</title>
-        <link rel="icon" href="img/favicon.ico" type="image/x-icon" />
+        <title>Title</title>
         <link href="css/style.css" rel="stylesheet" type="text/css" />
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" />
         <link href='https://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
@@ -22,14 +21,14 @@
         </header>
         <div class="wrapper">
             <div class="sideBar">
-                <a href="feed" class="feed sideLink current"><i id="feedIcon" class="fa fa-rss"></i>News Feed</a>
+                <div class="feed sideLink"><i id="feedIcon" class="fa fa-rss"></i>News Feed</div>
                 <div class="sideHeader">Friends</div>
-                <a id="sam" href="sam" class="friend sideLink"><i id="samIcon" class="fa fa-user"></i>Sam Creed</a>
+                <div id="sam" class="friend sideLink"><i id="samIcon" class="fa fa-user"></i>Sam Creed</div>
             </div>
             <div class="mainContent">
                 <div class="feedObject">
                     <div class="feedHeader">
-                        <div class="feedAvatar"><img class="avatar" src="img/samAvatar.png" alt="Sam's Avatar" /></div>
+                        <div class="feedAvatar"></div>
                         <div class="postedBy">Sam Creed</div>
                         <div class="date">1 hour ago</div>
                     </div>
@@ -62,43 +61,5 @@
                 </div>
             </div>
         </div>
-        <script>
-            function post(userId,date,text,image,link,liked) {
-                this.user = userId;
-                this.date = date;
-                this.text = text;
-                this.image = image;
-                this.link = link;
-                this.likes = liked;
-            }
-
-            function comment(parentId,order) {
-                this.parent = parentId;
-                this.order = order;
-            }
-
-            function message(time,content) {
-                this.time = time;
-                this.content = content;
-            }
-
-            function user(firstname,lastname,pronoun,created,avatar,hero) {
-                this.firstname = firstname;
-                this.lastname = lastname;
-                this.pronoun = pronoun;
-                this.created = created;
-                this.avatar = avatar;
-                this.hero = hero;
-            }
-
-            var posts = [
-                new post(1,13482394,'Yo yo yo','','',23),
-                new post(1,13482194,'Bitches love me','','',7),
-            ];
-
-            var users = {
-                1: new user('Sam','Creed','they',1429323,'samAvatar.jpg','samBg.jpg')
-            }
-        </script>
     </body>	
 </html>

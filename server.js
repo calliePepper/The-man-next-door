@@ -10,9 +10,16 @@ app.use(compression());
 
 
 router.get("/", function(req,res) {
-	res.end('Something has gone wrong');
+	res.sendFile(__dirname + '/public/index.html');
 });
 
+router.get("/feed", function(req,res) {
+	res.sendFile(__dirname + '/public/feed.html');
+});
+
+router.get("/sam", function(req,res) {
+	res.sendFile(__dirname + '/public/sam.html');
+});
 
 app.listen(3000);
 

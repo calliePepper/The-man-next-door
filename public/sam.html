@@ -115,23 +115,27 @@
             </div>
         </div>
         <script>      
-
             function drawData(targetObject) {
                 $('#userBody').html('');
                 $('#userHeader').addClass('noHero');
                 if (targetObject == 'posts') {
                     createFeed('userBody',totalData['posts']);
                 } else {
-                    $('#userBody').html('<div id="messageContainer" class="messageContainer"></div>');
+                    $('#userBody').html('<div id="messageContainer" class="messageContainer"><div class="messagesStart">Conversation started</div></div>');
                     $.each(totalData[targetObject], function(index,value) {
                         var usersAvatar = totalData['users'][value['user']]['avatar'];
                         var usersFirstname = totalData['users'][value['user']]['firstname'];
                         var usersLastname = totalData['users'][value['user']]['lastname'];
                         var date = datifyTime(value['date']);
+                        var imageLink = '';
+                        if (value['image'] != '') {
+                            imageLink = '<img src="img/'+value['image']+'" alt="user image" class="feedImage" />';
+                        }
                         if (value['from'] == 1){var fromText = '<i class="fa fa-mobile"></i><span class="sentFrom">Sent from mobile</span>';} else {var fromText = '<i class="fa fa-desktop"></i><span class="sentFrom">Sent from desktop</span>';}
-                        $('#messageContainer').prepend('<div class="messageCont"><img class="messageAvatar" src="img/'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /><div class="sentOn">'+fromText+date+'</div><div class="messageName">'+usersFirstname+' '+usersLastname+'</div><div class="messageContents">'+value['text']+'</div></div>');
+                        $('#messageContainer').append('<div class="messageCont"><img class="messageAvatar" src="img/'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /><div class="sentOn">'+fromText+date+'</div><div class="messageName">'+usersFirstname+' '+usersLastname+'</div><div class="messageContents">'+value['text']+'</div>'+imageLink+'</div>');
                     });
                     $('#messageContainer').height($(window).height()-195).scrollTop($('#messageContainer')[0].scrollHeight);
+                    createChoice(1,'Deal with the problem yourself','Ignore it','Skin the cat','messageContainer');
                 }
                 $('#userNav div').removeClass('current');
                 $('#'+targetObject).addClass('current');

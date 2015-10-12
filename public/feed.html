@@ -34,15 +34,6 @@
                 <div class="trending">
                     <div class="sideHeader">Trending</div>
                     <div id="trendingSection">
-                        <div class="trender">
-                            <span class="colouredText">Twaddle:</span> A new social media for the masses, is looking for new employees
-                        </div>
-                        <div class="trender">
-                            <span class="colouredText">Puppy love:</span> A puppy is a small regional zoo has made friends with a zebra, and they are the most unlikeliest of companions!
-                        </div>
-                        <div class="trender">
-                            <span class="colouredText">Baby Possom:</span> Photos shared of baby marsupial snuggling with toy kangaroo
-                        </div>
                     </div>
                     <div class="games">
                         <div class="sideHeader">New games</div>
@@ -53,9 +44,29 @@
             </div>
         </div>
         <script>
-
-
             createFeed('feedContent',totalData['posts']);
+            
+            var tempArray;
+            
+            function buildTrending() {
+                var desiredIndex = Math.floor(Math.random() * tempArray.length);
+				if (tempArray[desiredIndex] != undefined) {
+					var desiredStudent = tempArray[desiredIndex];
+					delete tempArray[desiredIndex];
+					createTrender(desiredStudent);
+				} else {
+					buildTrending();
+				}
+            }
+            
+            function createTrender(data) {
+                $('#trendingSection').append('<div class="trender"><span class="colouredText">'+data['title']+':</span> '+data['content']+'</div>');
+            }
+
+            tempArray = totalData['trending'];
+            buildTrending();
+            buildTrending();
+            buildTrending();
         </script>
     </body>	
 </html>

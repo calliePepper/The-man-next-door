@@ -253,6 +253,9 @@ header:after {
   border-color: #e5e6e9 #dfe0e4 #d0d1d5;
   border-radius: 3px;
   background: #fff;
+  padding: 0; }
+
+.innerFeed {
   padding: 10px; }
 
 .sideHeader {
@@ -294,7 +297,8 @@ header:after {
 
 .postedBy {
   color: #910101;
-  font-size: 1.2em; }
+  font-size: 1.2em;
+  font-weight: bold; }
 
 .date {
   font-size: 0.8em; }
@@ -304,10 +308,29 @@ header:after {
   color: #777;
   margin-bottom: 10px; }
 
+.feedControls {
+  border-top: 1px solid #dfe0e4;
+  padding: 10px 4px 0 8px; }
+
+.feedControl {
+  display: inline;
+  color: #dfe0e4;
+  padding: 8px 10px 0 0;
+  margin-right: 20px;
+  font-weight: bold;
+  cursor: pointer; }
+
+.feedControl:hover {
+  color: #000; }
+
+.feedControl i {
+  margin-right: 10px; }
+
 .likedSection {
   border-top: 1px solid #dfe0e4;
+  border-bottom: 1px solid #dfe0e4;
   font-size: 0.8em;
-  padding-top: 10px; }
+  padding: 10px; }
 
 .feedImage {
   width: 100%; }
@@ -328,6 +351,40 @@ header:after {
   width: 100%;
   height: 100%; }
 
+.comments {
+  padding-bottom: 10px; }
+
+.comment {
+  padding: 10px 10px 0 50px;
+  position: relative; }
+
+.commentAvatar {
+  position: absolute;
+  width: 30px;
+  left: 10px;
+  top: 14px;
+  margin: 0; }
+
+.commentBy {
+  color: #910101;
+  font-size: 1em;
+  margin-right: 4px;
+  font-weight: bold; }
+
+.commentContent {
+  font-size: 0.85em; }
+
+.commentFooter {
+  color: #dfe0e4;
+  font-size: 0.7em; }
+
+.commentLikes i {
+  margin-right: 4px; }
+
+.commentLikes {
+  margin-right: 8px;
+  color: #444; }
+
 .mainWrapper {
   height: 100%; }
 
@@ -341,7 +398,6 @@ header:after {
   border-color: #e5e6e9 #dfe0e4 #d0d1d5;
   border-radius: 3px;
   background: #fff;
-  padding: 10px;
   padding: 0;
   border-top: 0px; }
 
@@ -369,7 +425,6 @@ header:after {
   border-color: #e5e6e9 #dfe0e4 #d0d1d5;
   border-radius: 3px;
   background: #fff;
-  padding: 10px;
   padding: 4px;
   position: absolute;
   left: 20px;
@@ -418,7 +473,6 @@ header:after {
   border-color: #e5e6e9 #dfe0e4 #d0d1d5;
   border-radius: 3px;
   background: #fff;
-  padding: 10px;
   padding: 0; }
 
 .aboutNav {
@@ -489,6 +543,12 @@ header:after {
 .aboutFamilyRel {
   font-size: 0.8em; }
 
+.messagesStart {
+  width: 100%;
+  color: #dfe0e4;
+  text-align: center;
+  padding-bottom: 10px; }
+
 .messageContainer {
   min-height: 200px;
   height: auto;
@@ -497,14 +557,17 @@ header:after {
   border-color: #e5e6e9 #dfe0e4 #d0d1d5;
   border-radius: 3px;
   background: #fff;
+  overflow: auto;
   padding: 10px;
-  overflow: auto; }
+  display: table-cell;
+  vertical-align: bottom; }
 
 .messageCont {
   position: relative;
-  border-bottom: 1px solid #dfe0e4;
-  padding: 0 0 10px 60px;
-  margin-bottom: 10px; }
+  padding: 0 0 10px 40px;
+  margin-bottom: 10px;
+  vertical-align: bottom;
+  width: 100%; }
 
 .messageCont:last-child {
   margin-bottom: 0;
@@ -512,13 +575,16 @@ header:after {
 
 .messageAvatar {
   position: absolute;
-  width: 50px;
+  width: 30px;
   left: 0px;
-  top: 0px; }
+  top: 5px; }
 
 .messageName {
   color: #910101;
   font-size: 1.2em; }
+
+.messageContents {
+  font-size: 0.85em; }
 
 .sentOn {
   float: right;

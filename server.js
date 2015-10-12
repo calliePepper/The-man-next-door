@@ -21,6 +21,6 @@ router.get("/sam", function(req,res) {
 	res.sendFile(__dirname + '/public/sam.html');
 });
 
-app.listen(3000);
+app.listen(process.env.PORT, process.env.IP);
 
 console.log('Server running');

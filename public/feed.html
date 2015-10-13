@@ -10,32 +10,36 @@
         <link href='https://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
     </head>
     <body>
-    	<header>
-            <div class="wrapper">
-                <div id="logo" class="logo">Twaddle</div>
-                <div class="mobileNav">
-                    <i id="mobileNav" class="fa fa-bars fa-2x"></i>
-                </div>
-            </div>
-        </header>
-        <div class="wrapper">
-            <div class="sideBar">
-                <a href="feed" class="feed sideLink current"><i id="feedIcon" class="fa fa-rss"></i>News Feed</a>
-                <div class="sideHeader">Friends</div>
-                <a id="sam" href="sam" class="friend sideLink"><i id="samIcon" class="fa fa-user"></i>Sam Creed</a>
-            </div>
-            <div id="feedContent" class="mainContent">
-            </div>
-            <div class="sponsored">
-                
-                <div class="trending">
-                    <div class="sideHeader">Trending</div>
-                    <div id="trendingSection">
+        <div class="mobileFix">
+        	<header>
+                <div class="wrapper">
+                    <div id="logo" class="logo">Twaddle</div>
+                    <div class="mobileNav">
+                        <i id="mobileNav" class="fa fa-bars fa-2x"></i>
                     </div>
-                    <div class="games">
-                        <div class="sideHeader">New games</div>
-                        <div class="gameBlock"><div class="gameImg"></div></div>
-                        <div class="gameBlock"><div class="gameImg"></div></div>
+                </div>
+            </header>
+            <div class="wrapper">
+                <div class="sideBar" id="sideBar">
+                    <a href="feed" class="feed sideLink current">
+                        <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-feed fa-stack-1x fa-inverse"></i></span>
+                        <i id="feedIcon" class="desktop fa fa-rss"></i>News Feed
+                    </a>
+                    <div class="sideHeader">Friends</div>
+                </div>
+                <div id="feedContent" class="mainContent">
+                </div>
+                <div class="sponsored">
+                    
+                    <div class="trending">
+                        <div class="sideHeader">Trending</div>
+                        <div id="trendingSection">
+                        </div>
+                        <div class="games">
+                            <div class="sideHeader">New games</div>
+                            <div class="gameBlock"><div class="gameImg"></div></div>
+                            <div class="gameBlock"><div class="gameImg"></div></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -59,6 +63,8 @@
 				}
             }
             
+            setTimeout(function() {spawnNotification('This notification system will be used to let you know about new updates','img/samAvatar.png','Welcome to the man next door!');},3000);
+            
             function createTrender(data) {
                 $('#trendingSection').append('<div class="trender"><span class="colouredText">'+data['title']+':</span> '+data['content']+'</div>');
             }
@@ -74,6 +80,7 @@
             buildTrending();
             buildTrending();
             buildTrending();
+            users.load();
         </script>
     </body>	
 </html>

@@ -31,6 +31,16 @@
                 $('#comments_0').append(commentsString);        
             }
             
+            var users = {}
+            
+            users.load = function() {
+                $.each(totalData['users'], function(index, value) {
+                    if (index != 0 ) {
+                        $('#sideBar').append('<a id="'+value['firstname']+'" href="'+value['firstname']+'" class="friend sideLink"><img src="img/'+value['avatar']+'" class="navAvatar mobile" alt="Navigation avatar" /><i id="userIcon" class="desktop fa fa-user"></i>'+value['firstname']+' '+value['lastname']+'</a>');    
+                    }
+                });
+            }
+            
             var time = {}
             
             time.wordify = function(newTimes) {
@@ -141,7 +151,18 @@
                 this.content = content;
             }
       
+            Notification.requestPermission();
+            
+            function spawnNotification(theBody,theIcon,theTitle) {
+                var options = {
+                    body: theBody,
+                    icon: theIcon
+                }
+                var n = new Notification(theTitle,options);
+            }
+        
             $('#mobileNav').on('click touch', function() {
                 $('#feedContent').toggleClass('navFlip');
                 $('.sideBar').toggleClass('navFlip');
             });
+        

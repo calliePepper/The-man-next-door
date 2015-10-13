@@ -1,18 +1,39 @@
-            function createChoice(choiceId,choice1,choice2,choice3,target) {
+            var choiceControls = {};
+            
+            choiceControls.create = function(choiceId,target,remove,choice1,choice2,choice3) {
                 $('.choice').unbind();
-                $('#'+target).append('<div id="choiceBlock" class="choiceBlock"><div id="choice1" class="choice">'+choice1+'</div><div id="choice2" class="choice">'+choice2+'</div><div id="choice3" class="choice">'+choice3+'</div></div>');
+                var choiceString = '';
+                if (choice1!=0) {choiceString += '<div id="choice1" class="choice">'+choice1+'</div>';}
+                if (choice2!=0) {choiceString += '<div id="choice2" class="choice">'+choice2+'</div>';}
+                if (choice3!=0) {choiceString += '<div id="choice3" class="choice">'+choice3+'</div>';}
+                $('#'+target).append('<div id="choiceBlock" class="choiceBlock">'+choiceString+'</div>');
+                $('#choiceBlock').css('max-height','300px');
                 $('.choice').on('click touch', function() {
-                    choiceMade(choiceId,$(this).attr('id'));
+                    choiceControls.choose(choiceId,$(this).attr('id'));
+                    if (remove != '') {
+                        $('#'+remove).removeClass('choiceBeing');
+                    }
                 });
             }
 
-            function choiceMade(id,choice) {
-                console.log('You choice '+choice);
-                $('#choiceBlock').html('Your choice was '+$('#'+choice).html());
-                $('#choiceBlock').removeAttr('id');
+            choiceControls.choose = function(id,choice) {
+                var theChoice = $('#'+choice).html();
+                commentsString = '<div class="comments">';
+                var commentSince = time.wordify(Math.floor(Date.now() / 1000));
+                var usersAvatar = totalData['users'][0]['avatar'];
+                var usersFirstname = totalData['users'][0]['firstname'];
+                var usersLastname = totalData['users'][0]['lastname'];
+                var imageComments = '';
+                var likedComments = '';
+                commentsString += '<div class="comment"><div class="commentAvatar"><img class="avatar" src="img/'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><span class="commentBy">'+usersFirstname+' '+usersLastname+'</span><span class="commentContent">'+theChoice+'</span>'+imageComments+'<div class="commentFooter">'+likedComments+commentSince+'</div></div>';
+                commentsString += '</div>';
+                $('#choiceBlock').remove();
+                $('#comments_0').append(commentsString);        
             }
             
-            function wordifyTime(newTimes) {
+            var time = {}
+            
+            time.wordify = function(newTimes) {
                 var currentTime = Math.floor(Date.now() / 1000);
                 console.log('The current time is '+currentTime);
                 console.log('The post time is '+newTimes);
@@ -27,7 +48,7 @@
                 }
             }
 
-            function datifyTime(newTimes) {
+            time.date = function(newTimes) {
                 var date = new Date(newTimes*1000);
                 var hours = date.getHours();
                 var minutes = "0" + date.getMinutes();
@@ -38,7 +59,9 @@
                 return date+'/'+month+'/'+year+' '+hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
             }
 
-            function createFeed(target,objects) {
+            var feed = {};
+
+            feed.create = function(target,objects) {
                 $.each(objects, function(index,value) {
                     var imageLink = '';
                     if (value['image'] != '') {
@@ -48,15 +71,15 @@
                     if (value['likes'] != '') {
                         likedText = '<span class="colouredText">'+value['likes']+'</span> people like this';
                     }
-                    var sinceText = wordifyTime(value['date']);
+                    var sinceText = time.wordify(value['date']);
                     var usersAvatar = totalData['users'][value['user']]['avatar'];
                     var usersFirstname = totalData['users'][value['user']]['firstname'];
                     var usersLastname = totalData['users'][value['user']]['lastname'];
                     var commentsString = '';
                     if (value['comments'].length > 0) {
-                        commentsString = '<div class="comments">';
+                        commentsString = '<div class="comments" id="comments_'+index+'">';
                         $.each(value['comments'], function(index,value) {
-                            var commentSince = wordifyTime(value['date']);
+                            var commentSince = time.wordify(value['date']);
                             var usersAvatar = totalData['users'][value['user']]['avatar'];
                             var usersFirstname = totalData['users'][value['user']]['firstname'];
                             var usersLastname = totalData['users'][value['user']]['lastname'];
@@ -72,7 +95,7 @@
                         });
                         commentsString += '</div>';
                     }
-                    $('#'+target).append('<div class="feedObject"><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar"><img class="avatar" src="img/'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy">'+usersFirstname+' '+usersLastname+'</div><div class="date">'+sinceText+'</div></div><p>'+value['text']+'</p>'+imageLink+'<div class="feedControls"><span class="feedControl likeControl"><i class="fa fa-thumbs-up"></i>Like</span><span class="feedControl commentControl"><i class="fa fa-comment"></i>Comment</span></div></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
+                    $('#'+target).append('<div id="feed_'+index+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar"><img class="avatar" src="img/'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy">'+usersFirstname+' '+usersLastname+'</div><div class="date">'+sinceText+'</div></div><p>'+value['text']+'</p>'+imageLink+'<div class="feedControls"><span class="feedControl likeControl" id="like_'+index+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+index+'" class="feedControl commentControl"><i class="fa fa-comment"></i>Comment</span></div></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
                 });
             }          
 
@@ -117,33 +140,8 @@
                 this.title = title;
                 this.content = content;
             }
-            
-            var comments = {
-                    1: [
-                        new comment(1,1,1444611193,'God I am awesome','',-2),
-                        new comment(1,1,1444610193,'So amazingly awesome','',5),
-                    ]
-            }
-
-            var totalData = {
-                posts: [
-                    new post(1,1444511193,'Check out this image, found it at <a href="http://image.google.com">Google</a>','exampleLink.png',500,comments[1]),
-                    new post(1,1444362078,'Yo yo yo','',23,''),
-                    new post(1,1444162078,'Bitches love me','',7,'')
-                ],
-                trending: [
-                    new trending(1,'Twaddle','A new social media for the masses, is looking for new employees'),
-                    new trending(1,'Puppy love','A puppy is a small regional zoo has made friends with a zebra, and they are the most unlikeliest of companions!'),
-                    new trending(1,'Baby Possom','Photos shared of baby marsupial snuggling with toy kangaroo'),
-                    new trending(1,'Skinning Cats','There are more than one way! Our top chefs look at old age techniques that you probably have never heard of'),
-                    new trending(1,'Netherworld vacation','Are you tired of your boring existance? Think you deserve a great vacation? We show you paths that the guides don\'t want you to know about')
-                ],
-                messages: [
-                    new message(1,1444422078,'Bloop','',1),
-                    new message(1,1444230423,"Bite my shiny metal ass. Bender, we're trying our best. Yeah, I do that with my stupidness. Oh God, what have I done?<br>But I've never been to the moon! You, a bobsleder!? That I'd like to see! What kind of a father would I be if I said no? I just told you! You've killed me! We don't have a brig.",'',0),
-                    new message(1,1444511193,'Check out this image, found it at <a href="http://image.google.com">Google</a>','messageImage.jpg',1),
-                ],
-                users: {
-                    1: new user('Sam','Creed','they',1429323,'samAvatar.png','samBg.jpg')
-                }
-            };  
+      
+            $('#mobileNav').on('click touch', function() {
+                $('#feedContent').toggleClass('navFlip');
+                $('.sideBar').toggleClass('navFlip');
+            });

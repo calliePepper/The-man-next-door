@@ -8,17 +8,14 @@
         <link href="css/style.css" rel="stylesheet" type="text/css" />
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" />
         <link href='https://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
-        <script type="text/javascript" src="script/jquery.min.js"></script>
-        <script type="text/javascript" src="script/shared.js"></script>
     </head>
     <body>
     	<header>
             <div class="wrapper">
                 <div id="logo" class="logo">Twaddle</div>
-                <!--<div class="navigation">
-                    <i id="messages" class="fa fa-home fa-2x"></i>
-                    <i id="messages" class="fa fa-comment-o fa-2x"></i>
-                </div>-->
+                <div class="mobileNav">
+                    <i id="mobileNav" class="fa fa-bars fa-2x"></i>
+                </div>
             </div>
         </header>
         <div class="wrapper mainWrapper">
@@ -27,7 +24,7 @@
                 <div class="sideHeader">Friends</div>
                 <a href="sam" id="sam" class="friend sideLink current"><i id="samIcon" class="fa fa-user"></i>Sam Creed</a>
             </div>
-            <div class="mainContent noSponsored">
+            <div id="feedContent" class="mainContent noSponsored">
                 <div id="userHeader" class="userHeader noHero">
                     <div class="userHero"></div>
                     <div class="userAvatar"><img class="avatar" src="img/samAvatar.png" alt="Sam's Avatar" /></div>
@@ -114,19 +111,22 @@
                 </div>
             </div>
         </div>
+        <script type="text/javascript" src="script/jquery.min.js"></script>
+        <script type="text/javascript" src="script/shared.js"></script>
+        <script type="text/javascript" src="script/data.js"></script>
         <script>      
             function drawData(targetObject) {
                 $('#userBody').html('');
                 $('#userHeader').addClass('noHero');
                 if (targetObject == 'posts') {
-                    createFeed('userBody',totalData['posts']);
+                    feed.create('userBody',totalData['posts']);
                 } else {
                     $('#userBody').html('<div id="messageContainer" class="messageContainer"><div class="messagesStart">Conversation started</div></div>');
                     $.each(totalData[targetObject], function(index,value) {
                         var usersAvatar = totalData['users'][value['user']]['avatar'];
                         var usersFirstname = totalData['users'][value['user']]['firstname'];
                         var usersLastname = totalData['users'][value['user']]['lastname'];
-                        var date = datifyTime(value['date']);
+                        var date = time.date(value['date']);
                         var imageLink = '';
                         if (value['image'] != '') {
                             imageLink = '<img src="img/'+value['image']+'" alt="user image" class="feedImage" />';
@@ -135,7 +135,7 @@
                         $('#messageContainer').append('<div class="messageCont"><img class="messageAvatar" src="img/'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /><div class="sentOn">'+fromText+date+'</div><div class="messageName">'+usersFirstname+' '+usersLastname+'</div><div class="messageContents">'+value['text']+'</div>'+imageLink+'</div>');
                     });
                     $('#messageContainer').height($(window).height()-195).scrollTop($('#messageContainer')[0].scrollHeight);
-                    createChoice(1,'Deal with the problem yourself','Ignore it','Skin the cat','messageContainer');
+                    choiceControls.create(1,'Deal with the problem yourself','Ignore it','Skin the cat','messageContainer');
                 }
                 $('#userNav div').removeClass('current');
                 $('#'+targetObject).addClass('current');

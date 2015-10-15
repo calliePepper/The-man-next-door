@@ -19,11 +19,15 @@
                     </div>
                 </div>
             </header>
-            <div class="wrapper">
+            <div class="wrapper mainWrapper">
                 <div class="sideBar" id="sideBar">
                     <a href="feed" class="feed sideLink current">
-                        <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-feed fa-stack-1x fa-inverse"></i></span>
+                        <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-rss fa-stack-1x fa-inverse"></i></span>
                         <i id="feedIcon" class="desktop fa fa-rss"></i>News Feed
+                    </a>
+                    <a href="messages" class="feed sideLink">
+                        <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i></span>
+                        <i id="feedIcon" class="desktop fa fa-envelope-o"></i>Messaging
                     </a>
                     <div class="sideHeader">Friends</div>
                 </div>
@@ -47,6 +51,8 @@
         <script type="text/javascript" src="script/jquery.min.js"></script>
         <script type="text/javascript" src="script/shared.js"></script>
         <script type="text/javascript" src="script/data.js"></script>
+        <script type="text/javascript" src="script/init.js"></script>
+        <script type="text/javascript" src="script/glitch.js"></script>
         <script>
             feed.create('feedContent',totalData['posts']);
             
@@ -63,7 +69,7 @@
 				}
             }
             
-            setTimeout(function() {spawnNotification('This notification system will be used to let you know about new updates','img/samAvatar.png','Welcome to the man next door!');},3000);
+            //setTimeout(function() {spawnNotification('This notification system will be used to let you know about new updates','img/samAvatar.png','Welcome to the man next door!');},3000);
             
             function createTrender(data) {
                 $('#trendingSection').append('<div class="trender"><span class="colouredText">'+data['title']+':</span> '+data['content']+'</div>');
@@ -75,12 +81,17 @@
                 $('#comment_0').addClass('choiceBeing');
                 choiceControls.create(1,'feed_0','comment_0','Deal with the problem yourself','Ignore it, it will go away','Skin the cat. It\'s the only solution. Skin. The. Cat');
             });
+            
+            setTimeout(function() {
+                visibleChangeHandler();
+                glitchThis();
+            }, 10000);
 
             tempArray = totalData['trending'];
             buildTrending();
             buildTrending();
             buildTrending();
-            users.load();
+           
         </script>
     </body>	
 </html>

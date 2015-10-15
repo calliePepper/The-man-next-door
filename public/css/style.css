@@ -205,7 +205,9 @@ header:after {
 .sideLink {
   font-size: 0.8em;
   color: #000;
-  text-decoration: none; }
+  text-decoration: none;
+  display: inline-block;
+  width: 100%; }
 
 .mainContent {
   z-index: 1;
@@ -264,6 +266,13 @@ header:after {
 
 .sideLink i {
   margin-right: 10px; }
+
+.sideLink .mobile {
+  display: none; }
+
+.sideLink i.desktop {
+  width: 13px;
+  text-align: center; }
 
 .sideLink.current {
   color: #910101; }
@@ -543,20 +552,59 @@ header:after {
 .aboutFamilyRel {
   font-size: 0.8em; }
 
-.messagesStart {
-  width: 100%;
-  color: #dfe0e4;
-  text-align: center;
-  padding-bottom: 10px; }
+#messagesPage, #messagesPage .mobileFix, #messagesPage .wrapper {
+  height: 100%; }
 
-.messageContainer {
-  min-height: 200px;
+#messagesPage .wrapper {
+  height: 100%;
+  top: -45px;
+  padding-top: 45px; }
+
+#messagesPage header .wrapper {
   height: auto;
+  top: auto;
+  padding: 0; }
+
+#messagesPage .sideBar {
+  top: 45px; }
+
+#messagesPage .mainContent {
+  padding-top: 0px;
+  height: 100%; }
+
+.messageList {
+  width: 270px;
+  height: 100%;
+  float: left;
+  border-right: 1px solid #dfe0e4;
+  position: relative; }
+
+.messagesBox {
+  min-height: 200px;
+  height: 100%;
   max-height: 1000px;
   border: 1px solid;
   border-color: #e5e6e9 #dfe0e4 #d0d1d5;
   border-radius: 3px;
   background: #fff;
+  border-top: 0px; }
+
+.messages {
+  height: 100%; }
+
+.messagesCont {
+  overflow-y: scroll;
+  height: 100%; }
+
+.messagesStart {
+  width: 100%;
+  color: #dfe0e4;
+  text-align: center;
+  padding: 10px;
+  border-bottom: 1px solid #dfe0e4;
+  margin-bottom: 10px; }
+
+.messageContainer {
   overflow: auto;
   display: table-cell;
   vertical-align: bottom; }
@@ -593,6 +641,44 @@ header:after {
 .sentFrom {
   margin: 0 10px; }
 
+.messageUserList {
+  padding: 10px;
+  padding-left: 65px;
+  min-height: 65px;
+  border-bottom: 1px solid #dfe0e4;
+  position: relative;
+  cursor: pointer; }
+
+.messageUserList .messageAvatar {
+  width: 45px;
+  top: 10px;
+  left: 10px; }
+
+.messageUserList .messageContents {
+  color: #777; }
+
+.messageTitle {
+  color: #910101;
+  background: #fff;
+  font-size: 1.2em;
+  border-bottom: 1px solid #000;
+  padding: 10px;
+  margin-bottom: -45px;
+  display: none; }
+
+.messageUserList.current {
+  background: #910101;
+  border-bottom: 1px solid #910101; }
+
+.messageUserList.current .sentOn {
+  color: #fff; }
+
+.messageUserList.current .messageName {
+  color: #fff; }
+
+.messageUserList.current .messageContents {
+  color: #fff; }
+
 .choiceBlock {
   border-top: 1px solid #dfe0e4;
   padding: #paddingVal;
@@ -623,7 +709,20 @@ header:after {
   display: table-cell;
   margin: 10px; }
 
+.glitchCanvas {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  display: none; }
+
 @media screen and (max-width: 900px) {
+  header {
+    position: fixed; }
+
+  .mainWrapper {
+    padding-top: 42px; }
+
   .mobileNav {
     display: block; }
 
@@ -641,8 +740,10 @@ header:after {
     padding: 10px;
     top: 0px;
     background: #fff;
-    min-height: 90%;
-    overflow: hidden; }
+    min-height: 100%;
+    overflow: hidden;
+    z-index: 1;
+    padding-top: 42px; }
 
   #feedContent {
     transition: 0.4s;
@@ -717,7 +818,65 @@ header:after {
 
   .outerAbout {
     padding: 0px;
-    border-left: 0px; } }
+    border-left: 0px; }
+
+  #messagesPage .mainWrapper {
+    top: 0px;
+    padding-top: 42px; }
+
+  #messagesPage .mobileFix {
+    overflow-y: hidden; }
+
+  #feedContent.navFlip .messages {
+    left: 200%; }
+
+  #messagesPage .sideBar {
+    top: 0; }
+
+  .messageList {
+    width: 100%;
+    right: 0%;
+    transition: 0.4s; }
+
+  .messages {
+    left: 100%;
+    transition: 0.4s;
+    overflow-y: hidden;
+    width: 100%;
+    position: absolute;
+    background: #fff; }
+
+  .messagesCont {
+    padding-top: 45px; }
+
+  .messageUserList.current {
+    cursor: pointer;
+    background: #fff;
+    border-bottom: 1px solid #dfe0e4; }
+
+  .messageUserList.current .sentOn {
+    color: #aaa; }
+
+  .messageUserList.current .messageName {
+    color: #910101; }
+
+  .messageUserList.current .messageContents {
+    color: #777; }
+
+  .messageTitle {
+    display: block;
+    cursor: pointer;
+    position: relative;
+    z-index: 2; }
+
+  .messageList.flipped {
+    right: 100%; }
+
+  .messages.flipped {
+    left: 0%; }
+
+  .messages.flipped .messagesCont {
+    overflow-y: scroll; } }
 @media screen and (max-width: 600px) {
   .sentFrom {
     display: none; }

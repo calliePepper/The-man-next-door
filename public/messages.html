@@ -3,11 +3,59 @@
     <head> 
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1">   
-        <title>Title</title>
+        <title>Twaddle - A social media for the everyman</title>
+        <link rel="icon" href="img/favicon.ico" type="image/x-icon" />
         <link href="css/style.css" rel="stylesheet" type="text/css" />
-        <script type="text/javascript" src="script/jquery.min.js"></script>
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" />
+        <link href='https://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
     </head>
-    <body>
-    	<h1>The man next door</h1>
+    <body id="messagesPage">
+        <div class="mobileFix">
+        	<header>
+                <div class="wrapper">
+                    <div id="logo" class="logo">Twaddle</div>
+                    <div class="mobileNav">
+                        <i id="mobileNav" class="fa fa-bars fa-2x"></i>
+                    </div>
+                </div>
+            </header>
+            <div class="wrapper mainWrapper">
+                <div class="sideBar" id="sideBar">
+                    <a href="feed" class="feed sideLink">
+                        <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-rss fa-stack-1x fa-inverse"></i></span>
+                        <i id="feedIcon" class="desktop fa fa-rss"></i>News Feed
+                    </a>
+                    <a href="messages" class="feed sideLink current">
+                        <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i></span>
+                        <i id="feedIcon" class="desktop fa fa-envelope-o"></i>Messaging
+                    </a>
+                    <div class="sideHeader">Friends</div>
+                </div>
+                <div id="feedContent" class="mainContent noSponsored">
+                    <div class="messagesBox" id="messagesBox">
+                        <div class="messageList" id="messageList">
+                            
+                        </div>
+                        <div class="messages" id="messages">
+                            <div class="mobile messageTitle"></div>
+                            <div class="messagesCont" id="messagesCont">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="script/jquery.min.js"></script>
+        <script type="text/javascript" src="script/shared.js"></script>
+        <script type="text/javascript" src="script/data.js"></script>
+        <script type="text/javascript" src="script/init.js"></script>
+        <script>
+                 
+                    messages.init();
+                    // choiceControls.create(1,'Deal with the problem yourself','Ignore it','Skin the cat','messages');
+                    // SO FUCKING DODGY
+                    
+        </script>
     </body>	
 </html>

@@ -21,6 +21,10 @@ router.get("/sam", function(req,res) {
 	res.sendFile(__dirname + '/public/sam.html');
 });
 
+router.get("/messages", function(req,res) {
+	res.sendFile(__dirname + '/public/messages.html');
+});
+
 app.listen(process.env.PORT, process.env.IP);
 
 console.log('Server running');

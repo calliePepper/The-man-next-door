@@ -21,9 +21,13 @@
             </header>
             <div class="wrapper mainWrapper">
                 <div class="sideBar" id="sideBar">
-                    <a href="feed" class="feed sideLink current">
-                        <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-feed fa-stack-1x fa-inverse"></i></span>
+                    <a href="feed" class="feed sideLink">
+                        <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-rss fa-stack-1x fa-inverse"></i></span>
                         <i id="feedIcon" class="desktop fa fa-rss"></i>News Feed
+                    </a>
+                    <a href="messages" class="feed sideLink">
+                        <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i></span>
+                        <i id="feedIcon" class="desktop fa fa-envelope-o"></i>Messaging
                     </a>
                     <div class="sideHeader">Friends</div>
                 </div>
@@ -33,7 +37,7 @@
                         <div class="userAvatar"><img class="avatar" src="img/samAvatar.png" alt="Sam's Avatar" /></div>
                         <div class="userName">Sam Creed</div>
                         <div class="userNav" id="userNav">
-                            <div id="messages">Messages</div><div id="about">About</div><div id="posts">Wall</div>
+                            <div id="posts">Wall</div><div id="about">About</div>
                         </div>
                     </div>
                     <div id="userBody">
@@ -118,39 +122,18 @@
         <script type="text/javascript" src="script/jquery.min.js"></script>
         <script type="text/javascript" src="script/shared.js"></script>
         <script type="text/javascript" src="script/data.js"></script>
+        <script type="text/javascript" src="script/init.js"></script>
         <script>      
-            function drawData(targetObject) {
-                $('#userBody').html('');
-                $('#userHeader').addClass('noHero');
-                if (targetObject == 'posts') {
-                    feed.create('userBody',totalData['posts']);
-                } else {
-                    $('#userBody').html('<div id="messageContainer" class="messageContainer"><div class="messagesStart">Conversation started</div></div>');
-                    $.each(totalData[targetObject], function(index,value) {
-                        var usersAvatar = totalData['users'][value['user']]['avatar'];
-                        var usersFirstname = totalData['users'][value['user']]['firstname'];
-                        var usersLastname = totalData['users'][value['user']]['lastname'];
-                        var date = time.date(value['date']);
-                        var imageLink = '';
-                        if (value['image'] != '') {
-                            imageLink = '<img src="img/'+value['image']+'" alt="user image" class="feedImage" />';
-                        }
-                        if (value['from'] == 1){var fromText = '<i class="fa fa-mobile"></i><span class="sentFrom">Sent from mobile</span>';} else {var fromText = '<i class="fa fa-desktop"></i><span class="sentFrom">Sent from desktop</span>';}
-                        $('#messageContainer').append('<div class="messageCont"><img class="messageAvatar" src="img/'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /><div class="sentOn">'+fromText+date+'</div><div class="messageName">'+usersFirstname+' '+usersLastname+'</div><div class="messageContents">'+value['text']+'</div>'+imageLink+'</div>');
-                    });
-                    $('#messageContainer').height($(window).height()-195).scrollTop($('#messageContainer')[0].scrollHeight);
-                    choiceControls.create(1,'Deal with the problem yourself','Ignore it','Skin the cat','messageContainer');
-                }
-                $('#userNav div').removeClass('current');
-                $('#'+targetObject).addClass('current');
-            }
 
-            drawData('messages');
 
             $('#userNav div').on('click touch', function() {
                 if ($(this).attr('id') != 'about') {
                     $('#aboutBody').hide();
-                    drawData($(this).attr('id'));
+                    $('#userBody').html('');
+                    $('#userHeader').addClass('noHero');
+                    $('#userNav div').removeClass('current');
+                    $('#posts').addClass('current');
+                    feed.create('userBody',totalData['posts']);
                 } else{
                     $('#userBody').html('');
                     $('#userHeader').removeClass('noHero');
@@ -168,7 +151,7 @@
                 $('.'+$(this).attr('id')).show();
             });
             
-            users.load();
+            $('#posts').click();
         </script>
     </body>	
 </html>

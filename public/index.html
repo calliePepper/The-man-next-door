@@ -3,12 +3,50 @@
     <head> 
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1">   
-        <title>Title</title>
-        <link href="public/css/style.css" rel="stylesheet" type="text/css" />
-        <script type="text/javascript" src="public/script/jquery.min.js"></script>
+        <title>The Man Next Door</title>
+        <link href="css/style.css" rel="stylesheet" type="text/css" />
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" />
+        <link href='https://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
     </head>
-    <body>
-    	<h1>The man next door</h1>
-    	<a href="feed">Click here to start</a>
+    <body id="frontPage" class="frontPage">
+        <div class="infoBox">
+            <h1>The man next door</h1>
+            <p>The man next door is an interactive narrative, set on a fictional social media network. There are a couple of things you should know before you start:</p>
+            <ol>
+                <li>Please beaware this site uses some techniques which <strong class="colouredText">may trigger epileptic attacks</strong></li>
+                <li><strong class="colouredText">This narrative runs in real time</strong>. From the moment you hit start the story will unfold at its own pace, not yours</li>
+                <li>Occasionally, <strong class="colouredText">the page may play sounds</strong>. These sounds are not controllable, but muting the page will not cause you to miss out on any important information</li>
+            </ol>
+            <p>If you have understood all of this, please feel free to enter your name below and then click the start button</p>
+            <label for="name">Your name:</label><input type="text" id="name" name="name" /><br>
+            <div id="startBtn" class="btn startBtn">Click here to start</div>
+    	    
+        </div>
+        <script type="text/javascript" src="script/jquery.min.js"></script>
+        <script>
+            Storage.prototype.setObject = function(key, value) {
+                this.setItem(key, JSON.stringify(value));
+            }
+            
+            Storage.prototype.getObject = function(key) {
+                var value = this.getItem(key);
+                return value && JSON.parse(value);
+            }
+
+        
+            $('#startBtn').on('click touch', function() {
+                if ($('#name').val() != '') {
+                    if (typeof(Storage) !== 'undefined') {
+                        var gameData = {name:$('#name').val(),startTime:Math.floor(Date.now() / 1000),lastUpdate:Math.floor(Date.now() / 1000)};
+                        localStorage.setObject('gameData',gameData);
+                        window.location.href = "feed";
+                    } else {
+                        alert('Sorry your device does not support the required technology (HTML5 Local storage)');
+                    }
+                } else {
+                    $('#name').addClass('badInput');
+                }
+            });
+        </script>
     </body>	
 </html>

@@ -21,13 +21,13 @@
             </header>
             <div class="wrapper mainWrapper">
                 <div class="sideBar" id="sideBar">
-                    <a href="feed" class="feed sideLink current">
+                    <a href="feed" id="newsFeedLink" class="feed sideLink current">
                         <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-rss fa-stack-1x fa-inverse"></i></span>
-                        <i id="feedIcon" class="desktop fa fa-rss"></i>News Feed
+                        <i id="feedIcon" class="desktop fa fa-rss"></i>News Feed<span class="totalNew"></span>
                     </a>
-                    <a href="messages" class="feed sideLink">
+                    <a href="messages" id="messagesLink" class="feed sideLink">
                         <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i></span>
-                        <i id="feedIcon" class="desktop fa fa-envelope-o"></i>Messaging
+                        <i id="feedIcon" class="desktop fa fa-envelope-o"></i>Messaging<span class="totalNew"></span>
                     </a>
                     <div class="sideHeader">Friends</div>
                 </div>
@@ -49,11 +49,14 @@
             </div>
         </div>
         <script type="text/javascript" src="script/jquery.min.js"></script>
+        <script type="text/javascript" src="/socket.io/socket.io.js"></script>
         <script type="text/javascript" src="script/shared.js"></script>
         <script type="text/javascript" src="script/data.js"></script>
         <script type="text/javascript" src="script/init.js"></script>
         <script type="text/javascript" src="script/glitch.js"></script>
         <script>
+            var socket = io();
+        
             feed.create('feedContent',totalData['posts']);
             
             var tempArray;
@@ -79,7 +82,7 @@
             $('#comment_0').on('click touch', function() {
                 $('#comment_0').unbind();
                 $('#comment_0').addClass('choiceBeing');
-                choiceControls.create(1,'feed_0','comment_0','Deal with the problem yourself','Ignore it, it will go away','Skin the cat. It\'s the only solution. Skin. The. Cat');
+                choiceControls.create(1,'feed_0','comment','Deal with the problem yourself','Ignore it, it will go away','Skin the cat. It\'s the only solution. Skin. The. Cat');
             });
             
             setTimeout(function() {

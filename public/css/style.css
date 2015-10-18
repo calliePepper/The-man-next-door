@@ -104,6 +104,12 @@ abbr {
   font-size: 0.8em;
   letter-spacing: 0.1em; }
 
+li {
+  margin-left: 30px; }
+
+a {
+  color: #910101; }
+
 @media (min-width: 43.75em) {
   body {
     font-size: 1em;
@@ -209,6 +215,20 @@ header:after {
   display: inline-block;
   width: 100%; }
 
+.totalNew:empty {
+  display: none; }
+
+.totalNew {
+  float: right;
+  padding: 2px 6px;
+  border-radius: 50%;
+  background: #910101;
+  color: #FFF;
+  font-weight: bold;
+  font-size: 0.7em;
+  position: relative;
+  top: 1px; }
+
 .mainContent {
   z-index: 1;
   position: relative;
@@ -286,6 +306,13 @@ header:after {
 /*
      Specific
 */
+.newObject {
+  text-align: center;
+  color: #910101; }
+
+.newObject i {
+  margin-right: 10px; }
+
 .feedHeader {
   zoom: 1;
   padding-bottom: 10px; }
@@ -679,6 +706,16 @@ header:after {
 .messageUserList.current .messageContents {
   color: #fff; }
 
+@keyframes pulse {
+  50% {
+    background-color: #910101; } }
+.pulse {
+  animation: pulse .5s ease-out 3; }
+
+.typing {
+  color: #999;
+  padding-left: 50px; }
+
 .choiceBlock {
   border-top: 1px solid #dfe0e4;
   padding: #paddingVal;
@@ -689,12 +726,14 @@ header:after {
   max-height: 0px;
   transition: 1s; }
 
-.choice {
+.btn {
   border: 1px solid;
   background-color: #B50404;
   border-color: #8b4343 #883c3c #833333;
   border-radius: 3px;
-  padding: 10px;
+  padding: 10px; }
+
+.choice {
   display: inline-block;
   text-align: center;
   vertical-align: middle;
@@ -715,6 +754,58 @@ header:after {
   height: 100%;
   pointer-events: none;
   display: none; }
+
+.frontPage {
+  background-color: #000;
+  background-image: url("../img/bg_mobile.jpg");
+  background-size: cover;
+  background-position: center;
+  text-align: center;
+  height: 100%; }
+
+@media screen and (min-width: 600px) {
+  .frontPage {
+    background-image: url("../img/bg_mid.jpg"); } }
+@media screen and (min-width: 1280px) {
+  .frontPage {
+    background-image: url("../img/bg_large.jpg"); } }
+.infoBox {
+  max-width: 800px;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  margin: 0 auto;
+  height: 100%;
+  color: #fff;
+  padding: 10px;
+  text-align: left; }
+
+.infoBox h1 {
+  color: #910101; }
+
+.infoBox p {
+  color: #fff;
+  padding-bottom: 30px; }
+
+.infoBox li {
+  padding-bottom: 30px; }
+
+.startBtn {
+  margin-top: 10px;
+  width: auto;
+  display: inline-block;
+  margin-left: 93px;
+  cursor: pointer; }
+
+input[type="text"] {
+  padding: 8px;
+  color: #fff;
+  background: none;
+  border: 1px solid #910101;
+  margin-left: 10px; }
+
+.badInput {
+  background: rgba(255, 0, 0, 0.5) !important; }
 
 @media screen and (max-width: 900px) {
   header {
@@ -769,6 +860,11 @@ header:after {
     vertical-align: middle;
     margin-right: 20px;
     margin-left: 20px; }
+
+  .sideLink .totalNew {
+    padding: 4px 12px;
+    top: 8px;
+    font-size: 1.2em; }
 
   .navAvatar {
     width: 55px;

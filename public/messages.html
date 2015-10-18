@@ -3,7 +3,7 @@
     <head> 
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1">   
-        <title>Twaddle - A social media for the everyman</title>
+        <title>Twaddle - Messages</title>
         <link rel="icon" href="img/favicon.ico" type="image/x-icon" />
         <link href="css/style.css" rel="stylesheet" type="text/css" />
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" />
@@ -21,13 +21,13 @@
             </header>
             <div class="wrapper mainWrapper">
                 <div class="sideBar" id="sideBar">
-                    <a href="feed" class="feed sideLink">
+                    <a href="feed" id="newsFeedLink" class="feed sideLink">
                         <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-rss fa-stack-1x fa-inverse"></i></span>
-                        <i id="feedIcon" class="desktop fa fa-rss"></i>News Feed
+                        <i id="feedIcon" class="desktop fa fa-rss"></i>News Feed<span class="totalNew"></span>
                     </a>
-                    <a href="messages" class="feed sideLink current">
+                    <a href="messages" id="messagesLink" class="feed sideLink current">
                         <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i></span>
-                        <i id="feedIcon" class="desktop fa fa-envelope-o"></i>Messaging
+                        <i id="feedIcon" class="desktop fa fa-envelope-o"></i>Messaging<span class="totalNew"></span>
                     </a>
                     <div class="sideHeader">Friends</div>
                 </div>
@@ -47,11 +47,12 @@
             </div>
         </div>
         <script type="text/javascript" src="script/jquery.min.js"></script>
+        <script type="text/javascript" src="/socket.io/socket.io.js"></script>
         <script type="text/javascript" src="script/shared.js"></script>
         <script type="text/javascript" src="script/data.js"></script>
         <script type="text/javascript" src="script/init.js"></script>
         <script>
-                 
+                    var currentlyViewing = 0;
                     messages.init();
                     // choiceControls.create(1,'Deal with the problem yourself','Ignore it','Skin the cat','messages');
                     // SO FUCKING DODGY

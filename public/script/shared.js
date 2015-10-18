@@ -1,34 +1,65 @@
+            Storage.prototype.setObject = function(key, value) {
+                this.setItem(key, JSON.stringify(value));
+            }
+            
+            Storage.prototype.getObject = function(key) {
+                var value = this.getItem(key);
+                return value && JSON.parse(value);
+            }
+            
+            var gameUpdate = {};
+            
+            gameUpdate.updateTime = function() {
+                var currentTime = Math.floor(Date.now() / 1000);
+                var tempData = localStorage.getObject('gameData');
+                tempData.lastUpdate = currentTime;
+                localStorage.setObject('gameData',tempData);
+            }
+
             var choiceControls = {};
             
-            choiceControls.create = function(choiceId,target,remove,choice1,choice2,choice3) {
+            choiceControls.create = function(choiceId,target,targetType,remove,choice1,choice2,choice3) {
                 $('.choice').unbind();
                 var choiceString = '';
-                if (choice1!=0) {choiceString += '<div id="choice1" class="choice">'+choice1+'</div>';}
-                if (choice2!=0) {choiceString += '<div id="choice2" class="choice">'+choice2+'</div>';}
-                if (choice3!=0) {choiceString += '<div id="choice3" class="choice">'+choice3+'</div>';}
+                if (choice1!=0) {choiceString += '<div id="choice1" class="choice btn">'+choice1+'</div>';}
+                if (choice2!=0) {choiceString += '<div id="choice2" class="choice btn">'+choice2+'</div>';}
+                if (choice3!=0) {choiceString += '<div id="choice3" class="choice btn">'+choice3+'</div>';}
                 $('#'+target).append('<div id="choiceBlock" class="choiceBlock">'+choiceString+'</div>');
                 $('#choiceBlock').css('max-height','300px');
                 $('.choice').on('click touch', function() {
-                    choiceControls.choose(choiceId,$(this).attr('id'));
+                    choiceControls.choose(choiceId,$(this).attr('id'),targetType);
                     if (remove != '') {
                         $('#'+remove).removeClass('choiceBeing');
                     }
                 });
             }
 
-            choiceControls.choose = function(id,choice) {
+            choiceControls.choose = function(id,choice,targetType) {
                 var theChoice = $('#'+choice).html();
-                commentsString = '<div class="comments">';
-                var commentSince = time.wordify(Math.floor(Date.now() / 1000));
-                var usersAvatar = totalData['users'][0]['avatar'];
-                var usersFirstname = totalData['users'][0]['firstname'];
-                var usersLastname = totalData['users'][0]['lastname'];
-                var imageComments = '';
-                var likedComments = '';
-                commentsString += '<div class="comment"><div class="commentAvatar"><img class="avatar" src="img/'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><span class="commentBy">'+usersFirstname+' '+usersLastname+'</span><span class="commentContent">'+theChoice+'</span>'+imageComments+'<div class="commentFooter">'+likedComments+commentSince+'</div></div>';
-                commentsString += '</div>';
-                $('#choiceBlock').remove();
-                $('#comments_0').append(commentsString);        
+                if (targetType == 'comment') {
+                    commentsString = '<div class="comments">';
+                    var commentSince = time.wordify(Math.floor(Date.now() / 1000));
+                    var usersAvatar = totalData['users'][0]['avatar'];
+                    var usersFirstname = totalData['users'][0]['firstname'];
+                    var usersLastname = totalData['users'][0]['lastname'];
+                    var imageComments = '';
+                    var likedComments = '';
+                    commentsString += '<div class="comment"><div class="commentAvatar"><img class="avatar" src="img/'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><span class="commentBy">'+usersFirstname+'</span><span class="commentContent">'+theChoice+'</span>'+imageComments+'<div class="commentFooter">'+likedComments+commentSince+'</div></div>';
+                    commentsString += '</div>';
+                    $('#choiceBlock').parent().find('.comments').append(commentsString);
+                    $('#choiceBlock').remove();
+                } else if (targetType == 'message') {
+                    var date = time.date(Math.floor(Date.now() / 1000));
+                    var usersAvatar = totalData['users'][0]['avatar'];
+                    var usersFirstname = totalData['users'][0]['firstname'];
+                    var usersLastname = totalData['users'][0]['lastname'];
+                    var imageLink = '';
+                    var fromText = '<i class="fa fa-desktop"></i><span class="sentFrom">Sent from desktop</span>';
+                    //if (value['from'] == 1){var fromText = '<i class="fa fa-mobile"></i><span class="sentFrom">Sent from mobile</span>';} else {var fromText = '<i class="fa fa-desktop"></i><span class="sentFrom">Sent from desktop</span>';}
+                    $('#messagesCont').append('<div class="messageCont"><img class="messageAvatar" src="img/'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /><div class="sentOn">'+fromText+date+'</div><div class="messageName">'+usersFirstname+'</div><div class="messageContents">'+theChoice+'</div></div>');
+                    $('#messages').scrollTop($('#messages')[0].scrollHeight); 
+                    $('#choiceBlock').remove();
+                }
             }
             
             var users = {}
@@ -54,15 +85,15 @@
                 var firstUser = 0;
                 var firstMessage = 0;
                 $.each(totalData['messages'], function(index,value) {
-                    if (typeof firstMessages[value['user']]  === 'undefined'){
-                        firstMessages[value['user']] = {};
-                        firstMessages[value['user']].index = value['user'];
-                        firstMessages[value['user']].posted = 0;
+                    if (typeof firstMessages[value['toId']]  === 'undefined'){
+                        firstMessages[value['toId']] = {};
+                        firstMessages[value['toId']].index = value['toId'];
+                        firstMessages[value['toId']].posted = 0;
                     }
-                    if (value['date'] > firstMessages[value['user']].posted) {
-                        firstMessages[value['user']].posted = value['date'];
-                        firstMessages[value['user']].dateTime = time.minidate(value['date']);
-                        firstMessages[value['user']].text = value['text'];
+                    if (value['date'] > firstMessages[value['toId']].posted) {
+                        firstMessages[value['toId']].posted = value['date'];
+                        firstMessages[value['toId']].dateTime = time.minidate(value['date']);
+                        firstMessages[value['toId']].text = value['text'];
                     }
                     if (value['date'] > firstMessage) {
                         firstMessage = value['date'];
@@ -82,17 +113,19 @@
                 orderedUsers.sort(compare);
                 messages.users(orderedUsers);
                 messages.load(orderedUsers[0].index);
+                console.log(orderedUsers);
             }
             
             messages.load = function(id) {
                 $('#messagesCont').html('');
                 var firstMessages = {};
                 var thisUser = '';
+                currentlyViewing = id;
                 $.each(totalData['messages'], function(index,value) {
-                    if (value['user'] == id) {
-                        var usersAvatar = totalData['users'][value['user']]['avatar'];
-                        var usersFirstname = totalData['users'][value['user']]['firstname'];
-                        var usersLastname = totalData['users'][value['user']]['lastname'];
+                    if (value['toId'] == id) {
+                        var usersAvatar = totalData['users'][value['fromId']]['avatar'];
+                        var usersFirstname = totalData['users'][value['fromId']]['firstname'];
+                        var usersLastname = totalData['users'][value['fromId']]['lastname'];
                         thisUser = usersFirstname + ' ' + usersLastname;
                         var date = time.date(value['date']);
                         var imageLink = '';
@@ -107,6 +140,10 @@
                 $('#messagesCont').prepend('<div class="messagesStart">Conversation started</div>');
                 $('.messageTitle').html('&lt; '+thisUser);
                 $('#messagesCont').scrollTop($('#messagesCont')[0].scrollHeight);
+            }
+            
+            messages.create = function(userId,time,content,image,from) {
+                return new message(userId,time,content,image,from);
             }
             
             messages.users = function(firstMessages) {
@@ -151,13 +188,88 @@
                     }
             }
             
+            var messageQueue = [];
+            
+            messages.new = function(messageFrom,messageTo,cameIn,text,ttw,fullMessage) {
+                console.log(messageFrom);
+                console.log('New message from '+totalData.users[messageFrom].firstname+' at '+cameIn);
+                if ($(document).find("title").text() == 'Twaddle - Messages') {
+                    if (currentlyViewing == messageFrom) {
+                        $('#messagesCont').append('<div id="typing" class="typing">'+totalData.users[messageFrom].firstname+' is typing...</div>');
+                        setTimeout(function() {
+                            $('#typing').remove();
+                            if (currentlyViewing == messageFrom) {
+                                var usersAvatar = totalData['users'][fullMessage['fromId']]['avatar'];
+                                var usersFirstname = totalData['users'][fullMessage['fromId']]['firstname'];
+                                var usersLastname = totalData['users'][fullMessage['fromId']]['lastname'];
+                                thisUser = usersFirstname + ' ' + usersLastname;
+                                var date = time.date(fullMessage['date']);
+                                var imageLink = '';
+                                if (fullMessage['image'] != '') {
+                                    imageLink = '<img src="img/'+fullMessage['image']+'" alt="user image" class="feedImage" />';
+                                }
+                                if (fullMessage['from'] == 1){var fromText = '<i class="fa fa-mobile"></i><span class="sentFrom">Sent from mobile</span>';} else {var fromText = '<i class="fa fa-desktop"></i><span class="sentFrom">Sent from desktop</span>';}
+                                $('#messagesCont').append('<div class="messageCont"><img class="messageAvatar" src="img/'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /><div class="sentOn">'+fromText+date+'</div><div class="messageName">'+usersFirstname+' '+usersLastname+'</div><div class="messageContents">'+fullMessage['text']+'</div>'+imageLink+'</div>');
+                                $('#messages').scrollTop($('#messages')[0].scrollHeight); 
+                            }
+                            if(text.length > 15) text = text.substring(0,15) + '...';
+                            var date = time.minidate(cameIn);
+                            $('#messageLink_'+messageFrom).find('.sentOn').html(date);
+                            $('#messageLink_'+messageFrom).find('.messageContents').html(text);
+                            $('#messageLink_'+messageFrom).addClass('pulse');
+                            setTimeout(function() {$('#messageLink_'+messageFrom).removeClass('pulse');},1000);
+                            if (!visibleChangeHandler()) {
+                                spawnNotification('You have a new message from '+totalData.users[messageFrom].firstname,'img/'+totalData.users[messageFrom].avatar,'New Message');
+                            }
+                        },ttw);
+                    } else {
+                        setTimeout(function() {
+                            if(text.length > 15) text = text.substring(0,15) + '...';
+                            var date = time.minidate(cameIn);
+                            $('#messageLink_'+messageFrom).find('.sentOn').html(date);
+                            $('#messageLink_'+messageFrom).find('.messageContents').html(text);
+                            $('#messageLink_'+messageFrom).addClass('pulse');
+                            setTimeout(function() {$('#messageLink_'+messageFrom).removeClass('pulse');},1000);
+                            if (!visibleChangeHandler()) {
+                                spawnNotification('You have a new message from '+totalData.users[messageFrom].firstname,'img/'+totalData.users[messageFrom].avatar,'New Message');
+                            }
+                        },ttw);
+                    }
+                } else {
+                    if ($('#messagesLink').find('.totalNew').html() == '') {
+                        $('#messagesLink').find('.totalNew').html('1');
+                    } else {
+                        $('#messagesLink').find('.totalNew').html(parseInt($('#messagesLink .totalNew').html()) + 1);   
+                    }
+                }
+            }
+            
+            messages.packed = function(messageArray,choices) {
+                var counter = 0;
+                var userForMsg = 0;
+                function loopMessages() {
+                    var typingTime = messageArray[counter].text.length * totalData['users'][messageArray[counter].fromId]['typingSpeed'];
+                    console.log('Looping through message of length '+messageArray[counter].text.length+' next message should send in '+typingTime);
+                    messages.new(messageArray[counter].fromId,messageArray[counter].toId,messageArray[counter].date,messageArray[counter].text,typingTime,messageArray[counter]);
+                    userForMsg = messageArray[counter].toId;
+                    counter++;
+                    if (messageArray[counter] != undefined) {
+                       setTimeout(function() {
+                            loopMessages();
+                       },typingTime + totalData['users'][messageArray[counter].fromId]['waitTime']);
+                    } else if (choices != undefined) {
+                        setTimeout(function() {
+                            choiceControls.create(choices.choiceId,'messagesCont','message','',choices.choice1,choices.choice2,choices.choice3);
+                        },typingTime + totalData['users'][userForMsg]['waitTime']);
+                    }
+                }
+                loopMessages()
+            }
+            
             var time = {}
             
             time.wordify = function(newTimes) {
                 var currentTime = Math.floor(Date.now() / 1000);
-                console.log('The current time is '+currentTime);
-                console.log('The post time is '+newTimes);
-                console.log('The difference in minutes is '+(currentTime - newTimes) / 60);
                 var difference = (currentTime - newTimes) / 60;
                 if (difference < 60) {
                     return Math.floor(difference)+' minutes ago';
@@ -227,51 +339,19 @@
                         $('#'+target).append('<div id="feed_'+index+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar"><img class="avatar" src="img/'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy">'+usersFirstname+' '+usersLastname+'</div><div class="date">'+sinceText+'</div></div><p>'+value['text']+'</p>'+imageLink+'<div class="feedControls"><span class="feedControl likeControl" id="like_'+index+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+index+'" class="feedControl commentControl"><i class="fa fa-comment"></i>Comment</span></div></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
                     }
                 });
-            }          
-
-
-            function post(userId,date,text,image,liked,comments) {
-                this.user = userId;
-                this.date = date;
-                this.text = text;
-                this.image = image;
-                this.likes = liked;
-                this.comments = comments;
-            }
-
-            function comment(order,userId,date,text,image,liked) {
-                this.order = order;
-                this.user = userId;
-                this.date = date;
-                this.text = text;
-                this.image = image;
-                this.likes = liked;
-            }
-
-            function message(userId,time,content,image,from) {
-                this.user = userId;
-                this.date = time;
-                this.text = content;
-                this.image = image;
-                this.from = from;
-            }
-
-            function user(firstname,lastname,pronoun,created,avatar,hero,friended) {
-                this.firstname = firstname;
-                this.lastname = lastname;
-                this.pronoun = pronoun;
-                this.created = created;
-                this.avatar = avatar;
-                this.hero = hero;
-                this.friended = friended;
+            }      
+            
+            feed.new = function() {
+                if ($(document).find("title").text() == 'Twaddle - A social media for the everyman') {
+                    $('#feedContent').prepend('<div id="feed_news" class="feedObject"><div class="innerFeed newObject"><i class="fa fa-refresh"></i>New feed posts, reload to see them</div></div>');
+                }
+                if ($('#newsFeedLink').find('.totalNew').html() == '') {
+                    $('#newsFeedLink').find('.totalNew').html('1');
+                } else {
+                    $('#newsFeedLink').find('.totalNew').html(parseInt($('#newsFeedLink .totalNew').html()) + 1);   
+                }
             }
             
-            function trending(day,title,content) {
-                this.day = day;
-                this.title = title;
-                this.content = content;
-            }
-      
 
             // Notifications section
             
@@ -298,7 +378,11 @@
                         icon: theIcon //The URL of an image to be used as an icon
                     }
                 );
-                noty.onclick = function () {
+                
+                setTimeout(function(){ 
+                    noty.close() 
+                },5000); 
+                /*noty.onclick = function () {
                     console.log('notification.Click');
                 };
                 noty.onerror = function () {
@@ -309,7 +393,7 @@
                 };
                 noty.onclose = function () {
                     console.log('notification.Close');
-                };
+                };*/
                 return true;
             }
             
@@ -337,11 +421,11 @@
             // Event handler: log change to browser console
             function visibleChangeHandler() {
                 if (document[hidden]) {
-                    console.log('Page is not visible\n');
-                    var audio = new Audio("../sounds/roar.wav");
-                    audio.play();
+                    return false;
+                    //var audio = new Audio("../sounds/roar.wav");
+                    //audio.play();
                 } else {
-                    console.log('Page is visible\n');
+                    return true;
                 }
             }
             
@@ -352,4 +436,8 @@
                 $('#feedContent').toggleClass('navFlip');
                 $('.sideBar').toggleClass('navFlip');
             });
+            
+            
+            var socket = io();
+        
             

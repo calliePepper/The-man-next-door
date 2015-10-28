@@ -2,13 +2,18 @@
 var express = require('express'),
 	compression = require('compression'),
 	app = express(),
-	router = express.Router('');
+	router = express.Router(''),
+	moment = require('moment');
+
+var data = require('./gameData.js');
+var sendQueue = [];
 
 app.use(express.static(__dirname + '/public'));
 app.use(router),
 app.use(compression());
 
 var clients = [];
+var clientData = {};
 var sequence = 1;
 
 
@@ -28,6 +33,11 @@ router.get("/messages", function(req,res) {
 	res.sendFile(__dirname + '/public/messages.html');
 });
 
+router.get("/twaddle", function(req,res) {
+	res.sendFile(__dirname + '/public/twaddle.html');
+});
+
+
 
 var server = app.listen(process.env.PORT, process.env.IP);
 
@@ -39,82 +49,69 @@ var clients
 
 io.on('connection', function(socket) {
 	var userId = socket.id;
-	console.log(timestampify()+'Connection established, new target found at '+userId);
-	clients.push(userId);
+	io.sockets.connected[userId].emit('requestStatus');
+	clients[socket.id] = socket;
 	
 	socket.on('disconnect', function() {
 		//console.log('Target left');	
 		var index = clients.indexOf(userId);
-		if (index != -1) {
-			clients.splice(index,1);
-		}
 	});
 	
-	socket.on('newPage', function(page) {
-		console.log(timestampify()+'The player '+page.playerName+' is on '+page.page);
-		var compDate = getPoint(page.startTime,page.currentTime); 
-		console.log(timestampify()+'They are on day '+compDate.day+' and have passed '+Math.round(compDate.timeThrough/60)+' minutes');
-		console.log(timestampify()+'The last time they had an update was '+Math.round((page.currentTime - page.lastUpdate)/60)+' minutes ago');
+	socket.on('pageLoad', function(page) {
+		var compDate = getPoint(page.startTime,page.currentTime,page.timezone); 
+		var currentDay = compDate.day;
+		var timeThroughDay = Math.round(compDate.timeThrough);
+		if (page.lastUpdate != 1440) {
+			var updatedLast = moment(page.currentTime).clone().diff(moment(page.lastUpdate), 'minutes');
+		} else {
+			var updatedLast = page.lastUpdate;
+		}
+		console.log(timestampify()+userId+': '+page.playerName+' - '+data.pages[page.page]+'. Time: '+currentDay+': '+timeThroughDay+'. Updated: '+updatedLast);
+		clientData[userId] = {};
+		clientData[userId]['name'] = page.playerName;
+		clientData[userId]['timezone'] = page.timezone;
+		oldDataUpdate(currentDay,timeThroughDay,updatedLast);
 	});
 	
-	//newMessage
-		//message: 
-			//{Array}
-				//fromId:
-				//toId:
-				//timestamp:
-				//message:
-				//image:
-				//from:
-		//choices:
-			//choice1:
-			//choice2:
-			//choice3:
-			//choiceId:
-	
-	setTimeout(function() {
-		console.log(timestampify()+'Sending test message to '+userId);
-		var index = clients.indexOf(userId);
-		if (index != -1) {
-			io.sockets.connected[userId].emit('newMessage',{message:[{fromId:2,toId:2,timestamp:1444973605,message:'Hello? Are you there?',image:'',from:1},{fromId:2,toId:2,timestamp:1444973705,message:'Seriously, I need to talk to you',image:'',from:1}],choices:{choice1:'Ok I\'m here, what is wrong?',choice2:'It can\'t be that important',choice3:'[Ignore her]',choiceId:1}});
+	socket.on('choiceMade', function(replyData) {
+		if (data.choiceObjects[replyData.choiceId]['result_'+replyData.choiceMade] != 0) {
+			var messageResult = data.messageObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].messages;
+			var choiceResult = '';
+			if (data.messageObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].autoTarget == 'choice') {
+				var choiceResult = data.choiceObjects[data.messageObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].autoId]
+			}
+			var object2 = {timeStamp:moment().unix(),user:userId,type:'message',data:messageResult,choice:choiceResult};
+			sendQueue.push(object2);
+			organiseQueue();
 		}
-	},25000);
+		console.log(timestampify()+replyData.playerName+' came across choice '+replyData.choiceId+' and took path '+replyData.choiceMade);	
+	});
 	
-	//newFeed
-		//feedItem
-			//fromId
-			//date
-			//text
-			//image
-			//likes
-			//comments
-				//{array}
-					//order
-					//user
-					//date
-					//text
-					//image
-					//likes
-		//choices:
-			//choice1:
-			//choice2:
-			//choice3:
-			//choiceId:					
-					
-	setTimeout(function() {
-		console.log(timestampify()+'Sending test feed to '+userId);
-		var index = clients.indexOf(userId);
-		if (index != -1) {
-			//io.sockets.connected[userId].emit('newMessage',{message:[{fromId:2,toId:2,timestamp:1444973605,message:'Hello? Are you there?',image:'',from:1},{fromId:2,toId:2,timestamp:1444973705,message:'Seriously, I need to talk to you',image:'',from:1}],choices:{choice1:'Ok I\'m here, what is wrong?',choice2:'It can\'t be that important',choice3:'[Ignore her]',choiceId:1}});
-			var commentArray = [
-					{order:1,user:2,date:1444831193,text:'You are such a rebel Sam',image:'',likes:2},
-					{order:2,user:1,date:1444861193,text:'I know right? It\'s a wonder I haven\'t been arrested',image:'',likes:1}
-				]
-			var feedCreation = {fromId:1,date:1444811193,text:'Wake up Sheeple!!!',image:'',likes:4,comments:commentArray};
-			io.sockets.connected[userId].emit('newFeed',{feedItem:feedCreation,choices:{choice1:'Sam, you are an embarrasment',choice2:'How do you deal with this Cal?',choice3:'Yeah! Fight the power!',choiceId:2}});
+	function oldDataUpdate(day,timeThroughDay,updatedLast) {
+		var updateData = {};
+		updateData.messages = [];
+		updateData.feed = [];
+		var updateCounter = 0;
+		function loopDayUpdate(day,timeThroughDay,updatedLast) {
+			if (updatedLast > timeThroughDay) {
+				for (var i in data.events[day]) {
+					if (i < timeThroughDay && i < updatedLast) {
+						if (data.events[day][i]['object'] == 'feedObjects') { var type = 'feed'; } else { var type = 'messages'; }
+						updateData[type].push(data[data.events[day][i]['object']][data.events[day][i]['id']]);
+						updateCounter++;
+					}
+				};
+				updatedLast -= 1440;
+				if (updatedLast > 0 && day > 0) {
+					loopDayUpdate(day-1,1440,updatedLast);
+				}
+			}
 		}
-	},5000)
-	
+		loopDayUpdate(day,timeThroughDay,updatedLast);
+		console.log(timestampify()+'Pushing '+updateCounter+' new events to '+clientData[userId]['name'])
+		io.to(userId).emit('updateData',updateData);
+		queueFunc.update(userId,day,timeThroughDay,updatedLast);
+	}
 });
 
 
@@ -129,26 +126,89 @@ function timestampify() {
     return datetime;
 }
 
-function getPoint(start,currentTime) {
-	var day = 0;
-	var timeThroughDay = 0;
-	day = daydiff(currentTime,start);
-	var thisDay = Math.floor(getMidnight(currentTime) / 1000);
-	if (day != 0) {
-		timeThroughDay = parseInt(currentTime) / parseInt(thisDay);
-	} else {
-		timeThroughDay = parseInt(currentTime) - parseInt(start);
-	}
+function getPoint(start,currentTime,timezone) {
+	var thisDate = moment(currentTime).utcOffset(timezone * -1);
+	var startDate = moment(start).utcOffset(timezone * -1);
+	var startMidnight = startDate.clone().startOf('day').utcOffset(timezone * -1);
+	var thisMidnight = thisDate.clone().startOf('day').utcOffset(timezone * -1);
+	day =  moment(thisMidnight).diff(startMidnight, 'days');
+	timeThroughDay = thisDate.clone().diff(thisMidnight, 'minutes');
 	//console.log('Start time is '+start+'. Current time is '+currentTime+'. Difference is '+(parseInt(currentTime) - parseInt(start))+'. Which should be the same as '+timeThroughDay);
 	return {day:day,timeThrough:timeThroughDay};
 }
 
-function getMidnight(date) {
-	var thisDate = new Date(date);
-	thisDate.setHours(0,0,0,0);
-	return thisDate;
+function debugSetup(userId) {
+	var object2 = {timeStamp:moment().unix() + 2,user:userId,type:'message',data:data.messageObjects[1].messages,choice:data.choiceObjects[1]};
+	sendQueue.push(object2);
 }
 
-function daydiff(first, second) {
-    return Math.round((second-first)/(1000*60*60*24));
+function organiseQueue() {
+	function compare(a,b) {
+      if (a.timeStamp > b.timeStamp)
+        return -1;
+      if (a.timeStamp < b.timeStamp)
+        return 1;
+      return 0;
+    }
+    sendQueue.sort(compare);
+}
+
+var watcher = setInterval(function() {
+	if (sendQueue.length > 0) {
+		queueFunc.check();
+	}	
+},2000);
+
+var queueFunc = {};
+
+queueFunc.update = function(userId,day,timeThroughDay,updatedLast) {
+	timeStampToHit = 0;
+	nextOne = 0;
+	for (var i in data.events[day]) {
+		if (timeStampToHit == 0 && parseInt(timeThroughDay) < parseInt(i)) {
+			timeStampToHit = i;
+			break;
+		}
+	}
+	if (timeStampToHit != 0) {
+		console.log('Adding new queue object');
+		console.log(data.events[day][timeStampToHit]);
+		if (data.events[day][timeStampToHit]['object'] == 'feedObjects') { var type = 'feed'; } else { var type = 'messages'; }
+		if (data.events[day][timeStampToHit]['choiceId'] == 0) {
+			var queueChoice = '';
+		} else {
+			var queueChoice = data.choiceObjects[data.events[day][timeStampToHit]['choiceId']];
+		}
+		var queueObject = {
+			timeStamp:moment().unix() + ((i - timeThroughDay) * 60),
+			user:userId,
+			type:type,
+			data:data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']],
+			choice:queueChoice
+		};
+		sendQueue.push(queueObject);
+	}
+}
+
+queueFunc.check = function() {
+	var current = moment().unix();
+	if (sendQueue[0]['timeStamp'] <= current) {
+		console.log(timestampify()+'Sending '+sendQueue[0]['type'] + ' to '+clientData[sendQueue[0]['user']]['name']);
+		if (sendQueue[0]['type'] == 'message') {
+			if (sendQueue[0]['user'] == undefined) {
+				console.log(timestampify()+'Shit. Error.');
+				console.log(sendQueue);
+			} else {
+				io.to(sendQueue[0]['user']).emit('newMessage',{message:sendQueue[0]['data'],choices:sendQueue[0]['choice']});
+			}
+		} else {
+			if (sendQueue[0]['user'] == undefined) {
+				console.log(timestampify()+'Shit. Error.');
+				console.log(sendQueue);
+			} else {
+				io.to(sendQueue[0]['user']).emit('newFeed',{feedItem:sendQueue[0]['data'],choices:sendQueue[0]['choice']});
+			}
+		}
+		sendQueue.shift();
+	}
 }

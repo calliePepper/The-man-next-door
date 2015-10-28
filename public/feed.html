@@ -49,6 +49,7 @@
             </div>
         </div>
         <script type="text/javascript" src="script/jquery.min.js"></script>
+        <script type="text/javascript" src="script/moment.js"></script>
         <script type="text/javascript" src="/socket.io/socket.io.js"></script>
         <script type="text/javascript" src="script/shared.js"></script>
         <script type="text/javascript" src="script/data.js"></script>
@@ -57,7 +58,7 @@
         <script>
             var socket = io();
         
-            feed.create('feedContent',totalData['posts']);
+            feed.create('feedContent',localStorage.getObject('gameData').posts);
             
             var tempArray;
             
@@ -78,19 +79,12 @@
                 $('#trendingSection').append('<div class="trender"><span class="colouredText">'+data['title']+':</span> '+data['content']+'</div>');
             }
             
-            
-            $('#comment_0').on('click touch', function() {
-                $('#comment_0').unbind();
-                $('#comment_0').addClass('choiceBeing');
-                choiceControls.create(1,'feed_0','comment','Deal with the problem yourself','Ignore it, it will go away','Skin the cat. It\'s the only solution. Skin. The. Cat');
-            });
-            
             setTimeout(function() {
                 visibleChangeHandler();
                 glitchThis();
             }, 10000);
 
-            tempArray = totalData['trending'];
+            tempArray = localStorage.getObject('gameData').trending;
             buildTrending();
             buildTrending();
             buildTrending();

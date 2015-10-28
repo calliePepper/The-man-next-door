@@ -286,15 +286,12 @@ header:after {
 
 .sideLink i {
   margin-right: 10px; }
-
 .sideLink .mobile {
   display: none; }
-
 .sideLink i.desktop {
   width: 13px;
   text-align: center; }
-
-.sideLink.current {
+.sideLink .current {
   color: #910101; }
 
 .colouredText {
@@ -302,6 +299,9 @@ header:after {
 
 .avatar {
   max-width: 100%; }
+
+iframe {
+  width: 100%; }
 
 /*
      Specific
@@ -353,14 +353,21 @@ header:after {
   color: #dfe0e4;
   padding: 8px 10px 0 0;
   margin-right: 20px;
-  font-weight: bold;
-  cursor: pointer; }
+  font-weight: bold; }
 
-.feedControl:hover, .feedControl.choiceBeing {
+.usableControls:hover, .feedControl.choiceBeing {
   color: #000; }
 
 .feedControl i {
   margin-right: 10px; }
+
+.liked, .commented {
+  color: #910101 !important;
+  cursor: default !important; }
+
+.usableControls {
+  color: #989898;
+  cursor: pointer; }
 
 .likedSection {
   border-top: 1px solid #dfe0e4;
@@ -477,31 +484,27 @@ header:after {
 
 .userNav {
   text-align: center; }
-
-.userNav div {
-  cursor: pointer;
-  display: inline-block;
-  border-left: 1px solid #dfe0e4;
-  padding: 14px 30px;
-  position: relative; }
-
-.userNav div:hover {
-  color: #910101; }
-
-.userNav div:last-child {
-  border-right: 1px solid #dfe0e4; }
-
-.userNav .current:after {
-  content: "";
-  display: block;
-  position: absolute;
-  width: 0;
-  height: 0;
-  border: 10px solid transparent;
-  border-bottom: 10px solid #e9eaed;
-  bottom: -2px;
-  left: 50%;
-  margin-left: -10px; }
+  .userNav div {
+    cursor: pointer;
+    display: inline-block;
+    border-left: 1px solid #dfe0e4;
+    padding: 14px 30px;
+    position: relative; }
+  .userNav div:hover {
+    color: #910101; }
+  .userNav div:last-child {
+    border-right: 1px solid #dfe0e4; }
+  .userNav .current:after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-bottom: 10px solid #e9eaed;
+    bottom: -2px;
+    left: 50%;
+    margin-left: -10px; }
 
 .aboutBody {
   display: none;
@@ -579,7 +582,7 @@ header:after {
 .aboutFamilyRel {
   font-size: 0.8em; }
 
-#messagesPage, #messagesPage .mobileFix, #messagesPage .wrapper {
+#messagesPage, #messagesPage .mobileFix, #messagesPage .wrapper, #messagesPage #contentAim {
   height: 100%; }
 
 #messagesPage .wrapper {
@@ -775,7 +778,7 @@ header:after {
   background: rgba(0, 0, 0, 0.7);
   border: 1px solid rgba(0, 0, 0, 0.4);
   margin: 0 auto;
-  height: 100%;
+  min-height: 100%;
   color: #fff;
   padding: 10px;
   text-align: left; }
@@ -790,12 +793,18 @@ header:after {
 .infoBox li {
   padding-bottom: 30px; }
 
+.startBlock {
+  padding: 10px;
+  width: 100%;
+  text-align: center; }
+
 .startBtn {
   margin-top: 10px;
   width: auto;
   display: inline-block;
-  margin-left: 93px;
-  cursor: pointer; }
+  cursor: pointer;
+  font-size: 1.2em;
+  padding: 14px 30px; }
 
 input[type="text"] {
   padding: 8px;
@@ -804,8 +813,84 @@ input[type="text"] {
   border: 1px solid #910101;
   margin-left: 10px; }
 
+.halfer input {
+  margin-left: 60px;
+  margin-top: 15px; }
+
 .badInput {
   background: rgba(255, 0, 0, 0.5) !important; }
+
+.halfer {
+  width: 49%;
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+  height: 80px; }
+
+.halfer label {
+  margin-right: 18px; }
+
+.thumb {
+  width: 50px;
+  max-height: 50px;
+  margin-right: 20px;
+  position: absolute;
+  top: 25px; }
+
+.loadingSection {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 4; }
+
+.rightLoad, .leftLoad {
+  background: #000;
+  width: 50%;
+  position: absolute;
+  top: 0;
+  height: 100%;
+  z-index: 1; }
+
+.rightLoad {
+  right: 0;
+  transition: right 1s; }
+
+.leftLoad {
+  left: 0;
+  transition: left 1s; }
+
+.loadingLine {
+  height: 100%;
+  max-height: 0px;
+  position: absolute;
+  left: 50%;
+  width: 2px;
+  background: #910101;
+  top: 0;
+  transition: max-height 4s;
+  z-index: 2; }
+
+.load {
+  max-height: 1400px; }
+
+.loadingText {
+  color: #910101;
+  width: 1px;
+  font-size: 1.4em;
+  font-weight: bold;
+  word-break: break-all;
+  top: 0;
+  bottom: 0;
+  display: inline-block;
+  vertical-align: middle;
+  position: absolute;
+  top: 30%; }
+
+.leftLoad .loadingText {
+  right: 30px; }
+
+.rightLoad .loadingText {
+  left: 15px; }
 
 @media screen and (max-width: 900px) {
   header {

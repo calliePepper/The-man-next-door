@@ -94,13 +94,17 @@
                                 2:0
                             },
                             lastFeed: 0,
-                            firstLoad: 1
+                            firstLoad: 1,
+                            unread: {
+                                'posts':0,
+                                'messages':0
+                            }
                         };
                         localStorage.setObject('gameSettings',gameData);
                         var comments = {
                                 1: [
-                                    new comment(1,1,1444611193,'God I am awesome','',-2),
-                                    new comment(1,1,1444610193,'So amazingly awesome','',5),
+                                    new comment(1,1,1444611193,'God I am awesome','','',-2),
+                                    new comment(1,1,1444610193,'So amazingly awesome','','',5),
                                 ]
                         }
                         

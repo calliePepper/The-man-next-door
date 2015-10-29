@@ -89,15 +89,31 @@ io.on('connection', function(socket) {
 	
 	function oldDataUpdate(day,timeThroughDay,updatedLast) {
 		var updateData = {};
-		updateData.messages = [];
+		updateData.message = [];
 		updateData.feed = [];
 		var updateCounter = 0;
 		function loopDayUpdate(day,timeThroughDay,updatedLast) {
 			if (updatedLast > timeThroughDay) {
 				for (var i in data.events[day]) {
 					if (i < timeThroughDay && i < updatedLast) {
-						if (data.events[day][i]['object'] == 'feedObjects') { var type = 'feed'; } else { var type = 'messages'; }
-						updateData[type].push(data[data.events[day][i]['object']][data.events[day][i]['id']]);
+						console.log(data.events[day][i]);
+						var tempArray = {};
+						var tempChoice
+						if (data.events[day][i]['choiceId'] != 0) {
+							tempChoice = data.choiceObjects[data.events[day][i]['choiceId']];
+						} else {
+							tempChoice = '';
+						}
+						if (data.events[day][i]['object'] == 'feedObjects') { 
+							var type = 'feed'; 
+							tempArray.feedItem = data[data.events[day][i]['object']][data.events[day][i]['id']]
+							tempArray.choices = tempChoice;
+						} else { 
+							var type = 'message';
+							tempArray = data[data.events[day][i]['object']][data.events[day][i]['id']]
+							tempArray.choices = tempChoice;
+						}
+						updateData[type].push(tempArray);
 						updateCounter++;
 					}
 				};
@@ -171,7 +187,7 @@ queueFunc.update = function(userId,day,timeThroughDay,updatedLast) {
 		}
 	}
 	if (timeStampToHit != 0) {
-		console.log('Adding new queue object');
+		console.log(timestampify() + 'Adding new queue object');
 		console.log(data.events[day][timeStampToHit]);
 		if (data.events[day][timeStampToHit]['object'] == 'feedObjects') { var type = 'feed'; } else { var type = 'messages'; }
 		if (data.events[day][timeStampToHit]['choiceId'] == 0) {

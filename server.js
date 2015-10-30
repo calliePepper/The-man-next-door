@@ -98,19 +98,25 @@ io.on('connection', function(socket) {
 					if (i < timeThroughDay && i < updatedLast) {
 						console.log(data.events[day][i]);
 						var tempArray = {};
-						var tempChoice
-						if (data.events[day][i]['choiceId'] != 0) {
-							tempChoice = data.choiceObjects[data.events[day][i]['choiceId']];
-						} else {
-							tempChoice = '';
-						}
+						var tempChoice = '';
 						if (data.events[day][i]['object'] == 'feedObjects') { 
 							var type = 'feed'; 
 							tempArray.feedItem = data[data.events[day][i]['object']][data.events[day][i]['id']]
+							var tempComments = '';
+							if (tempArray.feedItem.comments != 0) {
+								tempComments = data.commentObjects[tempArray.feedItem.comments];
+								if (tempComments.autoTarget == 'choice') {
+									tempChoice = data.choiceObjects[tempComments.autoId];
+								}
+							}
 							tempArray.choices = tempChoice;
+							tempArray.comments = tempComments;
 						} else { 
 							var type = 'message';
-							tempArray = data[data.events[day][i]['object']][data.events[day][i]['id']]
+							tempArray.messageItem = data[data.events[day][i]['object']][data.events[day][i]['id']]
+							if (tempArray.messageItem.autoTarget == 'choice') {
+								tempChoice = data.choiceObjects[tempComments.autoId];
+							}
 							tempArray.choices = tempChoice;
 						}
 						updateData[type].push(tempArray);

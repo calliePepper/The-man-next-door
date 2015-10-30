@@ -46,9 +46,9 @@
         <script type="text/javascript" src="script/moment.js"></script>
         <script type="text/javascript" src="script/glitch.js"></script>
         <script>
-            var userAvatar = 'userAvatar.jpg';
+            var userAvatar = 'img/userAvatar.jpg';
         
-            if (localStorage.thumb) {
+            if (localStorage.thumb && localStorage.thumb != '') {
                 $('#putThumbHere').html('<img class="thumb" src="'+ localStorage.thumb +'" tile="Old icon"/>');
                 userAvatar = localStorage.thumb;
             }
@@ -114,9 +114,9 @@
             
                         var totalData = {
                             posts: [
-                                new post(1,1,1444511193,'Check out this image, found it at <a href="http://image.google.com">Google</a>','exampleLink.jpg','',500,comments[1],choices[3],0,0),
-                                new post(2,1,1444362078,'Yo yo yo','','',23,'','',0,0),
-                                new post(3,1,1444162078,'Bitches love me','','',7,'','',0,0)
+                                new post(1,1,1444511193,'Check out this image, found it at <a href="http://image.google.com">Google</a>','exampleLink.jpg','',500,comments[1],0),
+                                new post(2,1,1444362078,'Yo yo yo','','',23,'',0),
+                                new post(3,1,1444162078,'Bitches love me','','',7,'',0)
                             ],
                             trending: [
                                 new trending(1,'Twaddle','A new social media for the masses, is looking for new employees'),

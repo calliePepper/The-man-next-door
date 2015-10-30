@@ -577,12 +577,16 @@ feed.create = function(target,objects) {
             if (value['choices'] != undefined && value['choices'] != '' && value['commented'] == 0) {canComment = 'usableControls';}
             var commentsString = feed.comments(value['comments'],value['postId']);
             $('#'+target).prepend('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'<div class="feedControls"><span class="feedControl likeControl usableControls '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'"><i class="fa fa-comment"></i>Comment</span></div></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
-            if (value['choices'] != undefined && value['choices'] != '' && value['commented'] == 0) {
-                $('#comment_'+value['postId']).on('click touch', function() {
-                    $('#comment_'+value['postId']).unbind();
-                    $('#comment_'+value['postId']).addClass('choiceBeing');
-                    choiceControls.create(value['choices'].choiceId,'feed_'+value['postId'],'comment','comment_'+value['postId'],value.choices.choice1,value.choices.choice2,value.choices.choice3);
-                });
+            if (commentsString != '') {
+                var possibleChoice = value['comments'][value['comments'].length-1];
+                if (possibleChoice.date == 'CHOICE') {
+                    $('#comment_'+value['postId']).addClass('usableControls');
+                    $('#comment_'+value['postId']).on('click touch', function() {
+                        $('#comment_'+value['postId']).unbind();
+                        $('#comment_'+value['postId']).addClass('choiceBeing');
+                        choiceControls.create(possibleChoice.text.choiceId,'feed_'+value['postId'],'comment','comment_'+value['postId'],possibleChoice.text.choice1,possibleChoice.text.choice2,possibleChoice.text.choice3);                
+                    });
+                }
             }
             if (value['liked'] == 0) {
                 $('#like_'+value['postId']).on('click touch', function() {
@@ -601,19 +605,21 @@ feed.comments = function(comments,postId) {
     if (comments.length > 0) {
         commentsString = '<div class="comments" id="comments_'+postId+'">';
         $.each(comments, function(index,value) {
-            var commentSince = time.wordify(value['date']);
-            var usersAvatar = localStorage.getObject('gameData')['users'][value['user']]['avatar'];
-            var usersFirstname = localStorage.getObject('gameData')['users'][value['user']]['firstname'];
-            var usersLastname = localStorage.getObject('gameData')['users'][value['user']]['lastname'];
-            var imageComments = '';
-            if (value['image'] != '') {
-                imageComments = '<img src="img/'+value['image']+'" alt="user image" class="feedImage" />';
+            if (value['date'] != 'CHOICE') {
+                var commentSince = time.wordify(value['date']);
+                var usersAvatar = localStorage.getObject('gameData')['users'][value['user']]['avatar'];
+                var usersFirstname = localStorage.getObject('gameData')['users'][value['user']]['firstname'];
+                var usersLastname = localStorage.getObject('gameData')['users'][value['user']]['lastname'];
+                var imageComments = '';
+                if (value['image'] != '') {
+                    imageComments = '<img src="img/'+value['image']+'" alt="user image" class="feedImage" />';
+                }
+                var likedComments = '';
+                if (value['likes'] != '') {
+                    likedComments = '<span class="colouredText commentLikes"><i class="fa fa-thumbs-up"></i>'+value['likes']+'</span>';
+                }
+                commentsString += '<div class="comment"><div class="commentAvatar"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><span class="commentBy">'+usersFirstname+' '+usersLastname+'</span><span class="commentContent dateUpdate" data-date="'+value['date']+'">'+value['text']+'</span>'+imageComments+'<div class="commentFooter">'+likedComments+commentSince+'</div></div>';
             }
-            var likedComments = '';
-            if (value['likes'] != '') {
-                likedComments = '<span class="colouredText commentLikes"><i class="fa fa-thumbs-up"></i>'+value['likes']+'</span>';
-            }
-            commentsString += '<div class="comment"><div class="commentAvatar"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><span class="commentBy">'+usersFirstname+' '+usersLastname+'</span><span class="commentContent dateUpdate" data-date="'+value['date']+'">'+value['text']+'</span>'+imageComments+'<div class="commentFooter">'+likedComments+commentSince+'</div></div>';
         });
         commentsString += '</div>';
     } 

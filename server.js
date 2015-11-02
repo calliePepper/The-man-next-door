@@ -75,16 +75,28 @@ io.on('connection', function(socket) {
 	
 	socket.on('choiceMade', function(replyData) {
 		if (data.choiceObjects[replyData.choiceId]['result_'+replyData.choiceMade] != 0) {
-			var messageResult = data.messageObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].messages;
-			var choiceResult = '';
-			if (data.messageObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].autoTarget == 'choice') {
-				var choiceResult = data.choiceObjects[data.messageObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].autoId]
+			if (data.choiceObjects[replyData.choiceId].resultType == 'comment') {
+				var resultTest = 'result'+replyData.choiceMade;
+				var commentResult = data.commentObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]];
+				var choiceResult = '';
+				if (data.commentObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].autoTarget == 'choice') {
+					var choiceResult = data.choiceObjects[data.commentObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].autoId]
+				}
+				//commentResult.feedId = replyData.additionalTarget;
+				var object2 = {timeStamp:0,user:userId,type:'comment',data:commentResult,choice:choiceResult};
+			} else if (data.choiceObjects[replyData.choiceId].resultType == 'message') {
+				var messageResult = data.messageObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].messages;
+				var choiceResult = '';
+				if (data.messageObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].autoTarget == 'choice') {
+					var choiceResult = data.choiceObjects[data.messageObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].autoId]
+				}
+				choiceResult.additionalTarget = replyData.additionalTarget;
+				var object2 = {timeStamp:0,user:userId,type:'message',data:messageResult,choice:choiceResult};
 			}
-			var object2 = {timeStamp:moment().unix(),user:userId,type:'message',data:messageResult,choice:choiceResult};
+			console.log(timestampify()+replyData.playerName+' came across choice '+replyData.choiceId+' and took path '+replyData.choiceMade);	
 			sendQueue.push(object2);
 			organiseQueue();
 		}
-		console.log(timestampify()+replyData.playerName+' came across choice '+replyData.choiceId+' and took path '+replyData.choiceMade);	
 	});
 	
 	function oldDataUpdate(day,timeThroughDay,updatedLast) {
@@ -96,21 +108,26 @@ io.on('connection', function(socket) {
 			if (updatedLast > timeThroughDay) {
 				for (var i in data.events[day]) {
 					if (i < timeThroughDay && i < updatedLast) {
-						console.log(data.events[day][i]);
 						var tempArray = {};
-						var tempChoice
-						if (data.events[day][i]['choiceId'] != 0) {
-							tempChoice = data.choiceObjects[data.events[day][i]['choiceId']];
-						} else {
-							tempChoice = '';
-						}
+						var tempChoice = '';
 						if (data.events[day][i]['object'] == 'feedObjects') { 
 							var type = 'feed'; 
 							tempArray.feedItem = data[data.events[day][i]['object']][data.events[day][i]['id']]
+							var tempComments = '';
+							if (tempArray.feedItem.comments != 0) {
+								tempComments = data.commentObjects[tempArray.feedItem.comments];
+								if (tempComments.autoTarget == 'choice') {
+									tempChoice = data.choiceObjects[tempComments.autoId];
+								}
+							}
 							tempArray.choices = tempChoice;
+							tempArray.comments = tempComments;
 						} else { 
 							var type = 'message';
-							tempArray = data[data.events[day][i]['object']][data.events[day][i]['id']]
+							tempArray.messageItem = data[data.events[day][i]['object']][data.events[day][i]['id']]
+							if (tempArray.messageItem.autoTarget == 'choice') {
+								tempChoice = data.choiceObjects[tempComments.autoId];
+							}
 							tempArray.choices = tempChoice;
 						}
 						updateData[type].push(tempArray);
@@ -156,13 +173,14 @@ function getPoint(start,currentTime,timezone) {
 function debugSetup(userId) {
 	var object2 = {timeStamp:moment().unix() + 2,user:userId,type:'message',data:data.messageObjects[1].messages,choice:data.choiceObjects[1]};
 	sendQueue.push(object2);
+	organiseQueue()
 }
 
 function organiseQueue() {
 	function compare(a,b) {
-      if (a.timeStamp > b.timeStamp)
-        return -1;
       if (a.timeStamp < b.timeStamp)
+        return -1;
+      if (a.timeStamp > b.timeStamp)
         return 1;
       return 0;
     }
@@ -187,9 +205,9 @@ queueFunc.update = function(userId,day,timeThroughDay,updatedLast) {
 		}
 	}
 	if (timeStampToHit != 0) {
-		console.log(timestampify() + 'Adding new queue object');
-		console.log(data.events[day][timeStampToHit]);
-		if (data.events[day][timeStampToHit]['object'] == 'feedObjects') { var type = 'feed'; } else { var type = 'messages'; }
+		if (data.events[day][timeStampToHit]['object'] == 'feedObjects') { var type = 'feed'; 
+		} else if (data.events[day][timeStampToHit]['object'] == 'commentObjects') { var type = 'comment'; 
+		} else if (data.events[day][timeStampToHit]['object'] == 'messageObjects') { var type = 'messages'; }
 		if (data.events[day][timeStampToHit]['choiceId'] == 0) {
 			var queueChoice = '';
 		} else {
@@ -203,6 +221,7 @@ queueFunc.update = function(userId,day,timeThroughDay,updatedLast) {
 			choice:queueChoice
 		};
 		sendQueue.push(queueObject);
+		organiseQueue()
 	}
 }
 
@@ -217,7 +236,14 @@ queueFunc.check = function() {
 			} else {
 				io.to(sendQueue[0]['user']).emit('newMessage',{message:sendQueue[0]['data'],choices:sendQueue[0]['choice']});
 			}
-		} else {
+		} else if (sendQueue[0]['type'] == 'comment') {
+			if (sendQueue[0]['user'] == undefined) {
+				console.log(timestampify()+'Shit. Error.');
+				console.log(sendQueue);
+			} else {
+				io.to(sendQueue[0]['user']).emit('newComment',{comment:sendQueue[0]['data'],choices:sendQueue[0]['choice']});
+			}
+		} else if (sendQueue[0]['type'] == 'feed') {
 			if (sendQueue[0]['user'] == undefined) {
 				console.log(timestampify()+'Shit. Error.');
 				console.log(sendQueue);
@@ -226,5 +252,6 @@ queueFunc.check = function() {
 			}
 		}
 		sendQueue.shift();
+		organiseQueue()
 	}
 }

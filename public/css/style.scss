@@ -88,10 +88,10 @@ iframe{width:100%;}
 .trender{font-size:0.7em;color:#777;margin-bottom:$paddingVal;}
 .feedControls{border-top:1px solid #dfe0e4;padding: $paddingVal 4px 0 8px;}
 .feedControl{display:inline;color:#dfe0e4;padding:8px $paddingVal 0 0;margin-right:20px;font-weight:bold;}
-.usableControls:hover,.feedControl.choiceBeing{color:#000;}
+.usableControls:hover,.feedControl.choiceBeinsg{color:#000;}
 .feedControl i{margin-right:10px;}
-.liked,.commented{color:$majorColour !important;cursor:default !important;}
-.usableControls{color:#989898;cursor:pointer;}
+.liked,.commented{color:#dfe0e4 !important;cursor:default !important;}
+.usableControls{color:$majorColour;cursor:pointer;}
 .likedSection{border-top:1px solid #dfe0e4;border-bottom:1px solid #dfe0e4;font-size:0.8em;padding:$paddingVal;}
 .feedImage{width:100%;}
 .games{padding-top:$paddingVal;border-top:1px solid #dfe0e4;position:relative;width:100%;}

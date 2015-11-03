@@ -692,11 +692,13 @@ feed.commentPoster = function(comments,postId) {
         } else if (comments[counter] != undefined && comments[counter].date == 'CHOICE') {
             var possibleChoice = comments[comments.length-1];
             if (possibleChoice.date == 'CHOICE') {
-                $('#comment_'+value['postId']).addClass('usableControls');
-                $('#comment_'+value['postId']).on('click touch', function() {
-                    $('#comment_'+value['postId']).unbind();
-                    $('#comment_'+value['postId']).addClass('choiceBeing');
-                    choiceControls.create(possibleChoice.text.choiceId,'feed_'+value['postId'],'comment','comment_'+value['postId'],possibleChoice.text.choice1,possibleChoice.text.choice2,possibleChoice.text.choice3);                
+                console.log('There is a choice on #comment_'+postId);
+                $('#comment_'+postId).addClass('usableControls');
+                $('#comment_'+postId).removeClass('commented');
+                $('#comment_'+postId).on('click touch', function() {
+                    $('#comment_'+postId).unbind();
+                    $('#comment_'+postId).addClass('choiceBeing');
+                    choiceControls.create(possibleChoice.text.choiceId,'feed_'+postId,'comment','comment_'+postId,possibleChoice.text.choice1,possibleChoice.text.choice2,possibleChoice.text.choice3);                
                 });
             }
         }

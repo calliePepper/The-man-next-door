@@ -356,18 +356,18 @@ iframe {
   margin-right: 20px;
   font-weight: bold; }
 
-.usableControls:hover, .feedControl.choiceBeing {
+.usableControls:hover, .feedControl.choiceBeinsg {
   color: #000; }
 
 .feedControl i {
   margin-right: 10px; }
 
 .liked, .commented {
-  color: #910101 !important;
+  color: #dfe0e4 !important;
   cursor: default !important; }
 
 .usableControls {
-  color: #989898;
+  color: #910101;
   cursor: pointer; }
 
 .likedSection {

@@ -81,6 +81,13 @@
     
             document.getElementById('file').addEventListener('change',handleFile, false);
             
+            function createTimestamp(timeFrom) {
+                var d = new Date();
+                d.setHours(0,0,0,0);
+                var newDateObj = new Date(d.getTime() + (timeFrom*60000) - 86400000);
+                return newDateObj.getTime() / 1000;
+            }
+
             $('#startBtn').on('click touch', function() {
                 if ($('#name').val() != '') {
                     if (typeof(Storage) !== 'undefined') {
@@ -103,8 +110,8 @@
                         localStorage.setObject('gameSettings',gameData);
                         var comments = {
                                 1: [
-                                    new comment(1,1,1444611193,'God I am awesome','','',-2),
-                                    new comment(1,1,1444610193,'So amazingly awesome','','',5),
+                                    new comment(1,1,createTimestamp(601),'God I am awesome','','',-2),
+                                    new comment(1,1,createTimestamp(603),'So amazingly awesome','','',5),
                                 ]
                         }
                         
@@ -114,9 +121,9 @@
             
                         var totalData = {
                             posts: [
-                                new post(1,1,1444511193,'Check out this image, found it at <a href="http://image.google.com">Google</a>','exampleLink.jpg','',500,comments[1],0),
-                                new post(2,1,1444362078,'Yo yo yo','','',23,'',0),
-                                new post(3,1,1444162078,'Bitches love me','','',7,'',0)
+                                new post(1,1,createTimestamp(600),'Check out this image, found it at <a href="http://image.google.com">Google</a>','exampleLink.jpg','',500,comments[1],0),
+                                new post(2,1,createTimestamp(800),'Yo yo yo','','',23,'',0),
+                                new post(3,1,createTimestamp(1200),'Bitches love me','','',7,'',0)
                             ],
                             trending: [
                                 new trending(1,'Twaddle','A new social media for the masses, is looking for new employees'),
@@ -126,8 +133,8 @@
                                 new trending(1,'Netherworld vacation','Are you tired of your boring existance? Think you deserve a great vacation? We show you paths that the guides don\'t want you to know about')
                             ],
                             messages: [
-                                new message(1,1,1444734245,'Hey, thanks for the friend request','','',1,'0_1'),
-                                new message(2,2,1444734245,'Hey, you\'re that friend that Robin keeps talking about right?','','',1,'0_2')
+                                new message(1,1,createTimestamp(1300),'Hey, thanks for the friend request','','',1,'0_1'),
+                                new message(2,2,createTimestamp(1450),'Hey, you\'re that friend that Robin keeps talking about right?','','',1,'0_2')
                             ],
                             users: {
                                 0: new user($('#name').val(),'','they',1412314,userAvatar,'',0,0,0),

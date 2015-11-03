@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html> 
+    <head> 
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">   
+        <title>Twaddle - A social media for the everyman</title>
+        <link rel="icon" href="img/favicon.ico" type="image/x-icon" />
+        <link href="css/style.css" rel="stylesheet" type="text/css" />
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" />
+        <link href='https://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
+    </head>
+    <body>
+        <div id="loadingSection" class="loadingSection">
+            <div class="leftLoad" id="leftLoad">
+                <div class="loadingText">Fetching data</div>
+            </div>
+            <div class="loadingLine" id="loadingLine">
+                
+            </div>
+            <div class="rightLoad" id="rightLoad">
+                <div class="loadingText">Please wait</div>
+            </div>
+        </div>
+        <div id="contentAim">
+            
+        </div>
+        <script type="text/javascript" src="script/jquery.min.js"></script>
+        <script>
+            $('#loadingLine').addClass('load');
+        </script>
+        <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+        <script type="text/javascript" src="script/shared.js"></script>
+        <script type="text/javascript" src="script/data.js"></script>
+        <script type="text/javascript" src="script/init.js"></script>
+        <script type="text/javascript" src="script/glitch.js"></script>
+        <script>
+              navigationControls.change('feed');
+        </script>
+    </body>	
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html> 
+    <head> 
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">   
+        <title>Sam Creed</title>
+        <link rel="icon" href="img/favicon.ico" type="image/x-icon" />
+        <link href="css/style.css" rel="stylesheet" type="text/css" />
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" />
+        <link href='https://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
+    </head>
+    <body>
+        <div class="mobileFix">
+        	<header>
+                <div class="wrapper">
+                    <div id="logo" class="logo">Twaddle</div>
+                    <div class="mobileNav">
+                        <i id="mobileNav" class="fa fa-bars fa-2x"></i>
+                    </div>
+                </div>
+            </header>
+            <div class="wrapper mainWrapper">
+                <div class="sideBar" id="sideBar">
+                    <a href="feed" id="newsFeedLink" class="feed sideLink">
+                        <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-rss fa-stack-1x fa-inverse"></i></span>
+                        <i id="feedIcon" class="desktop fa fa-rss"></i>News Feed<span class="totalNew"></span>
+                    </a>
+                    <a href="messages" id="messagesLink" class="feed sideLink">
+                        <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i></span>
+                        <i id="feedIcon" class="desktop fa fa-envelope-o"></i>Messaging<span class="totalNew"></span>
+                    </a>
+                    <div class="sideHeader">Friends</div>
+                </div>
+                <div id="feedContent" class="mainContent noSponsored">
+                    <div id="userHeader" class="userHeader noHero">
+                        <div class="userHero"></div>
+                        <div class="userAvatar"><img class="avatar" src="img/samAvatar.png" alt="Sam's Avatar" /></div>
+                        <div class="userName">Sam Creed</div>
+                        <div class="userNav" id="userNav">
+                            <div id="posts">Wall</div><div id="about">About</div>
+                        </div>
+                    </div>
+                    <div id="userBody">
+                        
+                    </div>
+                    <div id="aboutBody" class="aboutBody">
+                        <div class="cardTitle">About</div>
+                        <div class="aboutNav">
+                            <div class="aboutItem current" id="overview">Overview</div>
+                            <div class="aboutItem" id="family">Family and Relationships</div>
+                            <div class="aboutItem" id="events">Life Events</div>
+                        </div>
+                        <div class="outerAbout">
+                            <div id="aboutContent" class="aboutContent">
+                                <div class="aboutContents overview">
+                                    <div class="aboutSection">
+                                        <div class="miniHeader">General Information</div>
+                                        <table class="infoTable">
+                                            <tr>
+                                                <td class="labelTd">Date of Birth</td>
+                                                <td>1 April</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="labelTd">Gender</td>
+                                                <td class="hiddenInfo">Not shared</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="aboutSection">
+                                        <div class="miniHeader">Favourite Quote</div>
+                                        <p>And now I see with eye serene,<br>
+                                        The very pulse of the machine.<br>
+                                        -Wordsworth</p>
+                                    </div>
+                                </div>                    
+                                <div class="aboutContents family">
+                                    <div class="aboutSection">
+                                        <div class="miniHeader">Relationship</div>
+                                        <p>Not shared</p>
+                                    </div>
+                                    <div class="aboutSection">
+                                        <div class="miniHeader">Family</div>
+                                        <table class="infoTable">
+                                            <tr>
+                                                <td>
+                                                    <img src="" class="aboutAvatar" alt="family avatar"/>
+                                                    <div class="aboutFamilyName">James Creed</div>
+                                                    <div class="aboutFamilyRel">Brother</div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="aboutContents events">
+                                    <div class="miniHeader">Life events</div>            
+                                    <table class="infoTable">
+                                            <tr>
+                                                <td class="labelTd">2015</td>
+                                                <td>Sam is in an open relationship</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="labelTd">2014</td>
+                                                <td>Graduated from Elridge Private School</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="labelTd">1997</td>
+                                                <td>James Creed was born</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="labelTd">1995</td>
+                                                <td>Born on 1 April</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="script/jquery.min.js"></script>
+        <script type="text/javascript" src="script/moment.js"></script>
+        <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+        <script type="text/javascript" src="script/shared.js"></script>
+        <script type="text/javascript" src="script/data.js"></script>
+        <script type="text/javascript" src="script/init.js"></script>
+        <script>      
+
+
+            $('#userNav div').on('click touch', function() {
+                if ($(this).attr('id') != 'about') {
+                    $('#aboutBody').hide();
+                    $('#userBody').html('');
+                    $('#userHeader').addClass('noHero');
+                    $('#userNav div').removeClass('current');
+                    $('#posts').addClass('current');
+                    feed.create('userBody',totalData['posts']);
+                } else{
+                    $('#userBody').html('');
+                    $('#userHeader').removeClass('noHero');
+                    $('#userNav div').removeClass('current');
+                    $('#about').addClass('current');
+                    $('#aboutBody').show();
+                    $('.overview').show();
+                }
+            });
+
+            $('.aboutItem').on('click touch', function() {
+                $('.aboutItem').removeClass('current');
+                $(this).addClass('current');
+                $('.aboutContents').hide();
+                $('.'+$(this).attr('id')).show();
+            });
+            
+            $('#posts').click();
+        </script>
+    </body>	
+</html>

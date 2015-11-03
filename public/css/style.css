@@ -298,7 +298,8 @@ header:after {
   color: #910101; }
 
 .avatar {
-  max-width: 100%; }
+  max-width: 100%;
+  max-height: 100%; }
 
 iframe {
   width: 100%; }
@@ -397,6 +398,9 @@ iframe {
 .comments {
   padding-bottom: 10px; }
 
+.comments:empty {
+  display: none; }
+
 .comment {
   padding: 10px 10px 0 50px;
   position: relative; }
@@ -404,9 +408,11 @@ iframe {
 .commentAvatar {
   position: absolute;
   width: 30px;
+  height: 30px;
   left: 10px;
   top: 14px;
-  margin: 0; }
+  margin: 0;
+  text-align: center; }
 
 .commentBy {
   color: #910101;
@@ -830,12 +836,16 @@ input[type="text"] {
 .halfer label {
   margin-right: 18px; }
 
-.thumb {
+.putThumbHere {
   width: 50px;
-  max-height: 50px;
+  height: 50px;
   margin-right: 20px;
   position: absolute;
   top: 25px; }
+
+.thumb {
+  max-width: 50px;
+  max-height: 50px; }
 
 .loadingSection {
   position: fixed;

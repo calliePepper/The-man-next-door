@@ -33,8 +33,9 @@ var playerName = localStorage.getObject('gameSettings').name;
 
 var gameUpdate = {};
 
-gameUpdate.updateTime = function() {
-    var currentTime = Math.floor(Date.now() / 1000);
+gameUpdate.updateTime = function(varTime) {
+    if (varTime == undefined) {varTime = 0;}
+    var currentTime = Math.floor(Date.now() / 1000 + varTime);
     var tempData = localStorage.getObject('gameSettings');
     tempData.lastUpdate = new Date();
     localStorage.setObject('gameSettings',tempData);
@@ -149,19 +150,20 @@ choiceControls.choose = function(id,choice,targetType) {
         commentsString = '';
         //commentsString = '<div class="comments">';
         var commentSince = time.wordify(Math.floor(Date.now() / 1000));
+        var now = Math.floor(Date.now() / 1000);
         var usersAvatar = localStorage.getObject('gameData')['users'][0]['avatar'];
         var usersFirstname = localStorage.getObject('gameData')['users'][0]['firstname'];
         var usersLastname = localStorage.getObject('gameData')['users'][0]['lastname'];
         var imageComments = '';
         var likedComments = '';
-        commentsString += '<div class="comment"><div class="commentAvatar"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><span class="commentBy">'+usersFirstname+'</span><span class="commentContent">'+theChoice+'</span>'+imageComments+'<div class="commentFooter">'+likedComments+commentSince+'</div></div>';
+        commentsString += '<div class="comment"><div class="commentAvatar"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><span class="commentBy">'+usersFirstname+'</span><span class="commentContent">'+theChoice+'</span>'+imageComments+'<div class="commentFooter dateUpdate" data-date="'+now+'">'+commentSince+'</div></div>';
         //commentsString += '</div>';
         var choiceMade = choice.replace('choice','');
         var commentTarg = $('#choiceBlock_'+id).parent().find('.comments').attr('id').split('_')[1];
         $('#choiceBlock_'+id).parent().find('.comments').append(commentsString);
         $('#choiceBlock_'+id).remove();
         additionalTarget = id;
-        var newComment = new comment('',0,Math.floor(Date.now() / 1000),theChoice,'','',0);
+        var newComment = new comment('',0,now,theChoice,'','',0);
         console.log('Submitting comment data. '+newComment+ '. '+commentTarg);
         gameUpdate.updateLocal(newComment,'comment',commentTarg);
         console.log('Submitting choice data. '+choiceMade+ '. '+commentTarg);
@@ -678,7 +680,7 @@ feed.commentPoster = function(comments,postId) {
             if (value['likes'] != '') {
                 likedComments = '<span class="colouredText commentLikes"><i class="fa fa-thumbs-up"></i>'+value['likes']+'</span>';
             }
-            commentsString += '<div class="comment"><div class="commentAvatar"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><span class="commentBy">'+usersFirstname+' '+usersLastname+'</span><span class="commentContent" data-date="'+value['date']+'">'+value['text']+'</span>'+imageComments+'<div class="commentFooter dateUpdate">'+commentSince+'</div></div>';
+            commentsString += '<div class="comment"><div class="commentAvatar"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><span class="commentBy">'+usersFirstname+' '+usersLastname+'</span><span class="commentContent" data-date="'+value['date']+'">'+value['text']+'</span>'+imageComments+'<div class="commentFooter dateUpdate" data-date="'+value['date']+'">'+commentSince+'</div></div>';
             console.log('#comments_'+postId);
             $('#comments_'+postId).append(commentsString);
             counter++

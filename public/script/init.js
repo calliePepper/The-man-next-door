@@ -124,7 +124,7 @@ function processFeed(receivedFeed,nonote) {
         if (nonote == 1) {
             feed.backlog(currentFeed);
         } else {
-            tempPusherfeed.new();
+            feed.create('feedContent',currentFeed,0);
         }
     }
     var updatePause;

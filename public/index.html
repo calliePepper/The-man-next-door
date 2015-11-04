@@ -110,8 +110,19 @@
                         localStorage.setObject('gameSettings',gameData);
                         var comments = {
                                 1: [
-                                    new comment(1,1,createTimestamp(601),'God I am awesome','','',-2),
-                                    new comment(1,1,createTimestamp(603),'So amazingly awesome','','',5),
+                                    new comment(1,2,createTimestamp(601),'Oh how the mighty has fallen... It is so good to have you home again, can\'t wait for some long overdue hangouts','','',2),
+                                    new comment(1,4,createTimestamp(603),'And you two can finally hook up','','',3),
+                                    new comment(1,2,createTimestamp(604),'Shut up Steve you massive jerk','','',3),
+                                    new comment(1,4,createTimestamp(605),'I only call it as I see it','','',2),
+                                    new comment(1,3,createTimestamp(607),'You mean you wish you saw it. Regardless, it\'s good to see you back Robin, it has been too long','','',7)
+                                ],
+                                2: [
+                                    new comment(1,2,createTimestamp(803), 'I guess you forget when you are a big city folk living the high life at a fancy university just how weird suburbia is','','',0),
+                                    new comment(1,1,createTimestamp(805), 'No seriously, I think something might be wrong with him','','',0)
+                                ],
+                                3: [
+                                    new comment(1,3,createTimestamp(1940), 'Can confirm we felt nothing over here, and we are only like 10 minutes drive away','','',0),
+                                    new comment(1,2,createTimestamp(1940), 'Must have been light if there was one, I didn\'t even wake up','','',0)
                                 ]
                         }
                         
@@ -121,9 +132,10 @@
             
                         var totalData = {
                             posts: [
-                                new post(1,1,createTimestamp(600),'Check out this image, found it at <a href="http://image.google.com">Google</a>','exampleLink.jpg','',500,comments[1],0),
-                                new post(2,1,createTimestamp(800),'Yo yo yo','','',23,'',0),
-                                new post(3,1,createTimestamp(1200),'Bitches love me','','',7,'',0)
+                                new post(1,1,createTimestamp(600),'It\'s good to be home. Finally signed up to Twaddle so I can get back into contact with all of you, but god it\'s weird to be on a mainstream social media','','',14,comments[1],0),
+                                new post(2,1,createTimestamp(800),'Jesus, how did I never notice the guy next door was so weird. I just saw him water his flowers, he zoned out and was just standing there flooding his flower beds while his face was blank...','','',4,comments[2],0),
+                                new post(3,1,createTimestamp(1200),'TIL Mother Teresa was fucking bitch. I love when someone this revered turns out to be relatively evil','','65JxnUW7Wk4',3,'',0),
+                                new post(3,1,createTimestamp(1563),'Holy shit, did anyone else feel that? Was there an earthquake or something?','','65JxnUW7Wk4',3,comments[3],0)
                             ],
                             trending: [
                                 new trending(1,'Twaddle','A new social media for the masses, is looking for new employees'),
@@ -139,7 +151,9 @@
                             users: {
                                 0: new user($('#name').val(),'','they',1412314,userAvatar,'',0,0,0),
                                 1: new user('Robin','Creed','they',1429323,'img/samAvatar.png','samBg.jpg',1,160,1300,0,0),
-                                2: new user('Cal','Ransom','she',1423413,'img/calAvatar.jpg','calBg.jpg',0,120,1500,0,0)
+                                2: new user('Cal','Ransom','she',1423413,'img/calAvatar.jpg','calBg.jpg',0,120,1500,0,0),
+                                3: new user('Ambrose','Mitchell','he',1423413,'img/ambroseAvatar.jpg','amBg.jpg',0,180,2400,0,0),
+                                4: new user('Steve','Steve','he',1423412,'img/steveAvatar.jpg','stBg.jpg',0,130,180,3000,0,0)
                             }
                         };          
                         

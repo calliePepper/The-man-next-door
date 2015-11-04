@@ -836,7 +836,7 @@ input[type="text"] {
 .halfer label {
   margin-right: 18px; }
 
-.putThumbHere {
+#putThumbHere {
   width: 50px;
   height: 50px;
   margin-right: 20px;

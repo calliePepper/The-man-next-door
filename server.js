@@ -74,7 +74,8 @@ io.on('connection', function(socket) {
 	});
 	
 	socket.on('choiceMade', function(replyData) {
-		if (data.choiceObjects[replyData.choiceId]['result_'+replyData.choiceMade] != 0) {
+		console.log(timestampify()+replyData.playerName+' came across choice '+replyData.choiceId+' and took path '+replyData.choiceMade);	
+		if (data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade] != 0) {
 			if (data.choiceObjects[replyData.choiceId].resultType == 'comment') {
 				var resultTest = 'result'+replyData.choiceMade;
 				var commentResult = data.commentObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]];
@@ -93,7 +94,6 @@ io.on('connection', function(socket) {
 				choiceResult.additionalTarget = replyData.additionalTarget;
 				var object2 = {timeStamp:0,user:userId,type:'message',data:messageResult,choice:choiceResult};
 			}
-			console.log(timestampify()+replyData.playerName+' came across choice '+replyData.choiceId+' and took path '+replyData.choiceMade);	
 			sendQueue.push(object2);
 			organiseQueue();
 		}

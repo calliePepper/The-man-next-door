@@ -376,6 +376,9 @@ iframe {
   font-size: 0.8em;
   padding: 10px; }
 
+.likedSection:empty {
+  display: none; }
+
 .feedImage {
   width: 100%; }
 

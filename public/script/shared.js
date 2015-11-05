@@ -449,6 +449,8 @@ messages.new.noNotification = function(messageFrom,messageTo,cameIn,text,ttw,ful
 messages.packed = function(messageArray,choices,noNote) {
     var counter = 0;
     var userForMsg = 0;
+    console.log('Message pack');
+    console.log(choices);
     function loopMessages() {
         var typingTime = messageArray[counter].text.length * localStorage.getObject('gameData')['users'][messageArray[counter].fromId]['typingSpeed'];
         var waitTime = localStorage.getObject('gameData')['users'][messageArray[counter].fromId]['waitTime'];
@@ -475,7 +477,6 @@ messages.packed = function(messageArray,choices,noNote) {
         } else {
             var timer = typingTime + waitTime;
         }
-        console.log(messageArray[counter]);
         if (messageArray[counter] != undefined) {
            setTimeout(function() {
                 loopMessages();
@@ -563,7 +564,6 @@ var feed = {};
 feed.create = function(target,objects,processNormal) {
     console.log(objects);
     $.each(objects, function(index,value) {
-        console.log(value);
         if (localStorage.getObject('gameData')['users'][value['user']]['friended'] == 1) {
             var videoLink = '';
             if (value['video'] != '' && value['video'] != undefined) {
@@ -667,7 +667,6 @@ feed.backlog = function(value) {
 feed.commentPoster = function(comments,postId) {
     var counter = 0;
     console.log('Posting comment');
-    console.log(comments);
     var timer = 10000;
     function postComment() {
         value = comments[counter];
@@ -686,7 +685,6 @@ feed.commentPoster = function(comments,postId) {
                 likedComments = '<span class="colouredText commentLikes"><i class="fa fa-thumbs-up"></i>'+value['likes']+'</span>';
             }
             commentsString += '<div class="comment"><div class="commentAvatar"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><span class="commentBy">'+usersFirstname+' '+usersLastname+'</span><span class="commentContent" data-date="'+value['date']+'">'+value['text']+'</span>'+imageComments+'<div class="commentFooter dateUpdate" data-date="'+value['date']+'">'+commentSince+'</div></div>';
-            console.log('#comments_'+postId);
             $('#comments_'+postId).append(commentsString);
             counter++
         }
@@ -716,8 +714,7 @@ feed.commentPoster = function(comments,postId) {
 }
 
 feed.commentBuilder = function(comments,postId) {
-    var commentsString = '';
-    console.log('building a comment');
+    var commentsString = '';    
     commentsString = '<div class="comments" id="comments_'+postId+'">';
     if (comments.length > 0) {
         $.each(comments, function(index,value) {

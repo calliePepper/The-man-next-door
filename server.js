@@ -107,7 +107,7 @@ io.on('connection', function(socket) {
 		function loopDayUpdate(day,timeThroughDay,updatedLast) {
 			if (updatedLast > timeThroughDay) {
 				for (var i in data.events[day]) {
-					if (i < timeThroughDay && i < updatedLast) {
+					if (i < timeThroughDay && i > (timeThroughDay - updatedLast)) {
 						var tempArray = {};
 						var tempChoice = '';
 						if (data.events[day][i]['object'] == 'feedObjects') { 
@@ -209,10 +209,10 @@ queueFunc.update = function(userId,day,timeThroughDay,updatedLast) {
 		if (data.events[day][timeStampToHit]['object'] == 'feedObjects') { var type = 'feed'; 
 		} else if (data.events[day][timeStampToHit]['object'] == 'commentObjects') { var type = 'comment'; 
 		} else if (data.events[day][timeStampToHit]['object'] == 'messageObjects') { var type = 'messages'; }
-		if (data.events[day][timeStampToHit]['choiceId'] == 0) {
-			var queueChoice = '';
+		if (data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']].autoTarget && data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']].autoTarget == 'choice') {
+			var queueChoice = data.choiceObjects[data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']].autoId];
 		} else {
-			var queueChoice = data.choiceObjects[data.events[day][timeStampToHit]['choiceId']];
+			var queueChoice = '';
 		}
 		console.log(timestampify()+'Update found, Type: '+type+', id: '+data.events[day][timeStampToHit]['id']);
 		var queueObject = {
@@ -238,8 +238,8 @@ queueFunc.check = function() {
 		console.log(timestampify()+replyString.substr(0,replyString.length-1));
 	}
 	if (sendQueue[0]['timeStamp'] <= current) {
-		console.log(timestampify()+'Sending '+sendQueue[0]['type'] + ' to '+clientData[sendQueue[0]['user']]['name']);
-		if (sendQueue[0]['type'] == 'messages') {
+		console.log(timestampify()+'Sending '+sendQueue[0]['type'] + ' to '+sendQueue[0].user.substr(0, 4)+'<->'+clientData[sendQueue[0]['user']]['name']);
+		if (sendQueue[0]['type'] == 'messages' || sendQueue[0]['type'] == 'message') {
 			if (sendQueue[0]['user'] == undefined) {
 				console.log(timestampify()+'Shit. Error.');
 				console.log(sendQueue);

@@ -56,6 +56,7 @@ socket.on('updateData', function(updateData) {
 });
 
 socket.on('newMessage', function(receivedMessages) {
+    console.log('PING - New message');
     processMessage(receivedMessages,0);
     gameUpdate.updateTime(80);
     setTimeout(function(){
@@ -128,12 +129,14 @@ function processFeed(receivedFeed,nonote) {
         }
         var currentFeed = new post(receivedFeed.feedItem.postId,receivedFeed.feedItem.fromId,createTimestamp(receivedFeed.feedItem['date']),receivedFeed.feedItem.text,receivedFeed.feedItem.image,receivedFeed.feedItem.video,receivedFeed.feedItem.likes,commentBuilder,0);
         gameUpdate.updateLocal(currentFeed,'posts');
-        if (nonote == 1) {
-            feed.backlog(currentFeed);
-        } else {
-            var tempFeed = [];
-            tempFeed.push(currentFeed);
-            feed.create('feedContent',tempFeed,0);
+        if ($(document).find("title").text() == 'Twaddle - A social media for the everyman') {
+            if (nonote == 1) {
+                feed.backlog(currentFeed);
+            } else {
+                var tempFeed = [];
+                tempFeed.push(currentFeed);
+                feed.create('feedContent',tempFeed,0);
+            }
         }
     }
     var updatePause;

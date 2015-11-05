@@ -93,6 +93,7 @@ iframe{width:100%;}
 .liked,.commented{color:#dfe0e4 !important;cursor:default !important;}
 .usableControls{color:$majorColour;cursor:pointer;}
 .likedSection{border-top:1px solid #dfe0e4;border-bottom:1px solid #dfe0e4;font-size:0.8em;padding:$paddingVal;}
+.likedSection:empty{display:none;}
 .feedImage{width:100%;}
 .games{padding-top:$paddingVal;border-top:1px solid #dfe0e4;position:relative;width:100%;}
 .gameBlock{width:50%;display:inline;height:100px;}

@@ -90,6 +90,11 @@ module.exports = {
         4: {choiceId:4,choice1:'You are an idiot',choice2:'Derp',choice3:': Grins like a moron back :',resultType:'comment',result1:0,result2:0,result3:0,ttd:''}
     },
     
+    directionObject: {
+        1: {directionId:1,attribute:'storyEvent1',operator:'=',value:'1',trueTarget:'message',trueId:'3',falseTarget:'message',falseId:'4'},
+        2: {directionId:2,attribute:'calTrust',operator:'>',value:'10',trueTarget:'message',trueId:'5',falseTarget:'message',falseId:'6'
+    },
+    
     pages: {
         'Twaddle - A social media for the everyman': 'Feed page',
         'Twaddle - Messages': 'Messages',
@@ -105,8 +110,7 @@ module.exports = {
             660:{object:'feedObjects',id:'6'},
             720:{object:'feedObjects',id:'7'},
             780:{object:'feedObjects',id:'8'},
-            830:{object:'messageObjects',id:'1'},
-            890:{object:'feedObjects',id:'9'},
+            840:{object:'feedObjects',id:'9'},
             900:{object:'feedObjects',id:'10'},
             960:{object:'feedObjects',id:'11'},
             1020:{object:'feedObjects',id:'12'},

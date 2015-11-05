@@ -437,7 +437,8 @@ messages.new.differentPage = function(messageFrom,messageTo,cameIn,text,ttw,full
 }
 
 messages.new.noNotification = function(messageFrom,messageTo,cameIn,text,ttw,fullMessage) {
-    console.log('New message from '+localStorage.getObject('gameData').users[messageFrom].firstname+' at '+cameIn);
+    console.log('New message with no notification from '+localStorage.getObject('gameData').users[messageFrom].firstname+' at '+cameIn);
+    console.log(fullMessage);
     fullMessage.date = createTimestamp(fullMessage['date']);
     gameUpdate.updateLocal(fullMessage,'messages');
     gameUpdate.updateMessages(messageTo,fullMessage['msgId']);
@@ -448,13 +449,13 @@ messages.new.noNotification = function(messageFrom,messageTo,cameIn,text,ttw,ful
 messages.packed = function(messageArray,choices,noNote) {
     var counter = 0;
     var userForMsg = 0;
-    console.log(messageArray);
-    console.log(choices);
     function loopMessages() {
         var typingTime = messageArray[counter].text.length * localStorage.getObject('gameData')['users'][messageArray[counter].fromId]['typingSpeed'];
-        console.log('Looping through message of length '+messageArray[counter].text.length+' next message should send in '+typingTime);
+        var waitTime = localStorage.getObject('gameData')['users'][messageArray[counter].fromId]['waitTime'];
+        console.log('Looping through message of length '+messageArray[counter].text.length+' next message should send in '+typingTime+' with a noNote value of '+noNote);
         userForMsg = messageArray[counter].toId;
-        if (noNote != undefined && noNote == '1') {
+        if (noNote != undefined && noNote == 1) {
+            console.log('Time for no notification!');
             messages.new.noNotification(messageArray[counter].fromId,messageArray[counter].toId,messageArray[counter].date,messageArray[counter].text,typingTime,messageArray[counter]);    
             typingTime = 100;
         } else {
@@ -472,13 +473,15 @@ messages.packed = function(messageArray,choices,noNote) {
         if (noNote == 1) {
             var timer = 0;
         } else {
-            var timer = typingTime + localStorage.getObject('gameData')['users'][messageArray[counter].fromId]['waitTime'];
+            var timer = typingTime + waitTime;
         }
+        console.log(messageArray[counter]);
         if (messageArray[counter] != undefined) {
            setTimeout(function() {
                 loopMessages();
            },timer);
         } else if (choices != undefined && choices != '') {
+            console.log('Yay a choice found');
             setTimeout(function() {
                 var newChoice = new choice(choices.choiceId,choices.choice1,choices.choice2,choices.choice3)
                 new choice(3,'Deal with the problem yourself','Ignore it, it will go away','Skin the cat. It\'s the only solution. Skin. The. Cat')
@@ -558,7 +561,9 @@ time.minidate = function(newTimes) {
 var feed = {};
 
 feed.create = function(target,objects,processNormal) {
+    console.log(objects);
     $.each(objects, function(index,value) {
+        console.log(value);
         if (localStorage.getObject('gameData')['users'][value['user']]['friended'] == 1) {
             var videoLink = '';
             if (value['video'] != '' && value['video'] != undefined) {

@@ -64,8 +64,8 @@ socket.on('newMessage', function(receivedMessages) {
 });
 
 function processMessage(receivedMessages,nonote) {
-    console.log('New message!');
-    console.log(receivedMessages);
+    console.log('New message with a nonote value of '+nonote);
+    console.log(receivedMessages); 
     var messageGroup = [];
     var updatePause;
     function process() {
@@ -77,7 +77,14 @@ function processMessage(receivedMessages,nonote) {
             messageGroup.push(incomingMessage);
             //gameUpdate.updateLocal(incomingMessage,'messages');
         });
-        messages.packed(messageGroup,receivedMessages.messageItem.choices,nonote);
+        /*if (receivedMessages.choices && receivedMessages.choices != '') {
+            console.log('Message answers!');
+            console.log(receivedMessages.choices);
+            var newChoice = new choice(receivedMessages.choices.choiceId,receivedMessages.choices.choice1,receivedMessages.choices.choice2,receivedMessages.choices.choice3);
+            var currentComment = new comment(0,0,'CHOICE',newChoice,'','',0);
+            messageGroup.push(currentComment);
+        }*/
+        messages.packed(messageGroup,receivedMessages.choices,nonote);
         //messages.new(message.userId,message.timestamp,message.message,typingTime);
     }
     if (updating == 1) {
@@ -124,7 +131,9 @@ function processFeed(receivedFeed,nonote) {
         if (nonote == 1) {
             feed.backlog(currentFeed);
         } else {
-            feed.create('feedContent',currentFeed,0);
+            var tempFeed = [];
+            tempFeed.push(currentFeed);
+            feed.create('feedContent',tempFeed,0);
         }
     }
     var updatePause;

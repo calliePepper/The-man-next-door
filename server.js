@@ -86,7 +86,7 @@ io.on('connection', function(socket) {
 				//commentResult.feedId = replyData.additionalTarget;
 				var object2 = {timeStamp:0,user:userId,type:'comment',data:commentResult,choice:choiceResult};
 			} else if (data.choiceObjects[replyData.choiceId].resultType == 'message') {
-				var messageResult = data.messageObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].messages;
+				var messageResult = data.messageObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]];
 				var choiceResult = '';
 				if (data.messageObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].autoTarget == 'choice') {
 					var choiceResult = data.choiceObjects[data.messageObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].autoId]
@@ -126,7 +126,7 @@ io.on('connection', function(socket) {
 							var type = 'message';
 							tempArray.messageItem = data[data.events[day][i]['object']][data.events[day][i]['id']]
 							if (tempArray.messageItem.autoTarget == 'choice') {
-								tempChoice = data.choiceObjects[tempComments.autoId];
+								tempChoice = data.choiceObjects[tempArray.messageItem.autoId];
 							}
 							tempArray.choices = tempChoice;
 						}
@@ -239,12 +239,12 @@ queueFunc.check = function() {
 	}
 	if (sendQueue[0]['timeStamp'] <= current) {
 		console.log(timestampify()+'Sending '+sendQueue[0]['type'] + ' to '+clientData[sendQueue[0]['user']]['name']);
-		if (sendQueue[0]['type'] == 'message') {
+		if (sendQueue[0]['type'] == 'messages') {
 			if (sendQueue[0]['user'] == undefined) {
 				console.log(timestampify()+'Shit. Error.');
 				console.log(sendQueue);
 			} else {
-				io.to(sendQueue[0]['user']).emit('newMessage',{message:sendQueue[0]['data'],choices:sendQueue[0]['choice']});
+				io.to(sendQueue[0]['user']).emit('newMessage',{messageItem:sendQueue[0]['data'],choices:sendQueue[0]['choice']});
 			}
 		} else if (sendQueue[0]['type'] == 'comment') {
 			if (sendQueue[0]['user'] == undefined) {

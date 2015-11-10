@@ -70,7 +70,7 @@ function processMessage(receivedMessages,nonote) {
     var messageGroup = [];
     var updatePause;
     function process() {
-        gameUpdate.updateTime(80);
+        gameUpdate.updateTime(300);
         $.each(receivedMessages.messageItem.messages, function(index,value) {
             console.log('Reading through');
             console.log(value);
@@ -113,7 +113,7 @@ function processFeed(receivedFeed,nonote) {
     console.log(receivedFeed);
     function process() {
         var commentBuilder = [];
-        gameUpdate.updateTime(80);
+        gameUpdate.updateTime(300);
         var dac = 0
         if (receivedFeed.comments && receivedFeed.comments.comments != '') {
             $.each(receivedFeed.comments.comments, function(index, value) {

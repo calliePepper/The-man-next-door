@@ -592,9 +592,14 @@ feed.create = function(target,objects,processNormal) {
             $('#'+target).prepend('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'<div class="feedControls"><span class="feedControl likeControl usableControls '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'"><i class="fa fa-comment"></i>Comment</span></div></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
             if (value['liked'] == 0) {
                 $('#like_'+value['postId']).on('click touch', function() {
-                    $('#like_'+value['postId']).unbind();
+                    $('#like_'+value['postId']).unbind('click touch');
+                    $('#like_'+value['postId']).off('click touch');
                     $('#like_'+value['postId']).addClass('liked');
-                    $('#feed_'+value['postId']+' .likedSection .colouredText').html(parseInt($('#feed_'+value['postId']+' .likedSection .colouredText').html()) + 1);
+                    if ($('#feed_'+value['postId']+' .likedSection').html() == '') {
+                        $('#feed_'+value['postId']+' .likedSection').html('<span class="colouredText">1</span> people like this');
+                    } else {
+                        $('#feed_'+value['postId']+' .likedSection .colouredText').html(parseInt($('#feed_'+value['postId']+' .likedSection .colouredText').html()) + 1);   
+                    }
                     gameUpdate.updateLocal('1','liked',value['postId']);
                 });
             }

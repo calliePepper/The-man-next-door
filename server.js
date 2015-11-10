@@ -105,9 +105,11 @@ io.on('connection', function(socket) {
 		updateData.feed = [];
 		var updateCounter = 0;
 		function loopDayUpdate(day,timeThroughDay,updatedLast) {
-			if (updatedLast > timeThroughDay) {
+			console.log('Looping through day '+day+'. Time through day is '+timeThroughDay+'. Updated last is '+updatedLast);
 				for (var i in data.events[day]) {
+					console.log(i +' vs ' +(timeThroughDay - updatedLast) + '. Time through day is '+timeThroughDay);
 					if (i < timeThroughDay && i > (timeThroughDay - updatedLast)) {
+						console.log('Found backlog event '+i);
 						var tempArray = {};
 						var tempChoice = '';
 						if (data.events[day][i]['object'] == 'feedObjects') { 
@@ -138,7 +140,6 @@ io.on('connection', function(socket) {
 				if (updatedLast > 0 && day > 0) {
 					loopDayUpdate(day-1,1440,updatedLast);
 				}
-			}
 		}
 		loopDayUpdate(day,timeThroughDay,updatedLast);
 		console.log(timestampify()+'Pushing a backlog of '+updateCounter+' events to '+userId.substr(0,4) + '<->' +clientData[userId]['name'])

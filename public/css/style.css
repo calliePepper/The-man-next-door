@@ -162,6 +162,19 @@ a {
 /*
 	 Generic Stuff
 */
+#alreadyStarted {
+  display: none;
+  text-align: center;
+  padding: 10px; }
+
+#alreadyStarted:empty {
+  padding: 0px; }
+
+#alreadyStarted .btn {
+  color: #fff;
+  text-decoration: none;
+  margin-top: 10px; }
+
 body {
   background: #e9eaed;
   font-family: helvetica, arial, san-serif; }
@@ -661,7 +674,8 @@ iframe {
 
 .messageAvatar {
   position: absolute;
-  width: 30px;
+  max-width: 30px;
+  max-height: 30px;
   left: 10px;
   top: 5px; }
 
@@ -689,7 +703,8 @@ iframe {
   cursor: pointer; }
 
 .messageUserList .messageAvatar {
-  width: 45px;
+  max-width: 45px;
+  max-height: 45px;
   top: 10px;
   left: 10px; }
 

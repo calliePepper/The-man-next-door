@@ -44,7 +44,6 @@ module.exports = {
             feedId:'4'
         }
     },
-
     
     messageObjects: {
         1:{
@@ -92,7 +91,7 @@ module.exports = {
     
     directionObject: {
         1: {directionId:1,attribute:'storyEvent1',operator:'=',value:'1',trueTarget:'message',trueId:'3',falseTarget:'message',falseId:'4'},
-        2: {directionId:2,attribute:'calTrust',operator:'>',value:'10',trueTarget:'message',trueId:'5',falseTarget:'message',falseId:'6'
+        2: {directionId:2,attribute:'calTrust',operator:'>',value:'10',trueTarget:'message',trueId:'5',falseTarget:'message',falseId:'6'}
     },
     
     pages: {
@@ -106,7 +105,7 @@ module.exports = {
             300:{object:'messageObjects',id:'4'},
             540:{object:'feedObjects',id:'4'},
             600:{object:'feedObjects',id:'5'},
-            648:{object:'messageObjects',id:'1'},
+            605:{object:'messageObjects',id:'1'},
             660:{object:'feedObjects',id:'6'},
             720:{object:'feedObjects',id:'7'},
             780:{object:'feedObjects',id:'8'},

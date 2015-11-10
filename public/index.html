@@ -11,6 +11,10 @@
     <body id="frontPage" class="frontPage">
         <div class="infoBox">
             <h1>The man next door</h1>
+            <div id="alreadyStarted">
+                STOP! According to our records you have an existing playthrough.<br><br>
+                <a class='btn' href="twaddle">Click here to continue your game</a><br>
+            </div>
             <p>The man next door is an interactive narrative, set on a fictional social media network. There are a couple of things you should know before you start:</p>
             <ol>
                 <li>Please be aware this site uses some techniques which <strong class="colouredText">may trigger epileptic attacks</strong></li>
@@ -51,6 +55,10 @@
             if (localStorage.thumb && localStorage.thumb != '') {
                 $('#putThumbHere').html('<img class="thumb" src="'+ localStorage.thumb +'" tile="Old icon"/>');
                 userAvatar = localStorage.thumb;
+            }
+            
+            if (localStorage.getObject('gameData')) {
+                $('#alreadyStarted').show();
             }
         
         
@@ -144,7 +152,8 @@
                                 new trending(1,'Puppy love','A puppy is a small regional zoo has made friends with a zebra, and they are the most unlikeliest of companions!'),
                                 new trending(1,'Baby Possom','Photos shared of baby marsupial snuggling with toy kangaroo'),
                                 new trending(1,'Skinning Cats','There are more than one way! Our top chefs look at old age techniques that you probably have never heard of'),
-                                new trending(1,'Netherworld vacation','Are you tired of your boring existance? Think you deserve a great vacation? We show you paths that the guides don\'t want you to know about')
+                                new trending(1,'Netherworld vacation','Are you tired of your boring existance? Think you deserve a great vacation? We show you paths that the guides don\'t want you to know about'),
+                                new trending(1,'Get the body you have always wanted', 'We know where you buried it. We can lend you a shovel.')
                             ],
                             messages: [
                                 new message(1,1,createTimestamp(1300),'Hey, thanks for the friend request','','',1,'0_1'),

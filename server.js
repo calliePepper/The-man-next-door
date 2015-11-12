@@ -103,11 +103,11 @@ io.on('connection', function(socket) {
 		var updateData = {};
 		updateData.message = [];
 		updateData.feed = [];
+		updateData.comment = [];
 		var updateCounter = 0;
 		function loopDayUpdate(day,timeThroughDay,updatedLast) {
 			console.log('Looping through day '+day+'. Time through day is '+timeThroughDay+'. Updated last is '+updatedLast);
 				for (var i in data.events[day]) {
-					console.log(i +' vs ' +(timeThroughDay - updatedLast) + '. Time through day is '+timeThroughDay);
 					if (i < timeThroughDay && i > (timeThroughDay - updatedLast)) {
 						console.log('Found backlog event '+i);
 						var tempArray = {};
@@ -124,10 +124,18 @@ io.on('connection', function(socket) {
 							}
 							tempArray.choices = tempChoice;
 							tempArray.comments = tempComments;
-						} else { 
+						} else if (data.events[day][i]['object'] == 'messageObjects') { 
 							var type = 'message';
 							tempArray.messageItem = data[data.events[day][i]['object']][data.events[day][i]['id']]
 							if (tempArray.messageItem.autoTarget == 'choice') {
+								tempChoice = data.choiceObjects[tempArray.messageItem.autoId];
+							}
+							tempArray.choices = tempChoice;
+						} else if (data.events[day][i]['object'] == 'commentObjects') {
+							var type = 'comment';
+							tempArray.comment = data[data.events[day][i]['object']][data.events[day][i]['id']]
+							console.log(tempArray);
+							if (tempArray.comment.autoTarget == 'choice') {
 								tempChoice = data.choiceObjects[tempArray.messageItem.autoId];
 							}
 							tempArray.choices = tempChoice;

@@ -208,6 +208,7 @@ choiceControls.choose = function(id,choice,targetType) {
 var users = {}
 
 users.load = function() {
+    console.log('loading users');
     $.each(localStorage.getObject('gameData')['users'], function(index, value) {
         if (index != 0 && value['friended'] == 1) {
             var isCurrent ='';
@@ -587,7 +588,7 @@ feed.create = function(target,objects,processNormal) {
             if (value['choices'] != undefined && value['choices'] != '' && value['commented'] == 0) {canComment = 'usableControls';}
             var commentsString = '<div class="comments" id="comments_'+value['postId']+'"></div>';
             if (processNormal == 1) {
-                var commentsString = feed.commentBuilder(value['comments'],value['postId']);
+                var commentsString = feed.commentBuilder(value['comments'],value['postId'],0);
             }
             $('#'+target).prepend('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'<div class="feedControls"><span class="feedControl likeControl usableControls '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'"><i class="fa fa-comment"></i>Comment</span></div></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
             if (value['liked'] == 0) {
@@ -672,6 +673,7 @@ feed.backlog = function(value) {
 feed.commentPoster = function(comments,postId) {
     var counter = 0;
     console.log('Posting comment');
+    console.log(comments);
     var timer = 10000;
     function postComment() {
         value = comments[counter];
@@ -718,9 +720,11 @@ feed.commentPoster = function(comments,postId) {
     } 
 }
 
-feed.commentBuilder = function(comments,postId) {
+feed.commentBuilder = function(comments,postId,noNote) {
     var commentsString = '';    
-    commentsString = '<div class="comments" id="comments_'+postId+'">';
+    if (noNote != undefined && noNote != 1) {
+        commentsString = '<div class="comments" id="comments_'+postId+'">';
+    }
     if (comments.length > 0) {
         $.each(comments, function(index,value) {
             if (value['date'] != 'CHOICE') {
@@ -739,8 +743,10 @@ feed.commentBuilder = function(comments,postId) {
                 commentsString += '<div class="comment"><div class="commentAvatar"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><span class="commentBy">'+usersFirstname+' '+usersLastname+'</span><span class="commentContent">'+value['text']+'</span>'+imageComments+'<div class="commentFooter dateUpdate" data-date="'+value['date']+'">'+commentSince+'</div></div>';
             }
         });
-    } 
-    commentsString += '</div>';
+    }
+    if (noNote != undefined && noNote != 1) {
+        commentsString += '</div>';
+    }
     return commentsString;
 }
 
@@ -864,6 +870,8 @@ navigationControls.setUp = function() {
     $('#mobileNav').on('click touch', function() {
         $('#feedContent').toggleClass('navFlip');
         $('.sideBar').toggleClass('navFlip');
+        window.scrollTo(0,0);
+        $('body').toggleClass('navFlip');
     });  
     $('.sideLink').on('click touch', function(ev) {
          ev.preventDefault();

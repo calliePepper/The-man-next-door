@@ -47,6 +47,11 @@ socket.on('updateData', function(updateData) {
             processFeed(value,1);       
         });
     }
+    if (updateData['comment'].length > 0) {
+        $.each(updateData['comment'], function(index,value) {
+            processComment(value,1);       
+        });
+    }
     $('#loadingLine').hide();
     $('#leftLoad').css('left','-50%');
     $('#rightLoad').css('right','-50%');
@@ -153,6 +158,8 @@ function processFeed(receivedFeed,nonote) {
 }
 
 socket.on('newComment', function(receivedFeed) {
+    console.log('New comment');
+    console.log(receivedFeed);
     processComment(receivedFeed,0);
     gameUpdate.updateTime(80);
     setTimeout(function(){
@@ -161,39 +168,45 @@ socket.on('newComment', function(receivedFeed) {
 });
 
 function processComment(receivedComment,nonote) {
-        console.log(receivedComment);
-        if (nonote == 1) {
-            var now = createTimestamp(value['date'])
-        } else {
-            var now = Math.floor(Date.now() / 1000);
+    console.log(receivedComment);
+    if (nonote == 1) {
+        var now = createTimestamp(receivedComment.comment.comments[0].date)
+    } else {
+        var now = Math.floor(Date.now() / 1000);
+    }
+    var tempComments = [];
+    $.each(receivedComment.comment.comments, function(index, value) {
+        var currentComment = new comment(value['order'],value['user'],now,value['text'],value['image'],value['video'],value['likes']);
+        tempComments.push(currentComment);
+    });
+    if (receivedComment.choices && receivedComment.choices != '') {
+        var newChoice = new choice(receivedComment.choices.choiceId,receivedComment.choices.choice1,receivedComment.choices.choice2,receivedComment.choices.choice3);
+        var currentComment = new comment(0,0,'CHOICE',newChoice,'','',0);
+        tempComments.push(currentComment);
+    }
+    
+    var tempData = localStorage.getObject('gameData');
+    var aim = 0;
+    $.each(tempData.posts, function(index, value) {
+        if (value.postId == receivedComment.comment.feedId) {
+            aim = index;
         }
-        var tempComments = [];
-        $.each(receivedComment.comment.comments, function(index, value) {
-            var currentComment = new comment(value['order'],value['user'],now,value['text'],value['image'],value['video'],value['likes']);
-            tempComments.push(currentComment);
-        });
-        if (receivedComment.choices && receivedComment.choices != '') {
-            var newChoice = new choice(receivedComment.choices.choiceId,receivedComment.choices.choice1,receivedComment.choices.choice2,receivedComment.choices.choice3);
-            var currentComment = new comment(0,0,'CHOICE',newChoice,'','',0);
-            tempComments.push(currentComment);
+    });
+    console.log('Applying to '+aim);
+    $.each(tempComments, function(index, value) {
+        if (tempData.posts[aim].comments == 0) {
+            tempData.posts[aim].comments = [];
         }
-        
-        var tempData = localStorage.getObject('gameData');
-        var aim = 0;
-        $.each(tempData.posts, function(index, value) {
-            if (value.postId == receivedComment.comment.feedId) {
-                aim = index;
-            }
-        });
-        $.each(tempComments, function(index, value) {
-            tempData.posts[aim].comments.push(value);    
-        });
-        localStorage.setObject('gameData',tempData);
-        if (nonote == 1) {
-            feed.commentBuilder(tempComments,receivedComment.comment.feedId) 
-        } else {
-            feed.commentPoster(tempComments,receivedComment.comment.feedId) 
-        }
+        console.log(tempData.posts[aim]);
+        tempData.posts[aim].comments.push(value);    
+    });
+    localStorage.setObject('gameData',tempData);
+    if (nonote == 1) {
+        var tempAppend = feed.commentBuilder(tempComments,receivedComment.comment.feedId,1);
+        $('#comments_'+receivedComment.comment.feedId).append(tempAppend);
+    } else {
+        feed.commentPoster(tempComments,receivedComment.comment.feedId) 
+    }
 }
 
 function emitChoice(choiceId,choiceMade) {

@@ -179,6 +179,9 @@ body {
   background: #e9eaed;
   font-family: helvetica, arial, san-serif; }
 
+body.navFlip {
+  overflow-y: hidden; }
+
 header {
   position: relative;
   z-index: 2;

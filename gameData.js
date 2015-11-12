@@ -1,19 +1,13 @@
 module.exports = {
     
     feedObjects: {
-	    4:{postId:4,fromId:1,date:540,text:'Wake up Sheeple!!! (Sent at 9am)',image:'',video:'',likes:4,comments:1},
-	    5:{postId:5,fromId:1,date:600,text:'The truth is all over youtube (Sent at 10am)',image:'',video:'rbJg9TQKU0U',likes:4,comments:2},
-	    6:{postId:6,fromId:1,date:660,text:'The way I see it, life is a pile of good things and bad things... (Sent at 11am)',image:'',video:'',likes:4,comments:0},
-	    7:{postId:7,fromId:1,date:720,text:'Can\'t we share this robbery? Isn\'t that what robberies are all about? (Sent at 12am)',image:'',video:'',likes:4,comments:0},
-	    8:{postId:8,fromId:1,date:780,text:'Stop talking, brain thinking (Sent at 1pm)',image:'',video:'',likes:4,comments:0},
-	    9:{postId:9,fromId:1,date:840,text:'They call me Robin, I don\'t know wat. I call me Robin too. (Sent at 2pm)',image:'',video:'',likes:4,comments:0},
-	    10:{postId:10,fromId:1,date:900,text:'You know whe grown-ups tell you everything is going to be fine and you think they are probably lying to make you feel better... (Sent at 3pm)',image:'',video:'',likes:4,comments:0},
-	    11:{postId:11,fromId:1,date:960,text:'I\'m nobody\'s taxi service (Sent at 4pm)',image:'',video:'',likes:4,comments:0},
-	    12:{postId:12,fromId:1,date:1020,text:'All I\'ve got to do is pass an an ordinary human being. Simple. What could go wrong (Sent at 5pm)',image:'',video:'',likes:4,comments:0},
-	    13:{postId:13,fromId:1,date:1080,text:'I\'ll fix it, I\'m good at fixing rot. Call me the Rotmeister. Actually call me Robin. Never call me the Rotmeister (Sent at 6pm)',image:'',video:'',likes:4,comments:0},
-	    14:{postId:14,fromId:1,date:1140,text:'Father Christmas. Santas Claus. Or as I\'ve always known him: Jeff (Sent at 7pm)',image:'',video:'',likes:4,comments:0},
-	    15:{postId:15,fromId:1,date:1200,text:'Sorry, checking all the water in this area; there is an escaped fish (Sent at 8pm)',image:'',video:'',likes:4,comments:0}
-	    
+	    6:{postId:6,fromId:1,date:540,text:'Wake up Sheeple!!! (Test post for comment systemm)',image:'',video:'',likes:4,comments:1},
+	    7:{postId:7,fromId:1,date:640,text:'You\'d think that I’d know how to study by now.',image:'',video:'',likes:2,comments:0},
+	    8:{postId:8,fromId:1,date:740,text:'I was wondering if I could ask a favour of anyone reading this. Does anyone know a database I can access to check local seismic reports. I don’t know if they’d have anything specific to where I live, but anything will do.',image:'',video:'',likes:2,comments:0},
+	    9:{postId:9,fromId:1,date:820,text:'Finally, some success! Actually not. I hoped optimism would spur one of you to help me out with this. I don’t know what to look for.',image:'',video:'',likes:2,comments:0},
+	    10:{postId:10,fromId:1,date:950,text:'My neighbour is being weird again. I might just watch him, get some inspiration on this. I’m not being paranoid, but I hope there’s no way for him to see these posts. It could be funny though. A sort of Mutually weird neighbour\' kind of thing.',image:'',video:'',likes:2,comments:0},
+	    11:{postId:11,fromId:1,date:1010,text:'Weird. So, my brand new friend (read: strange neighbour) has started up some recreational painting. All over his house.',image:'',video:'',likes:2,comments:0},
+	    12:{postId:12,fromId:3,date:1030,text:'Robin. If you can read this, I hate to stomp all over what must be a seriously intense day of study, but could you please respond to my messages?',image:'',video:'',likes:2,comments:0}
     },
     
     commentObjects: {
@@ -24,7 +18,7 @@ module.exports = {
             ],
             autoTarget:'choice',
             autoId:'2',
-            feedId:'4'
+            feedId:'6'
         },
         2:{
             comments:[
@@ -33,7 +27,7 @@ module.exports = {
 		    ],
 		    autoTarget:'choice',
 		    autoId:'2',
-		    feedId:'4'
+		    feedId:'6'
         },
         3:{
             comments:[
@@ -41,8 +35,24 @@ module.exports = {
             ],
             autoTarget: 'choice',
             autoId:'4',
+            feedId:'6'
+        },
+        4:{
+            comments:[
+                {order:1,user:3,date:500,text:'Can confirm we felt nothing over here, and we are only like 10 minutes drive away',image:'',video:'',like:1}
+            ],
+            autoTarget:'',
+            autoId:'',
             feedId:'4'
-        }
+        },
+        5:{
+            comments:[
+                {order:1,user:2,date:530,text:'Must have been light if there was one, I didn\'t even wake up',image:'',video:'',like:1}
+            ],
+            autoTarget:'',
+            autoId:'',
+            feedId:'4'
+        },
     },
     
     messageObjects: {
@@ -103,19 +113,17 @@ module.exports = {
     events: {
         0: {
             300:{object:'messageObjects',id:'4'},
-            540:{object:'feedObjects',id:'4'},
-            600:{object:'feedObjects',id:'5'},
+            500:{object:'commentObjects',id:'4'},
+            530:{object:'commentObjects',id:'5'},
+            540:{object:'feedObjects',id:'6'},
             605:{object:'messageObjects',id:'1'},
-            660:{object:'feedObjects',id:'6'},
-            720:{object:'feedObjects',id:'7'},
-            780:{object:'feedObjects',id:'8'},
-            840:{object:'feedObjects',id:'9'},
-            900:{object:'feedObjects',id:'10'},
-            960:{object:'feedObjects',id:'11'},
-            1020:{object:'feedObjects',id:'12'},
-            1080:{object:'feedObjects',id:'13'},
-            1140:{object:'feedObjects',id:'14'},
-            1200:{object:'feedObjects',id:'15'}
+            640:{object:'feedObjects',id:'7'},
+            740:{object:'feedObjects',id:'8'},
+            820:{object:'feedObjects',id:'9'},
+            950:{object:'feedObjects',id:'10'},
+            1010:{object:'feedObjects',id:'11'},
+            1030:{object:'feedObjects',id:'12'},
+            
         },
         1: {
             

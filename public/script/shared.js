@@ -332,6 +332,7 @@ messages.users = function(firstMessages) {
     });
     var mq = window.matchMedia('screen and (max-width:900px)');
         if(mq.matches) {
+            $('.messageUserList').off();
             $('.messageUserList').on('click touch', function() {
                 var userId = $(this).attr('id').split('_')[1];
                 messages.load(userId);
@@ -339,6 +340,7 @@ messages.users = function(firstMessages) {
                 $('.messages').toggleClass('flipped');
                 var objDiv = document.getElementById("messagesCont");objDiv.scrollTop = objDiv.scrollHeight;
             });
+            $('.messageTitle').off();
             $('.messageTitle').on('click touch', function() {
                 $('.messageList').toggleClass('flipped');
                 $('.messages').toggleClass('flipped');

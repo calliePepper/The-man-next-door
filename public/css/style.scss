@@ -97,14 +97,14 @@ iframe{width:100%;}
 .feedControl i{margin-right:10px;}
 .liked,.commented{color:#dfe0e4 !important;cursor:default !important;}
 .usableControls{color:$majorColour;cursor:pointer;}
-.likedSection{border-top:1px solid #dfe0e4;border-bottom:1px solid #dfe0e4;font-size:0.8em;padding:$paddingVal;}
+.likedSection{border-top:1px solid #dfe0e4;font-size:0.8em;padding:$paddingVal;}
 .likedSection:empty{display:none;}
 .feedImage{width:100%;}
 .games{padding-top:$paddingVal;border-top:1px solid #dfe0e4;position:relative;width:100%;}
 .gameBlock{width:50%;display:inline;height:100px;}
 .gameImg{background:$majorColour;width:100%;height:100%;}
 
-.comments{padding-bottom:$paddingVal;}
+.comments{padding-bottom:$paddingVal;border-top: 1px solid #dfe0e4;}
 .comments:empty{display:none;}
 .comment{padding:$paddingVal $paddingVal 0 50px ;position:relative;}
 .commentAvatar{position:absolute;width:30px;height:30px;left:10px;top:14px;margin:0;text-align:center;}

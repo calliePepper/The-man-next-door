@@ -388,7 +388,6 @@ iframe {
 
 .likedSection {
   border-top: 1px solid #dfe0e4;
-  border-bottom: 1px solid #dfe0e4;
   font-size: 0.8em;
   padding: 10px; }
 
@@ -415,7 +414,8 @@ iframe {
   height: 100%; }
 
 .comments {
-  padding-bottom: 10px; }
+  padding-bottom: 10px;
+  border-top: 1px solid #dfe0e4; }
 
 .comments:empty {
   display: none; }

@@ -619,6 +619,7 @@ feed.create = function(target,objects,processNormal) {
                     }
                 }
             } else {
+                console.log('Triggering the commentPoster!');
                 feed.commentPoster(value['comments'],value['postId']);
             }
         }
@@ -695,7 +696,7 @@ feed.commentPoster = function(comments,postId) {
             }
             commentsString += '<div class="comment"><div class="commentAvatar"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><span class="commentBy">'+usersFirstname+' '+usersLastname+'</span><span class="commentContent" data-date="'+value['date']+'">'+value['text']+'</span>'+imageComments+'<div class="commentFooter dateUpdate" data-date="'+value['date']+'">'+commentSince+'</div></div>';
             $('#comments_'+postId).append(commentsString);
-            counter++
+            counter++;
         }
         if (comments[counter] != undefined && comments[counter].date != 'CHOICE') {
            setTimeout(function() {
@@ -724,7 +725,7 @@ feed.commentPoster = function(comments,postId) {
 
 feed.commentBuilder = function(comments,postId,noNote) {
     var commentsString = '';    
-    if (noNote != undefined && noNote != 1) {
+    if (noNote == undefined || noNote != 1) {
         commentsString = '<div class="comments" id="comments_'+postId+'">';
     }
     if (comments.length > 0) {
@@ -828,7 +829,7 @@ navigationControls.change = function(page) {
                     $('#userHeader').addClass('noHero');
                     $('#userNav div').removeClass('current');
                     $('#posts').addClass('current');
-                    feed.create('userBody',localStorage.getObject('gameData').posts);
+                    feed.create('userBody',localStorage.getObject('gameData').posts,1);
                 } else{
                     $('#userBody').html('');
                     $('#userHeader').removeClass('noHero');
@@ -991,5 +992,6 @@ var emergencyStop = setInterval(
         $('.dateUpdate').each(function() {
             $(this).html(time.wordify($(this).attr('data-date')));
         });
-    },60000);
-
+    },
+    60000
+);

@@ -132,7 +132,7 @@ function processFeed(receivedFeed,nonote) {
             var currentComment = new comment(0,0,'CHOICE',newChoice,'','',0);
             commentBuilder.push(currentComment);
         }
-        var currentFeed = new post(receivedFeed.feedItem.postId,receivedFeed.feedItem.fromId,createTimestamp(receivedFeed.feedItem['date']),receivedFeed.feedItem.text,receivedFeed.feedItem.image,receivedFeed.feedItem.video,receivedFeed.feedItem.likes,commentBuilder,0);
+        var currentFeed = new post(receivedFeed.feedItem.postId,receivedFeed.feedItem.fromId,createTimestamp(receivedFeed.feedItem['date']),receivedFeed.feedItem.text,receivedFeed.feedItem.image,receivedFeed.feedItem.video,receivedFeed.feedItem.likes,commentBuilder,0,receivedFeed.feedItem.caption);
         gameUpdate.updateLocal(currentFeed,'posts');
         if ($(document).find("title").text() == 'Twaddle - A social media for the everyman') {
             if (nonote == 1) {

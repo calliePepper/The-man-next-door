@@ -13,7 +13,7 @@
 */
 
 var currentlyViewing = 0;
-var socket = io();
+var socket = io('https://the-man-next-door-soldevifae.c9.io');
 var updating = 0;
 
 Storage.prototype.setObject = function(key, value) {
@@ -523,11 +523,23 @@ time.wordify = function(newTimes) {
     var currentTime = Math.floor(Date.now() / 1000);
     var difference = (currentTime - newTimes) / 60;
     if (difference < 60) {
-        return Math.floor(difference)+' minutes ago';
+        if (Math.floor(difference) == 1) {
+            return Math.floor(difference)+' minute ago';
+        } else {
+            return Math.floor(difference)+' minutes ago';
+        }
     } else if (difference / 60 < 24) {
-        return Math.floor(difference/60)+' hours ago';
+        if (Math.floor(difference/60) == 1) {
+            return Math.floor(difference/60)+' hour ago';
+        } else {
+            return Math.floor(difference/60)+' hours ago';
+        }
     } else {
-        return Math.floor(difference/60/24)+' days ago';
+        if (Math.floor(difference/60/24) == 1) {
+            return Math.floor(difference/60/24)+' day ago';   
+        } else {
+            return Math.floor(difference/60/24)+' days ago';
+        }
     }
 }
 
@@ -575,6 +587,9 @@ feed.create = function(target,objects,processNormal) {
             var imageLink = '';
             if (value['image'] != '' && value['image'] != undefined) {
                 imageLink = '<img src="img/'+value['image']+'" alt="user image" class="feedImage" />';
+                if (value['caption'] != '' && value['caption'] != undefined) {
+                    imageLink = imageLink + value['caption'];
+                }
             }
             var likedText = '';
             if (value['likes'] != '' && value['likes'] != undefined) {
@@ -636,6 +651,9 @@ feed.backlog = function(value) {
         var imageLink = '';
         if (value['image'] != '' && value['image'] != undefined) {
             imageLink = '<img src="img/'+value['image']+'" alt="user image" class="feedImage" />';
+            if (value['caption'] != '' && value['caption'] != undefined) {
+                imageLink = imageLink + value['caption'];
+            }
         }
         var likedText = '';
         if (value['likes'] != '' && value['likes'] != undefined) {

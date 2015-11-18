@@ -1,4 +1,4 @@
-            function post(postId,userId,date,text,image,video,likes,comments,liked) {
+            function post(postId,userId,date,text,image,video,likes,comments,liked,caption) {
                 this.postId = postId;
                 this.user = userId;
                 this.date = date;
@@ -8,6 +8,7 @@
                 this.likes = likes;
                 this.comments = comments;
                 this.liked = liked;
+                this.caption = caption;
             }
 
             function comment(order,userId,date,text,image,video,liked) {

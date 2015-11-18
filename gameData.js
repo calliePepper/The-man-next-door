@@ -6,9 +6,9 @@ module.exports = {
 	    9:{postId:9,fromId:1,date:600,text:'Does anyone else ever feel the urgency in decisions? Laying the foundation for a day of serious research on the nature of this world, versus getting ready for a party.',image:'',caption:'',video:'',likes:1,comments:0},
 	    10:{postId:10,fromId:1,date:690,text:'Finally, some success! Actually not. I hoped optimism would spur one of you to help me out with this. I don’t know what to look for.',image:'',caption:'',video:'',likes:4,comments:0},
 	    11:{postId:11,fromId:1,date:824,text:'My neighbour is being weird again. I might just watch him, get some inspiration on this. I’m not being paranoid, but I hope there’s no way for him to see these posts. It could be funny though. A sort of Mutually weird neighbour\' kind of thing.',image:'',caption:'',video:'',likes:10,comments:0},
-	    12:{postId:11,fromId:1,date:862,text:'And of course, someone organised a party and this happens…',image:'forecast1.png',caption:'<div class="captionTitle">Bureau of meteorology</div><div class="captionContent">Provides access to weather forecasts, warnings, observations and radar imagery</div></div class="captionLink">bom.com</div>',video:'',likes:10,comments:0},
-	    13:{postId:12,fromId:1,date:923,text:'Weird. So, my brand new friend (read: strange neighbour) has started up some recreational painting. All over his house.',image:'',caption:'',video:'',likes:4,comments:0},
-	    14:{postId:13,fromId:3,date:1072,text:'Robin. If you can read this, I hate to stomp all over what must be a seriously intense day of study, but could you please respond to my messages?',image:'',caption:'',video:'',likes:3,comments:14}
+	    12:{postId:12,fromId:1,date:862,text:'And of course, someone organised a party and this happens…',image:'forecast1.png',caption:'<div class="captionTitle">Bureau of meteorology</div><div class="captionContent">Provides access to weather forecasts, warnings, observations and radar imagery</div><div class="captionLink">bom.com</div>',video:'',likes:10,comments:0},
+	    13:{postId:13,fromId:1,date:923,text:'Weird. So, my brand new friend (read: strange neighbour) has started up some recreational painting. All over his house.',image:'',caption:'',video:'',likes:4,comments:0},
+	    14:{postId:14,fromId:3,date:1072,text:'Robin. If you can read this, I hate to stomp all over what must be a seriously intense day of study, but could you please respond to my messages?',image:'',caption:'',video:'',likes:3,comments:14}
     },
     commentObjects: {
         1:{
@@ -162,7 +162,7 @@ module.exports = {
         },
         19:{
             comments: [
-                {order:2,user:1,date:990,text:'Well. That’s odd.',image:'',video:'',like:1},
+                {order:2,user:3,date:990,text:'Well. That’s odd.',image:'',video:'',like:1},
             ],
             autoTarget:'',
             autoId:'',
@@ -170,7 +170,7 @@ module.exports = {
         },
         20:{
             comments: [
-                {order:4,user:2,date:1000,text:'I think the guy is just odd all-over',image:'',video:'',like:1}
+                {order:4,user:1,date:1000,text:'I think the guy is just odd all-over',image:'',video:'',like:1}
             ],
             autoTarget:'',
             autoId:'',

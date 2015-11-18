@@ -394,8 +394,31 @@ iframe {
 .likedSection:empty {
   display: none; }
 
+.feedImageCont {
+  border: 1px solid;
+  border-color: #e5e6e9 #dfe0e4 #d0d1d5; }
+
 .feedImage {
-  width: 100%; }
+  width: 100%;
+  position: relative;
+  z-index: 2; }
+
+.captionCont {
+  padding: 10px 15px;
+  position: relative;
+  top: -12px;
+  margin: 0 2px;
+  z-index: 1;
+  font-size: 0.8em; }
+
+.captionTitle {
+  font-size: 1.6em;
+  padding: 4px 0 8px; }
+
+.captionLink {
+  padding: 10px 0 0;
+  color: #666;
+  text-transform: uppercase; }
 
 .games {
   padding-top: 10px;
@@ -931,6 +954,9 @@ input[type="text"] {
   .mainWrapper {
     padding-top: 42px; }
 
+  .halfer {
+    width: 100%; }
+
   .mobileNav {
     display: block; }
 
@@ -943,7 +969,6 @@ input[type="text"] {
 
   .sideBar {
     transition: 0.4s;
-    left: 100%;
     width: 100%;
     padding: 10px;
     top: 0px;
@@ -951,17 +976,44 @@ input[type="text"] {
     min-height: 100%;
     overflow: hidden;
     z-index: 1;
-    padding-top: 42px; }
+    padding-top: 42px;
+    -webkit-transform: translate3d(100%, 0, 0);
+    -moz-transform: translate3d(100%, 0, 0);
+    -ms-transform: translate3d(100%, 0, 0);
+    -o-transform: translate3d(100%, 0, 0);
+    transform: translate3d(100%, 0, 0);
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -ms-backface-visibility: hidden;
+    -o-backface-visibility: hidden;
+    backface-visibility: hidden; }
 
   #feedContent {
-    transition: 0.4s;
-    right: 0%; }
+    transition: 0.4s ease;
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform: translate3d(0, 0, 0);
+    -ms-transform: translate3d(0, 0, 0);
+    -o-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -ms-backface-visibility: hidden;
+    -o-backface-visibility: hidden;
+    backface-visibility: hidden; }
 
   .sideBar.navFlip {
-    left: 0%; }
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform: translate3d(0, 0, 0);
+    -ms-transform: translate3d(0, 0, 0);
+    -o-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0); }
 
   #feedContent.navFlip {
-    right: 100%; }
+    -webkit-transform: translate3d(-100%, 0, 0);
+    -moz-transform: translate3d(-100%, 0, 0);
+    -ms-transform: translate3d(-100%, 0, 0);
+    -o-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0); }
 
   .sideLink {
     padding: 10px 0;
@@ -1048,16 +1100,34 @@ input[type="text"] {
 
   .messageList {
     width: 100%;
-    right: 0%;
-    transition: 0.4s; }
+    transition: 0.4s;
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform: translate3d(0, 0, 0);
+    -ms-transform: translate3d(0, 0, 0);
+    -o-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -ms-backface-visibility: hidden;
+    -o-backface-visibility: hidden;
+    backface-visibility: hidden; }
 
   .messages {
-    left: 100%;
     transition: 0.4s;
     overflow-y: hidden;
     width: 100%;
     position: absolute;
-    background: #fff; }
+    background: #fff;
+    -webkit-transform: translate3d(100%, 0, 0);
+    -moz-transform: translate3d(100%, 0, 0);
+    -ms-transform: translate3d(100%, 0, 0);
+    -o-transform: translate3d(100%, 0, 0);
+    transform: translate3d(100%, 0, 0);
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -ms-backface-visibility: hidden;
+    -o-backface-visibility: hidden;
+    backface-visibility: hidden; }
 
   .messagesCont {
     padding-top: 45px; }
@@ -1083,10 +1153,18 @@ input[type="text"] {
     z-index: 2; }
 
   .messageList.flipped {
-    right: 100%; }
+    -webkit-transform: translate3d(-100%, 0, 0);
+    -moz-transform: translate3d(-100%, 0, 0);
+    -ms-transform: translate3d(-100%, 0, 0);
+    -o-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0); }
 
   .messages.flipped {
-    left: 0%; }
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform: translate3d(0, 0, 0);
+    -ms-transform: translate3d(0, 0, 0);
+    -o-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0); }
 
   .messages.flipped .messagesCont {
     overflow-y: scroll; } }

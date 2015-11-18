@@ -99,7 +99,11 @@ iframe{width:100%;}
 .usableControls{color:$majorColour;cursor:pointer;}
 .likedSection{border-top:1px solid #dfe0e4;font-size:0.8em;padding:$paddingVal;}
 .likedSection:empty{display:none;}
-.feedImage{width:100%;}
+.feedImageCont{border: 1px solid;border-color: #e5e6e9 #dfe0e4 #d0d1d5;}
+.feedImage{width:100%;position:relative;z-index:2;}
+.captionCont{padding: 10px 15px;position: relative;top: -12px;margin: 0 2px;z-index: 1;font-size:0.8em;}
+.captionTitle{font-size:1.6em;padding:4px 0 8px;}
+.captionLink{padding:10px 0 0;color:#666;text-transform:uppercase;}
 .games{padding-top:$paddingVal;border-top:1px solid #dfe0e4;position:relative;width:100%;}
 .gameBlock{width:50%;display:inline;height:100px;}
 .gameImg{background:$majorColour;width:100%;height:100%;}
@@ -217,14 +221,14 @@ input[type="text"]{padding:8px;color:#fff;background:none;border:1px solid $majo
 	
 	header{position:fixed;}
 	.mainWrapper{padding-top:42px;}
-	
+	.halfer{width:100%;}
 	.mobileNav{display:block;}
 	body{max-width:100%;overflow-x:hidden;}
 	.mobileFix{overflow-x:hidden;}
-	.sideBar{transition:0.4s;left: 100%;width: 100%;padding: 10px; top: 0px;background: #fff; min-height: 100%; overflow: hidden;z-index: 1;padding-top: 42px}
-	#feedContent{transition:0.4s;right:0%;}
-	.sideBar.navFlip{left:0%;}
-	#feedContent.navFlip{right:100%;}
+	.sideBar{transition:0.4s;width: 100%;padding: 10px; top: 0px;background: #fff; min-height: 100%; overflow: hidden;z-index: 1;padding-top: 42px;-webkit-transform: translate3d(100%,0,0);-moz-transform: translate3d(100%,0,0);-ms-transform: translate3d(100%,0,0);-o-transform: translate3d(100%,0,0);transform: translate3d(100%,0,0);-webkit-backface-visibility:hidden;-moz-backface-visibility:hidden;-ms-backface-visibility:hidden;-o-backface-visibility:hidden;backface-visibility:hidden;}
+	#feedContent{transition:0.4s ease;-webkit-transform: translate3d(0,0,0);-moz-transform: translate3d(0,0,0);-ms-transform: translate3d(0,0,0);-o-transform: translate3d(0,0,0);transform: translate3d(0,0,0);-webkit-backface-visibility:hidden;-moz-backface-visibility:hidden;-ms-backface-visibility:hidden;-o-backface-visibility:hidden;backface-visibility:hidden;}
+	.sideBar.navFlip{-webkit-transform: translate3d(0,0,0);-moz-transform: translate3d(0,0,0);-ms-transform: translate3d(0,0,0);-o-transform: translate3d(0,0,0);transform: translate3d(0,0,0);}
+	#feedContent.navFlip{-webkit-transform: translate3d(-100%,0,0);-moz-transform: translate3d(-100%,0,0);-ms-transform: translate3d(-100%,0,0);-o-transform: translate3d(-100%,0,0);transform: translate3d(-100%,0,0);}
 	.sideLink{padding:10px 0;font-size:1.2em;min-height:55px;display:block;}
 	.sideLink .desktop{display:none;}
 	.sideLink .mobile{display:inline-block;vertical-align: middle; margin-right: 20px;margin-left:20px;}
@@ -248,8 +252,8 @@ input[type="text"]{padding:8px;color:#fff;background:none;border:1px solid $majo
 	#feedContent.navFlip .messages{left:200%;}
 	#messagesPage .sideBar{top:0;}
 	
-	.messageList{width:100%;right:0%;transition:0.4s;}
-	.messages{left:100%;transition:0.4s;overflow-y:hidden;width: 100%; position: absolute;background:#fff;}
+	.messageList{width:100%;transition:0.4s;-webkit-transform: translate3d(0,0,0);-moz-transform: translate3d(0,0,0);-ms-transform: translate3d(0,0,0);-o-transform: translate3d(0,0,0);transform: translate3d(0,0,0);-webkit-backface-visibility:hidden;-moz-backface-visibility:hidden;-ms-backface-visibility:hidden;-o-backface-visibility:hidden;backface-visibility:hidden;}
+	.messages{transition:0.4s;overflow-y:hidden;width: 100%; position: absolute;background:#fff;-webkit-transform: translate3d(100%,0,0);-moz-transform: translate3d(100%,0,0);-ms-transform: translate3d(100%,0,0);-o-transform: translate3d(100%,0,0);transform: translate3d(100%,0,0);-webkit-backface-visibility:hidden;-moz-backface-visibility:hidden;-ms-backface-visibility:hidden;-o-backface-visibility:hidden;backface-visibility:hidden;}
 	.messagesCont{padding-top:45px;}
 	.messageUserList.current{cursor:pointer;background:#fff;border-bottom:1px solid #dfe0e4;}
 	.messageUserList.current .sentOn{color:#aaa;}
@@ -257,8 +261,8 @@ input[type="text"]{padding:8px;color:#fff;background:none;border:1px solid $majo
 	.messageUserList.current .messageContents{color:#777;}
 	.messageTitle{display:block;cursor:pointer;position: relative; z-index: 2;}
 	
-	.messageList.flipped{right:100%;}
-	.messages.flipped{left:0%;}
+	.messageList.flipped{-webkit-transform: translate3d(-100%,0,0);-moz-transform: translate3d(-100%,0,0);-ms-transform: translate3d(-100%,0,0);-o-transform: translate3d(-100%,0,0);transform: translate3d(-100%,0,0);}
+	.messages.flipped{-webkit-transform: translate3d(0,0,0);-moz-transform: translate3d(0,0,0);-ms-transform: translate3d(0,0,0);-o-transform: translate3d(0,0,0);transform: translate3d(0,0,0);}
 	.messages.flipped .messagesCont{overflow-y:scroll;}
 }
 

@@ -588,7 +588,7 @@ feed.create = function(target,objects,processNormal) {
             if (value['image'] != '' && value['image'] != undefined) {
                 imageLink = '<img src="img/'+value['image']+'" alt="user image" class="feedImage" />';
                 if (value['caption'] != '' && value['caption'] != undefined) {
-                    imageLink = imageLink + value['caption'];
+                    imageLink = '<div class="feedImageCont">' + imageLink + '<div class="captionCont"> ' + value['caption'] + '</div></div>';
                 }
             }
             var likedText = '';
@@ -652,7 +652,7 @@ feed.backlog = function(value) {
         if (value['image'] != '' && value['image'] != undefined) {
             imageLink = '<img src="img/'+value['image']+'" alt="user image" class="feedImage" />';
             if (value['caption'] != '' && value['caption'] != undefined) {
-                imageLink = imageLink + value['caption'];
+                imageLink = '<div class="feedImageCont">' + imageLink + '<div class="captionCont"> ' + value['caption'] + '</div></div>';
             }
         }
         var likedText = '';

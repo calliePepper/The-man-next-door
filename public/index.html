@@ -11,7 +11,7 @@
     <body id="frontPage" class="frontPage">
         <script>
           if (localStorage.getItem('gameData')) {
-                window.location.href = 'twaddle';
+                window.location.replace("twaddle");
             }
         </script>
         <div class="infoBox">
@@ -161,7 +161,7 @@
                             }
                         };          
                         localStorage.setObject('gameData',totalData);
-                        window.location.href = "twaddle";
+                        window.location.replace("twaddle");
                     } else {
                         alert('Sorry your device does not support the required technology (HTML5 Local storage)');
                     }

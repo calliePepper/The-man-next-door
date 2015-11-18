@@ -215,7 +215,7 @@ users.load = function() {
             if ($(document).find("title").text() == value['firstname'] + ' ' + value['lastname']) {
                 isCurrent = 'current';
             }
-            $('#sideBar').append('<a id="'+value['firstname']+'" href="'+value['firstname']+'" class="friend sideLink '+isCurrent+'"><img src="'+value['avatar']+'" class="navAvatar mobile" alt="Navigation avatar" /><i id="userIcon" class="desktop fa fa-user"></i>'+value['firstname']+' '+value['lastname']+'</a>');    
+            $('#friendContainer').append('<a id="'+value['firstname']+'" href="'+value['firstname']+'" class="friend sideLink '+isCurrent+'"><img src="'+value['avatar']+'" class="navAvatar mobile" alt="Navigation avatar" /><i id="userIcon" class="desktop fa fa-user"></i>'+value['firstname']+' '+value['lastname']+'</a>');    
         }
     });
 }
@@ -830,6 +830,10 @@ navigationControls.change = function(page) {
     $('.sideLink').off();
     $('#userNav div').off();
     $('.aboutItem').off();
+    if (page == 'restart') {
+            window.localStorage.clear();
+            window.location.href = 'index.html';
+    }
     $('#contentAim').load('content/'+page+'.html', null, function() {
         users.load(); 
         $('body').attr('id','');
@@ -882,7 +886,7 @@ navigationControls.change = function(page) {
             buildTrending();
             buildTrending();
             buildTrending();
-        }
+        } 
         navigationControls.setUp();
     });
 }
@@ -902,6 +906,8 @@ navigationControls.setUp = function() {
              navigationControls.change('messages');
          } else if ($(this).attr('id') == 'Robin') {
              navigationControls.change('robin');
+         } else if ($(this).attr('id') == 'restartLink') {
+             navigationControls.change('restart');
          }
     });
     if (localStorage.getObject('gameSettings').unread.messages > 0) {$('#messagesLink').find('.totalNew').html(localStorage.getObject('gameSettings').unread.messages);}

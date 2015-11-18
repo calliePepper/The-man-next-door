@@ -9,12 +9,13 @@
         <link href='https://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
     </head>
     <body id="frontPage" class="frontPage">
+        <script>
+          if (localStorage.getItem('gameData')) {
+                window.location.href = 'twaddle';
+            }
+        </script>
         <div class="infoBox">
             <h1>The man next door</h1>
-            <div id="alreadyStarted">
-                STOP! According to our records you have an existing playthrough.<br><br>
-                <a class='btn' href="twaddle">Click here to continue your game</a><br>
-            </div>
             <p>The man next door is an interactive narrative, set on a fictional social media network. There are a couple of things you should know before you start:</p>
             <ol>
                 <li>Please be aware this site uses some techniques which <strong class="colouredText">may trigger epileptic attacks</strong></li>
@@ -56,11 +57,6 @@
                 $('#putThumbHere').html('<img class="thumb" src="'+ localStorage.thumb +'" tile="Old icon"/>');
                 userAvatar = localStorage.thumb;
             }
-            
-            if (localStorage.getObject('gameData')) {
-                $('#alreadyStarted').show();
-            }
-        
         
             function handleFile(evt) {
                 var file = evt.target.files;

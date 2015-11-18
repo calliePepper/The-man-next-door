@@ -790,6 +790,7 @@ iframe {
   background-image: url("../img/bg_mobile.jpg");
   background-size: cover;
   background-position: center;
+  background-attachment: fixed;
   text-align: center;
   height: 100%; }
 

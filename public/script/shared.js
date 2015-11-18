@@ -26,7 +26,7 @@ Storage.prototype.getObject = function(key) {
 }
 
 if (localStorage.getObject('gameSettings') == undefined || localStorage.getObject('gameSettings').name == undefined || localStorage.getObject('gameSettings').startTime == undefined || localStorage.getObject('gameSettings').lastUpdate == undefined || localStorage.getObject('gameSettings').timezone == undefined) {
-    window.location.replace('/');
+    window.location.replace('index.html');
 } 
 
 var playerName = localStorage.getObject('gameSettings').name;
@@ -832,7 +832,7 @@ navigationControls.change = function(page) {
     $('.aboutItem').off();
     if (page == 'restart') {
             window.localStorage.clear();
-            window.location.replace("/");
+            window.location.replace("index.html");
     }
     $('#contentAim').load('content/'+page+'.html', null, function() {
         users.load(); 

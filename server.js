@@ -70,7 +70,10 @@ io.on('connection', function(socket) {
 		clientData[userId] = {};
 		clientData[userId]['name'] = page.playerName;
 		clientData[userId]['timezone'] = page.timezone;
-		oldDataUpdate(currentDay,timeThroughDay,updatedLast);
+		oldDataUpdate(currentDay,timeThroughDay,updatedLast,page.lastFeed,page.lastMessage,page.lastComment);
+		if (page.firstLoad == 1) {
+			io.to(userId).emit('newMessage',{messageItem:data.messageObjects[1],choices:data.choiceObjects[1]});
+		}
 	});
 	
 	socket.on('choiceMade', function(replyData) {
@@ -99,7 +102,18 @@ io.on('connection', function(socket) {
 		}
 	});
 	
-	function oldDataUpdate(day,timeThroughDay,updatedLast) {
+	socket.on('anotherMessage', function(replyData) {
+		console.log(timestampify()+replyData.playerName+' asked for another message (Message: '+replyData.nextId+')');	
+		var messageItem = data.messageObjects[replyData.nextId];
+		var choiceResult = '';
+		if (messageItem.autoTarget == 'choice') {
+			var choiceResult = data.choiceObjects[messageItem.autoId]
+		}
+		io.to(userId).emit('newMessage',{messageItem:messageItem,choices:choiceResult});
+	});
+	
+	
+	function oldDataUpdate(day,timeThroughDay,updatedLast,lastFeed,lastMessage,lastComment) {
 		var updateData = {};
 		updateData.message = [];
 		updateData.feed = [];
@@ -144,7 +158,7 @@ io.on('connection', function(socket) {
 						updateCounter++;
 					}
 				};
-				updatedLast -= 1440;
+				updatedLast -= timeThroughDay;
 				if (updatedLast > 0 && day > 0) {
 					loopDayUpdate(day-1,1440,updatedLast);
 				}
@@ -152,13 +166,14 @@ io.on('connection', function(socket) {
 		loopDayUpdate(day,timeThroughDay,updatedLast);
 		console.log(timestampify()+'Pushing a backlog of '+updateCounter+' events to '+userId.substr(0,4) + '<->' +clientData[userId]['name'])
 		io.to(userId).emit('updateData',updateData);
-		queueFunc.update(userId,day,timeThroughDay,updatedLast);
+		queueFunc.update(userId,day,timeThroughDay,updatedLast,lastFeed,lastMessage,lastComment);
 	}
 });
 
 
 function timestampify() {
 	var currentdate = new Date(); 
+	currentdate = new Date(currentdate.getTime() + 10*60*60000)
 	var datetime = "[" + currentdate.getDate() + "/"
                 + (currentdate.getMonth()+1)  + "/" 
                 + currentdate.getFullYear() + " @ "  
@@ -204,12 +219,15 @@ var watcher = setInterval(function() {
 
 var queueFunc = {};
 
-queueFunc.update = function(userId,day,timeThroughDay,updatedLast) {
-	console.log(timestampify()+'Checking update for '+userId.substr(0,4)+'<->'+clientData[userId].name);
+queueFunc.update = function(userId,day,timeThroughDay,updatedLast,lastFeed,lastMessage,lastComment) {
+	console.log(timestampify()+'Checking update for '+userId.substr(0,4)+'<->'+clientData[userId].name + ' . '+lastFeed+'-'+lastMessage+'-'+lastComment);
 	timeStampToHit = 0;
 	nextOne = 0;
 	for (var i in data.events[day]) {
-		if (timeStampToHit == 0 && parseInt(timeThroughDay) < parseInt(i)) {
+		if (timeStampToHit == 0 && parseInt(timeThroughDay) < parseInt(i)
+			|| timeStampToHit == 0 && data.events[day][i].object == 'feedObjects' && data.events[day][i].id > lastFeed
+			|| timeStampToHit == 0 && data.events[day][i].object == 'commentObjects' && data.events[day][i].id > lastComment
+			|| timeStampToHit == 0 && data.events[day][i].object == 'messageObjects' && data.events[day][i].id > lastMessage) {
 			timeStampToHit = i;
 			break;
 		}
@@ -234,6 +252,7 @@ queueFunc.update = function(userId,day,timeThroughDay,updatedLast) {
 		sendQueue.push(queueObject);
 		organiseQueue()
 	}
+	sendQueue = uniqueTest(sendQueue);
 }
 
 queueFunc.check = function() {
@@ -276,4 +295,20 @@ queueFunc.check = function() {
 		sendQueue.shift();
 		organiseQueue()
 	}
+}
+
+	
+function uniqueTest(arr) {
+  var n, y, x, i, r;
+  var arrResult = {},
+    unique = [];
+  for (i = 0, n = arr.length; i < n; i++) {
+    var item = arr[i];
+    arrResult[item.title + " - " + item.artist] = item;
+  }
+  i = 0;
+  for (var item in arrResult) {
+    unique[i++] = arrResult[item];
+  }
+  return unique;
 }

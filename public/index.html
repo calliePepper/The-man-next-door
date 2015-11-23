@@ -46,10 +46,7 @@
             
         </script>
         <script type="text/javascript" src="script/jquery.min.js"></script>
-        <script type="text/javascript" src="/socket.io/socket.io.js"></script>
         <script type="text/javascript" src="script/data.js"></script>
-        <script type="text/javascript" src="script/moment.js"></script>
-        <script type="text/javascript" src="script/glitch.js"></script>
         <script>
             var userAvatar = 'img/userAvatar.jpg';
         
@@ -97,20 +94,19 @@
                     if (typeof(Storage) !== 'undefined') {
                         var gameData = {
                             name:$('#name').val(),
-                            startTime:moment().format(),
-                            lastUpdate:moment().format(),
+                            startTime:new Date(),
+                            lastUpdate:new Date(),
                             timezone:new Date().getTimezoneOffset(),
-                            lastMessage: {
-                                1:0,
-                                2:0
-                            },
+                            lastMessage: 0,
                             lastFeed: 0,
+                            lastComment: 0,
                             firstLoad: 1,
                             unread: {
                                 'posts':0,
                                 'messages':0
                             }
                         };
+                        console.log(gameData);
                         localStorage.setObject('gameSettings',gameData);
                         var comments = {
                                 1: [
@@ -148,8 +144,7 @@
                                 new trending(1,'Get the body you have always wanted', 'We know where you buried it. We can lend you a shovel.')
                             ],
                             messages: [
-                                new message(1,1,createTimestamp(1300),'Hey, thanks for the friend request','','',1,'0_1'),
-                                new message(2,2,createTimestamp(1450),'Hey, you\'re that friend that Robin keeps talking about right?','','',1,'0_2')
+                            
                             ],
                             users: {
                                 0: new user($('#name').val(),'','they',1412314,userAvatar,'',0,0,0,0,0),
@@ -170,11 +165,33 @@
                 }
             });
             
-            function testSound() {
-               var audio = new Audio("sounds/roar.wav");
-                audio.play();
-                setTimeout(testSound(),400);
+            var background = $('#frontPage').css('background-image');
+            var backgroundi = background.substring(background.length, background.length - 11);
+            backgroundi = backgroundi.substring(0, backgroundi.length - 5) + '_i.jpg';
+            
+            $('<img/>')[0].src = 'img/'+backgroundi;
+            
+            function setFlicker() {
+                console.log('Setting flicker up')
+                setTimeout(
+                    function() {
+                        $('#frontPage').css('background-image','url(img/'+backgroundi+')');
+                        console.log('Flickering!');
+                        setTimeout(
+                            function() {
+                                $('#frontPage').css('background-image',background);        
+                                setFlicker();
+                            }
+                        ,200);
+                    },getRandomInt(4000,12000)
+                );    
             }
+            
+            function getRandomInt(min, max) {
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            }  
+            
+            setTimeout(setFlicker(),6000);
             
             //testSound();
         </script>

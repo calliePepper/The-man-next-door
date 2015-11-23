@@ -16,6 +16,7 @@ module.exports = {
                 {order:1,user:2,date:540,text:'You are such a rebel Robin',image:'',video:'',likes:2},
 		        {order:2,user:1,date:541,text:'I know right? It\'s a wonder I haven\'t been arrested',image:'',video:'',likes:1}
             ],
+            commentId:1,
             autoTarget:'choice',
             autoId:'2',
             feedId:'6'
@@ -25,6 +26,7 @@ module.exports = {
                 {order:1,user:2,date:601,text:'You are such a rebel Robin',image:'',video:'',likes:2},
 		        {order:2,user:1,date:601,text:'I know right? It\'s a wonder I haven\'t been arrested',image:'',video:'',likes:1}
 		    ],
+		    commentId:2,
 		    autoTarget:'choice',
 		    autoId:'2',
 		    feedId:'6'
@@ -33,6 +35,7 @@ module.exports = {
             comments:[
                 {order:1,user:1,date:603,text:': Grins like an idiot :',image:'',video:'',likes:5}    
             ],
+            commentId:3,
             autoTarget: 'choice',
             autoId:'4',
             feedId:'6'
@@ -41,6 +44,7 @@ module.exports = {
             comments:[
                 {order:1,user:3,date:501,text:'Can confirm we felt nothing over here, and we are only like 10 minutes drive away',image:'',video:'',like:1}
             ],
+            commentId:4,
             autoTarget:'',
             autoId:'',
             feedId:'4'
@@ -49,14 +53,16 @@ module.exports = {
             comments:[
                 {order:1,user:2,date:523,text:'Must have been a light one, I didn\'t even wake up',image:'',video:'',like:1}
             ],
+            commentId:5,
             autoTarget:'',
             autoId:'',
             feedId:'4'
         },
         6:{
             comments: [
-                {order:1,user:2,date:422,text:'Great, less than 24 hours back and you are already digger through people\'s trash. Nice work',image:'',video:'',like:1}
+                {order:1,user:2,date:422,text:'Great, less than 24 hours back and you are already digging through people\'s trash. Nice work',image:'',video:'',like:1}
             ],
+            commentId:6,
             autoTarget:'',
             autoId:'',
             feedId:'5'
@@ -65,6 +71,7 @@ module.exports = {
             comments: [
                 {order:1,user:3,date:564,text:'Anything I can help with?',image:'',video:'',like:1},
             ],
+            commentId:7,
             autoTarget:'',
             autoId:'',
             feedId:'7'
@@ -74,6 +81,7 @@ module.exports = {
                 {order:2,user:1,date:565,text:'Just the usual cosmic mysteries',image:'',video:'',like:1},
                 {order:3,user:3,date:565,text:'Studying the cosmic mysteries is one of your strong points. Come on Robin, I believe in you!',image:'',video:'',like:1},
             ],
+            commentId:8,
             autoTarget:'',
             autoId:'',
             feedId:'7'
@@ -83,6 +91,7 @@ module.exports = {
                 {order:4,user:1,date:566,text:'Thanks buddy. I\'ll tip you in on my findings',image:'',video:'',like:1},
                 {order:5,user:3,date:567,text:'I am so very sure of that.',image:'',video:'',like:1},
             ],
+            commentId:9,
             autoTarget:'',
             autoId:'',
             feedId:'7'
@@ -91,6 +100,7 @@ module.exports = {
             comments: [
                 {order:1,user:2,date:600,text:'I checked the NEIC (National Earthquake Information Center). No reports. It\'s supposed to report on local findings, but nothing so far.',image:'',video:'',like:1},
             ],
+            commentId:10,
             autoTarget:'',
             autoId:'',
             feedId:'8'
@@ -99,6 +109,7 @@ module.exports = {
             comments: [
                 {order:2,user:3,date:605,text:'What do you need?',image:'',video:'',like:1}
             ],
+            commentId:11,
             autoTarget:'',
             autoId:'',
             feedId:'9'
@@ -107,6 +118,7 @@ module.exports = {
             comments: [
                 {order:2,user:1,date:615,text:'Maybe some help with the whole clothing situation. I\'ve been away awhile, I don’t know what the current dress style is. Have you talked to Marcel? He’s pretty good in that department.',image:'',video:'',like:1}
             ],
+            commentId:12,
             autoTarget:'',
             autoId:'',
             feedId:'9'
@@ -115,6 +127,7 @@ module.exports = {
             comments: [
                 {order:2,user:3,date:625,text:'I actually haven\'t. Not even sure if he\'s coming.',image:'',video:'',like:1}
             ],
+            commentId:13,
             autoTarget:'',
             autoId:'',
             feedId:'9'
@@ -123,6 +136,7 @@ module.exports = {
             comments: [
                 {order:2,user:1,date:630,text:'Weird, I know I wasn\'t dreaming.',image:'',video:'',like:1}
             ],
+            commentId:14,
             autoTarget:'',
             autoId:'',
             feedId:'8'
@@ -132,6 +146,7 @@ module.exports = {
             comments: [
                 {order:1,user:2,date:930,text:'Anything good?',image:'',video:'',like:1},
             ],
+            commentId:15,
             autoTarget:'',
             autoId:'',
             feedId:'13'
@@ -140,6 +155,7 @@ module.exports = {
             comments: [
                 {order:2,user:1,date:940,text:'Just shapes and lines. Someone would probably call it post-modern',image:'',video:'',like:1},
             ],
+            commentId:16,
             autoTarget:'',
             autoId:'',
             feedId:'13'
@@ -148,6 +164,7 @@ module.exports = {
             comments: [
                 {order:2,user:3,date:960,text:'Wait, I swear I heard rain outside.',image:'',video:'',like:1},
             ],
+            commentId:17,
             autoTarget:'',
             autoId:'',
             feedId:'13'
@@ -156,6 +173,7 @@ module.exports = {
             comments: [
                 {order:2,user:1,date:980,text:'Doesn’t seem to be stopping him. The paint is just dripping straight off the house.',image:'',video:'',like:1},
             ],
+            commentId:18,
             autoTarget:'',
             autoId:'',
             feedId:'13'
@@ -164,6 +182,7 @@ module.exports = {
             comments: [
                 {order:2,user:3,date:990,text:'Well. That’s odd.',image:'',video:'',like:1},
             ],
+            commentId:19,
             autoTarget:'',
             autoId:'',
             feedId:'13'
@@ -172,6 +191,7 @@ module.exports = {
             comments: [
                 {order:4,user:1,date:1000,text:'I think the guy is just odd all-over',image:'',video:'',like:1}
             ],
+            commentId:20,
             autoTarget:'',
             autoId:'',
             feedId:'13'
@@ -180,6 +200,7 @@ module.exports = {
             comments: [
                 {order:1,user:1,date:1078,text:'Sorry, I was deep into the mystery.',image:'',video:'',like:''},
             ],
+            commentId:21,
             autoTarget:'',
             autoId:'',
             feedId:'14'
@@ -188,6 +209,7 @@ module.exports = {
             comments: [
                 {order:2,user:3,date:1079,text:'Respond to my message?',image:'',video:'',like:''},
             ],
+            commentId:22,
             autoTarget:'',
             autoId:'',
             feedId:'14'
@@ -196,6 +218,7 @@ module.exports = {
             comments: [
                 {order:3,user:1,date:1081,text:'Sorry, on it now',image:'',video:'',like:''}
             ],
+            commentId:23,
             autoTarget:'',
             autoId:'',
             feedId:'14'
@@ -216,45 +239,94 @@ module.exports = {
     messageObjects: {
         1:{
             messages:[
-                {msgId:'1_1',fromId:2,toId:2,timestamp:600,message:'Hello? Are you there?',image:'',video:'',from:1},
-                {msgId:'1_2',fromId:2,toId:2,timestamp:603,message:'Seriously, I need to talk to you',image:'',video:'',from:1}
+                {msgId:'1_1',fromId:1,toId:1,timestamp:600,message:'Hey. So, this may be a bit weird.',image:'',video:'',from:1},
+                {msgId:'1_2',fromId:1,toId:1,timestamp:601,message:'Some things have been happening. I know that mysteriously inviting you to this without any prior comment is strange',image:'',video:'',from:1},
+                {msgId:'1_3',fromId:1,toId:1,timestamp:602,message:'But then, strange and mysterious is my middle name.',image:'',video:'',from:1},
+                {msgId:'1_4',fromId:1,toId:1,timestamp:603,message:'Names.',image:'',video:'',from:1},
+                {msgId:'1_5',fromId:1,toId:1,timestamp:604,message:'Sorry, Bit freaked out',image:'',video:'',from:1},
+                {msgId:'1_6',fromId:1,toId:1,timestamp:605,message:'I need some help. You there?',image:'',video:'',from:1},
             ],
+            messageId:1,
             autoTarget:'choice',
             autoId:'1'
         },
         2:{
             messages:[
-                {msgId:'2_1',fromId:2,toId:2,timestamp:1444973605,message:'Thank god you are here, I am starting to really freak out',image:'',video:'',from:1},
-                {msgId:'2_2',fromId:2,toId:2,timestamp:1444973705,message:'I think Robin is totally getting carried away with this whole \'neighbour\' situation',image:'',video:'',from:1},
-                {msgId:'2_3',fromId:2,toId:2,timestamp:1444973705,message:'Last night I was bombarded with messages about how the neighbour is actually a lizard person',image:'',video:'',from:1},
-                {msgId:'2_4',fromId:2,toId:2,timestamp:1444973705,message:'It\'s seriously getting out of hand',image:'',video:'',from:1}
+                {msgId:'2_1',fromId:1,toId:1,timestamp:600,message:'Can we just forget about all that?',image:'',video:'',from:1},
+                {msgId:'2_2',fromId:1,toId:1,timestamp:601,message:'Okay, starting over. ',image:'',video:'',from:1},
+                {msgId:'2_3',fromId:1,toId:1,timestamp:602,message:'My name is Robin, and I could use some help.',image:'',video:'',from:1},
             ],
-            autoTarget:'',
-            autoId:''
-        }        ,
+            messageId:2,
+            autoTarget:'message',
+            autoId:'4'
+        },
         3:{
             messages:[
-                {msgId:'3_1',fromId:2,toId:2,timestamp:1444973605,message:'Wow. Ok',image:'',video:'',from:1},
-                {msgId:'3_2',fromId:2,toId:2,timestamp:1444973705,message:'Well fuck you',image:'',video:'',from:1}
+                {msgId:'3_1',fromId:1,toId:1,timestamp:600,message:'Okay, I\'ll start at the start.',image:'',video:'',from:1},
+                {msgId:'3_2',fromId:1,toId:1,timestamp:601,message:'I moved back home from college a little while ago.',image:'',video:'',from:1},
+                {msgId:'3_3',fromId:1,toId:1,timestamp:602,message:'Since then, things have been slightly off.',image:'',video:'',from:1},
             ],
-            autoTarget:'',
-            autoId:''
+            messageId:3,
+            autoTarget:'message',
+            autoId:'4'
         },
         4:{
             messages:[
-                {msgId:'4_1',fromId:1,toId:1,timestamp:300,message:'Are you awake? I think I saw something',image:'',video:'',from:1},
-                {msgId:'4_2',fromId:1,toId:1,timestamp:304,message:'I definately saw something',image:'',video:'',from:1}
+                {msgId:'4_1',fromId:1,toId:1,timestamp:600,message:'Great. Sorry, I should probably explain why I added you first.',image:'',video:'',from:1},
+                {msgId:'4_2',fromId:1,toId:1,timestamp:601,message:'You know that forum? Great mysteries, ghosts and the truth behind the ages?',image:'',video:'',from:1},
+                {msgId:'4_3',fromId:1,toId:1,timestamp:602,message:'Well, that\'s a regular haunt for me. Yes, I did see the thing I did there.',image:'',video:'',from:1},
             ],
+            messageId:4,
+            autoTarget:'choice',
+            autoId:'2'
+        },
+        5:{
+            messages:[
+                {msgId:'5_1',fromId:1,toId:1,timestamp:600,message:'Yeah, I saw a number of posts of yours. Not on anything in particular though.',image:'',video:'',from:1},
+                {msgId:'5_2',fromId:1,toId:1,timestamp:601,message:'Which is good. Because I have no idea what I\'m dealing with, or if I\'m even dealing with something.',image:'',video:'',from:1},
+                {msgId:'5_3',fromId:1,toId:1,timestamp:602,message:'Maybe it would help if I explained what was going on.',image:'',video:'',from:1},
+            ],
+            messageId:5,
+            autoTarget:'choice',
+            autoId:'3'
+        },
+        6:{
+            messages:[
+                {msgId:'6_1',fromId:1,toId:1,timestamp:600,message:'You\'d probably get the idea if you looked through my page.',image:'',video:'',from:1},
+                {msgId:'6_2',fromId:1,toId:1,timestamp:601,message:'I\'ve been posting pretty frequently about it. ',image:'',video:'',from:1},
+                {msgId:'6_3',fromId:1,toId:1,timestamp:602,message:'Then again, maybe the delivery of a personal experience would work better.',image:'',video:'',from:1},
+                {msgId:'6_4',fromId:1,toId:1,timestamp:602,message:'Sorry about all these messages, by the way.',image:'',video:'',from:1},
+            ],
+            messageId:6,
+            autoTarget:'choice',
+            autoId:'4'
+        },
+        7:{
+            messages:[
+                {msgId:'7_1',fromId:1,toId:1,timestamp:600,message:'Well, since it\'s nothing specific, I thought you could help me with a general idea.',image:'',video:'',from:1},
+                {msgId:'7_2',fromId:1,toId:1,timestamp:601,message:'I love all those mysteries.',image:'',video:'',from:1},
+                {msgId:'7_3',fromId:1,toId:1,timestamp:602,message:'But I really feel like one may be happening to me.',image:'',video:'',from:1},
+                {msgId:'7_4',fromId:1,toId:1,timestamp:602,message:'Sorry about all these messages, by the way.',image:'',video:'',from:1},
+            ],
+            messageId:7,
+            autoTarget:'choice',
+            autoId:'4'
+        },
+        8:{
+            messages:[
+                {msgId:'8_1',fromId:1,toId:1,timestamp:600,message:'OUT OF CONVERSATION',image:'',video:'',from:1},
+            ],
+            messageId:8,
             autoTarget:'',
             autoId:''
         },
     },
     
     choiceObjects: {
-        1: {choiceId:1,choice1:'Ok I\'m here, what is wrong?',choice2:'It can\'t be that important',choice3:'I\'m going to ignore you till you calm down',resultType:'message',result1:2,result2:3,result3:3,ttd:360},
-        2: {choiceId:2,choice1:'Robin, you are an embarrasment',choice2:'How do you deal with this Cal?',choice3:'Yeah! Fight the power!',resultType:'comment',result1:3,result2:3,result3:3,ttd:''},
-        3: {choiceId:3,choice1:'Deal with the problem yourself',choice2:'Ignore it, it will go away',choice3:'Skin the cat. It\'s the only solution. Skin. The. Cat',resultType:'comment',result1:0,result2:0,result3:0,ttd:''},
-        4: {choiceId:4,choice1:'You are an idiot',choice2:'Derp',choice3:': Grins like a moron back :',resultType:'comment',result1:0,result2:0,result3:0,ttd:''}
+        1: {choiceId:1,choice1:'Yeah, I\'m here',choice2:'What\'s up?',choice3:'Um',resultType:'message',result1:4,result2:3,result3:2,ttd:360},
+        2: {choiceId:2,choice1:'Oh yeah, I\'m a regular there',choice2:'So you saw my name on there?',choice3:'Oh, you must have seen one of my posts',resultType:'message',result1:5,result2:5,result3:5,ttd:''},
+        3: {choiceId:3,choice1:'That could help',choice2:'Why do you think I\'d know any better?',choice3:'Sounds good, what information do you have',resultType:'message',result1:6,result2:7,result3:6,ttd:''},
+        4: {choiceId:4,choice1:'That\'s okay, I\'m interested.',choice2:'Just relax and tell me.',choice3:'I\'m not that interested',resultType:'message',result1:8,result2:8,result3:8,ttd:''},
     },
     
     directionObject: {
@@ -270,7 +342,6 @@ module.exports = {
     
     events: {
         0: {
-            300:{object:'messageObjects',id:'4'},
             501:{object:'commentObjects',id:'4'},
             521:{object:'commentObjects',id:'6'},
             523:{object:'commentObjects',id:'5'},
@@ -279,9 +350,8 @@ module.exports = {
             565:{object:'commentObjects',id:'8'},
             566:{object:'commentObjects',id:'9'},
             585:{object:'feedObjects',id:'8'},
-            600:{object:'commentObjects',id:'10'},
+            599:{object:'commentObjects',id:'10'},
             600:{object:'feedObjects',id:'9'},
-            605:{object:'messageObjects',id:'1'},
             605:{object:'commentObjects',id:'11'},
             615:{object:'commentObjects',id:'12'},
             625:{object:'commentObjects',id:'13'},

@@ -771,10 +771,11 @@ iframe {
 
 .choiceBlock {
   border-top: 1px solid #dfe0e4;
-  padding: #paddingVal;
+  padding: 10px;
   background: #f6f7f8;
   display: table;
   border-spacing: 10px;
+  width: 100%;
   border-collapse: separate;
   max-height: 0px;
   transition: 1s; }
@@ -810,7 +811,7 @@ iframe {
 
 .frontPage {
   background-color: #000;
-  background-image: url("../img/bg_mobile.jpg");
+  background-image: url("../img/bg_mob.jpg");
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -822,7 +823,7 @@ iframe {
     background-image: url("../img/bg_mid.jpg"); } }
 @media screen and (min-width: 1280px) {
   .frontPage {
-    background-image: url("../img/bg_large.jpg"); } }
+    background-image: url("../img/bg_lar.jpg"); } }
 .infoBox {
   max-width: 800px;
   width: 100%;
@@ -1019,7 +1020,8 @@ input[type="text"] {
     padding: 10px 0;
     font-size: 1.2em;
     min-height: 55px;
-    display: block; }
+    display: block;
+    cursor: pointer; }
 
   .sideLink .desktop {
     display: none; }

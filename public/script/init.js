@@ -1,27 +1,29 @@
-/* 
-            
+/*
+
                global comment
                global post
                global trending
                global message
                global user
-               
+
             */
 
 socket.on('requestStatus', function() {
-    requestStatusReply();  
-});      
+    requestStatusReply();
+});
 
 function requestStatusReply() {
    var lastUpdate = localStorage.getObject('gameSettings').lastUpdate;
+   var firstLoadTime = 0
     if (localStorage.getObject('gameSettings').firstLoad == 1) {
-        console.log('omg first load');
+        console.log(timestampify()+'omg first load');
         lastUpdate = 1440;
         var tempData = localStorage.getObject('gameSettings');
         tempData.firstLoad = 0;
+        firstLoadTime = 1;
         localStorage.setObject('gameSettings',tempData);
     }
-    console.log('Retrieving data');
+    console.log(timestampify()+'Retrieving data');
     socket.emit('pageLoad', {
         page:$(document).find("title").text(),
         playerName:playerName,
@@ -31,11 +33,13 @@ function requestStatusReply() {
         timezone:localStorage.getObject('gameSettings').timezone,
         lastFeed:localStorage.getObject('gameSettings').lastFeed,
         lastMessage:localStorage.getObject('gameSettings').lastMessage,
-    });   
+        lastComment:localStorage.getObject('gameSettings').lastComment,
+        firstLoad:firstLoadTime,
+    });
 }
 
 socket.on('updateData', function(updateData) {
-    console.log('Backlog received');
+    console.log(timestampify()+'Backlog received');
     console.log(updateData);
     if (updateData['message'].length > 0) {
         $.each(updateData['message'], function(index,value) {
@@ -44,12 +48,12 @@ socket.on('updateData', function(updateData) {
     };
     if (updateData['feed'].length > 0) {
         $.each(updateData['feed'], function(index,value) {
-            processFeed(value,1);       
+            processFeed(value,1);
         });
     }
     if (updateData['comment'].length > 0) {
         $.each(updateData['comment'], function(index,value) {
-            processComment(value,1);       
+            processComment(value,1);
         });
     }
     $('#loadingLine').hide();
@@ -61,43 +65,49 @@ socket.on('updateData', function(updateData) {
 });
 
 socket.on('newMessage', function(receivedMessages) {
-    console.log('PING - New message');
+    console.log(timestampify()+'PING - New message');
     processMessage(receivedMessages,0);
     gameUpdate.updateTime(80);
     setTimeout(function(){
         requestStatusReply();
-    },10000);
+    },6000);
 });
 
 function processMessage(receivedMessages,nonote) {
-    console.log('New message with a nonote value of '+nonote);
-    console.log(receivedMessages); 
+    gameUpdate.updateMessages(receivedMessages.messageItem.messageId);
+    console.log(timestampify()+'New message with a nonote value of '+nonote);
+    console.log(receivedMessages);
     var messageGroup = [];
     var updatePause;
     function process() {
         gameUpdate.updateTime(300);
         $.each(receivedMessages.messageItem.messages, function(index,value) {
-            console.log('Reading through');
+            console.log(timestampify()+'Reading through');
             console.log(value);
             var incomingMessage =  new message(value.fromId,value.toId,value.timestamp,value.message,value.image,value.video,value.from,value.msgId);
             messageGroup.push(incomingMessage);
             //gameUpdate.updateLocal(incomingMessage,'messages');
         });
         /*if (receivedMessages.choices && receivedMessages.choices != '') {
-            console.log('Message answers!');
+            console.log(timestampify()+'Message answers!');
             console.log(receivedMessages.choices);
             var newChoice = new choice(receivedMessages.choices.choiceId,receivedMessages.choices.choice1,receivedMessages.choices.choice2,receivedMessages.choices.choice3);
             var currentComment = new comment(0,0,'CHOICE',newChoice,'','',0);
             messageGroup.push(currentComment);
         }*/
-        messages.packed(messageGroup,receivedMessages.choices,nonote);
+        if (receivedMessages.messageItem.autoTarget == 'message') {
+            var nextMsg = receivedMessages.messageItem.autoId;
+        } else {
+            var nextMsg = 0;
+        }
+        messages.packed(messageGroup,receivedMessages.choices,nonote,nextMsg);
         //messages.new(message.userId,message.timestamp,message.message,typingTime);
     }
     if (updating == 1) {
         while (updating == 1) {
             clearTimeout(updatePause);
             updatePause = setTimeout(function() {
-                process();    
+                process();
             },3000);
         }
     } else {
@@ -110,11 +120,12 @@ socket.on('newFeed', function(receivedFeed) {
     gameUpdate.updateTime(80);
     setTimeout(function(){
         requestStatusReply();
-    },10000);
+    },60000);
 });
 
 function processFeed(receivedFeed,nonote) {
-    console.log('new feed item retrieved');
+    gameUpdate.updateFeed(receivedFeed.feedItem.postId);
+    console.log(timestampify()+'new feed item retrieved');
     console.log(receivedFeed);
     function process() {
         var commentBuilder = [];
@@ -158,16 +169,17 @@ function processFeed(receivedFeed,nonote) {
 }
 
 socket.on('newComment', function(receivedFeed) {
-    console.log('New comment');
+    console.log(timestampify()+'New comment');
     console.log(receivedFeed);
     processComment(receivedFeed,0);
     gameUpdate.updateTime(80);
     setTimeout(function(){
         requestStatusReply();
-    },10000);
+    },60000);
 });
 
 function processComment(receivedComment,nonote) {
+    gameUpdate.updateComment(receivedComment.comment.commentId);
     console.log(receivedComment);
     if (nonote == 1) {
         var now = createTimestamp(receivedComment.comment.comments[0].date)
@@ -184,7 +196,7 @@ function processComment(receivedComment,nonote) {
         var currentComment = new comment(0,0,'CHOICE',newChoice,'','',0);
         tempComments.push(currentComment);
     }
-    
+
     var tempData = localStorage.getObject('gameData');
     var aim = 0;
     $.each(tempData.posts, function(index, value) {
@@ -192,23 +204,27 @@ function processComment(receivedComment,nonote) {
             aim = index;
         }
     });
-    console.log('Applying to '+aim);
+    console.log(timestampify()+'Applying to '+aim);
     $.each(tempComments, function(index, value) {
         if (tempData.posts[aim].comments == 0) {
             tempData.posts[aim].comments = [];
         }
         console.log(tempData.posts[aim]);
-        tempData.posts[aim].comments.push(value);    
+        tempData.posts[aim].comments.push(value);
     });
     localStorage.setObject('gameData',tempData);
     if (nonote == 1) {
         var tempAppend = feed.commentBuilder(tempComments,receivedComment.comment.feedId,1);
         $('#comments_'+receivedComment.comment.feedId).append(tempAppend);
     } else {
-        feed.commentPoster(tempComments,receivedComment.comment.feedId) 
+        feed.commentPoster(tempComments,receivedComment.comment.feedId)
     }
 }
 
 function emitChoice(choiceId,choiceMade) {
-    socket.emit('choiceMade', {playerName:playerName,currentTime:new Date(),timezone:localStorage.getObject('gameSettings').timezone,choiceId:choiceId,choiceMade:choiceMade});    
+    socket.emit('choiceMade', {playerName:playerName,currentTime:new Date(),timezone:localStorage.getObject('gameSettings').timezone,choiceId:choiceId,choiceMade:choiceMade});
+}
+
+function askForAnother(nextOne) {
+    socket.emit('anotherMessage', {playerName:playerName,currentTime:new Date(),timezone:localStorage.getObject('gameSettings').timezone,nextId:nextOne});
 }

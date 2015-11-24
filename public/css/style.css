@@ -229,7 +229,8 @@ header:after {
   color: #000;
   text-decoration: none;
   display: inline-block;
-  width: 100%; }
+  width: 100%;
+  cursor: pointer; }
 
 .totalNew:empty {
   display: none; }

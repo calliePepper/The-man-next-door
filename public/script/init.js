@@ -216,6 +216,9 @@ function processComment(receivedComment,nonote) {
     if (nonote == 1) {
         var tempAppend = feed.commentBuilder(tempComments,receivedComment.comment.feedId,1);
         $('#comments_'+receivedComment.comment.feedId).append(tempAppend);
+        if (receivedComment.choices && receivedComment.choices != '') {
+            feed.createComment(receivedComment.comment.feedId, receivedComment.choices);   
+        }
     } else {
         feed.commentPoster(tempComments,receivedComment.comment.feedId)
     }

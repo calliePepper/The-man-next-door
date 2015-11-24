@@ -96,7 +96,7 @@ gameUpdate.updateLocal = function(data,dataType,extraData,choiceId) {
             for (var i = 0, len = tempStorage['posts'].length; i < len; i++) {
                 lookup[tempStorage['posts'][i].postId] = i;
             }
-            console.log(cameFrom[1]);
+            //console.log(cameFrom[1]);
             tempStorage['posts'][lookup[cameFrom[1]]].commented = 1;
         }
         localStorage.setObject('gameData',tempStorage);
@@ -176,9 +176,9 @@ choiceControls.choose = function(id,choice,targetType) {
         $('#choiceBlock_'+id).remove();
         additionalTarget = id;
         var newComment = new comment('',0,now,theChoice,'','',0);
-        console.log(timestampify()+'Submitting comment data. '+newComment+ '. '+commentTarg);
+        //console.log(timestampify()+'Submitting comment data. '+newComment+ '. '+commentTarg);
         gameUpdate.updateLocal(newComment,'comment',commentTarg);
-        console.log(timestampify()+'Submitting choice data. '+choiceMade+ '. '+commentTarg);
+        //console.log(timestampify()+'Submitting choice data. '+choiceMade+ '. '+commentTarg);
         gameUpdate.updateLocal(choiceMade,'choice','comment_'+commentTarg,id);
     } else if (targetType == 'message') {
         var tempStorage = localStorage.getObject('gameData');
@@ -285,7 +285,7 @@ messages.init = function() {
     orderedUsers.sort(compare);
     messages.users(orderedUsers);
     messages.load(orderedUsers[0].index);
-    console.log(orderedUsers);
+    //console.log(orderedUsers);
 }
 
 messages.load = function(id) {
@@ -295,7 +295,7 @@ messages.load = function(id) {
     currentlyViewing = id;
     $.each(localStorage.getObject('gameData')['messages'], function(index,value) {
         if (value['toId'] == id) {
-            console.log(Object.keys(value).length);
+            //console.log(Object.keys(value).length);
             if (value.date == 'CHOICE') {
                 console.log(timestampify()+'Building a choice');
                 choiceControls.create(value.text.choiceId,'messagesCont','message','',value.text.choice1,value.text.choice2,value.text.choice3);                
@@ -450,7 +450,6 @@ messages.new.differentPage = function(messageFrom,messageTo,cameIn,text,ttw,full
 
 messages.new.noNotification = function(messageFrom,messageTo,cameIn,text,ttw,fullMessage) {
     console.log(timestampify()+'New message with no notification from '+localStorage.getObject('gameData').users[messageFrom].firstname+' at '+cameIn);
-    console.log(fullMessage);
     fullMessage.date = createTimestamp(fullMessage['date']);
     gameUpdate.updateLocal(fullMessage,'messages');
 
@@ -469,7 +468,7 @@ messages.packed = function(messageArray,choices,noNote,nextOne) {
         console.log(timestampify()+'Looping through message of length '+messageArray[counter].text.length+' next message should send in '+typingTime+' with a noNote value of '+noNote);
         userForMsg = messageArray[counter].toId;
         if (noNote != undefined && noNote == 1) {
-            console.log(timestampify()+'Time for no notification!');
+            //console.log(timestampify()+'Time for no notification!');
             messages.new.noNotification(messageArray[counter].fromId,messageArray[counter].toId,messageArray[counter].date,messageArray[counter].text,typingTime,messageArray[counter]);    
             typingTime = 100;
         } else {
@@ -652,8 +651,19 @@ feed.create = function(target,objects,processNormal) {
     });
 }      
 
+feed.createComment = function(postId,possibleChoice) {
+    $('#comment_'+postId).addClass('usableControls');
+    $('#comment_'+postId).on('click touch', function() {
+        $('#comment_'+postId).unbind();
+        $('#comment_'+postId).addClass('choiceBeing');
+        choiceControls.create(possibleChoice.choiceId,'feed_'+postId,'comment','comment_'+postId,possibleChoice.choice1,possibleChoice.choice2,possibleChoice.choice3);                
+    });
+}
+
 feed.backlog = function(value) {
     var target = 'feedContent';
+    console.log(timestampify()+'Feed backlog with feedId ' +value['postId']);
+    console.log(value);
     if (localStorage.getObject('gameData')['users'][value['user']]['friended'] == 1) {
         var videoLink = '';
         if (value['video'] != '' && value['video'] != undefined) {
@@ -682,6 +692,7 @@ feed.backlog = function(value) {
         $('#'+target).prepend('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy">'+usersFirstname+' '+usersLastname+'</div><div class="date">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'<div class="feedControls"><span class="feedControl likeControl usableControls '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'"><i class="fa fa-comment"></i>Comment</span></div></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
         if (commentsString != '') {
             var possibleChoice = value['comments'][value['comments'].length-1];
+            console.log(possibleChoice);
             if (possibleChoice && possibleChoice.date == 'CHOICE') {
                 $('#comment_'+value['postId']).addClass('usableControls');
                 $('#comment_'+value['postId']).on('click touch', function() {
@@ -705,7 +716,7 @@ feed.backlog = function(value) {
 feed.commentPoster = function(comments,postId) {
     var counter = 0;
     console.log(timestampify()+'Posting comment');
-    console.log(comments);
+    //console.log(comments);
     var timer = 10000;
     function postComment() {
         value = comments[counter];
@@ -848,7 +859,7 @@ navigationControls.change = function(page) {
     $('#contentAim').load('content/'+page+'.html', null, function() {
         users.load(); 
         $('body').attr('id','');
-        console.log(timestampify()+'Going to '+page);
+        //console.log(timestampify()+'Going to '+page);
         if (page == 'messages') {
             $('body').attr('id','messagesPage');
             gameUpdate.updateNotifications('messages',1);

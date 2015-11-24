@@ -150,7 +150,7 @@ io.on('connection', function(socket) {
 							tempArray.comment = data[data.events[day][i]['object']][data.events[day][i]['id']]
 							console.log(tempArray);
 							if (tempArray.comment.autoTarget == 'choice') {
-								tempChoice = data.choiceObjects[tempArray.messageItem.autoId];
+								tempChoice = data.choiceObjects[tempArray.comment.autoId];
 							}
 							tempArray.choices = tempChoice;
 						}

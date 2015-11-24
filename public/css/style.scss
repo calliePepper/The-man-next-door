@@ -58,7 +58,7 @@ header:after{clear:both;display:block;height:1px;visibility:none;content:"";}
 .mobileNav{float:right;color:#fff;text-shadow:$shadowVals;display:none;}
 .mobileNav i{margin:0 10px;vertical-align: middle;cursor: pointer;}
 .wrapper{width:100%;max-width:960px;margin:0 auto;position:relative;}
-.sideLink{font-size:0.8em;color:#000;text-decoration: none;display:inline-block;width:100%;}
+.sideLink{font-size:0.8em;color:#000;text-decoration: none;display:inline-block;width:100%;cursor:pointer;}
 .totalNew:empty {display: none;}
 .totalNew{float:right;padding:2px 6px;border-radius:50%;background:$majorColour;color:#FFF;font-weight:bold;font-size:0.7em;position: relative;top: 1px;}
 .mainContent{z-index:1;position:relative;width:100%;padding: $paddingVal $sponWidth 0 $sideWidth;}

@@ -42,26 +42,20 @@ gameUpdate.updateTime = function(varTime) {
 }
 
 gameUpdate.updateFeed = function(feedId) {
-    var tempData = localStorage.getObject('gameSettings');
-    if (tempData.lastFeed < feedId) {
-        tempData.lastFeed = feedId;
-    }
+    var tempData = localStorage.getObject('gameSettings');        
+    tempData.lastFeed = tempData.lastFeed + feedId + ',';
     localStorage.setObject('gameSettings',tempData);
 }
 
 gameUpdate.updateMessages = function(messageId) {
     var tempData = localStorage.getObject('gameSettings');
-    if (tempData.lastMessage < messageId) {
-        tempData.lastMessage = messageId;
-    }
+    tempData.lastMessage = tempData.lastMessage + messageId + ',';
     localStorage.setObject('gameSettings',tempData);
 }
 
 gameUpdate.updateComment = function(commentId) {
     var tempData = localStorage.getObject('gameSettings');
-    if (tempData.lastComment < commentId) {
-        tempData.lastComment = commentId;
-    }
+    tempData.lastComment = tempData.lastComment + commentId + ',';
     localStorage.setObject('gameSettings',tempData);
 }
 
@@ -115,7 +109,6 @@ gameUpdate.updateLocal = function(data,dataType,extraData,choiceId) {
     } else if (dataType == 'posts') {
         tempStorage['posts'].push(data);
         localStorage.setObject('gameData',tempStorage);
-        gameUpdate.updateFeed(data.postId);
     }
     updating = 0;
 }
@@ -385,11 +378,12 @@ messages.new.currentMsg = function(messageFrom,messageTo,cameIn,text,ttw,fullMes
         var thisUser = '';
         $('#typing').remove();
         if (currentlyViewing == messageFrom) {
+            console.log(fullMessage);
             var usersAvatar = localStorage.getObject('gameData')['users'][fullMessage['fromId']]['avatar'];
             var usersFirstname = localStorage.getObject('gameData')['users'][fullMessage['fromId']]['firstname'];
             var usersLastname = localStorage.getObject('gameData')['users'][fullMessage['fromId']]['lastname'];
             thisUser = usersFirstname + ' ' + usersLastname;
-            var date = time.date(fullMessage['date']);
+            var date = time.date(Math.floor(Date.now() / 1000));
             var videoLink = '';
             if (fullMessage['video'] != '' && fullMessage['video'] != undefined) {
                 videoLink = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+fullMessage['video']+'" frameborder="0" allowfullscreen></iframe>';

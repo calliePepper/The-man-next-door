@@ -220,14 +220,26 @@ var watcher = setInterval(function() {
 var queueFunc = {};
 
 queueFunc.update = function(userId,day,timeThroughDay,updatedLast,lastFeed,lastMessage,lastComment) {
-	console.log(timestampify()+'Checking update for '+userId.substr(0,4)+'<->'+clientData[userId].name + ' . '+lastFeed+'-'+lastMessage+'-'+lastComment);
+	console.log(timestampify()+'Checking update for '+userId.substr(0,4)+'<->'+clientData[userId].name + ' . '+lastFeed+'|'+lastMessage+'|'+lastComment);
 	timeStampToHit = 0;
-	nextOne = 0;
 	for (var i in data.events[day]) {
-		if (timeStampToHit == 0 && parseInt(timeThroughDay) < parseInt(i)
-			|| timeStampToHit == 0 && data.events[day][i].object == 'feedObjects' && data.events[day][i].id > lastFeed
-			|| timeStampToHit == 0 && data.events[day][i].object == 'commentObjects' && data.events[day][i].id > lastComment
-			|| timeStampToHit == 0 && data.events[day][i].object == 'messageObjects' && data.events[day][i].id > lastMessage) {
+		var notDone = 1;
+		if (lastFeed != '' && data.events[day][i].object == 'feedObjects') {
+			if (indexOf.call(lastFeed.split(','), data.events[day][i].id) > -1) {
+				notDone = 0;
+			}
+		}
+		if (lastComment != '' && data.events[day][i].object == 'commentObjects') {
+			if (indexOf.call(lastComment.split(','), data.events[day][i].id) > -1) {
+				notDone = 0;
+			}
+		}
+		if (lastMessage != '' && data.events[day][i].object == 'messageObjects') {
+			if (indexOf.call(lastMessage.split(','), data.events[day][i].id) > -1) {
+				notDone = 0;
+			}
+		}
+		if (timeStampToHit == 0 && parseInt(timeThroughDay) < parseInt(i) || notDone == 1) {
 			timeStampToHit = i;
 			break;
 		}
@@ -312,3 +324,24 @@ function uniqueTest(arr) {
   }
   return unique;
 }
+
+var indexOf = function(needle) {
+    if(typeof Array.prototype.indexOf === 'function') {
+        indexOf = Array.prototype.indexOf;
+    } else {
+        indexOf = function(needle) {
+            var i = -1, index = -1;
+
+            for(i = 0; i < this.length; i++) {
+                if(this[i] === needle) {
+                    index = i;
+                    break;
+                }
+            }
+
+            return index;
+        };
+    }
+
+    return indexOf.call(this, needle);
+};

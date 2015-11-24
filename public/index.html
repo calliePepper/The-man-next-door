@@ -148,10 +148,10 @@
                             ],
                             users: {
                                 0: new user($('#name').val(),'','they',1412314,userAvatar,'',0,0,0,0,0),
-                                1: new user('Robin','Creed','they',1429323,'img/samAvatar.png','samBg.jpg',1,160,1300,0,0),
-                                2: new user('Cal','Ransom','she',1423413,'img/calAvatar.jpg','calBg.jpg',0,120,1500,0,0),
-                                3: new user('Ambrose','Mitchell','he',1423413,'img/ambroseAvatar.jpg','amBg.jpg',0,180,2400,0,0),
-                                4: new user('Steve','Steve','he',1423412,'img/steveAvatar.jpg','stBg.jpg',0,180,3000,0,0),
+                                1: new user('Robin','Creed','they',1429323,'img/samAvatar.png','samBg.jpg',1,100,1300,0,0),
+                                2: new user('Cal','Ransom','she',1423413,'img/calAvatar.jpg','calBg.jpg',0,70,1500,0,0),
+                                3: new user('Ambrose','Mitchell','he',1423413,'img/ambroseAvatar.jpg','amBg.jpg',0,120,2400,0,0),
+                                4: new user('Steve','Steve','he',1423412,'img/steveAvatar.jpg','stBg.jpg',0,140,3000,0,0),
                                 5: new user('Marcel','Artur','he',1423412,'img/marcelAvatar.jpg','maBg.jpg',0,1,1,0,0)
                             }
                         };          
@@ -176,6 +176,7 @@
                 setTimeout(
                     function() {
                         $('#frontPage').css('background-image','url(img/'+backgroundi+')');
+                        $('<img/>')[0].src = 'img/'+backgroundi;
                         console.log('Flickering!');
                         setTimeout(
                             function() {
@@ -183,7 +184,7 @@
                                 setFlicker();
                             }
                         ,200);
-                    },getRandomInt(4000,12000)
+                    },getRandomInt(3000,12000)
                 );    
             }
             

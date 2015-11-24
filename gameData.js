@@ -407,9 +407,72 @@ module.exports = {
         },
         8:{
             messages:[
-                {msgId:'8_1',fromId:1,toId:1,timestamp:600,message:'OUT OF CONVERSATION',image:'',video:'',from:1},
+                {msgId:'8_1',fromId:1,toId:1,timestamp:600,message:'Are you sure? It\'s the same frame as the stuff you posted about on the forum',image:'',video:'',from:1},
+                {msgId:'8_2',fromId:1,toId:1,timestamp:600,message:'Though it seems like it could be something new',image:'',video:'',from:1},
+                {msgId:'8_3',fromId:1,toId:1,timestamp:600,message:'You sure you aren\'t interested?',image:'',video:'',from:1},
             ],
             messageId:8,
+            autoTarget:'choice',
+            autoId:'6'
+        },
+        9:{
+            messages:[
+                {msgId:'9_1',fromId:1,toId:1,timestamp:600,message:'Okay. Here it goes',image:'',video:'',from:1},
+                {msgId:'9_2',fromId:1,toId:1,timestamp:600,message:'This guy moved in next door. At first, I thought there might be something normally wrong with him',image:'',video:'',from:1},
+                {msgId:'9_3',fromId:1,toId:1,timestamp:600,message:'As in, he may have some attention problem. He\'d just stand in his yard and stare.',image:'',video:'',from:1},
+                {msgId:'9_4',fromId:1,toId:1,timestamp:600,message:'Today, he started painting his house. In the rain. What\'s more, I recognised the things he was painting',image:'',video:'',from:1},
+                {msgId:'9_5',fromId:1,toId:1,timestamp:600,message:'I only just realised what they were. They were symbols I\'d seen on the forum',image:'',video:'',from:1},
+            ],
+            messageId:9,
+            autoTarget:'choice',
+            autoId:'7'
+        },
+        10:{
+            messages:[
+                {msgId:'10_1',fromId:1,toId:1,timestamp:600,message:'I\'ll just tell you then.',image:'',video:'',from:1},
+                {msgId:'10_2',fromId:1,toId:1,timestamp:600,message:'So this guy moved in next door and I thought he was just a bit eccentric at first',image:'',video:'',from:1},
+                {msgId:'10_3',fromId:1,toId:1,timestamp:600,message:'But he\'s gotten weirder and other things have happened.',image:'',video:'',from:1}
+            ],
+            messageId:9,
+            autoTarget:'choice',
+            autoId:'8'
+        },
+        11:{
+            messages:[
+                {msgId:'11_1',fromId:1,toId:1,timestamp:600,message:'I know it doesn\'t sound that bad so far',image:'',video:'',from:1},
+                {msgId:'11_2',fromId:1,toId:1,timestamp:600,message:'Sure, I could be looking a little too much into this',image:'',video:'',from:1},
+                {msgId:'11_3',fromId:1,toId:1,timestamp:600,message:'I mean, it could be just another strange person. I\'m pretty sure I\'m one of those.',image:'',video:'',from:1},
+                {msgId:'11_4',fromId:1,toId:1,timestamp:600,message:'It just gives me a bad feeling though.',image:'',video:'',from:1},
+                {msgId:'11_5',fromId:1,toId:1,timestamp:600,message:'First, these things and then Marcel vanishes',image:'',video:'',from:1}
+            ],
+            messageId:11,
+            autoTarget:'choice',
+            autoId:'9'
+        },
+        12:{
+            messages:[
+                {msgId:'12_1',fromId:1,toId:1,timestamp:600,message:'He\'s been painting symbols all around his house. In the rain.',image:'',video:'',from:1},
+                {msgId:'12_2',fromId:1,toId:1,timestamp:600,message:'What\'s weirder is, I recognise these symbols from the forum',image:'',video:'',from:1},
+                {msgId:'12_3',fromId:1,toId:1,timestamp:600,message:'People were posting about them in reference to some old mythos.',image:'',video:'',from:1},
+                {msgId:'12_4',fromId:1,toId:1,timestamp:600,message:'I wouldn\'t consider this strange all by itself, but Marcel vanished around the same time that the man next door arrived.',image:'',video:'',from:1},
+            ],
+            messageId:12,
+            autoTarget:'choice',
+            autoId:'9'
+        },
+        13:{
+            messages:[
+                {msgId:'13_1',fromId:1,toId:1,timestamp:600,message:'Yeah, around the same time, My friend Marcel vanished',image:'',video:'',from:1},
+            ],
+            messageId:13,
+            autoTarget:'choice',
+            autoId:'9'
+        },
+         15:{
+            messages:[
+                {msgId:'15_1',fromId:1,toId:1,timestamp:600,message:'OUT OF CONVERSATION',image:'',video:'',from:1},
+            ],
+            messageId:15,
             autoTarget:'',
             autoId:''
         },
@@ -419,8 +482,12 @@ module.exports = {
         1: {choiceId:1,choice1:'Yeah, I\'m here',choice2:'What\'s up?',choice3:'Um',resultType:'message',result1:4,result2:3,result3:2,ttd:360},
         2: {choiceId:2,choice1:'Oh yeah, I\'m a regular there',choice2:'So you saw my name on there?',choice3:'Oh, you must have seen one of my posts',resultType:'message',result1:5,result2:5,result3:5,ttd:''},
         3: {choiceId:3,choice1:'That could help',choice2:'Why do you think I\'d know any better?',choice3:'Sounds good, what information do you have',resultType:'message',result1:6,result2:7,result3:6,ttd:''},
-        4: {choiceId:4,choice1:'That\'s okay, I\'m interested.',choice2:'Just relax and tell me.',choice3:'I\'m not that interested',resultType:'message',result1:8,result2:8,result3:8,ttd:''},
+        4: {choiceId:4,choice1:'That\'s okay, I\'m interested.',choice2:'Just relax and tell me.',choice3:'I\'m not that interested',resultType:'message',result1:10,result2:9,result3:8,ttd:''},
         5: {choiceId:5,choice1:'Try calling him',choice2:'Don\'t worry, he\'ll show up',choice3:'We already have enough mysteries',resultType:'',result1:0,result2:0,result3:0,ttd:''},
+        6: {choiceId:6,choice1:'That\'s okay, I\'m interested.',choice2:'I am, but lay it out straight',choice3:'Just relax and tell me.',resultType:'',result1:10,result2:9,result3:9,ttd:''},
+        7: {choiceId:7,choice1:'What were the symbols?',choice2:'So, he was painting in the rain. You\'re right, that\'s pretty weird',choice3:'This isn\'t sounding that strange so far',resultType:'message',result1:15,result2:15,result3:11,ttd:''},
+        8: {choiceId:8,choice1:'What\'s he doing?',choice2:'Other things?',choice3:'Are you sure you\'re not overreacting?',resultType:'message',result1:12,result2:13,result3:11,ttd:''},
+        9: {choiceId:9,choice1:'Who\'s Marcel?',choice2:'Who vanished?',choice3:'You could have led with someone vanishing',resultType:'message',result1:15,result2:15,result3:15,ttd:''},
     },
     
     directionObject: {

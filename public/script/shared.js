@@ -13,7 +13,7 @@
 */
 
 var currentlyViewing = 0;
-var socket = io('https://the-man-next-door-soldevifae.c9.io');
+var socket = io('https://young-plateau-9307.herokuapp.com:8080');
 var updating = 0;
 
 Storage.prototype.setObject = function(key, value) {
@@ -903,7 +903,7 @@ navigationControls.change = function(page) {
             buildTrending();
             buildTrending();
             
-            $('.userName_5')
+            $('.userName_5').glitch();
         } 
         navigationControls.setUp();
     });

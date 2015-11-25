@@ -39,7 +39,7 @@ router.get("/twaddle", function(req,res) {
 
 
 
-var server = app.listen(process.env.PORT, process.env.IP);
+var server = app.listen(8080);
 
 console.log(timestampify()+'Server running');
 

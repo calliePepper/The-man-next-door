@@ -43,7 +43,9 @@ var server = app.listen(process.env.PORT, process.env.IP);
 
 console.log(timestampify()+'Server running');
 
-var	io = require('socket.io')(server);
+var	io = require('socket.io').listen(server);
+
+io.set( 'origins', '*:*' );
 
 var clients
 

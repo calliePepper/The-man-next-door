@@ -903,7 +903,7 @@ navigationControls.change = function(page) {
             buildTrending();
             buildTrending();
             
-            $('.userName_5').glitch();
+            $('.userName_5').glitch({minint:1, maxint:3, maxglitch:15, hoffset:10, voffset:3, direction:'random'});
         } 
         navigationControls.setUp();
     });

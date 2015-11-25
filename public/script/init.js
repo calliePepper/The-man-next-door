@@ -7,8 +7,14 @@
                global user
 
             */
+var rebootIfError = setTimeout(function() {
+    window.localStorage.clear();
+    window.location.replace("index.html?connection=error");    
+},20000);
+
 
 socket.on('requestStatus', function() {
+    clearTimeout(rebootIfError);
     requestStatusReply();
 });
 

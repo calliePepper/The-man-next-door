@@ -47,7 +47,11 @@
         </script>
         <script type="text/javascript" src="script/jquery.min.js"></script>
         <script type="text/javascript" src="script/data.js"></script>
+        <script type="text/javascript" src="script/glitchText.js"></script>
         <script>
+            $('h1').glitch({minint:1, maxint:3, maxglitch:15, hoffset:10, voffset:3, direction:'random'});
+            $('.colouredText').glitch();
+
             var userAvatar = 'img/userAvatar.jpg';
         
             if (localStorage.thumb && localStorage.thumb != '') {
@@ -184,7 +188,7 @@
                                 setFlicker();
                             }
                         ,200);
-                    },getRandomInt(3000,12000)
+                    },getRandomInt(6000,12000)
                 );    
             }
             
@@ -192,7 +196,7 @@
                 return Math.floor(Math.random() * (max - min + 1)) + min;
             }  
             
-            setTimeout(setFlicker(),6000);
+            //setTimeout(setFlicker(),20000);
             
             //testSound();
         </script>

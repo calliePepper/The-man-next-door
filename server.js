@@ -239,9 +239,11 @@ queueFunc.update = function(userId,day,timeThroughDay,updatedLast,lastFeed,lastM
 				notDone = 0;
 			}
 		}
-		if (timeStampToHit == 0 && parseInt(timeThroughDay) < parseInt(i) || notDone == 1) {
+		if (notDone == 1) {
 			timeStampToHit = i;
-			break;
+			if (i > timeThroughDay) {
+				break;
+			}
 		}
 	}
 	if (timeStampToHit != 0) {

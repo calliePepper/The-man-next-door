@@ -949,6 +949,16 @@ input[type="text"] {
 .rightLoad .loadingText {
   left: 15px; }
 
+.resetLoading {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: #fff;
+  -webkit-box-shadow: 0px 0px 10px 10px white;
+  -moz-box-shadow: 0px 0px 10px 10px white;
+  box-shadow: 0px 0px 10px 10px white;
+  padding: 0px; }
+
 @media screen and (max-width: 900px) {
   header {
     position: fixed; }

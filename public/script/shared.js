@@ -13,7 +13,7 @@
 */
 
 var currentlyViewing = 0;
-var socket = io('https://young-plateau-9307.herokuapp.com:8080');
+var socket = io('https://young-plateau-9307.herokuapp.com');
 var updating = 0;
 
 Storage.prototype.setObject = function(key, value) {

@@ -122,10 +122,10 @@ io.on('connection', function(socket) {
 		updateData.comment = [];
 		var updateCounter = 0;
 		function loopDayUpdate(day,timeThroughDay,updatedLast) {
-			console.log('Looping through day '+day+'. Time through day is '+timeThroughDay+'. Updated last is '+updatedLast);
+			console.log(timestampify()+'Looping through day '+day+'. Time through day is '+timeThroughDay+'. Updated last is '+updatedLast);
 				for (var i in data.events[day]) {
 					if (i < timeThroughDay && i > (timeThroughDay - updatedLast)) {
-						console.log('Found backlog event '+i);
+						console.log(timestampify()+'Found backlog event '+i);
 						var tempArray = {};
 						var tempChoice = '';
 						if (data.events[day][i]['object'] == 'feedObjects') { 
@@ -150,7 +150,6 @@ io.on('connection', function(socket) {
 						} else if (data.events[day][i]['object'] == 'commentObjects') {
 							var type = 'comment';
 							tempArray.comment = data[data.events[day][i]['object']][data.events[day][i]['id']]
-							console.log(tempArray);
 							if (tempArray.comment.autoTarget == 'choice') {
 								tempChoice = data.choiceObjects[tempArray.comment.autoId];
 							}
@@ -168,7 +167,9 @@ io.on('connection', function(socket) {
 		loopDayUpdate(day,timeThroughDay,updatedLast);
 		console.log(timestampify()+'Pushing a backlog of '+updateCounter+' events to '+userId.substr(0,4) + '<->' +clientData[userId]['name'])
 		io.to(userId).emit('updateData',updateData);
-		queueFunc.update(userId,day,timeThroughDay,updatedLast,lastFeed,lastMessage,lastComment);
+		if (lastFeed != '' || lastMessage != '' || lastComment != '') {
+			queueFunc.update(userId,day,timeThroughDay,updatedLast,lastFeed,lastMessage,lastComment);
+		}
 	}
 });
 
@@ -221,6 +222,30 @@ var watcher = setInterval(function() {
 
 var queueFunc = {};
 
+queueFunc.add = function(day,timeStampToHit,userId,timeThroughDay) {
+	if (timeStampToHit != 0) {
+		if (data.events[day][timeStampToHit]['object'] == 'feedObjects') { var type = 'feed'; 
+		} else if (data.events[day][timeStampToHit]['object'] == 'commentObjects') { var type = 'comment'; 
+		} else if (data.events[day][timeStampToHit]['object'] == 'messageObjects') { var type = 'messages'; }
+		if (data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']].autoTarget && data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']].autoTarget == 'choice') {
+			var queueChoice = data.choiceObjects[data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']].autoId];
+		} else {
+			var queueChoice = '';
+		}
+		console.log(timestampify()+'Update found, Type: '+type+', id: '+data.events[day][timeStampToHit]['id']);
+		var queueObject = {
+			timeStamp:moment().unix() + ((timeStampToHit - timeThroughDay) * 60),
+			timeToHit:timeStampToHit,
+			user:userId,
+			type:type,
+			data:data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']],
+			choice:queueChoice
+		};
+		sendQueue.push(queueObject);
+		organiseQueue()
+	}
+}
+
 queueFunc.update = function(userId,day,timeThroughDay,updatedLast,lastFeed,lastMessage,lastComment) {
 	console.log(timestampify()+'Checking update for '+userId.substr(0,4)+'<->'+clientData[userId].name + ' . '+lastFeed+'|'+lastMessage+'|'+lastComment);
 	timeStampToHit = 0;
@@ -241,32 +266,13 @@ queueFunc.update = function(userId,day,timeThroughDay,updatedLast,lastFeed,lastM
 				notDone = 0;
 			}
 		}
+		console.log(timestampify()+'Checking event - '+i+' - '+ data.events[day][i].id+' should be a '+data.events[day][i].object +'. Not Done = '+notDone);
 		if (notDone == 1) {
-			timeStampToHit = i;
+			queueFunc.add(day,i,userId,timeThroughDay);
 			if (i > timeThroughDay) {
 				break;
 			}
 		}
-	}
-	if (timeStampToHit != 0) {
-		if (data.events[day][timeStampToHit]['object'] == 'feedObjects') { var type = 'feed'; 
-		} else if (data.events[day][timeStampToHit]['object'] == 'commentObjects') { var type = 'comment'; 
-		} else if (data.events[day][timeStampToHit]['object'] == 'messageObjects') { var type = 'messages'; }
-		if (data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']].autoTarget && data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']].autoTarget == 'choice') {
-			var queueChoice = data.choiceObjects[data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']].autoId];
-		} else {
-			var queueChoice = '';
-		}
-		console.log(timestampify()+'Update found, Type: '+type+', id: '+data.events[day][timeStampToHit]['id']);
-		var queueObject = {
-			timeStamp:moment().unix() + ((i - timeThroughDay) * 60),
-			user:userId,
-			type:type,
-			data:data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']],
-			choice:queueChoice
-		};
-		sendQueue.push(queueObject);
-		organiseQueue()
 	}
 	sendQueue = uniqueTest(sendQueue);
 }
@@ -276,7 +282,14 @@ queueFunc.check = function() {
 	if (current % 600 <= 1) {
 		var replyString = '';
 		for (var i in sendQueue) {
-			replyString += 'User: '+sendQueue[i].user.substr(0, 4)+'<->'+clientData[sendQueue[i].user].name+', Type: '+sendQueue[i].type+', Id: '+sendQueue[i].data.postId+'|';
+			console.log(sendQueue[i]);
+			if (sendQueue[i].type == 'feedObjects') {
+				replyString += 'User: '+sendQueue[i].user.substr(0, 4)+'<->'+clientData[sendQueue[i].user].name+', Type: Post, Id: '+sendQueue[i].data.postId+'|';
+			} else if (sendQueue[i].type == 'commentObjects') {
+				replyString += 'User: '+sendQueue[i].user.substr(0, 4)+'<->'+clientData[sendQueue[i].user].name+', Type: Comment, Id: '+sendQueue[i].data.commentId+'|';
+			} else if (sendQueue[i].type == 'messageObjects') {
+				replyString += 'User: '+sendQueue[i].user.substr(0, 4)+'<->'+clientData[sendQueue[i].user].name+', Type: Message, Id: '+sendQueue[i].data.messageId+'|';
+			}
 		}
 		console.log(timestampify()+'Queue update, total in queue is '+sendQueue.length+', next update in '+Math.floor((sendQueue[0]['timeStamp'] - current) / 60)+' minutes');
 		console.log(timestampify()+replyString.substr(0,replyString.length-1));
@@ -320,7 +333,7 @@ function uniqueTest(arr) {
     unique = [];
   for (i = 0, n = arr.length; i < n; i++) {
     var item = arr[i];
-    arrResult[item.title + " - " + item.artist] = item;
+    arrResult[item.timeToHit + " - " + item.user] = item;
   }
   i = 0;
   for (var item in arrResult) {

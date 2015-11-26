@@ -76,7 +76,7 @@ socket.on('newMessage', function(receivedMessages) {
     gameUpdate.updateTime(80);
     setTimeout(function(){
         requestStatusReply();
-    },6000);
+    },20000);
 });
 
 function processMessage(receivedMessages,nonote) {
@@ -126,7 +126,7 @@ socket.on('newFeed', function(receivedFeed) {
     gameUpdate.updateTime(80);
     setTimeout(function(){
         requestStatusReply();
-    },60000);
+    },20000);
 });
 
 function processFeed(receivedFeed,nonote) {
@@ -181,7 +181,7 @@ socket.on('newComment', function(receivedFeed) {
     gameUpdate.updateTime(80);
     setTimeout(function(){
         requestStatusReply();
-    },60000);
+    },20000);
 });
 
 function processComment(receivedComment,nonote) {

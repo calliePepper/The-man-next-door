@@ -52,7 +52,8 @@ var clients
 io.on('connection', function(socket) {
 	var userId = socket.id;
 	io.sockets.connected[userId].emit('requestStatus');
-	clients[socket.id] = socket;
+	clients[socket.id] = [];
+	clients[socket.id]['socket'] = socket;
 	
 	socket.on('disconnect', function() {
 		//console.log('Target left');	
@@ -72,7 +73,17 @@ io.on('connection', function(socket) {
 		clientData[userId] = {};
 		clientData[userId]['name'] = page.playerName;
 		clientData[userId]['timezone'] = page.timezone;
-		oldDataUpdate(currentDay,timeThroughDay,updatedLast,page.lastFeed,page.lastMessage,page.lastComment);
+		clientData[userId]['lastUpdated'] = updatedLast;
+		if (clientData[userId]['lastFeed'] == undefined || page.lastFeed.length > clientData[userId]['lastFeed']) {
+			clientData[userId]['lastFeed'] = page.lastFeed;
+		}
+		if (clientData[userId]['lastMessage'] == undefined || page.lastMessage.length > clientData[userId]['lastMessage']) {
+			clientData[userId]['lastMessage'] = page.lastMessage;
+		}
+		if (clientData[userId]['lastComment'] == undefined || page.lastComment.length > clientData[userId]['lastComment']) {
+			clientData[userId]['lastComment'] = page.lastComment;
+		}
+		oldDataUpdate(currentDay,timeThroughDay,updatedLast,clientData[userId]['lastFeed'],clientData[userId]['lastMessage'],clientData[userId]['lastComment']);
 		if (page.firstLoad == 1) {
 			io.to(userId).emit('newMessage',{messageItem:data.messageObjects[1],choices:data.choiceObjects[1]});
 		}
@@ -167,7 +178,7 @@ io.on('connection', function(socket) {
 		loopDayUpdate(day,timeThroughDay,updatedLast);
 		console.log(timestampify()+'Pushing a backlog of '+updateCounter+' events to '+userId.substr(0,4) + '<->' +clientData[userId]['name'])
 		io.to(userId).emit('updateData',updateData);
-		if (lastFeed != '' || lastMessage != '' || lastComment != '') {
+		if (countProperties(lastFeed) > 0 || countProperties(lastMessage) > 0 || countProperties(lastComment) > 0) {
 			queueFunc.update(userId,day,timeThroughDay,updatedLast,lastFeed,lastMessage,lastComment);
 		}
 	}
@@ -246,23 +257,31 @@ queueFunc.add = function(day,timeStampToHit,userId,timeThroughDay) {
 	}
 }
 
+queueFunc.getIndex = function(object) {
+	var replyString = '';
+	for (var i in object) {
+		replyString = replyString + i + ',';
+	}
+	return replyString.substr(0,replyString.length-1);
+}
+
 queueFunc.update = function(userId,day,timeThroughDay,updatedLast,lastFeed,lastMessage,lastComment) {
-	console.log(timestampify()+'Checking update for '+userId.substr(0,4)+'<->'+clientData[userId].name + ' . '+lastFeed+'|'+lastMessage+'|'+lastComment);
+	console.log(timestampify()+'Checking update for '+userId.substr(0,4)+'<->'+clientData[userId].name + ' . '+queueFunc.getIndex(lastFeed)+'|'+queueFunc.getIndex(lastMessage)+'|'+queueFunc.getIndex(lastComment));
 	timeStampToHit = 0;
 	for (var i in data.events[day]) {
 		var notDone = 1;
 		if (lastFeed != '' && data.events[day][i].object == 'feedObjects') {
-			if (indexOf.call(lastFeed.split(','), data.events[day][i].id) > -1) {
+			if (lastFeed[data.events[day][i].id] == 1) {
 				notDone = 0;
 			}
 		}
 		if (lastComment != '' && data.events[day][i].object == 'commentObjects') {
-			if (indexOf.call(lastComment.split(','), data.events[day][i].id) > -1) {
+			if (lastComment[data.events[day][i].id] == 1) {
 				notDone = 0;
 			}
 		}
 		if (lastMessage != '' && data.events[day][i].object == 'messageObjects') {
-			if (indexOf.call(lastMessage.split(','), data.events[day][i].id) > -1) {
+			if (lastMessage[data.events[day][i].id] == 1) {
 				notDone = 0;
 			}
 		}
@@ -274,51 +293,62 @@ queueFunc.update = function(userId,day,timeThroughDay,updatedLast,lastFeed,lastM
 			}
 		}
 	}
+	var initialLength = sendQueue.length;
 	sendQueue = uniqueTest(sendQueue);
+	if (sendQueue.length > initialLength) {
+		console.log(timestampify()+'Found '+parseInt(initialLength) - parseInt(sendQueue.length)+' duplicates');	
+	} else {
+		console.log(timestampify()+'No duplicates found');
+	}
+	queueFunc.report(0);
 }
 
-queueFunc.check = function() {
+queueFunc.report = function(limit) {
 	var current = moment().unix();
-	if (current % 600 <= 1) {
+	if (limit == 0 || current % 600 <= 1) {
 		var replyString = '';
 		for (var i in sendQueue) {
-			console.log(sendQueue[i]);
-			if (sendQueue[i].type == 'feedObjects') {
+			if (sendQueue[i].type == 'feed') {
 				replyString += 'User: '+sendQueue[i].user.substr(0, 4)+'<->'+clientData[sendQueue[i].user].name+', Type: Post, Id: '+sendQueue[i].data.postId+'|';
-			} else if (sendQueue[i].type == 'commentObjects') {
+			} else if (sendQueue[i].type == 'comment') {
 				replyString += 'User: '+sendQueue[i].user.substr(0, 4)+'<->'+clientData[sendQueue[i].user].name+', Type: Comment, Id: '+sendQueue[i].data.commentId+'|';
-			} else if (sendQueue[i].type == 'messageObjects') {
+			} else if (sendQueue[i].type == 'message') {
 				replyString += 'User: '+sendQueue[i].user.substr(0, 4)+'<->'+clientData[sendQueue[i].user].name+', Type: Message, Id: '+sendQueue[i].data.messageId+'|';
 			}
 		}
 		console.log(timestampify()+'Queue update, total in queue is '+sendQueue.length+', next update in '+Math.floor((sendQueue[0]['timeStamp'] - current) / 60)+' minutes');
 		console.log(timestampify()+replyString.substr(0,replyString.length-1));
 	}
+}
+
+queueFunc.check = function() {
+	var current = moment().unix();
+	queueFunc.report(1);
 	if (sendQueue[0]['timeStamp'] <= current) {
 		console.log(timestampify()+'Sending '+sendQueue[0]['type'] + ' to '+sendQueue[0].user.substr(0, 4)+'<->'+clientData[sendQueue[0]['user']]['name']);
 		if (sendQueue[0]['type'] == 'messages' || sendQueue[0]['type'] == 'message') {
 			if (sendQueue[0]['user'] == undefined) {
 				console.log(timestampify()+'Shit. Error.');
-				console.log(sendQueue);
 			} else {
 				io.to(sendQueue[0]['user']).emit('newMessage',{messageItem:sendQueue[0]['data'],choices:sendQueue[0]['choice']});
+				clientData[sendQueue[0]['user']]['lastMessage'][sendQueue[0]['data'].messageId] = 1;
 			}
 		} else if (sendQueue[0]['type'] == 'comment') {
 			if (sendQueue[0]['user'] == undefined) {
 				console.log(timestampify()+'Shit. Error.');
-				console.log(sendQueue);
 			} else {
 				io.to(sendQueue[0]['user']).emit('newComment',{comment:sendQueue[0]['data'],choices:sendQueue[0]['choice']});
+				clientData[sendQueue[0]['user']]['lastComment'][sendQueue[0]['data'].commentId] = 1;
 			}
 		} else if (sendQueue[0]['type'] == 'feed') {
 			if (sendQueue[0]['user'] == undefined) {
 				console.log(timestampify()+'Shit. Error.');
-				console.log(sendQueue);
 			} else {
 				if (sendQueue[0]['data'].comments != 0) {
 					var commentSend = data.commentObjects[sendQueue[0]['data'].comments];
 				}
 				io.to(sendQueue[0]['user']).emit('newFeed',{feedItem:sendQueue[0]['data'],choices:sendQueue[0]['choice'],comments:commentSend});
+				clientData[sendQueue[0]['user']]['lastFeed'][sendQueue[0]['data'].postId] = 1;
 			}
 		}
 		sendQueue.shift();
@@ -331,9 +361,11 @@ function uniqueTest(arr) {
   var n, y, x, i, r;
   var arrResult = {},
     unique = [];
+    console.log(timestampify()+'-----Unique test-----');
   for (i = 0, n = arr.length; i < n; i++) {
     var item = arr[i];
     arrResult[item.timeToHit + " - " + item.user] = item;
+    console.log(timestampify()+'Item: '+item.timeToHit + " - " + item.user);
   }
   i = 0;
   for (var item in arrResult) {
@@ -362,3 +394,14 @@ var indexOf = function(needle) {
 
     return indexOf.call(this, needle);
 };
+
+function countProperties(obj) {
+    var count = 0;
+
+    for(var prop in obj) {
+        if(obj.hasOwnProperty(prop))
+            ++count;
+    }
+
+    return count;
+}

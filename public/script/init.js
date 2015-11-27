@@ -18,6 +18,7 @@ socket.on('requestStatus', function() {
     requestStatusReply();
 });
 
+
 function requestStatusReply() {
    var lastUpdate = localStorage.getObject('gameSettings').lastUpdate;
    var firstLoadTime = 0

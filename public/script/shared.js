@@ -43,19 +43,19 @@ gameUpdate.updateTime = function(varTime) {
 
 gameUpdate.updateFeed = function(feedId) {
     var tempData = localStorage.getObject('gameSettings');        
-    tempData.lastFeed = tempData.lastFeed + feedId + ',';
+    tempData.lastFeed[feedId.toString()] = 1;
     localStorage.setObject('gameSettings',tempData);
 }
 
 gameUpdate.updateMessages = function(messageId) {
     var tempData = localStorage.getObject('gameSettings');
-    tempData.lastMessage = tempData.lastMessage + messageId + ',';
+    tempData.lastMessage[messageId.toString()] = 1;
     localStorage.setObject('gameSettings',tempData);
 }
 
 gameUpdate.updateComment = function(commentId) {
     var tempData = localStorage.getObject('gameSettings');
-    tempData.lastComment = tempData.lastComment + commentId + ',';
+    tempData.lastComment[commentId.toString()] = 1;
     localStorage.setObject('gameSettings',tempData);
 }
 

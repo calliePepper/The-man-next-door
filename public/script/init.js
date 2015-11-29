@@ -7,6 +7,9 @@
                global user
 
             */
+            
+var firstRun = 1;            
+            
 var rebootIfError = setTimeout(function() {
     window.localStorage.clear();
     window.location.replace("index.html?connection=error");    
@@ -42,7 +45,9 @@ function requestStatusReply() {
         lastMessage:localStorage.getObject('gameSettings').lastMessage,
         lastComment:localStorage.getObject('gameSettings').lastComment,
         firstLoad:firstLoadTime,
+        firstRun:firstRun
     });
+    firstRun = 0;
 }
 
 socket.on('updateData', function(updateData) {
@@ -63,17 +68,25 @@ socket.on('updateData', function(updateData) {
             processComment(value,1);
         });
     }
-    $('#loadingLine').hide();
+    hideLoad();
+});
+
+socket.on('hideLoad', function() {
+    hideLoad();
+})
+
+function hideLoad() {
+     $('#loadingLine').hide();
     $('#leftLoad').css('left','-50%');
     $('#rightLoad').css('right','-50%');
     setTimeout(function() {
         $('#loadingSection').hide();
-    },1000)
-});
+    },1000);
+}
 
 socket.on('newMessage', function(receivedMessages) {
     console.log(timestampify()+'PING - New message');
-    processMessage(receivedMessages,0);
+    processMessage(receivedMessages,receivedMessages.noNote);
     gameUpdate.updateTime(80);
     setTimeout(function(){
         requestStatusReply();
@@ -123,7 +136,7 @@ function processMessage(receivedMessages,nonote) {
 }
 
 socket.on('newFeed', function(receivedFeed) {
-    processFeed(receivedFeed,0);
+    processFeed(receivedFeed,receivedFeed.noNote);
     gameUpdate.updateTime(80);
     setTimeout(function(){
         requestStatusReply();
@@ -178,7 +191,7 @@ function processFeed(receivedFeed,nonote) {
 socket.on('newComment', function(receivedFeed) {
     console.log(timestampify()+'New comment');
     console.log(receivedFeed);
-    processComment(receivedFeed,0);
+    processComment(receivedFeed,receivedFeed.noNote);
     gameUpdate.updateTime(80);
     setTimeout(function(){
         requestStatusReply();

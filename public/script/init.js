@@ -21,33 +21,41 @@ socket.on('requestStatus', function() {
     requestStatusReply();
 });
 
+var retrieveTimer;
 
 function requestStatusReply() {
-   var lastUpdate = localStorage.getObject('gameSettings').lastUpdate;
-   var firstLoadTime = 0
-    if (localStorage.getObject('gameSettings').firstLoad == 1) {
-        console.log(timestampify()+'omg first load');
-        lastUpdate = 1440;
-        var tempData = localStorage.getObject('gameSettings');
-        tempData.firstLoad = 0;
-        firstLoadTime = 1;
-        localStorage.setObject('gameSettings',tempData);
+    clearTimeout(retrieveTimer);
+    var timerSet = 4000;
+    if (firstRun == 1) {
+        timerSet = 0;
     }
-    console.log(timestampify()+'Retrieving data');
-    socket.emit('pageLoad', {
-        page:$(document).find("title").text(),
-        playerName:playerName,
-        startTime:localStorage.getObject('gameSettings').startTime,
-        lastUpdate:lastUpdate,
-        currentTime:new Date(),
-        timezone:localStorage.getObject('gameSettings').timezone,
-        lastFeed:localStorage.getObject('gameSettings').lastFeed,
-        lastMessage:localStorage.getObject('gameSettings').lastMessage,
-        lastComment:localStorage.getObject('gameSettings').lastComment,
-        firstLoad:firstLoadTime,
-        firstRun:firstRun
-    });
-    firstRun = 0;
+    retrieveTimer = setTimeout(function() {
+       var lastUpdate = localStorage.getObject('gameSettings').lastUpdate;
+       var firstLoadTime = 0
+        if (localStorage.getObject('gameSettings').firstLoad == 1) {
+            console.log(timestampify()+'omg first load');
+            lastUpdate = 1440;
+            var tempData = localStorage.getObject('gameSettings');
+            tempData.firstLoad = 0;
+            firstLoadTime = 1;
+            localStorage.setObject('gameSettings',tempData);
+        }
+        console.log(timestampify()+'Retrieving data');
+        socket.emit('pageLoad', {
+            page:$(document).find("title").text(),
+            playerName:playerName,
+            startTime:localStorage.getObject('gameSettings').startTime,
+            lastUpdate:lastUpdate,
+            currentTime:new Date(),
+            timezone:localStorage.getObject('gameSettings').timezone,
+            lastFeed:localStorage.getObject('gameSettings').lastFeed,
+            lastMessage:localStorage.getObject('gameSettings').lastMessage,
+            lastComment:localStorage.getObject('gameSettings').lastComment,
+            firstLoad:firstLoadTime,
+            firstRun:firstRun
+        });
+        firstRun = 0;
+    }, timerSet);
 }
 
 socket.on('updateData', function(updateData) {
@@ -199,8 +207,8 @@ socket.on('newComment', function(receivedFeed) {
 });
 
 function processComment(receivedComment,nonote) {
-    gameUpdate.updateComment(receivedComment.comment.commentId);
     console.log(receivedComment);
+    gameUpdate.updateComment(receivedComment.comment.commentId);
     if (nonote == 1) {
         var now = createTimestamp(receivedComment.comment.comments[0].date)
     } else {

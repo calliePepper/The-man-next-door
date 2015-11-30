@@ -85,7 +85,7 @@ io.on('connection', function(socket) {
 		}
 		queueFunc.update(userId,day,timeThroughDay,updatedLast,clientData[userId]['lastFeed'],clientData[userId]['lastMessage'],clientData[userId]['lastComment'],page.firstRun)
 		if (page.firstLoad == 1) {
-			io.to(userId).emit('newMessage',{messageItem:data.messageObjects[1],choices:data.choiceObjects[1]});
+			io.to(userId).emit('newMessage',{messageItem:data.messageObjects[0],choices:data.choiceObjects[0]});
 		}
 	});
 	
@@ -211,6 +211,8 @@ queueFunc.getIndex = function(object) {
 queueFunc.update = function(userId,day,timeThroughDay,updatedLast,lastFeed,lastMessage,lastComment,noNote) {
 	console.log(timestampify()+'Checking update for '+userId.substr(0,4)+'<->'+clientData[userId].name + ' . '+queueFunc.getIndex(lastFeed)+'|'+queueFunc.getIndex(lastMessage)+'|'+queueFunc.getIndex(lastComment));
 	timeStampToHit = 0;
+	var itemsQueued = 0;
+	var itemsSent = 0;
 	for (var i in data.events[day]) {
 		var notDone = 1;
 		if (lastFeed != '' && data.events[day][i].object == 'feedObjects') {
@@ -232,10 +234,14 @@ queueFunc.update = function(userId,day,timeThroughDay,updatedLast,lastFeed,lastM
 		if (notDone == 1) {
 			queueFunc.add(day,i,userId,timeThroughDay,noNote);
 			if (i > timeThroughDay) {
+				itemsQueued++;
 				break;
+			} else {
+				itemsSent++;
 			}
 		}
 	}
+	io.to(userId).emit('hideLoad');
 	var initialLength = sendQueue.length;
 	sendQueue = uniqueTest(sendQueue);
 	if (sendQueue.length > initialLength) {

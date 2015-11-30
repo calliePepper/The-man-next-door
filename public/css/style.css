@@ -775,7 +775,8 @@ iframe {
 
 .typing {
   color: #999;
-  padding-left: 50px; }
+  padding-left: 50px;
+  padding-bottom: 20px; }
 
 .choiceBlock {
   border-top: 1px solid #dfe0e4;

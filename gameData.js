@@ -332,14 +332,23 @@ module.exports = {
     */
     
     messageObjects: {
+        0:{
+            messages:[
+                {msgId:'0_1',fromId:1,toId:1,timestamp:600,message:'Hey, are you there?',image:'',video:'',from:1}  
+            ],
+            messageId:0,
+            autoTarget:'choice',
+            autoId:'0'
+        },
         1:{
             messages:[
-                {msgId:'1_1',fromId:1,toId:1,timestamp:600,message:'Hey. So, this may be a bit weird.',image:'',video:'',from:1},
-                {msgId:'1_2',fromId:1,toId:1,timestamp:601,message:'Some things have been happening. I know that mysteriously inviting you to this without any prior comment is strange',image:'',video:'',from:1},
-                {msgId:'1_3',fromId:1,toId:1,timestamp:602,message:'But then, strange and mysterious is my middle name.',image:'',video:'',from:1},
-                {msgId:'1_4',fromId:1,toId:1,timestamp:603,message:'Names.',image:'',video:'',from:1},
-                {msgId:'1_5',fromId:1,toId:1,timestamp:604,message:'Sorry, Bit freaked out',image:'',video:'',from:1},
-                {msgId:'1_6',fromId:1,toId:1,timestamp:605,message:'I need some help. You there?',image:'',video:'',from:1},
+                {msgId:'1_1',fromId:1,toId:1,timestamp:600,message:'Great!',image:'',video:'',from:1},
+                {msgId:'1_2',fromId:1,toId:1,timestamp:600,message:'Ok. So, this may be a bit weird.',image:'',video:'',from:1},
+                {msgId:'1_3',fromId:1,toId:1,timestamp:601,message:'Some things have been happening. I know that mysteriously inviting you to this without any prior comment is strange',image:'',video:'',from:1},
+                {msgId:'1_4',fromId:1,toId:1,timestamp:602,message:'But then, strange and mysterious is my middle name.',image:'',video:'',from:1},
+                {msgId:'1_5',fromId:1,toId:1,timestamp:603,message:'Names.',image:'',video:'',from:1},
+                {msgId:'1_6',fromId:1,toId:1,timestamp:604,message:'Sorry, Bit freaked out',image:'',video:'',from:1},
+                {msgId:'1_7 ',fromId:1,toId:1,timestamp:605,message:'I need some help. You there?',image:'',video:'',from:1},
             ],
             messageId:1,
             autoTarget:'choice',
@@ -433,7 +442,9 @@ module.exports = {
             messages:[
                 {msgId:'10_1',fromId:1,toId:1,timestamp:600,message:'I\'ll just tell you then.',image:'',video:'',from:1},
                 {msgId:'10_2',fromId:1,toId:1,timestamp:600,message:'So this guy moved in next door and I thought he was just a bit eccentric at first',image:'',video:'',from:1},
-                {msgId:'10_3',fromId:1,toId:1,timestamp:600,message:'But he\'s gotten weirder and other things have happened.',image:'',video:'',from:1}
+                {msgId:'10_3',fromId:1,toId:1,timestamp:600,message:'Well, there\'s the painting. The other day, he spent a solid amount of time painting his house, in the rain.',image:'',video:'',from:1},
+                {msgId:'10_4',fromId:1,toId:1,timestamp:600,message:'He was painting symbols, symbols that I\'ve seen on the forum',image:'',video:'',from:1},
+                {msgId:'10_5',fromId:1,toId:1,timestamp:600,message:'But he\'s gotten weirder and other things have happened.',image:'',video:'',from:1}
             ],
             messageId:9,
             autoTarget:'choice',
@@ -453,8 +464,8 @@ module.exports = {
         },
         12:{
             messages:[
-                {msgId:'12_1',fromId:1,toId:1,timestamp:600,message:'He\'s been painting symbols all around his house. In the rain.',image:'',video:'',from:1},
-                {msgId:'12_2',fromId:1,toId:1,timestamp:600,message:'What\'s weirder is, I recognise these symbols from the forum',image:'',video:'',from:1},
+                {msgId:'12_1',fromId:1,toId:1,timestamp:600,message:'It\'s not just that. Sometimes he just stands in his yard, staring at nothing.',image:'',video:'',from:1},
+                {msgId:'12_1',fromId:1,toId:1,timestamp:600,message:'The symbols are really what got me though. Like I said, I\'ve seen them on the forum',image:'',video:'',from:1},
                 {msgId:'12_3',fromId:1,toId:1,timestamp:600,message:'People were posting about them in reference to some old mythos.',image:'',video:'',from:1},
                 {msgId:'12_4',fromId:1,toId:1,timestamp:600,message:'I wouldn\'t consider this strange all by itself, but Marcel vanished around the same time that the man next door arrived.',image:'',video:'',from:1},
             ],
@@ -472,26 +483,144 @@ module.exports = {
         },
         15:{
             messages:[
-                {msgId:'15_1',fromId:1,toId:1,timestamp:600,message:'OUT OF CONVERSATION',image:'',video:'',from:1},
+                {msgId:'15_1',fromId:1,toId:1,timestamp:600,message:'I know, right? No-one else seems to think that it\'s that weird.',image:'',video:'',from:1},
+                {msgId:'15_2',fromId:1,toId:1,timestamp:600,message:'Then again, it could be a relative thing',image:'',video:'',from:1},
+                {msgId:'15_3',fromId:1,toId:1,timestamp:600,message:'Marcel vanishing was weirder.',image:'',video:'',from:1},
             ],
             messageId:15,
-            autoTarget:'',
-            autoId:''
+            autoTarget:'choice',
+            autoId:'9'
         },
+        16:{
+            messages:[
+                {msgId:'16_1',fromId:1,toId:1,timestamp:600,message:'I\'ll have to find some pictures for you',image:'',video:'',from:1},
+                {msgId:'16_2',fromId:1,toId:1,timestamp:600,message:'They weren\'t something I could describe off the top of my head.',image:'',video:'',from:1},
+                {msgId:'16_3',fromId:1,toId:1,timestamp:600,message:'I was a bit panicked when I saw them, I was pretty worried about Marcel vanishing',image:'',video:'',from:1},
+            ],
+            messageId:16,
+            autoTarget:'choice',
+            autoId:'9'
+        },
+        17:{
+            messages:[
+                {msgId:'17_1',fromId:1,toId:1,timestamp:600,message:'A good friend of mine. I thought he\'d turn up by now',image:'',video:'',from:1},
+            ],
+            messageId:17,
+            autoTarget:'message',
+            autoId:'20'
+        },
+        18:{
+            messages:[
+                {msgId:'18_1',fromId:1,toId:1,timestamp:600,message:'Sorry, I really should have mentioned that sooner',image:'',video:'',from:1},
+                {msgId:'18_2',fromId:1,toId:1,timestamp:600,message:'Marcel. He\'s a good friend of mine, and he was supposed to come over to visit me',image:'',video:'',from:1},
+            ],
+            messageId:18,
+            autoTarget:'message',
+            autoId:'20'
+        },
+        19:{
+            messages:[
+                {msgId:'19_1',fromId:1,toId:1,timestamp:600,message:'Sorry, I tend to get carried with other things',image:'',video:'',from:1},
+                {msgId:'19_2',fromId:1,toId:1,timestamp:600,message:'Bit of a habit.',image:'',video:'',from:1},
+            ],
+            messageId:19,
+            autoTarget:'message',
+            autoId:'20'
+        },
+        20:{
+            messages:[
+                {msgId:'20_1',fromId:1,toId:1,timestamp:600,message:'He hasn\'t exactly vanished. More like, he hasn\'t turned up',image:'',video:'',from:1},
+                {msgId:'20_2',fromId:1,toId:1,timestamp:600,message:'It\'s not like we definitively know something has happened, I tend to get carried with other things',image:'',video:'',from:1},
+                {msgId:'20_3',fromId:1,toId:1,timestamp:600,message:'Ambrose and Cal have different ideas about it.',image:'',video:'',from:1},
+            ],
+            messageId:20,
+            autoTarget:'choice',
+            autoId:'10'
+        },
+        21:{
+            messages:[
+                {msgId:'21_1',fromId:1,toId:1,timestamp:600,message:'He has a habit of going off on little adventures',image:'',video:'',from:1},
+                {msgId:'21_2',fromId:1,toId:1,timestamp:600,message:'But this is different. He\'d be quick to reassure us that he was okay',image:'',video:'',from:1},
+                {msgId:'21_3',fromId:1,toId:1,timestamp:600,message:'Ambrose is pretty worried',image:'',video:'',from:1},
+                {msgId:'21_4',fromId:1,toId:1,timestamp:600,message:'Cal is much calmer about it though',image:'',video:'',from:1},
+            ],
+            messageId:21,
+            autoTarget:'choice',
+            autoId:'11'
+        },
+        22:{
+            messages:[
+                {msgId:'22_1',fromId:1,toId:1,timestamp:600,message:'They\'re my best friends.',image:'',video:'',from:1},
+                {msgId:'22_2',fromId:1,toId:1,timestamp:600,message:'They both look out for me in, well, different ways',image:'',video:'',from:1},
+                {msgId:'22_3',fromId:1,toId:1,timestamp:600,message:'They both know about the man next door. If only because I\'ve been messaging them whenever I have a thought.',image:'',video:'',from:1},
+            ],
+            messageId:22,
+            autoTarget:'choice',
+            autoId:'12'
+        },
+        23:{
+            messages:[
+                {msgId:'23_1',fromId:1,toId:1,timestamp:600,message:'Cal just runs analysis. She doesn\'t think anything bad has actually happened',image:'',video:'',from:1},
+                {msgId:'23_2',fromId:1,toId:1,timestamp:600,message:'Then again, that could be just her way of masking worry.',image:'',video:'',from:1},
+                {msgId:'23_3',fromId:1,toId:1,timestamp:600,message:'When it comes to the man-next-door, she seems more concerned about my condition than the situation.',image:'',video:'',from:1},
+                {msgId:'23_4',fromId:1,toId:1,timestamp:600,message:'On the other hand, Ambrose is pretty worried. So worried that he doesn\'t consider many details about it',image:'',video:'',from:1},
+                {msgId:'23_5',fromId:1,toId:1,timestamp:600,message:'I think he just wants Marcel to contact one of us.',image:'',video:'',from:1},
+                {msgId:'23_6',fromId:1,toId:1,timestamp:600,message:'When it comes to the man-next-door, he seems more amused than concerned. Especially regarding my antics',image:'',video:'',from:1},
+            ],
+            messageId:23,
+            autoTarget:'choice',
+            autoId:'13'
+        },
+        24:{
+            messages:[
+                {msgId:'24_1',fromId:1,toId:1,timestamp:600,message:'Ambrose is pretty worried. So worried that he doesn\'t consider many details about it',image:'',video:'',from:1},
+                {msgId:'24_2',fromId:1,toId:1,timestamp:600,message:'I think he just wants Marcel to contact one of us.',image:'',video:'',from:1},
+                {msgId:'24_3',fromId:1,toId:1,timestamp:600,message:'When it comes to the man-next-door, he seems more amused than concerned. Especially regarding my antics',image:'',video:'',from:1},
+                {msgId:'24_4',fromId:1,toId:1,timestamp:600,message:'Cal is basically the opposite',image:'',video:'',from:1},
+                {msgId:'24_5',fromId:1,toId:1,timestamp:600,message:'Cal just runs analysis. She doesn\'t think anything bad has actually happened',image:'',video:'',from:1},
+                {msgId:'24_6',fromId:1,toId:1,timestamp:600,message:'Then again, that could be just her way of masking worry.',image:'',video:'',from:1},
+                {msgId:'24_7',fromId:1,toId:1,timestamp:600,message:'When it comes to the man-next-door, she seems more concerned about my condition than the situation.',image:'',video:'',from:1},
+            ],
+            messageId:24,
+            autoTarget:'choice',
+            autoId:'13'
+        },
+        25:{
+            messages:[
+                {msgId:'25_1',fromId:1,toId:1,timestamp:600,message:'I think the only thing I can do is recon',image:'',video:'',from:1},
+                {msgId:'25_2',fromId:1,toId:1,timestamp:600,message:'Keep an eye out on things, do my usual thing.',image:'',video:'',from:1},
+                {msgId:'25_3',fromId:1,toId:1,timestamp:600,message:'Maybe look around the forum, see if anyone has an idea or if anyone\'s experienced something like this',image:'',video:'',from:1},
+            ],
+            messageId:25,
+            autoTarget:'choice',
+            autoId:'14'
+        },
+        26:{
+            messages:[
+                {msgId:'26_1',fromId:1,toId:1,timestamp:600,message:'OUT OF CONVERSATION',image:'',video:'',from:1}
+            ],
+            messageId:26,
+            autoTarget:'',
+            autoId:'',
+        }
     },
-    
     choiceObjects: {
-        1: {choiceId:1,choice1:'Yeah, I\'m here',choice2:'What\'s up?',choice3:'Um',resultType:'message',result1:4,result2:3,result3:2,ttd:360},
+        0: {choiceId:0,choice1:'I\'m here',choice2:'Hello?',choice3:'Yeah',resultType:'message',result1:1,result2:1,result3:1,ttd:360},
+        1: {choiceId:1,choice1:'Yeah, I\'m still here',choice2:'What\'s up?',choice3:'Um',resultType:'message',result1:4,result2:3,result3:2,ttd:360},
         2: {choiceId:2,choice1:'Oh yeah, I\'m a regular there',choice2:'So you saw my name on there?',choice3:'Oh, you must have seen one of my posts',resultType:'message',result1:5,result2:5,result3:5,ttd:''},
         3: {choiceId:3,choice1:'That could help',choice2:'Why do you think I\'d know any better?',choice3:'Sounds good, what information do you have',resultType:'message',result1:6,result2:7,result3:6,ttd:''},
         4: {choiceId:4,choice1:'That\'s okay, I\'m interested.',choice2:'Just relax and tell me.',choice3:'I\'m not that interested',resultType:'message',result1:10,result2:9,result3:8,ttd:''},
         5: {choiceId:5,choice1:'Try calling him',choice2:'Don\'t worry, he\'ll show up',choice3:'We already have enough mysteries',resultType:'',result1:0,result2:0,result3:0,ttd:''},
         6: {choiceId:6,choice1:'That\'s okay, I\'m interested.',choice2:'I am, but lay it out straight',choice3:'Just relax and tell me.',resultType:'',result1:10,result2:9,result3:9,ttd:''},
-        7: {choiceId:7,choice1:'What were the symbols?',choice2:'So, he was painting in the rain. You\'re right, that\'s pretty weird',choice3:'This isn\'t sounding that strange so far',resultType:'message',result1:15,result2:15,result3:11,ttd:''},
+        7: {choiceId:7,choice1:'What were the symbols?',choice2:'So, he was painting in the rain. You\'re right, that\'s pretty weird',choice3:'This isn\'t sounding that strange so far',resultType:'message',result1:16,result2:15,result3:11,ttd:''},
         8: {choiceId:8,choice1:'What\'s he doing?',choice2:'Other things?',choice3:'Are you sure you\'re not overreacting?',resultType:'message',result1:12,result2:13,result3:11,ttd:''},
-        9: {choiceId:9,choice1:'Who\'s Marcel?',choice2:'Who vanished?',choice3:'You could have led with someone vanishing',resultType:'message',result1:15,result2:15,result3:15,ttd:''},
+        9: {choiceId:9,choice1:'Who\'s Marcel?',choice2:'Who vanished?',choice3:'You could have led with someone vanishing',resultType:'message',result1:17,result2:18,result3:19,ttd:''},
+        10: {choiceId:10,choice1:'Who\'s Ambrose and Cal?',choice2:'Why do you think he\'s vandished',choice3:'Your friends?',resultType:'message',result1:22,result2:21,result3:22,ttd:''},
+        11: {choiceId:11,choice1:'Who\'s Ambrose and Cal?',choice2:'You mentioned them',choice3:'Your friends?',resultType:'message',result1:22,result2:22,result3:22,ttd:''},
+        12: {choiceId:12,choice1:'So, what\'s the plan?',choice2:'What does Cal think?',choice3:'What does Ambrose think?',resultType:'message',result1:25,result2:23,result3:24,ttd:''},
+        13: {choiceId:13,choice1:'So, what do we do?',choice2:'What are you going to do',choice3:'What next?',resultType:'message',result1:25,result2:25,result3:25,ttd:''},
+        14: {choideId:14,choice1:'What help do you need from me?',choice2:'I\'m sure it\'ll turn out okay',choice3:'I\'m in', resultType:'message',result1:26,result2:26,result3:26,ttd:''}
     },
-    
     directionObject: {
         1: {directionId:1,attribute:'storyEvent1',operator:'=',value:'1',trueTarget:'message',trueId:'3',falseTarget:'message',falseId:'4'},
         2: {directionId:2,attribute:'calTrust',operator:'>',value:'10',trueTarget:'message',trueId:'5',falseTarget:'message',falseId:'6'}

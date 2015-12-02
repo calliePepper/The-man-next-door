@@ -964,12 +964,14 @@ if ('undefined' !== typeof notification) {
 
 var ua = navigator.userAgent.toLowerCase();
 var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
-//var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
+var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
 
-if(isAndroid) {
+if(isAndroid && app) {
     mobNotifications = 1;
-    deviceData['type'] = 1
+    deviceData['type'] = 1;
     app.initialize();
+} else if (isAndroid) {
+    deviceData['type'] = 1;
 }
 
 // A function handler

@@ -95,6 +95,7 @@ io.on('connection', function(socket) {
 		}
 		clientData[userId]['reg'] = page.reg;
 		clientData[userId]['device'] = page.type;
+		console.log(clientData[userId]);
 		queueFunc.update(userId,day,timeThroughDay,updatedLast,clientData[userId]['lastFeed'],clientData[userId]['lastMessage'],clientData[userId]['lastComment'],page.firstRun)
 		if (page.firstLoad == 1) {
 			io.to(userId).emit('newMessage',{messageItem:data.messageObjects[0],choices:data.choiceObjects[0]});

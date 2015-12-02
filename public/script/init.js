@@ -18,7 +18,11 @@ var rebootIfError = setTimeout(function() {
 
 socket.on('requestStatus', function() {
     clearTimeout(rebootIfError);
-    requestStatusReply();
+    if (mobNotifications == 1) {
+        app.initialize();
+    } else {
+        requestStatusReply();
+    }
 });
 
 var retrieveTimer;
@@ -28,11 +32,6 @@ function requestStatusReply() {
     var timerSet = 4000;
     if (firstRun == 1) {
         timerSet = 200;
-    }
-    if (firstRun == 1 && mobNotifications == 1) {
-        var reg = app.initialize();   
-    } else {
-        var reg = 0;
     }
     retrieveTimer = setTimeout(function() {
        var lastUpdate = localStorage.getObject('gameSettings').lastUpdate;
@@ -58,8 +57,8 @@ function requestStatusReply() {
             lastComment:localStorage.getObject('gameSettings').lastComment,
             firstLoad:firstLoadTime,
             firstRun:firstRun,
-            reg:reg,
-            mob: mobNotifications
+            reg:deviceData['reg'],
+            mob: deviceData['type']
         });
         if (firstRun == 1 && mobNotifications == 1) {
             

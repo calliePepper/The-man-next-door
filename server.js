@@ -3,7 +3,8 @@ var express = require('express'),
 	compression = require('compression'),
 	app = express(),
 	router = express.Router(''),
-	moment = require('moment');
+	moment = require('moment'),
+	gcm = require('node-gcm');
 
 var data = require('./gameData.js');
 var sendQueue = [];
@@ -175,6 +176,38 @@ var watcher = setInterval(function() {
 	}	
 },500);
 
+var notifyUser = function(info,reg) {
+	var message = new gcm.Message({
+	    collapseKey: 'demo',
+	    priority: 'high',
+	    contentAvailable: true,
+	    delayWhileIdle: true,
+	    timeToLive: 3,
+	    restrictedPackageName: "somePackageName",
+	    dryRun: true,
+	    data: {
+	        key1: 'message1',
+	        key2: 'message2'
+	    },
+	    notification: {
+	        title: "Hello, World",
+	        icon: "ic_launcher",
+	        body: "This is a notification that will be displayed ASAP."
+	    }
+	});
+	
+	var sender = new gcm.Sender('AIzaSyBsDedWcDBATdqS69h7zFvlMYH97rRwq8w');
+	
+	// Add the registration tokens of the devices you want to send to
+	var registrationTokens = [reg];
+	
+	// ... or retrying
+	sender.send(message, { registrationTokens: registrationTokens }, function (err, response) {
+	  if(err) console.error(err);
+	  else    console.log(response);
+	});
+}
+
 var queueFunc = {};
 
 queueFunc.add = function(day,timeStampToHit,userId,timeThroughDay,userDay,noNote) {
@@ -320,8 +353,9 @@ queueFunc.check = function() {
 		organiseQueue()
 	}
 	var timer2 = new Date();
-	if (timer2.getTime() - timer1.getTime() > 5) {
-		console.log(timestampify()+ '>>>>>>>>>>>>>>>>>>  Check function took '+timer2.getTime() - timer1.getTime()+'. didSend: '+didSend+' <<<<<<<<<<<<<<<<<<');
+	var timeTaken = timer2.getTime() - timer1.getTime();
+	if (timeTaken > 5) {
+		console.log(timestampify()+ '>>>>>>>>>>>>>>>>>>  Check function took '+timeTaken+'. didSend: '+didSend+' <<<<<<<<<<<<<<<<<<');
 	}
 }
 

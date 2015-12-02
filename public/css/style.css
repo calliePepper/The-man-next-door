@@ -208,7 +208,7 @@ header:after {
   content: ""; }
 
 .logo {
-  font-family: lobster;
+  font-family: lobsterregular;
   color: #fff;
   text-shadow: 0 -1px 0 #888;
   float: left;

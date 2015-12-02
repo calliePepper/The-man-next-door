@@ -951,43 +951,91 @@ navigationControls.setUp = function() {
 // Determine the correct object to use
 var notification = window.Notification || window.mozNotification || window.webkitNotification;
 
+var webNotifications = 0;
+var mobNotifications = 0;
+
 // The user needs to allow this
-if ('undefined' === typeof notification)
-    alert('Web notification not supported');
-else
+if ('undefined' !== typeof notification) {
     notification.requestPermission(function(permission){});
+    webNotifications = 1;
+}
+
+var ua = navigator.userAgent.toLowerCase();
+var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
+//var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
+
+if(isAndroid) {
+	mobNotifications = 1;
+    var push = PushNotification.init({
+        android: {
+            senderID: "840758201462",
+            image: "www/image/logo.png"
+        },
+        ios: {
+            alert: "true",
+            badge: "true",
+            sound: "true"
+        },
+        windows: {}
+    });
+    
+    push.on('registration', function(data) {
+        console.log(data);
+    });
+    
+    push.on('notification', function(data) {
+        // data.message,
+        // data.title,
+        // data.count,
+        // data.sound,
+        // data.image,
+        // data.additionalData
+    });
+    
+    push.on('error', function(e) {
+        // e.message
+    })
+    
+    var pubnub = PUBNUB.init({
+        subscribe_key: 'your-sub-key',
+        publish_key:   'your-pub-key',
+    });
+}
 
 // A function handler
 function spawnNotification(theBody,theIcon,theTitle)
 {
-    if ('undefined' === typeof notification)
-        return false;       //Not supported....
-    var noty = new notification(
-        theTitle, {
-            body: theBody,
-            dir: 'auto', // or ltr, rtl
-            lang: 'EN', //lang used within the notification.
-            tag: 'notificationPopup', //An element ID to get/set the content
-            icon: theIcon //The URL of an image to be used as an icon
-        }
-    );
-    
-    setTimeout(function(){ 
-        noty.close() 
-    },5000); 
-    /*noty.onclick = function () {
-        console.log(timestampify()+'notification.Click');
-    };
-    noty.onerror = function () {
-        console.log(timestampify()+'notification.Error');
-    };
-    noty.onshow = function () {
-        console.log(timestampify()+'notification.Show');
-    };
-    noty.onclose = function () {
-        console.log(timestampify()+'notification.Close');
-    };*/
-    return true;
+    if (webNotifications == 1) {
+        var noty = new notification(
+            theTitle, {
+                body: theBody,
+                dir: 'auto', // or ltr, rtl
+                lang: 'EN', //lang used within the notification.
+                tag: 'notificationPopup', //An element ID to get/set the content
+                icon: theIcon //The URL of an image to be used as an icon
+            }
+        );
+        
+        setTimeout(function(){ 
+            noty.close() 
+        },5000); 
+        /*noty.onclick = function () {
+            console.log(timestampify()+'notification.Click');
+        };
+        noty.onerror = function () {
+            console.log(timestampify()+'notification.Error');
+        };
+        noty.onshow = function () {
+            console.log(timestampify()+'notification.Show');
+        };
+        noty.onclose = function () {
+            console.log(timestampify()+'notification.Close');
+        };*/
+        return true;
+    } else if (mobNotifications == 1) {
+
+
+    }
 }
 
 // Page visibility

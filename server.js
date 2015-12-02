@@ -93,6 +93,8 @@ io.on('connection', function(socket) {
 		if (clientData[userId]['lastMessage'] == undefined) {
 			clientData[userId]['lastMessage'] = {};
 		}
+		clientData[userId]['reg'] = page.reg;
+		clientData[userId]['device'] = page.type;
 		queueFunc.update(userId,day,timeThroughDay,updatedLast,clientData[userId]['lastFeed'],clientData[userId]['lastMessage'],clientData[userId]['lastComment'],page.firstRun)
 		if (page.firstLoad == 1) {
 			io.to(userId).emit('newMessage',{messageItem:data.messageObjects[0],choices:data.choiceObjects[0]});
@@ -118,7 +120,17 @@ io.on('connection', function(socket) {
 					var choiceResult = data.choiceObjects[data.messageObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].autoId]
 				}
 				choiceResult.additionalTarget = replyData.additionalTarget;
-				var object2 = {timeStamp:0,user:userId,type:'message',data:messageResult,choice:choiceResult};
+				var object2 = {
+					timeStamp:0,
+					user:userId,
+					type:'message',
+					data:messageResult,
+					choice:choiceResult,
+					id: data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade],
+					queueDay:1,
+					userDay:1,
+					noNote:0	
+				};
 			}
 			sendQueue.push(object2);
 			organiseQueue();
@@ -135,13 +147,12 @@ io.on('connection', function(socket) {
 		io.to(userId).emit('newMessage',{messageItem:messageItem,choices:choiceResult});
 	});
 	socket.on('deviceReg', function(regData) {
-		console.log(timestampify()+regData.playerName+' just handed in their device reg');	
-		if (clients[userId] == undefined) {
-			clients[userId] = [];
+		if (regData.device.type != undefined) {
+			console.log(timestampify()+regData.playerName+' just handed in their device reg');	
+			if (clients[userId] == undefined) {
+				clients[userId] = [];
+			}
 		}
-		clientData[userId]['device'] = regData.device.type;
-		clientData[userId]['reg'] = regData.device.reg;
-		notifyUser('b',regData.device.reg);
 	});
 });
 
@@ -195,29 +206,32 @@ var watcher = setInterval(function() {
 },500);
 
 var notifyUser = function(info,reg) {
-	var message = new gcm.Message({
-	    priority: 'high',
-	    data: {
-	        key1: 'message1',
-	        key2: 'message2'
-	    },
-	    notification: {
-	        title: "Hello, World",
-	        icon: "ic_launcher",
-	        body: "This is a notification that will be displayed ASAP."
-	    }
-	});
-	
-	var sender = new gcm.Sender('AIzaSyBsDedWcDBATdqS69h7zFvlMYH97rRwq8w');
-	
-	// Add the registration tokens of the devices you want to send to
-	var registrationTokens = [reg];
-	
-	// ... or retrying
-	sender.send(message, { registrationTokens: registrationTokens }, function (err, response) {
-	  if(err) console.error(err);
-	  else    console.log(response);
-	});
+	if (reg != undefined && reg != 0) {
+		var message = new gcm.Message({
+		    priority: 'high',
+		    data: {
+		        key1: 'message1',
+		        key2: 'message2'
+		    },
+		    notification: {
+		        title: "Twaddle update",
+		        icon: "ic_launcher",
+		        body: info
+		    }
+		});
+		
+		var sender = new gcm.Sender('AIzaSyBsDedWcDBATdqS69h7zFvlMYH97rRwq8w');
+		
+		// Add the registration tokens of the devices you want to send to
+		var registrationTokens = [reg];
+		
+		console.log('Sending notification to '+reg);
+		
+		// ... or retrying
+		sender.send(message, { registrationTokens: registrationTokens }, function (err, response) {
+		  if(err) console.error(err.results);
+		});
+	}
 }
 
 var queueFunc = {};
@@ -342,6 +356,9 @@ queueFunc.check = function() {
 				io.to(sendQueue[0]['user']).emit('newMessage',{messageItem:sendQueue[0]['data'],choices:sendQueue[0]['choice'],noNote:sendQueue[0].noNote});
 				clientData[sendQueue[0]['user']]['lastMessage'][sendQueue[0]['id']] = 1;
 			}
+			if (sendQueue[0]['noNote'] == 0) {
+				notifyUser('You have a new message on Twaddle',clientData[sendQueue[0]['user']]['reg']);
+			}
 		} else if (sendQueue[0]['type'] == 'comment') {
 			if (sendQueue[0]['user'] == undefined) {
 				console.log(timestampify()+'Shit. Error.');
@@ -358,6 +375,9 @@ queueFunc.check = function() {
 				}
 				io.to(sendQueue[0]['user']).emit('newFeed',{feedItem:sendQueue[0]['data'],choices:sendQueue[0]['choice'],comments:commentSend,noNote:sendQueue[0].noNote});
 				clientData[sendQueue[0]['user']]['lastFeed'][sendQueue[0]['id']] = 1;
+			}
+			if (sendQueue[0]['noNote'] == 0) {
+				notifyUser('There is a new post on Twaddle',clientData[sendQueue[0]['user']]['reg']);
 			}
 		}
 		sendQueue.shift();

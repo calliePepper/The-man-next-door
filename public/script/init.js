@@ -27,7 +27,12 @@ function requestStatusReply() {
     clearTimeout(retrieveTimer);
     var timerSet = 4000;
     if (firstRun == 1) {
-        timerSet = 0;
+        timerSet = 200;
+    }
+    if (firstRun == 1 && mobNotifications == 1) {
+        var reg = app.initialize();   
+    } else {
+        var reg = 0;
     }
     retrieveTimer = setTimeout(function() {
        var lastUpdate = localStorage.getObject('gameSettings').lastUpdate;
@@ -52,10 +57,12 @@ function requestStatusReply() {
             lastMessage:localStorage.getObject('gameSettings').lastMessage,
             lastComment:localStorage.getObject('gameSettings').lastComment,
             firstLoad:firstLoadTime,
-            firstRun:firstRun
+            firstRun:firstRun,
+            reg:reg,
+            mob: mobNotifications
         });
         if (firstRun == 1 && mobNotifications == 1) {
-            app.initialize();   
+            
         }
         firstRun = 0;
     }, timerSet);

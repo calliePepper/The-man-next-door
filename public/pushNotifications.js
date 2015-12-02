@@ -106,7 +106,7 @@ var app = {
                 if ( e.regid.length > 0 )
                 {
                     deviceData['reg'] = e.regid;
-                    emitReg();
+                    return e.regid;
                 }
                 break;
 
@@ -117,10 +117,12 @@ var app = {
 
             case 'error':
                 console.log('GCM error = '+e.msg);
+                return false;
                 break;
 
             default:
                 console.log('An unknown GCM event has occurred');
+                return false;
                 break;
         }
     }

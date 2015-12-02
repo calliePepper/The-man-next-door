@@ -15,6 +15,8 @@
 var currentlyViewing = 0;
 var socket = io('https://the-man-next-door-soldevifae.c9.io');
 var updating = 0;
+var deviceData = {};
+deviceData['type'] = 1;
 
 Storage.prototype.setObject = function(key, value) {
     this.setItem(key, JSON.stringify(value));
@@ -965,41 +967,9 @@ var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
 //var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
 
 if(isAndroid) {
-	mobNotifications = 1;
-    var push = PushNotification.init({
-        android: {
-            senderID: "840758201462",
-            image: "www/image/logo.png"
-        },
-        ios: {
-            alert: "true",
-            badge: "true",
-            sound: "true"
-        },
-        windows: {}
-    });
-    
-    push.on('registration', function(data) {
-        console.log(data);
-    });
-    
-    push.on('notification', function(data) {
-        // data.message,
-        // data.title,
-        // data.count,
-        // data.sound,
-        // data.image,
-        // data.additionalData
-    });
-    
-    push.on('error', function(e) {
-        // e.message
-    })
-    
-    var pubnub = PUBNUB.init({
-        subscribe_key: 'your-sub-key',
-        publish_key:   'your-pub-key',
-    });
+    mobNotifications = 1;
+    deviceData['type'] = 1
+    app.initialize();
 }
 
 // A function handler
@@ -1032,10 +1002,7 @@ function spawnNotification(theBody,theIcon,theTitle)
             console.log(timestampify()+'notification.Close');
         };*/
         return true;
-    } else if (mobNotifications == 1) {
-
-
-    }
+    } 
 }
 
 // Page visibility

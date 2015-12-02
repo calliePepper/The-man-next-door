@@ -75,14 +75,23 @@ io.on('connection', function(socket) {
 		clientData[userId]['name'] = page.playerName;
 		clientData[userId]['timezone'] = page.timezone;
 		clientData[userId]['lastUpdated'] = updatedLast;
-		if (clientData[userId]['lastFeed'] == undefined || page.lastFeed.length > clientData[userId]['lastFeed']) {
+		if (clientData[userId]['lastFeed'] == undefined || page.lastFeed.length > clientData[userId]['lastFeed'].length) {
 			clientData[userId]['lastFeed'] = page.lastFeed;
 		}
-		if (clientData[userId]['lastMessage'] == undefined || page.lastMessage.length > clientData[userId]['lastMessage']) {
+		if (clientData[userId]['lastMessage'] == undefined || page.lastMessage.length > clientData[userId]['lastMessage'].length) {
 			clientData[userId]['lastMessage'] = page.lastMessage;
 		}
-		if (clientData[userId]['lastComment'] == undefined || page.lastComment.length > clientData[userId]['lastComment']) {
+		if (clientData[userId]['lastComment'] == undefined || page.lastComment.length > clientData[userId]['lastComment'].length) {
 			clientData[userId]['lastComment'] = page.lastComment;
+		}
+		if (clientData[userId]['lastFeed'] == undefined) {
+			clientData[userId]['lastFeed'] = {};
+		}
+		if (clientData[userId]['lastComment'] == undefined) {
+			clientData[userId]['lastComment'] = {};
+		}
+		if (clientData[userId]['lastMessage'] == undefined) {
+			clientData[userId]['lastMessage'] = {};
 		}
 		queueFunc.update(userId,day,timeThroughDay,updatedLast,clientData[userId]['lastFeed'],clientData[userId]['lastMessage'],clientData[userId]['lastComment'],page.firstRun)
 		if (page.firstLoad == 1) {
@@ -124,6 +133,15 @@ io.on('connection', function(socket) {
 			var choiceResult = data.choiceObjects[messageItem.autoId]
 		}
 		io.to(userId).emit('newMessage',{messageItem:messageItem,choices:choiceResult});
+	});
+	socket.on('deviceReg', function(regData) {
+		console.log(timestampify()+regData.playerName+' just handed in their device reg');	
+		if (clients[userId] == undefined) {
+			clients[userId] = [];
+		}
+		clientData[userId]['device'] = regData.device.type;
+		clientData[userId]['reg'] = regData.device.reg;
+		notifyUser('b',regData.device.reg);
 	});
 });
 
@@ -178,13 +196,7 @@ var watcher = setInterval(function() {
 
 var notifyUser = function(info,reg) {
 	var message = new gcm.Message({
-	    collapseKey: 'demo',
 	    priority: 'high',
-	    contentAvailable: true,
-	    delayWhileIdle: true,
-	    timeToLive: 3,
-	    restrictedPackageName: "somePackageName",
-	    dryRun: true,
 	    data: {
 	        key1: 'message1',
 	        key2: 'message2'
@@ -260,7 +272,7 @@ queueFunc.update = function(userId,day,timeThroughDay,updatedLast,lastFeed,lastM
 					notDone = 0;
 				}
 			}
-			if (lastComment != '' && data.events[dayCheck][i].object == 'commentObjects') {
+			if (lastComment != null && data.events[dayCheck][i].object == 'commentObjects') {
 				if (lastComment[data.events[dayCheck][i].id] == 1) {
 					notDone = 0;
 				}
@@ -270,7 +282,6 @@ queueFunc.update = function(userId,day,timeThroughDay,updatedLast,lastFeed,lastM
 					notDone = 0;
 				}
 			}
-			console.log(timestampify()+'Checking event - '+i+' - '+ data.events[dayCheck][i].id+' should be a '+data.events[dayCheck][i].object +'. Not Done = '+notDone);
 			if (notDone == 1) {
 				queueFunc.add(dayCheck,i,userId,timeThroughDay,day,noNote);
 				var dayDiff = day - dayCheck;
@@ -368,7 +379,6 @@ function uniqueTest(arr) {
   for (i = 0, n = arr.length; i < n; i++) {
     var item = arr[i];
     arrResult[item.timeToHit + " - " + item.user] = item;
-    console.log(timestampify()+'Item: '+item.timeToHit + " - " + item.user);
   }
   i = 0;
   for (var item in arrResult) {

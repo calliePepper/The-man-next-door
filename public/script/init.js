@@ -54,6 +54,9 @@ function requestStatusReply() {
             firstLoad:firstLoadTime,
             firstRun:firstRun
         });
+        if (firstRun == 1 && mobNotifications == 1) {
+            app.initialize();   
+        }
         firstRun = 0;
     }, timerSet);
 }
@@ -258,4 +261,8 @@ function emitChoice(choiceId,choiceMade) {
 
 function askForAnother(nextOne) {
     socket.emit('anotherMessage', {playerName:playerName,currentTime:new Date(),timezone:localStorage.getObject('gameSettings').timezone,nextId:nextOne});
+}
+
+function emitReg() {
+    socket.emit('deviceReg', {playerName:playerName,currentTime:new Date(),device:deviceData});   
 }

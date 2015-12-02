@@ -969,7 +969,6 @@ var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'htt
 if(isAndroid && app) {
     mobNotifications = 1;
     deviceData['type'] = 1;
-    app.initialize();
 } else if (isAndroid) {
     deviceData['type'] = 1;
 }

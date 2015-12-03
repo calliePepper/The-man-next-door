@@ -293,6 +293,7 @@ messages.load = function(id) {
             //console.log(Object.keys(value).length);
             if (value.date == 'CHOICE') {
                 console.log(timestampify()+'Building a choice');
+                console.log(value);
                 choiceControls.create(value.text.choiceId,'messagesCont','message','',value.text.choice1,value.text.choice2,value.text.choice3);                
             } else {
                 var usersAvatar = localStorage.getObject('gameData')['users'][value['fromId']]['avatar'];
@@ -380,7 +381,6 @@ messages.new.currentMsg = function(messageFrom,messageTo,cameIn,text,ttw,fullMes
         var thisUser = '';
         $('#typing').remove();
         if (currentlyViewing == messageFrom) {
-            console.log(fullMessage);
             var usersAvatar = localStorage.getObject('gameData')['users'][fullMessage['fromId']]['avatar'];
             var usersFirstname = localStorage.getObject('gameData')['users'][fullMessage['fromId']]['firstname'];
             var usersLastname = localStorage.getObject('gameData')['users'][fullMessage['fromId']]['lastname'];
@@ -584,7 +584,7 @@ time.minidate = function(newTimes) {
 var feed = {};
 
 feed.create = function(target,objects,processNormal) {
-    console.log(objects);
+    //console.log(objects);
     $.each(objects, function(index,value) {
         if (localStorage.getObject('gameData')['users'][value['user']]['friended'] == 1) {
             var videoLink = '';
@@ -660,7 +660,7 @@ feed.createComment = function(postId,possibleChoice) {
 feed.backlog = function(value) {
     var target = 'feedContent';
     console.log(timestampify()+'Feed backlog with feedId ' +value['postId']);
-    console.log(value);
+    //console.log(value);
     if (localStorage.getObject('gameData')['users'][value['user']]['friended'] == 1) {
         var videoLink = '';
         if (value['video'] != '' && value['video'] != undefined) {

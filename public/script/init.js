@@ -121,7 +121,7 @@ function processMessage(receivedMessages,nonote) {
         $.each(receivedMessages.messageItem.messages, function(index,value) {
             console.log(timestampify()+'Reading through');
             console.log(value);
-            var incomingMessage =  new message(value.fromId,value.toId,value.timestamp,value.message,value.image,value.video,value.from,value.msgId);
+            var incomingMessage =  new message(value.fromId,value.toId,value.timestamp,value.message,value.image,value.video,deviceData['type'],value.msgId);
             messageGroup.push(incomingMessage);
             //gameUpdate.updateLocal(incomingMessage,'messages');
         });

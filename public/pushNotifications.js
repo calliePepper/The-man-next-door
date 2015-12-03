@@ -103,6 +103,7 @@ var app = {
         switch( e.event )
         {
             case 'registered':
+                console.log('Registering '+e.regid);
                 if ( e.regid.length > 0 )
                 {
                     deviceData['reg'] = e.regid;

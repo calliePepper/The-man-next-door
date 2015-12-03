@@ -597,9 +597,88 @@ module.exports = {
         },
         26:{
             messages:[
-                {msgId:'26_1',fromId:1,toId:1,timestamp:600,message:'OUT OF CONVERSATION',image:'',video:'',from:1}
+                {msgId:'26_1',fromId:1,toId:1,timestamp:600,message:'Thanks. I mean, everyone has been telling me that.',image:'',video:'',from:1},
+                {msgId:'26_2',fromId:1,toId:1,timestamp:600,message:'It\'s more that someone actually listens to my worries on this. Ambrose exacerbates them and Cal just dismisses them. They both mean right in their own way',image:'',video:'',from:1},
+                {msgId:'26_3',fromId:1,toId:1,timestamp:600,message:'I just wish there was something I could do',image:'',video:'',from:1}
             ],
-            messageId:26,
+            messageId:27,
+            autoTarget:'message',
+            autoId:'27',
+        },
+        27:{
+            messages:[
+                {msgId:'27_1',fromId:1,toId:1,timestamp:600,message:'Sorry to rope you into this, but I\'m glad to hear you\'re willing to help',image:'',video:'',from:1},
+                {msgId:'27_2',fromId:1,toId:1,timestamp:600,message:'At the moment, what I really need is someone to just listen to my ideas. More or less, act as a sounding board.',image:'',video:'',from:1},
+                {msgId:'27_3',fromId:1,toId:1,timestamp:600,message:'I understand this all may be a bit strange',image:'',video:'',from:1},
+                {msgId:'27_4',fromId:1,toId:1,timestamp:600,message:'If it turns out to be nothing, you have express permission to laugh at me.',image:'',video:'',from:1}
+            ],
+            messageId:27,
+            autoTarget:'choice',
+            autoId:'15',
+        },
+        28:{
+            messages:[
+                {msgId:'28_1',fromId:1,toId:1,timestamp:600,message:'Well, that\'s very nice of you person that I started talking to barely ten minutes ago',image:'',video:'',from:1},
+                {msgId:'28_2',fromId:1,toId:1,timestamp:600,message:'No, seriously, that\'s a nice thing to say',image:'',video:'',from:1},
+                {msgId:'28_3',fromId:1,toId:1,timestamp:600,message:'Thank you :)',image:'',video:'',from:1},
+                {msgId:'28_4',fromId:1,toId:1,timestamp:600,message:'Anyway, if you\'re looking to help',image:'',video:'',from:1}
+            ],
+            messageId:28,
+            autoTarget:'message',
+            autoId:'30',
+        },
+        29:{
+            messages:[
+                {msgId:'29_1',fromId:1,toId:1,timestamp:600,message:'Well, that seems like an enthusiastic response to make fun of someone',image:'',video:'',from:1},
+                {msgId:'29_2',fromId:1,toId:1,timestamp:600,message:'But, on the subject of how you can help',image:'',video:'',from:1},
+            ],
+            messageId:29,
+            autoTarget:'message',
+            autoId:'30',
+        },
+        30:{
+            messages:[
+                {msgId:'30_1',fromId:1,toId:1,timestamp:600,message:'Just try to stick around. I\'ll message you when I need something',image:'',video:'',from:1},
+                {msgId:'30_2',fromId:1,toId:1,timestamp:600,message:'I might send you some stuff, so look over it if I do',image:'',video:'',from:1},
+                {msgId:'30_3',fromId:1,toId:1,timestamp:600,message:'I\'ll let you know if I need anything more.',image:'',video:'',from:1},
+                {msgId:'30_4',fromId:1,toId:1,timestamp:600,message:'I\'ll give you something to start on though',image:'',video:'',from:1},
+            ],
+            messageId:30,
+            autoTarget:'choice',
+            autoId:'16',
+        },
+        31:{
+            messages:[
+                {msgId:'31_1',fromId:1,toId:1,timestamp:600,message:'That\'s a nice offer, but I think I\'ll stick to the research front',image:'',video:'',from:1},
+                {msgId:'31_2',fromId:1,toId:1,timestamp:600,message:'You can\'t really research what you can\'t see, but if I find some material for you to look at, you can help with that.',image:'',video:'',from:1},
+                {msgId:'31_3',fromId:1,toId:1,timestamp:600,message:'But here\'s what I was talking about',image:'',video:'',from:1},
+            ],
+            messageId:31,
+            autoTarget:'message',
+            autoId:'32',
+        },
+        32:{
+            messages:[
+                {msgId:'32_1',fromId:1,toId:1,timestamp:600,message:'While we were talking, I found one of those symbols I was talking about, from the forum.',image:'weirdPage.jpg',video:'',from:1},
+            ],
+            messageId:32,
+            autoTarget:'choice',
+            autoId:'17',
+        },
+        33:{
+            messages:[
+                {msgId:'33_1',fromId:1,toId:1,timestamp:600,message:'Well, we both probably encountered it on the forum',image:'',video:'',from:1},
+            ],
+            messageId:33,
+            autoTarget:'message',
+            autoId:'34',
+        },
+        34:{
+            messages:[
+                {msgId:'34_1',fromId:1,toId:1,timestamp:600,message:'yeah, I have no idea what it means',image:'',video:'',from:1},
+                {msgId:'34_1',fromId:1,toId:1,timestamp:600,message:'But it\'s a start',image:'',video:'',from:1},
+            ],
+            messageId:34,
             autoTarget:'',
             autoId:'',
         }
@@ -619,7 +698,10 @@ module.exports = {
         11: {choiceId:11,choice1:'Who\'s Ambrose and Cal?',choice2:'You mentioned them',choice3:'Your friends?',resultType:'message',result1:22,result2:22,result3:22,ttd:''},
         12: {choiceId:12,choice1:'So, what\'s the plan?',choice2:'What does Cal think?',choice3:'What does Ambrose think?',resultType:'message',result1:25,result2:23,result3:24,ttd:''},
         13: {choiceId:13,choice1:'So, what do we do?',choice2:'What are you going to do',choice3:'What next?',resultType:'message',result1:25,result2:25,result3:25,ttd:''},
-        14: {choideId:14,choice1:'What help do you need from me?',choice2:'I\'m sure it\'ll turn out okay',choice3:'I\'m in', resultType:'message',result1:26,result2:26,result3:26,ttd:''}
+        14: {choideId:14,choice1:'What help do you need from me?',choice2:'I\'m sure it\'ll turn out okay',choice3:'I\'m in', resultType:'message',result1:27,result2:26,result3:27,ttd:''},
+        15: {choideId:15,choice1:'I\'d never laugh at you',choice2:'Sounds good!',choice3:'Is there anything more active I can do?', resultType:'message',result1:28,result2:29,result3:30,ttd:''},
+        16: {choideId:16,choice1:'I can do some research too',choice2:'What is it?',choice3:'Just message me when you need a hand', resultType:'message',result1:32,result2:31,result3:31,ttd:''},
+        17: {choideId:17,choice1:'What does it mean?',choice2:'I think I\'ve seen that before',choice3:'Whoa', resultType:'message',result1:34,result2:33,result3:34,ttd:''}
     },
     directionObject: {
         1: {directionId:1,attribute:'storyEvent1',operator:'=',value:'1',trueTarget:'message',trueId:'3',falseTarget:'message',falseId:'4'},

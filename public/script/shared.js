@@ -16,7 +16,7 @@ var currentlyViewing = 0;
 var socket = io('https://the-man-next-door-soldevifae.c9.io');
 var updating = 0;
 var deviceData = {};
-deviceData['type'] = 1;
+deviceData['type'] = 0;
 
 Storage.prototype.setObject = function(key, value) {
     this.setItem(key, JSON.stringify(value));
@@ -185,10 +185,10 @@ choiceControls.choose = function(id,choice,targetType) {
         var usersLastname = localStorage.getObject('gameData')['users'][0]['lastname'];
         var imageLink = '';
         var choiceMade = choice.replace('choice','');
-        var newMessage = new message(0,currentlyViewing,Math.floor(Date.now() / 1000),theChoice,'','',1);
+        var newMessage = new message(0,currentlyViewing,Math.floor(Date.now() / 1000),theChoice,'','',deviceData['type']);
         var commentTarg = currentlyViewing;
-        var fromText = '<i class="fa fa-desktop"></i><span class="sentFrom">Sent from desktop</span>';
-        //if (value['from'] == 1){var fromText = '<i class="fa fa-mobile"></i><span class="sentFrom">Sent from mobile</span>';} else {var fromText = '<i class="fa fa-desktop"></i><span class="sentFrom">Sent from desktop</span>';}
+        //var fromText = '<i class="fa fa-desktop"></i><span class="sentFrom">Sent from desktop</span>';
+        if (deviceData['type'] == 1){var fromText = '<i class="fa fa-mobile"></i><span class="sentFrom">Sent from mobile</span>';} else {var fromText = '<i class="fa fa-desktop"></i><span class="sentFrom">Sent from desktop</span>';}
         $('#messagesCont').append('<div class="messageCont"><img class="messageAvatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /><div class="sentOn">'+fromText+date+'</div><div class="messageName">'+usersFirstname+'</div><div class="messageContents">'+theChoice+'</div></div>');
         var objDiv = document.getElementById("messagesCont");objDiv.scrollTop = objDiv.scrollHeight;
         $('#choiceBlock_'+id).remove();
@@ -490,6 +490,7 @@ messages.packed = function(messageArray,choices,noNote,nextOne) {
            },timer);
         } else if (choices != undefined && choices != '') {
             console.log(timestampify()+'Yay a choice found');
+            console.log(choices);
             setTimeout(function() {
                 var newChoice = new choice(choices.choiceId,choices.choice1,choices.choice2,choices.choice3)
                 new choice(3,'Deal with the problem yourself','Ignore it, it will go away','Skin the cat. It\'s the only solution. Skin. The. Cat')
@@ -969,6 +970,7 @@ var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'htt
 if(isAndroid && app) {
     mobNotifications = 1;
     deviceData['type'] = 1;
+    app.initialize();
 } else if (isAndroid) {
     deviceData['type'] = 1;
 }

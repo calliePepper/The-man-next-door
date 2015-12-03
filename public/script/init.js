@@ -5,6 +5,10 @@
                global trending
                global message
                global user
+               global app
+               global socket
+               global mobNotifications
+               global timestampify
 
             */
             
@@ -60,9 +64,6 @@ function requestStatusReply() {
             reg:deviceData['reg'],
             mob: deviceData['type']
         });
-        if (firstRun == 1 && mobNotifications == 1) {
-            
-        }
         firstRun = 0;
     }, timerSet);
 }
@@ -271,4 +272,8 @@ function askForAnother(nextOne) {
 
 function emitReg() {
     socket.emit('deviceReg', {playerName:playerName,currentTime:new Date(),device:deviceData});   
+}
+
+if (mobNotifications == 1) {
+    document.addEventListener('resume',app.initialize, false);
 }

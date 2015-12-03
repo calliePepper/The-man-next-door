@@ -131,7 +131,7 @@ io.on('connection', function(socket) {
 					queueDay:1,
 					userDay:1,
 					noNote:0,
-					fromChoice:1,
+					fromChoice:1
 				};
 			}
 			sendQueue.push(object2);
@@ -358,7 +358,7 @@ queueFunc.check = function() {
 				io.to(sendQueue[0]['user']).emit('newMessage',{messageItem:sendQueue[0]['data'],choices:sendQueue[0]['choice'],noNote:sendQueue[0].noNote});
 				clientData[sendQueue[0]['user']]['lastMessage'][sendQueue[0]['id']] = 1;
 			}
-			if (sendQueue[0]['noNote'] == 0 || sendQueue[0]['fromChoice'] == undefined || sendQueue[0]['fromChoice'] == 0) {
+			if (sendQueue[0]['noNote'] == 0 && sendQueue[0]['fromChoice'] == undefined || sendQueue[0]['noNote'] == 0 && sendQueue[0]['fromChoice'] == 0) {
 				notifyUser('You have a new message on Twaddle',clientData[sendQueue[0]['user']]['reg']);
 			}
 		} else if (sendQueue[0]['type'] == 'comment') {

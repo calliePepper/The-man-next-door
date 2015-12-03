@@ -698,10 +698,10 @@ module.exports = {
         11: {choiceId:11,choice1:'Who\'s Ambrose and Cal?',choice2:'You mentioned them',choice3:'Your friends?',resultType:'message',result1:22,result2:22,result3:22,ttd:''},
         12: {choiceId:12,choice1:'So, what\'s the plan?',choice2:'What does Cal think?',choice3:'What does Ambrose think?',resultType:'message',result1:25,result2:23,result3:24,ttd:''},
         13: {choiceId:13,choice1:'So, what do we do?',choice2:'What are you going to do',choice3:'What next?',resultType:'message',result1:25,result2:25,result3:25,ttd:''},
-        14: {choideId:14,choice1:'What help do you need from me?',choice2:'I\'m sure it\'ll turn out okay',choice3:'I\'m in', resultType:'message',result1:27,result2:26,result3:27,ttd:''},
-        15: {choideId:15,choice1:'I\'d never laugh at you',choice2:'Sounds good!',choice3:'Is there anything more active I can do?', resultType:'message',result1:28,result2:29,result3:30,ttd:''},
-        16: {choideId:16,choice1:'I can do some research too',choice2:'What is it?',choice3:'Just message me when you need a hand', resultType:'message',result1:32,result2:31,result3:31,ttd:''},
-        17: {choideId:17,choice1:'What does it mean?',choice2:'I think I\'ve seen that before',choice3:'Whoa', resultType:'message',result1:34,result2:33,result3:34,ttd:''}
+        14: {choiceId:14,choice1:'What help do you need from me?',choice2:'I\'m sure it\'ll turn out okay',choice3:'I\'m in', resultType:'message',result1:27,result2:26,result3:27,ttd:''},
+        15: {choiceId:15,choice1:'I\'d never laugh at you',choice2:'Sounds good!',choice3:'Is there anything more active I can do?', resultType:'message',result1:28,result2:29,result3:30,ttd:''},
+        16: {choiceId:16,choice1:'I can do some research too',choice2:'What is it?',choice3:'Just message me when you need a hand', resultType:'message',result1:32,result2:31,result3:31,ttd:''},
+        17: {choiceId:17,choice1:'What does it mean?',choice2:'I think I\'ve seen that before',choice3:'Whoa', resultType:'message',result1:34,result2:33,result3:34,ttd:''}
     },
     directionObject: {
         1: {directionId:1,attribute:'storyEvent1',operator:'=',value:'1',trueTarget:'message',trueId:'3',falseTarget:'message',falseId:'4'},

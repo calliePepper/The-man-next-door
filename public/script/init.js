@@ -275,5 +275,16 @@ function emitReg() {
 }
 
 if (mobNotifications == 1) {
-    document.addEventListener('resume',app.initialize, false);
+    console.log('Binding resume event');
+    document.addEventListener('resume',onResume, false);
+    document.addEventListener('pause',onPause, false);
+    
+    function onResume() {
+        console.log('Resuming');
+        api.onDeviceUpdate();
+    }
+    
+    function onPause() {
+        console.log('Application paused');
+    }
 }

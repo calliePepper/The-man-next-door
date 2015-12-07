@@ -209,7 +209,7 @@ var watcher = setInterval(function() {
 
 var notifyUser = function(info,reg) {
 	if (reg != undefined && reg != 0) {
-		var message = new gcm.Message({
+		/*var message = new gcm.Message({
 		    priority: 'high',
 		    data: {
 		        key1: 'message1',
@@ -231,8 +231,27 @@ var notifyUser = function(info,reg) {
 		
 		// ... or retrying
 		sender.send(message, { registrationTokens: registrationTokens }, function (err, response) {
-		  if(err) console.error(err.results);
+		  console.log(err);
+		  console.log(response);
+		});*/
+		
+		var sender = new gcm.Sender('AIzaSyBsDedWcDBATdqS69h7zFvlMYH97rRwq8w');
+		var message = new gcm.Message({
+		  notification: {
+		        title: "Twaddle update",
+		        icon: "ic_launcher",
+		        body: info
+		    }
 		});
+		message.addData('key1','testdarinodegcm');
+		message.delay_while_idle = 1;
+		var registrationIds = [];
+		registrationIds.push(reg);
+		sender.send(message, registrationIds, 4, function (err, result) {
+			console.log(err);
+		  	console.log(result);
+		});
+		
 	}
 }
 
@@ -301,7 +320,7 @@ queueFunc.update = function(userId,day,timeThroughDay,updatedLast,lastFeed,lastM
 			if (notDone == 1) {
 				queueFunc.add(dayCheck,i,userId,timeThroughDay,day,noNote);
 				var dayDiff = day - dayCheck;
-				if (i > timeThroughDay && dayDiff == 0) {
+				if (i > timeThroughDay && dayDiff == 0 && data.events[dayCheck][i].object == 'feedObjects' || i > timeThroughDay && dayDiff == 0 && data.events[dayCheck][i].object == 'messageObjects') {
 					itemsQueued++;
 					break;
 				} else {

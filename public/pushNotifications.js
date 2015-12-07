@@ -86,6 +86,12 @@ var app = {
         pushNotification.register(app.successHandler, app.errorHandler,{"senderID":"840758201462","ecb":"app.onNotificationGCM"});
 
     },
+    onDeviceUpdate: function() {
+        app.receivedEvent('deviceready');
+        var pushNotification = window.plugins.pushNotification;
+        pushNotification.register(app.successHandler, app.errorHandler,{"senderID":"840758201462","ecb":"app.onNotificationGCM"});
+    },
+    
     // Update DOM on a Received Event
     receivedEvent: function(id) {
 

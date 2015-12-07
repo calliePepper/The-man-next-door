@@ -236,15 +236,15 @@ var notifyUser = function(info,reg) {
 		});*/
 		
 		var sender = new gcm.Sender('AIzaSyBsDedWcDBATdqS69h7zFvlMYH97rRwq8w');
-		var message = new gcm.Message({
+		/*var message = new gcm.Message({
 		  notification: {
 		        title: "Twaddle update",
 		        icon: "ic_launcher",
 		        body: info
 		    }
-		});
+		});*/
+		var message = new gcm.Message();
 		message.addData('key1','testdarinodegcm');
-		message.delay_while_idle = 1;
 		var registrationIds = [];
 		registrationIds.push(reg);
 		sender.send(message, registrationIds, 4, function (err, result) {
@@ -268,6 +268,7 @@ queueFunc.add = function(day,timeStampToHit,userId,timeThroughDay,userDay,noNote
 			var queueChoice = '';
 		}
 		console.log(timestampify()+'Update found, Type: '+type+', id: '+data.events[day][timeStampToHit]['id']);
+		var dayDifTemp = userDay - day;
 		var queueObject = {
 			timeStamp:moment().unix() + ((timeStampToHit - timeThroughDay) * 60),
 			timeToHit:timeStampToHit,
@@ -277,6 +278,7 @@ queueFunc.add = function(day,timeStampToHit,userId,timeThroughDay,userDay,noNote
 			data:data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']],
 			choice:queueChoice,
 			queueDay:day,
+			dayDifference: dayDifTemp,
 			userDay:userDay,
 			noNote:noNote
 		};
@@ -303,7 +305,7 @@ queueFunc.update = function(userId,day,timeThroughDay,updatedLast,lastFeed,lastM
 		for (var i in data.events[dayCheck]) {
 			var notDone = 1;
 			if (lastFeed != '' && data.events[dayCheck][i].object == 'feedObjects') {
-				if (lastFeed[data.events[dayCheck][i].id] == 1) {
+				if (lastFeed[data.events[dayCheck][i].id] == 1)  {
 					notDone = 0;
 				}
 			}
@@ -374,7 +376,7 @@ queueFunc.check = function() {
 			if (sendQueue[0]['user'] == undefined) {
 				console.log(timestampify()+'Shit. Error.');
 			} else {
-				io.to(sendQueue[0]['user']).emit('newMessage',{messageItem:sendQueue[0]['data'],choices:sendQueue[0]['choice'],noNote:sendQueue[0].noNote});
+				io.to(sendQueue[0]['user']).emit('newMessage',{messageItem:sendQueue[0]['data'],choices:sendQueue[0]['choice'],noNote:sendQueue[0].noNote,queueDay:sendQueue[0].dayDifference});
 				clientData[sendQueue[0]['user']]['lastMessage'][sendQueue[0]['id']] = 1;
 			}
 			if (sendQueue[0]['noNote'] == 0 && sendQueue[0]['fromChoice'] == undefined || sendQueue[0]['noNote'] == 0 && sendQueue[0]['fromChoice'] == 0) {
@@ -384,7 +386,7 @@ queueFunc.check = function() {
 			if (sendQueue[0]['user'] == undefined) {
 				console.log(timestampify()+'Shit. Error.');
 			} else {
-				io.to(sendQueue[0]['user']).emit('newComment',{comment:sendQueue[0]['data'],choices:sendQueue[0]['choice'],noNote:sendQueue[0].noNote});
+				io.to(sendQueue[0]['user']).emit('newComment',{comment:sendQueue[0]['data'],choices:sendQueue[0]['choice'],noNote:sendQueue[0].noNote,queueDay:sendQueue[0].dayDifference});
 				clientData[sendQueue[0]['user']]['lastComment'][sendQueue[0]['id']] = 1;
 			}
 		} else if (sendQueue[0]['type'] == 'feed') {
@@ -394,7 +396,7 @@ queueFunc.check = function() {
 				if (sendQueue[0]['data'].comments != 0) {
 					var commentSend = data.commentObjects[sendQueue[0]['data'].comments];
 				}
-				io.to(sendQueue[0]['user']).emit('newFeed',{feedItem:sendQueue[0]['data'],choices:sendQueue[0]['choice'],comments:commentSend,noNote:sendQueue[0].noNote});
+				io.to(sendQueue[0]['user']).emit('newFeed',{feedItem:sendQueue[0]['data'],choices:sendQueue[0]['choice'],comments:commentSend,noNote:sendQueue[0].noNote,queueDay:sendQueue[0].dayDifference});
 				clientData[sendQueue[0]['user']]['lastFeed'][sendQueue[0]['id']] = 1;
 			}
 			if (sendQueue[0]['noNote'] == 0) {

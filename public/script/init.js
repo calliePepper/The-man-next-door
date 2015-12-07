@@ -20,7 +20,7 @@ var rebootIfError = setTimeout(function() {
 },20000);
 
 
-socket.on('requestStatus', function() {
+socket.on('requestStatus', function(data) {
     clearTimeout(rebootIfError);
     if (mobNotifications == 1) {
         app.initialize();
@@ -112,7 +112,6 @@ socket.on('newMessage', function(receivedMessages) {
 });
 
 function processMessage(receivedMessages,nonote) {
-    gameUpdate.updateMessages(receivedMessages.messageItem.messageId);
     console.log(timestampify()+'New message with a nonote value of '+nonote);
     console.log(receivedMessages);
     var messageGroup = [];
@@ -171,7 +170,7 @@ function processFeed(receivedFeed,nonote) {
         var dac = 0
         if (receivedFeed.comments && receivedFeed.comments.comments != '') {
             $.each(receivedFeed.comments.comments, function(index, value) {
-                var currentComment = new comment(value['order'],value['user'],createTimestamp(value['date']),value['text'],value['image'],value['video'],value['likes']);
+                var currentComment = new comment(value['order'],value['user'],createTimestamp(value['date'],receivedFeed.queueDay),value['text'],value['image'],value['video'],value['likes']);
                 commentBuilder.push(currentComment);
                 dac += 4;
             });
@@ -181,7 +180,7 @@ function processFeed(receivedFeed,nonote) {
             var currentComment = new comment(0,0,'CHOICE',newChoice,'','',0);
             commentBuilder.push(currentComment);
         }
-        var currentFeed = new post(receivedFeed.feedItem.postId,receivedFeed.feedItem.fromId,createTimestamp(receivedFeed.feedItem['date']),receivedFeed.feedItem.text,receivedFeed.feedItem.image,receivedFeed.feedItem.video,receivedFeed.feedItem.likes,commentBuilder,0,receivedFeed.feedItem.caption);
+        var currentFeed = new post(receivedFeed.feedItem.postId,receivedFeed.feedItem.fromId,createTimestamp(receivedFeed.feedItem['date'],receivedFeed.queueDay),receivedFeed.feedItem.text,receivedFeed.feedItem.image,receivedFeed.feedItem.video,receivedFeed.feedItem.likes,commentBuilder,0,receivedFeed.feedItem.caption);
         gameUpdate.updateLocal(currentFeed,'posts');
         if ($(document).find("title").text() == 'Twaddle - A social media for the everyman') {
             if (nonote == 1) {
@@ -220,7 +219,7 @@ function processComment(receivedComment,nonote) {
     console.log(receivedComment);
     gameUpdate.updateComment(receivedComment.comment.commentId);
     if (nonote == 1) {
-        var now = createTimestamp(receivedComment.comment.comments[0].date)
+        var now = createTimestamp(receivedComment.comment.comments[0].date,receivedComment.queueDay)
     } else {
         var now = Math.floor(Date.now() / 1000);
     }
@@ -281,6 +280,7 @@ if (mobNotifications == 1) {
     
     function onResume() {
         console.log('Resuming');
+        updateTheDateTime();
         app.onDeviceUpdate();
     }
     

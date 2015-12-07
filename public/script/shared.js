@@ -51,7 +51,7 @@ gameUpdate.updateFeed = function(feedId) {
 
 gameUpdate.updateMessages = function(messageId) {
     var tempData = localStorage.getObject('gameSettings');
-    tempData.lastMessage[messageId.toString()] = 1;
+    tempData.lastMessage = messageId;
     localStorage.setObject('gameSettings',tempData);
 }
 
@@ -186,6 +186,7 @@ choiceControls.choose = function(id,choice,targetType) {
         var imageLink = '';
         var choiceMade = choice.replace('choice','');
         var newMessage = new message(0,currentlyViewing,Math.floor(Date.now() / 1000),theChoice,'','',deviceData['type']);
+        //gameUpdate.updateMessages(receivedMessages.messageItem.messageId);
         var commentTarg = currentlyViewing;
         //var fromText = '<i class="fa fa-desktop"></i><span class="sentFrom">Sent from desktop</span>';
         if (deviceData['type'] == 1){var fromText = '<i class="fa fa-mobile"></i><span class="sentFrom">Sent from mobile</span>';} else {var fromText = '<i class="fa fa-desktop"></i><span class="sentFrom">Sent from desktop</span>';}
@@ -411,6 +412,7 @@ messages.new.currentMsg = function(messageFrom,messageTo,cameIn,text,ttw,fullMes
         }
         fullMessage.date = Math.floor(Date.now() / 1000);
         gameUpdate.updateLocal(fullMessage,'messages');
+        gameUpdate.updateMessages(fullMessage.messageId);
     },ttw);
 }
 
@@ -430,6 +432,7 @@ messages.new.notCurrentMsg = function(messageFrom,messageTo,cameIn,text,ttw,full
         }
         fullMessage.date = Math.floor(Date.now() / 1000);
         gameUpdate.updateLocal(fullMessage,'messages');
+        gameUpdate.updateMessages(fullMessage.messageId);
     },ttw);
 }
 
@@ -442,12 +445,14 @@ messages.new.differentPage = function(messageFrom,messageTo,cameIn,text,ttw,full
     $('#messagesLink').find('.totalNew').html(localStorage.getObject('gameSettings').unread.messages);
     fullMessage.date = Math.floor(Date.now() / 1000);
     gameUpdate.updateLocal(fullMessage,'messages');
+    gameUpdate.updateMessages(fullMessage.messageId);
 }
 
 messages.new.noNotification = function(messageFrom,messageTo,cameIn,text,ttw,fullMessage) {
     console.log(timestampify()+'New message with no notification from '+localStorage.getObject('gameData').users[messageFrom].firstname+' at '+cameIn);
     fullMessage.date = createTimestamp(fullMessage['date']);
     gameUpdate.updateLocal(fullMessage,'messages');
+    gameUpdate.updateMessages(fullMessage.messageId);
 
     gameUpdate.updateNotifications('messages');
     $('#messagesLink').find('.totalNew').html(localStorage.getObject('gameSettings').unread.messages);
@@ -970,7 +975,6 @@ var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'htt
 if(isAndroid && app) {
     mobNotifications = 1;
     deviceData['type'] = 1;
-    app.initialize();
 } else if (isAndroid) {
     deviceData['type'] = 1;
 }
@@ -1040,21 +1044,24 @@ function visibleChangeHandler() {
     }
 }
 
-function createTimestamp(timeFrom) {
+function createTimestamp(timeFrom, dayDif) {
     var d = new Date();
     d.setHours(0,0,0,0);
-    var newDateObj = new Date(d.getTime() + (timeFrom*60000));
+    if (dayDif != undefined && dayDif != 0) {
+        var newDateObj = new Date(d.getTime() + (timeFrom*60000) - (dayDif * 86400000));
+    } else {
+        var newDateObj = new Date(d.getTime() + (timeFrom*60000));   
+    }
     return newDateObj.getTime() / 1000;
 }
 
-var emergencyStop = setInterval(
-    function updateTheDateTime() {
-        $('.dateUpdate').each(function() {
-            $(this).html(time.wordify($(this).attr('data-date')));
-        });
-    },
-    60000
-);
+var emergencyStop = setInterval(updateTheDateTime(),60000);
+
+function updateTheDateTime() {
+    $('.dateUpdate').each(function() {
+        $(this).html(time.wordify($(this).attr('data-date')));
+    });
+}
 
 $('.resetLoading').on('click touch', function() {
     window.localStorage.clear();

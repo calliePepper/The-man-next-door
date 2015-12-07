@@ -281,7 +281,7 @@ if (mobNotifications == 1) {
     
     function onResume() {
         console.log('Resuming');
-        api.onDeviceUpdate();
+        app.onDeviceUpdate();
     }
     
     function onPause() {

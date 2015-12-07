@@ -375,7 +375,7 @@ messages.new = [];
 messages.new.currentMsg = function(messageFrom,messageTo,cameIn,text,ttw,fullMessage) {
     $('#messagesCont').append('<div id="typing" class="typing">'+localStorage.getObject('gameData').users[messageFrom].firstname+' is typing...</div>');
     var objDiv = document.getElementById("messagesCont");objDiv.scrollTop = objDiv.scrollHeight;
-    var notificationNoise = new Audio("../sounds/tapNote.mp3");
+    var notificationNoise = new Audio("sounds/tapNote.mp3");
     console.log(timestampify()+'New message from '+localStorage.getObject('gameData').users[messageFrom].firstname+' at '+cameIn);
     setTimeout(function() {
         var thisUser = '';

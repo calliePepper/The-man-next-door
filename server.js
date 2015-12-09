@@ -149,6 +149,7 @@ io.on('connection', function(socket) {
 		}
 		io.to(userId).emit('newMessage',{messageItem:messageItem,choices:choiceResult});
 	});
+	
 	socket.on('deviceReg', function(regData) {
 		if (regData.device.type != undefined) {
 			console.log(timestampify()+regData.playerName+' just handed in their device reg');	
@@ -156,6 +157,11 @@ io.on('connection', function(socket) {
 				clients[userId] = [];
 			}
 		}
+	});
+	
+	socket.on('messageWait', function(data) {
+		console.log(timestampify()+' -= Message Wait warning =-');
+		console.log(data);	
 	});
 });
 

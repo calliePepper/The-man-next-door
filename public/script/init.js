@@ -28,12 +28,28 @@ socket.on('requestStatus', function(data) {
     } else {
         requestStatusReply();
     }
+    var waitCount = 0;
+    for (var prop in localStorage.getObject('gameSettings').messageWait) {
+        if (localStorage.getObject('gameSettings').messageWait.hasOwnProperty(prop)) {
+            waitCount++;
+        }
+    }
+    if (firstRun == 1 && waitCount > 0) {
+        console.log(timestampify()+'Uh oh, there is a messageWait');
+        console.log(localStorage.getObject('gameSettings').messageWait);
+        socket.emit('messageWait', {messageWait:localStorage.getObject('gameSettings').messageWait});
+    }
 });
 
 var retrieveTimer;
 
 function requestStatusReply() {
     clearTimeout(retrieveTimer);
+    clearTimeout(emergencyStop);
+    emergencyStop = setInterval(
+    function() {
+        updateTheDateTime()
+    },60000);
     var timerSet = 4000;
     if (firstRun == 1) {
         timerSet = 200;

@@ -17,6 +17,7 @@ var socket = io('https://the-man-next-door-soldevifae.c9.io');
 var updating = 0;
 var deviceData = {};
 deviceData['type'] = 0;
+var emergencyStop;
 
 Storage.prototype.setObject = function(key, value) {
     this.setItem(key, JSON.stringify(value));
@@ -1083,10 +1084,13 @@ function createTimestamp(timeFrom, dayDif) {
     }
     return newDateObj.getTime() / 1000;
 }
-
-var emergencyStop = setInterval(updateTheDateTime(),60000);
+emergencyStop = setInterval(
+    function() {
+        updateTheDateTime()
+    },60000);
 
 function updateTheDateTime() {
+    console.log(timestampify() + 'Triggering the date update');
     $('.dateUpdate').each(function() {
         $(this).html(time.wordify($(this).attr('data-date')));
     });
@@ -1099,7 +1103,7 @@ $('.resetLoading').on('click touch', function() {
 
 function timestampify() {
 	var currentdate = new Date(); 
-	currentdate = new Date(currentdate.getTime() + 10*60*60000)
+	currentdate = new Date(currentdate.getTime())
 	var datetime = "[" + currentdate.getDate() + "/"
                 + (currentdate.getMonth()+1)  + "/" 
                 + currentdate.getFullYear() + " @ "  

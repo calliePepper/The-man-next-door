@@ -543,7 +543,7 @@ module.exports = {
         },
         20509: {
             comments:[
-                {order:1,user:1,date:687,text:'No, it’s okay',image:'',video:'',like:''},
+                {order:1,user:3,date:687,text:'No, it’s okay',image:'',video:'',like:''},
             ],
             commentId:20509,
             autoTarget:'',
@@ -552,7 +552,7 @@ module.exports = {
         },
         20510: {
             comments:[
-                {order:1,user:1,date:688,text:'Thanks though',image:'',video:'',like:''},
+                {order:1,user:3,date:688,text:'Thanks though',image:'',video:'',like:''},
             ],
             commentId:20510,
             autoTarget:'',

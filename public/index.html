@@ -23,11 +23,23 @@
             </ol>
             <p>If you have understood all of this, please feel free to enter your name below, upload a thumbnail (optional) and then click the start button</p>
             <div class="halfer">
-                <label for="name">Your name:</label><br><input type="text" id="name" name="name" />
+                <label for="name"><strong>Your name:</strong></label><br><input type="text" id="name" name="name" />
             </div>
             <div class="halfer">
-                <label for="file">Your thumbnail:</label><br><span id="putThumbHere"></span><input type="file" name="file" id="file" />
+                <label for="file"><strong>Your thumbnail:</strong></label><br><span id="putThumbHere"></span><input type="file" name="file" id="file" />
             </div>  
+            <div>
+                <label><strong>Debug options</strong></label><br>
+                    <div class="inputIndex">
+                        Start from day <br>
+                        <input type="radio" name="dayStart" checked='checked' value=0> Day 0
+                        <input type="radio" name="dayStart" value=1> Day 1
+                        <input type="radio" name="dayStart" value=2> Day 2
+                        <input type="radio" name="dayStart" value=3> Day 3
+                        <input type="radio" name="dayStart" value=4> Day 4
+                        <input type="radio" name="dayStart" value=5> Day 5
+                    </div>
+            </div>
             <div class="startBlock">
                 <div id="startBtn" class="btn startBtn">Click here to start</div>   
             </div>
@@ -94,13 +106,17 @@
 
             $('#startBtn').on('click touch', function() {
                 if ($('#name').val() != '') {
+                    var day = $('input[name=dayStart]:checked').val();
+                    var startDate = new Date((new Date()).valueOf() - day*1000*3600*24);
                     if (typeof(Storage) !== 'undefined') {
                         var gameData = {
                             name:$('#name').val(),
-                            startTime:new Date(),
-                            lastUpdate:new Date(),
+                            startTime:startDate,
+                            lastUpdate:startDate,
                             timezone:new Date().getTimezoneOffset(),
-                            lastMessage: '',
+                            messageWait: {},
+                            returnWait: {},
+                            lastMessage: {},
                             lastFeed: {},
                             lastComment: {},
                             firstLoad: 1,

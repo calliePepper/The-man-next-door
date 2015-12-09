@@ -98,7 +98,7 @@ io.on('connection', function(socket) {
 		console.log (clientData[userId]['reg'] + ' - ' + clientData[userId]['device'])
 		queueFunc.update(userId,currentDay,timeThroughDay,updatedLast,clientData[userId]['lastFeed'],clientData[userId]['lastMessage'],clientData[userId]['lastComment'],page.firstRun)
 		if (page.firstLoad == 1) {
-			io.to(userId).emit('newMessage',{messageItem:data.messageObjects[0],choices:data.choiceObjects[0]});
+			io.to(userId).emit('newMessage',{messageItem:data.messageObjects[0],choices:data.choiceObjects[0],noNote:1});
 		}
 	});
 	
@@ -136,6 +136,7 @@ io.on('connection', function(socket) {
 			}
 			sendQueue.push(object2);
 			organiseQueue();
+			io.to(userId).emit('receivedChoice',{choiceId:replyData.choiceId});
 		}
 	});
 	

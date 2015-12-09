@@ -51,7 +51,19 @@ gameUpdate.updateFeed = function(feedId) {
 
 gameUpdate.updateMessages = function(messageId) {
     var tempData = localStorage.getObject('gameSettings');
-    tempData.lastMessage = messageId;
+    tempData.lastMessage[messageId] = 1;
+    localStorage.setObject('gameSettings',tempData);
+}
+
+gameUpdate.messageWait = function(messageId) {
+    var tempData = localStorage.getObject('gameSettings');
+    tempData.messageWait[messageId] = 1;
+    localStorage.setObject('gameSettings',tempData);
+}
+
+gameUpdate.removeMessages = function(messageId) {
+    var tempData = localStorage.getObject('gameSettings');
+    tempData.messageWait[messageId] = undefined;
     localStorage.setObject('gameSettings',tempData);
 }
 
@@ -69,6 +81,18 @@ gameUpdate.updateNotifications = function(type,clear) {
     }
     var tempData = localStorage.getObject('gameSettings');
     tempData.unread[type] = newNumber;
+    localStorage.setObject('gameSettings',tempData);
+}
+
+gameUpdate.updateReturn = function(id,choice,additional) {
+    var tempData = localStorage.getObject('gameSettings');
+    tempData.returnWait[id] = [choice,additional];
+    localStorage.setObject('gameSettings',tempData);
+}
+
+gameUpdate.removeReturn = function(id) {
+    var tempData = localStorage.getObject('gameSettings');
+    tempData.returnWait[id] = undefined;
     localStorage.setObject('gameSettings',tempData);
 }
 
@@ -175,6 +199,7 @@ choiceControls.choose = function(id,choice,targetType) {
         gameUpdate.updateLocal(newComment,'comment',commentTarg);
         //console.log(timestampify()+'Submitting choice data. '+choiceMade+ '. '+commentTarg);
         gameUpdate.updateLocal(choiceMade,'choice','comment_'+commentTarg,id);
+        
     } else if (targetType == 'message') {
         var tempStorage = localStorage.getObject('gameData');
         tempStorage.messages.pop();
@@ -196,6 +221,7 @@ choiceControls.choose = function(id,choice,targetType) {
         gameUpdate.updateLocal(newMessage,'messages');
         gameUpdate.updateLocal(choiceMade,'choice','message_'+commentTarg,id);
     }
+    gameUpdate.updateReturn(id,choice.replace('choice',''),additionalTarget);
     emitChoice(id,choice.replace('choice',''),additionalTarget);
 }
 
@@ -378,24 +404,26 @@ messages.new.currentMsg = function(messageFrom,messageTo,cameIn,text,ttw,fullMes
     var objDiv = document.getElementById("messagesCont");objDiv.scrollTop = objDiv.scrollHeight;
     var notificationNoise = new Audio("sounds/tapNote.mp3");
     console.log(timestampify()+'New message from '+localStorage.getObject('gameData').users[messageFrom].firstname+' at '+cameIn);
+    var usersAvatar = localStorage.getObject('gameData')['users'][fullMessage['fromId']]['avatar'];
+    var usersFirstname = localStorage.getObject('gameData')['users'][fullMessage['fromId']]['firstname'];
+    var usersLastname = localStorage.getObject('gameData')['users'][fullMessage['fromId']]['lastname'];
+    var thisUser = '';
+    thisUser = usersFirstname + ' ' + usersLastname;
+    var date = time.date(Math.floor(Date.now() / 1000));
+    var videoLink = '';
+    if (fullMessage['video'] != '' && fullMessage['video'] != undefined) {
+        videoLink = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+fullMessage['video']+'" frameborder="0" allowfullscreen></iframe>';
+    }
+    var imageLink = '';
+    if (fullMessage['image'] != '') {
+        imageLink = '<img src="img/'+fullMessage['image']+'" alt="user image" class="feedImage" />';
+    }
+            if (fullMessage['from'] == 1){var fromText = '<i class="fa fa-mobile"></i><span class="sentFrom">Sent from mobile</span>';} else {var fromText = '<i class="fa fa-desktop"></i><span class="sentFrom">Sent from desktop</span>';}
+    fullMessage.date = Math.floor(Date.now() / 1000);
+    gameUpdate.updateLocal(fullMessage,'messages');
     setTimeout(function() {
-        var thisUser = '';
         $('#typing').remove();
         if (currentlyViewing == messageFrom) {
-            var usersAvatar = localStorage.getObject('gameData')['users'][fullMessage['fromId']]['avatar'];
-            var usersFirstname = localStorage.getObject('gameData')['users'][fullMessage['fromId']]['firstname'];
-            var usersLastname = localStorage.getObject('gameData')['users'][fullMessage['fromId']]['lastname'];
-            thisUser = usersFirstname + ' ' + usersLastname;
-            var date = time.date(Math.floor(Date.now() / 1000));
-            var videoLink = '';
-            if (fullMessage['video'] != '' && fullMessage['video'] != undefined) {
-                videoLink = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+fullMessage['video']+'" frameborder="0" allowfullscreen></iframe>';
-            }
-            var imageLink = '';
-            if (fullMessage['image'] != '') {
-                imageLink = '<img src="img/'+fullMessage['image']+'" alt="user image" class="feedImage" />';
-            }
-            if (fullMessage['from'] == 1){var fromText = '<i class="fa fa-mobile"></i><span class="sentFrom">Sent from mobile</span>';} else {var fromText = '<i class="fa fa-desktop"></i><span class="sentFrom">Sent from desktop</span>';}
             $('#messagesCont').append('<div class="messageCont"><img class="messageAvatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /><div class="sentOn">'+fromText+date+'</div><div class="messageName">'+usersFirstname+' '+usersLastname+'</div><div class="messageContents">'+fullMessage['text']+'</div>'+videoLink+imageLink+'</div>');
             var objDiv = document.getElementById("messagesCont");objDiv.scrollTop = objDiv.scrollHeight; 
         } else {
@@ -410,15 +438,14 @@ messages.new.currentMsg = function(messageFrom,messageTo,cameIn,text,ttw,fullMes
         if (!visibleChangeHandler()) {
             spawnNotification('You have a new message from '+localStorage.getObject('gameData').users[messageFrom].firstname,localStorage.getObject('gameData').users[messageFrom].avatar,'New Message');
         }
-        fullMessage.date = Math.floor(Date.now() / 1000);
-        gameUpdate.updateLocal(fullMessage,'messages');
-        gameUpdate.updateMessages(fullMessage.messageId);
     },ttw);
 }
 
 messages.new.notCurrentMsg = function(messageFrom,messageTo,cameIn,text,ttw,fullMessage) {
     var notificationNoise = new Audio("../sounds/tapNote.mp3");
     console.log(timestampify()+'New message from '+localStorage.getObject('gameData').users[messageFrom].firstname+' at '+cameIn);
+    fullMessage.date = Math.floor(Date.now() / 1000);
+    gameUpdate.updateLocal(fullMessage,'messages');
     setTimeout(function() {
         if(text.length > 15) text = text.substring(0,15) + '...';
         var date = time.minidate(cameIn);
@@ -430,9 +457,6 @@ messages.new.notCurrentMsg = function(messageFrom,messageTo,cameIn,text,ttw,full
         if (!visibleChangeHandler()) {
             spawnNotification('You have a new message from '+localStorage.getObject('gameData').users[messageFrom].firstname,localStorage.getObject('gameData').users[messageFrom].avatar,'New Message');
         }
-        fullMessage.date = Math.floor(Date.now() / 1000);
-        gameUpdate.updateLocal(fullMessage,'messages');
-        gameUpdate.updateMessages(fullMessage.messageId);
     },ttw);
 }
 
@@ -445,15 +469,12 @@ messages.new.differentPage = function(messageFrom,messageTo,cameIn,text,ttw,full
     $('#messagesLink').find('.totalNew').html(localStorage.getObject('gameSettings').unread.messages);
     fullMessage.date = Math.floor(Date.now() / 1000);
     gameUpdate.updateLocal(fullMessage,'messages');
-    gameUpdate.updateMessages(fullMessage.messageId);
 }
 
 messages.new.noNotification = function(messageFrom,messageTo,cameIn,text,ttw,fullMessage) {
     console.log(timestampify()+'New message with no notification from '+localStorage.getObject('gameData').users[messageFrom].firstname+' at '+cameIn);
     fullMessage.date = createTimestamp(fullMessage['date']);
     gameUpdate.updateLocal(fullMessage,'messages');
-    gameUpdate.updateMessages(fullMessage.messageId);
-
     gameUpdate.updateNotifications('messages');
     $('#messagesLink').find('.totalNew').html(localStorage.getObject('gameSettings').unread.messages);
 }
@@ -463,11 +484,17 @@ messages.packed = function(messageArray,choices,noNote,nextOne) {
     var userForMsg = 0;
     console.log(timestampify()+'Message pack');
     console.log(messageArray);
+    var lastMessage = 0;
     function loopMessages() {
         var typingTime = messageArray[counter].text.length * localStorage.getObject('gameData')['users'][messageArray[counter].fromId]['typingSpeed'];
         var waitTime = localStorage.getObject('gameData')['users'][messageArray[counter].fromId]['waitTime'];
         console.log(timestampify()+'Looping through message of length '+messageArray[counter].text.length+' next message should send in '+typingTime+' with a noNote value of '+noNote);
         userForMsg = messageArray[counter].toId;
+        var thisMessage = messageArray[counter].msgId;
+        gameUpdate.messageWait(thisMessage);
+        if (lastMessage != 0) {
+            gameUpdate.removeMessages(lastMessage);
+        }
         if (noNote != undefined && noNote == 1) {
             //console.log(timestampify()+'Time for no notification!');
             messages.new.noNotification(messageArray[counter].fromId,messageArray[counter].toId,messageArray[counter].date,messageArray[counter].text,typingTime,messageArray[counter]);    
@@ -489,6 +516,7 @@ messages.packed = function(messageArray,choices,noNote,nextOne) {
         } else {
             var timer = typingTime + waitTime;
         }
+        lastMessage = thisMessage;
         if (messageArray[counter] != undefined) {
            setTimeout(function() {
                 loopMessages();
@@ -496,20 +524,21 @@ messages.packed = function(messageArray,choices,noNote,nextOne) {
         } else if (choices != undefined && choices != '') {
             console.log(timestampify()+'Yay a choice found');
             console.log(choices);
+            gameUpdate.removeMessages(lastMessage);
+            var newChoice = new choice(choices.choiceId,choices.choice1,choices.choice2,choices.choice3)
+            new choice(3,'Deal with the problem yourself','Ignore it, it will go away','Skin the cat. It\'s the only solution. Skin. The. Cat')
+            var newMessage = new message(0,userForMsg,'CHOICE',newChoice,'','',1);
+            gameUpdate.updateLocal(newMessage,'messages');
             setTimeout(function() {
-                var newChoice = new choice(choices.choiceId,choices.choice1,choices.choice2,choices.choice3)
-                new choice(3,'Deal with the problem yourself','Ignore it, it will go away','Skin the cat. It\'s the only solution. Skin. The. Cat')
                 if (currentlyViewing == userForMsg) {
                     choiceControls.create(choices.choiceId,'messagesCont','message','',choices.choice1,choices.choice2,choices.choice3);
-                    var newMessage = new message(0,userForMsg,'CHOICE',newChoice,'','',1);
-                    gameUpdate.updateLocal(newMessage,'messages');
-                } else {
-                    var newMessage = new message(0,userForMsg,'CHOICE',newChoice,'','',1);
-                    gameUpdate.updateLocal(newMessage,'messages');
-                }
+                }  
             },timer);
         } else if (nextOne != 0) {
+            gameUpdate.removeMessages(lastMessage);
             setTimeout(function() {askForAnother(nextOne);},timer);
+        } else {
+            gameUpdate.removeMessages(lastMessage);
         }
     }
     loopMessages()

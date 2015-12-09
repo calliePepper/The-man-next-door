@@ -9,6 +9,7 @@
                global socket
                global mobNotifications
                global timestampify
+               global gameUpdate
 
             */
             
@@ -68,6 +69,10 @@ function requestStatusReply() {
     }, timerSet);
 }
 
+socket.on('receivedChoice', function(data) {
+    gameUpdate.removeReturn(data.choiceId);
+});
+
 socket.on('updateData', function(updateData) {
     console.log(timestampify()+'Backlog received');
     console.log(updateData);
@@ -104,6 +109,7 @@ function hideLoad() {
 
 socket.on('newMessage', function(receivedMessages) {
     console.log(timestampify()+'PING - New message');
+    console.log(receivedMessages);
     processMessage(receivedMessages,receivedMessages.noNote);
     gameUpdate.updateTime(80);
     setTimeout(function(){
@@ -139,6 +145,7 @@ function processMessage(receivedMessages,nonote) {
         }
         messages.packed(messageGroup,receivedMessages.choices,nonote,nextMsg);
         //messages.new(message.userId,message.timestamp,message.message,typingTime);
+        gameUpdate.updateMessages(receivedMessages.messageItem.messageId);
     }
     if (updating == 1) {
         while (updating == 1) {
@@ -221,7 +228,11 @@ function processComment(receivedComment,nonote) {
     if (nonote == 1) {
         var now = createTimestamp(receivedComment.comment.comments[0].date,receivedComment.queueDay)
     } else {
+        var later = createTimestamp(receivedComment.comment.comments[0].date,receivedComment.queueDay)
         var now = Math.floor(Date.now() / 1000);
+        if ((now - later) > 960) {
+            now = later;
+        }
     }
     var tempComments = [];
     $.each(receivedComment.comment.comments, function(index, value) {

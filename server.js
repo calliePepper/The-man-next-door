@@ -64,7 +64,7 @@ io.on('connection', function(socket) {
 		        disconCounter++;
 		    }
 		}
-		console.log(timestampify()+clientData[userId]['name']+' just disconnected, '+disconCounter+' events removed, '+sendQueue.length+' remaing');
+		console.log(timestampify()+userId+' just disconnected, '+disconCounter+' events removed, '+sendQueue.length+' remaing');
 	});
 	
 	socket.on('pageLoad', function(page) {
@@ -246,7 +246,7 @@ var notifyUser = function(type,reg,user,pic) {
 		registrationIds.push(reg);
 		sender.send(message, registrationIds, 4, function (err, result) {
 			console.log(err);
-		  	console.log(result);
+		  	//console.log(result);
 		});
 	}
 }

@@ -134,6 +134,9 @@ socket.on('newMessage', function(receivedMessages) {
 });
 
 function processMessage(receivedMessages,nonote) {
+    if (receivedMessages.fromChoice != 'NA') {
+        gameUpdate.removeReturn(receivedMessages.fromChoice);
+    }
     console.log(timestampify()+'New message with a nonote value of '+nonote);
     console.log(receivedMessages);
     var messageGroup = [];
@@ -184,6 +187,9 @@ socket.on('newFeed', function(receivedFeed) {
 });
 
 function processFeed(receivedFeed,nonote) {
+    if (receivedFeed.fromChoice != 'NA') {
+        gameUpdate.removeReturn(receivedFeed.fromChoice);
+    }
     gameUpdate.updateFeed(receivedFeed.feedItem.postId);
     console.log(timestampify()+'new feed item retrieved');
     console.log(receivedFeed);
@@ -308,7 +314,6 @@ if (mobNotifications == 1) {
     function onResume() {
         console.log('Resuming');
         updateTheDateTime();
-        app.onDeviceUpdate();
     }
     
     function onPause() {

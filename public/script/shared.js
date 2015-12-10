@@ -223,7 +223,6 @@ choiceControls.choose = function(id,choice,targetType) {
         gameUpdate.updateLocal(choiceMade,'choice','message_'+commentTarg,id);
     }
     gameUpdate.updateReturn(id,choice.replace('choice',''),additionalTarget);
-    emitChoice(id,choice.replace('choice',''),additionalTarget);
 }
 
 /*
@@ -1093,6 +1092,17 @@ function updateTheDateTime() {
     console.log(timestampify() + 'Triggering the date update');
     $('.dateUpdate').each(function() {
         $(this).html(time.wordify($(this).attr('data-date')));
+    });
+}
+
+sendQueue = setInterval(
+    function() {
+        updateQueue();
+    },3000);
+
+function updateQueue() {
+    $.each(localStorage.getObject('gameSettings').returnWait, function(index,value) {
+        emitChoice(index,value[0],value[1]); 
     });
 }
 

@@ -131,7 +131,7 @@ io.on('connection', function(socket) {
 					queueDay:1,
 					userDay:1,
 					noNote:0,
-					fromChoice:1
+					fromChoice:replyData.choiceId
 				};
 			}
 			sendQueue.push(object2);
@@ -199,12 +199,17 @@ function organiseQueue() {
 	function compare(a,b) {
 		var aDiff = a.userDay - a.queueDay;
 		var bDiff = b.userDay - b.queueDay;
+		if (a.queueDay < b.queueDay)
+			return -1
+		if (b.queueDay < a.queueDay)
+			return 1
       	if (a.timeStamp < b.timeStamp || aDiff > bDiff) 
         	return -1;
       	if (a.timeStamp > b.timeStamp || bDiff > aDiff)
         	return 1;
       	return 0;
-    }
+	}
+    
     sendQueue.sort(compare);
 }
 
@@ -214,51 +219,29 @@ var watcher = setInterval(function() {
 	}	
 },500);
 
-var notifyUser = function(info,reg) {
+var notifyUser = function(type,reg,user,pic) {
 	if (reg != undefined && reg != 0) {
-		/*var message = new gcm.Message({
-		    priority: 'high',
-		    data: {
-		        key1: 'message1',
-		        key2: 'message2'
-		    },
-		    notification: {
-		        title: "Twaddle update",
-		        icon: "ic_launcher",
-		        body: info
-		    }
-		});
-		
 		var sender = new gcm.Sender('AIzaSyBsDedWcDBATdqS69h7zFvlMYH97rRwq8w');
-		
-		// Add the registration tokens of the devices you want to send to
-		var registrationTokens = [reg];
-		
-		console.log('Sending notification to '+reg);
-		
-		// ... or retrying
-		sender.send(message, { registrationTokens: registrationTokens }, function (err, response) {
-		  console.log(err);
-		  console.log(response);
-		});*/
-		
-		var sender = new gcm.Sender('AIzaSyBsDedWcDBATdqS69h7zFvlMYH97rRwq8w');
-		/*var message = new gcm.Message({
+		if (type == 'message') {
+			body = user + ' has sent you a message';
+		} else if (type == 'post') {
+			body = user + ' has posted a new feed item';
+		}
+		var message = new gcm.Message({
 		  notification: {
 		        title: "Twaddle update",
-		        icon: "ic_launcher",
-		        body: info
+		        body: body,
+		        style: "inbox",
+		        image: "www/"+pic,
+		        summaryText: "There are %n% notifications"
 		    }
-		});*/
-		var message = new gcm.Message();
-		message.addData('key1','testdarinodegcm');
+		});
 		var registrationIds = [];
 		registrationIds.push(reg);
 		sender.send(message, registrationIds, 4, function (err, result) {
 			console.log(err);
 		  	console.log(result);
 		});
-		
 	}
 }
 
@@ -329,7 +312,7 @@ queueFunc.update = function(userId,day,timeThroughDay,updatedLast,lastFeed,lastM
 			if (notDone == 1) {
 				queueFunc.add(dayCheck,i,userId,timeThroughDay,day,noNote);
 				var dayDiff = day - dayCheck;
-				if (i > timeThroughDay && dayDiff == 0 && data.events[dayCheck][i].object == 'feedObjects' || i > timeThroughDay && dayDiff == 0 && data.events[dayCheck][i].object == 'messageObjects') {
+				if (i > timeThroughDay && dayDiff <= 0 && data.events[dayCheck][i].object == 'feedObjects' || i > timeThroughDay && dayDiff <= 0 && data.events[dayCheck][i].object == 'messageObjects') {
 					itemsQueued++;
 					break;
 				} else {
@@ -383,17 +366,27 @@ queueFunc.check = function() {
 			if (sendQueue[0]['user'] == undefined) {
 				console.log(timestampify()+'Shit. Error.');
 			} else {
-				io.to(sendQueue[0]['user']).emit('newMessage',{messageItem:sendQueue[0]['data'],choices:sendQueue[0]['choice'],noNote:sendQueue[0].noNote,queueDay:sendQueue[0].dayDifference});
+				if (sendQueue[0]['fromChoice'] == undefined) {
+					var choiceID = 'NA';
+				} else {
+					var choiceId = sendQueue[0]['fromChoice'];
+				}
+				io.to(sendQueue[0]['user']).emit('newMessage',{messageItem:sendQueue[0]['data'],choices:sendQueue[0]['choice'],noNote:sendQueue[0].noNote,queueDay:sendQueue[0].dayDifference,fromChoice:choiceId});
 				clientData[sendQueue[0]['user']]['lastMessage'][sendQueue[0]['id']] = 1;
 			}
-			if (sendQueue[0]['noNote'] == 0 && sendQueue[0]['fromChoice'] == undefined || sendQueue[0]['noNote'] == 0 && sendQueue[0]['fromChoice'] == 0) {
-				notifyUser('You have a new message on Twaddle',clientData[sendQueue[0]['user']]['reg']);
+			if (sendQueue[0]['noNote'] == 0 && sendQueue[0]['fromChoice'] == undefined) {
+				notifyUser('message',clientData[sendQueue[0]['user']]['reg'],data.users[sendQueue[0]['data']['messages'][0]['fromId']][0],data.users[sendQueue[0]['data']['messages'][0]['fromId']][4]);
 			}
 		} else if (sendQueue[0]['type'] == 'comment') {
 			if (sendQueue[0]['user'] == undefined) {
 				console.log(timestampify()+'Shit. Error.');
 			} else {
-				io.to(sendQueue[0]['user']).emit('newComment',{comment:sendQueue[0]['data'],choices:sendQueue[0]['choice'],noNote:sendQueue[0].noNote,queueDay:sendQueue[0].dayDifference});
+				if (sendQueue[0]['fromChoice'] == undefined) {
+					var choiceID = 'NA';
+				} else {
+					var choiceId = sendQueue[0]['fromChoice'];
+				}
+				io.to(sendQueue[0]['user']).emit('newComment',{comment:sendQueue[0]['data'],choices:sendQueue[0]['choice'],noNote:sendQueue[0].noNote,queueDay:sendQueue[0].dayDifference,fromChoice:choiceId});
 				clientData[sendQueue[0]['user']]['lastComment'][sendQueue[0]['id']] = 1;
 			}
 		} else if (sendQueue[0]['type'] == 'feed') {
@@ -407,7 +400,7 @@ queueFunc.check = function() {
 				clientData[sendQueue[0]['user']]['lastFeed'][sendQueue[0]['id']] = 1;
 			}
 			if (sendQueue[0]['noNote'] == 0) {
-				notifyUser('There is a new post on Twaddle',clientData[sendQueue[0]['user']]['reg']);
+				notifyUser('post',clientData[sendQueue[0]['user']]['reg'],data.users[sendQueue[0]['data']['fromId']][0],data.users[sendQueue[0]['data']['fromId']][4]);
 			}
 		}
 		sendQueue.shift();

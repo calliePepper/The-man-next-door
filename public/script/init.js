@@ -134,7 +134,7 @@ socket.on('newMessage', function(receivedMessages) {
 });
 
 function processMessage(receivedMessages,nonote) {
-    if (receivedMessages.fromChoice != 'NA') {
+    if (receivedMessages.fromChoice  != undefined && receivedMessages.fromChoice != 'NA') {
         gameUpdate.removeReturn(receivedMessages.fromChoice);
     }
     console.log(timestampify()+'New message with a nonote value of '+nonote);
@@ -187,9 +187,6 @@ socket.on('newFeed', function(receivedFeed) {
 });
 
 function processFeed(receivedFeed,nonote) {
-    if (receivedFeed.fromChoice != 'NA') {
-        gameUpdate.removeReturn(receivedFeed.fromChoice);
-    }
     gameUpdate.updateFeed(receivedFeed.feedItem.postId);
     console.log(timestampify()+'new feed item retrieved');
     console.log(receivedFeed);
@@ -245,6 +242,9 @@ socket.on('newComment', function(receivedFeed) {
 });
 
 function processComment(receivedComment,nonote) {
+    if (receivedComment.fromChoice != undefined && receivedComment.fromChoice != 'NA') {
+        gameUpdate.removeReturn(receivedComment.fromChoice);
+    }
     console.log(receivedComment);
     gameUpdate.updateComment(receivedComment.comment.commentId);
     if (nonote == 1) {

@@ -57,8 +57,14 @@ io.on('connection', function(socket) {
 	clients[socket.id]['socket'] = socket;
 	
 	socket.on('disconnect', function() {
-		//console.log('Target left');	
-		var index = clients.indexOf(userId);
+		var disconCounter = 0;
+		for (var i in sendQueue) {
+		    if (sendQueue[i]['user'] == userId) {
+		        delete sendQueue[i];
+		        disconCounter++;
+		    }
+		}
+		console.log(timestampify()+clientData[userId]['name']+' just disconnected, '+disconCounter+' events removed');
 	});
 	
 	socket.on('pageLoad', function(page) {
@@ -396,6 +402,7 @@ queueFunc.check = function() {
 				if (sendQueue[0]['data'].comments != 0) {
 					var commentSend = data.commentObjects[sendQueue[0]['data'].comments];
 				}
+				console.log('Sending feed');
 				io.to(sendQueue[0]['user']).emit('newFeed',{feedItem:sendQueue[0]['data'],choices:sendQueue[0]['choice'],comments:commentSend,noNote:sendQueue[0].noNote,queueDay:sendQueue[0].dayDifference});
 				clientData[sendQueue[0]['user']]['lastFeed'][sendQueue[0]['id']] = 1;
 			}

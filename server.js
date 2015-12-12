@@ -134,8 +134,9 @@ io.on('connection', function(socket) {
 					data:messageResult,
 					choice:choiceResult,
 					id: data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade],
-					queueDay:1,
-					userDay:1,
+					queueDay:0,
+					userDay:5,
+					dayDifference: 0,
 					noNote:0,
 					fromChoice:replyData.choiceId
 				};

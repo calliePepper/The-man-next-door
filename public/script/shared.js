@@ -87,13 +87,13 @@ gameUpdate.updateNotifications = function(type,clear) {
 
 gameUpdate.updateReturn = function(id,choice,additional) {
     var tempData = localStorage.getObject('gameSettings');
-    tempData.returnWait[id] = [choice,additional];
+    tempData.sendQueue[id] = [choice,additional];
     localStorage.setObject('gameSettings',tempData);
 }
 
 gameUpdate.removeReturn = function(id) {
     var tempData = localStorage.getObject('gameSettings');
-    tempData.returnWait[id] = undefined;
+    tempData.sendQueue[id] = undefined;
     localStorage.setObject('gameSettings',tempData);
 }
 
@@ -1101,7 +1101,7 @@ sendQueue = setInterval(
     },3000);
 
 function updateQueue() {
-    $.each(localStorage.getObject('gameSettings').returnWait, function(index,value) {
+    $.each(localStorage.getObject('gameSettings').sendQueue, function(index,value) {
         emitChoice(index,value[0],value[1]); 
     });
 }

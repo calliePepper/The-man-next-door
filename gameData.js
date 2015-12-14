@@ -73,6 +73,36 @@ module.exports = {
                 {order:1,user:2,date:422,text:'Great, less than 24 hours back and you are already digging through people\'s trash. Nice work',image:'',video:'',like:1}
             ],
             commentId:501,
+            autoTarget:'choice',
+            autoId:'18',
+            feedId:'5'
+        },
+        502:{
+            comments: [
+                {order:1,user:1,date:422,text:'*Readies a high five*',image:'',video:'',like:1},
+                {order:1,user:2,date:422,text:'Oh good. There’s two of you now.',image:'',video:'',like:1}
+            ],
+            commentId:502,
+            autoTarget:'',
+            autoId:'',
+            feedId:'5'
+        },
+        503:{
+            comments: [
+                {order:1,user:1,date:422,text:'Aw. I am so judged.',image:'',video:'',like:1}
+            ],
+            commentId:503,
+            autoTarget:'',
+            autoId:'',
+            feedId:'5'
+        },
+        504:{
+            comments: [
+                {order:1,user:2,date:422,text:'What good could you find in garbage?',image:'',video:'',like:1},
+                {order:1,user:1,date:422,text:'Oh dear sweet Cal. You have no idea',image:'',video:'',like:1},
+                {order:1,user:2,date:422,text:'*Silence*',image:'',video:'',like:1}
+            ],
+            commentId:504,
             autoTarget:'',
             autoId:'',
             feedId:'5'
@@ -627,9 +657,9 @@ module.exports = {
         },
         4:{
             messages:[
-                {msgId:'4_1',fromId:1,toId:1,timestamp:600,message:'Great. Sorry, I should probably explain why I added you first.',image:'',video:'',from:1},
+                {msgId:'4_1',fromId:1,toId:1,timestamp:600,message:'Sorry, I should probably explain why I added you first.',image:'',video:'',from:1},
                 {msgId:'4_2',fromId:1,toId:1,timestamp:601,message:'You know that forum? Great mysteries, ghosts and the truth behind the ages?',image:'',video:'',from:1},
-                {msgId:'4_3',fromId:1,toId:1,timestamp:602,message:'Well, that\'s a regular haunt for me. Yes, I did see the thing I did there.',image:'',video:'',from:1},
+                {msgId:'4_3',fromId:1,toId:1,timestamp:602,message:'Well, I frequent it a lot. Partly interest, partly hobby.',image:'',video:'',from:1},
             ],
             messageId:4,
             autoTarget:'choice',
@@ -754,7 +784,7 @@ module.exports = {
         },
         17:{
             messages:[
-                {msgId:'17_1',fromId:1,toId:1,timestamp:600,message:'A good friend of mine. I thought he\'d turn up by now',image:'',video:'',from:1},
+                {msgId:'17_1',fromId:1,toId:1,timestamp:600,message:'A good friend of mine. He was supposed to come around the other night',image:'',video:'',from:1},
             ],
             messageId:17,
             autoTarget:'message',
@@ -781,8 +811,9 @@ module.exports = {
         20:{
             messages:[
                 {msgId:'20_1',fromId:1,toId:1,timestamp:600,message:'He hasn\'t exactly vanished. More like, he hasn\'t turned up',image:'',video:'',from:1},
-                {msgId:'20_2',fromId:1,toId:1,timestamp:600,message:'It\'s not like we definitively know something has happened, I tend to get carried with other things',image:'',video:'',from:1},
-                {msgId:'20_3',fromId:1,toId:1,timestamp:600,message:'Ambrose and Cal have different ideas about it.',image:'',video:'',from:1},
+                {msgId:'20_2',fromId:1,toId:1,timestamp:600,message:'It\'s not like we definitively know something has happened',image:'',video:'',from:1},
+                {msgId:'20_3',fromId:1,toId:1,timestamp:600,message:'It\'s just kinda weird',image:'',video:'',from:1},
+                {msgId:'20_4',fromId:1,toId:1,timestamp:600,message:'Ambrose and Cal have different ideas about it.',image:'',video:'',from:1},
             ],
             messageId:20,
             autoTarget:'choice',
@@ -927,7 +958,11 @@ module.exports = {
         34:{
             messages:[
                 {msgId:'34_1',fromId:1,toId:1,timestamp:600,message:'yeah, I have no idea what it means',image:'',video:'',from:1},
-                {msgId:'34_1',fromId:1,toId:1,timestamp:600,message:'But it\'s a start',image:'',video:'',from:1},
+                {msgId:'34_2',fromId:1,toId:1,timestamp:600,message:'It\'s all we\'ve got at the moment, and there\'s got to be an answer somewhere.',image:'',video:'',from:1},
+                {msgId:'34_3',fromId:1,toId:1,timestamp:600,message:'I\'m going to go, maybe look around the forums and some other sites',image:'',video:'',from:1},
+                {msgId:'34_4',fromId:1,toId:1,timestamp:600,message:'I\'ll message you if I find anything',image:'',video:'',from:1},
+                {msgId:'34_5',fromId:1,toId:1,timestamp:600,message:'Thanks for the help, even if it\'s just to get some of this off my chest',image:'',video:'',from:1},
+                {msgId:'34_6',fromId:1,toId:1,timestamp:600,message:'Talk to you soon =)',image:'',video:'',from:1},
             ],
             messageId:34,
             autoTarget:'',
@@ -951,8 +986,9 @@ module.exports = {
         13: {choiceId:13,choice1:'So, what do we do?',choice2:'What are you going to do',choice3:'What next?',resultType:'message',result1:25,result2:25,result3:25,ttl:''},
         14: {choiceId:14,choice1:'What help do you need from me?',choice2:'I\'m sure it\'ll turn out okay',choice3:'I\'m in', resultType:'message',result1:27,result2:26,result3:27,ttl:''},
         15: {choiceId:15,choice1:'I\'d never laugh at you',choice2:'Sounds good!',choice3:'Is there anything more active I can do?', resultType:'message',result1:28,result2:29,result3:30,ttl:''},
-        16: {choiceId:16,choice1:'I can do some research too',choice2:'What is it?',choice3:'Just message me when you need a hand', resultType:'message',result1:32,result2:31,result3:31,ttl:''},
-        17: {choiceId:17,choice1:'What does it mean?',choice2:'I think I\'ve seen that before',choice3:'Whoa', resultType:'message',result1:34,result2:33,result3:34,ttl:''}
+        16: {choiceId:16,choice1:'I could research what you find.',choice2:'What is it?',choice3:'Just message me when you need a hand', resultType:'message',result1:32,result2:31,result3:31,ttl:''},
+        17: {choiceId:17,choice1:'What does it mean?',choice2:'I think I\'ve seen that before',choice3:'Whoa', resultType:'message',result1:34,result2:33,result3:34,ttl:''},
+        18: {choiceId:18,choice1:'Come on Cal, nothing wrong with a little dumpster diving?',choice2:'Ewww',choice3:'Find anything good?', resultType:'comment',result1:502,result2:503,result3:504,ttl:''}
     },
     directionObject: {
         1: {directionId:1,attribute:'storyEvent1',operator:'=',value:'1',trueTarget:'message',trueId:'3',falseTarget:'message',falseId:'4'},

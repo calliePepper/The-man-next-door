@@ -119,7 +119,19 @@ io.on('connection', function(socket) {
 					var choiceResult = data.choiceObjects[data.commentObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].autoId]
 				}
 				//commentResult.feedId = replyData.additionalTarget;
-				var object2 = {timeStamp:0,user:userId,type:'comment',data:commentResult,choice:choiceResult};
+				var object2 = {
+					timeStamp:0,
+					user:userId,
+					type:'comment',
+					data:commentResult,
+					choice:choiceResult,
+					id: data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade],
+					queueDay:0,
+					userDay:5,
+					dayDifference: 0,
+					noNote:0,
+					fromChoice:replyData.choiceId
+				};
 			} else if (data.choiceObjects[replyData.choiceId].resultType == 'message') {
 				var messageResult = data.messageObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]];
 				var choiceResult = '';

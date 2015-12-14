@@ -430,8 +430,8 @@ messages.new.currentMsg = function(messageFrom,messageTo,cameIn,text,ttw,fullMes
             notificationNoise.play();
         }
         if(text.length > 15) text = text.substring(0,15) + '...';
-        var date = time.minidate(cameIn);
-        $('#messageLink_'+messageFrom).find('.sentOn').html(date);
+        var date2 = time.minidate(Math.floor(Date.now() / 1000));
+        $('#messageLink_'+messageFrom).find('.sentOn').html(date2);
         $('#messageLink_'+messageFrom).find('.messageContents').html(text);
         $('#messageLink_'+messageFrom).addClass('pulse');
         setTimeout(function() {$('#messageLink_'+messageFrom).removeClass('pulse');},1000);
@@ -753,7 +753,8 @@ feed.commentPoster = function(comments,postId) {
         value = comments[counter];
         if (value['date'] != 'CHOICE') {
             var commentsString = '';
-            var commentSince = time.wordify(value['date']);
+            var currentStamp = Math.floor(Date.now() / 1000)
+            var commentSince = time.wordify(currentStamp);
             var usersAvatar = localStorage.getObject('gameData')['users'][value['user']]['avatar'];
             var usersFirstname = localStorage.getObject('gameData')['users'][value['user']]['firstname'];
             var usersLastname = localStorage.getObject('gameData')['users'][value['user']]['lastname'];
@@ -765,7 +766,7 @@ feed.commentPoster = function(comments,postId) {
             if (value['likes'] != '') {
                 likedComments = '<span class="colouredText commentLikes"><i class="fa fa-thumbs-up"></i>'+value['likes']+'</span>';
             }
-            commentsString += '<div class="comment"><div class="commentAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><span class="commentBy userName_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</span><span class="commentContent" data-date="'+value['date']+'">'+value['text']+'</span>'+imageComments+'<div class="commentFooter dateUpdate" data-date="'+value['date']+'">'+commentSince+'</div></div>';
+            commentsString += '<div class="comment"><div class="commentAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><span class="commentBy userName_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</span><span class="commentContent" data-date="'+value['date']+'">'+value['text']+'</span>'+imageComments+'<div class="commentFooter dateUpdate" data-date="'+currentStamp+'">'+commentSince+'</div></div>';
             $('#comments_'+postId).append(commentsString);
             counter++;
         }

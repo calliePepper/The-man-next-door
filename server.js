@@ -81,6 +81,14 @@ io.on('connection', function(socket) {
 		clientData[userId]['name'] = page.playerName;
 		clientData[userId]['timezone'] = page.timezone;
 		clientData[userId]['lastUpdated'] = updatedLast;
+		clientData[userId]['friends'] = {};
+		for (user in page.users) {
+		    if (!page.users.hasOwnProperty(user)) {
+				continue;   	
+		    }
+		    clientData[userId]['friends'][user] = page.users[user].friended;
+		}
+		console.log(clientData[userId]['friends']);
 		if (clientData[userId]['lastFeed'] == undefined || page.lastFeed.length > clientData[userId]['lastFeed'].length) {
 			clientData[userId]['lastFeed'] = page.lastFeed;
 		}
@@ -271,6 +279,9 @@ queueFunc.add = function(day,timeStampToHit,userId,timeThroughDay,userDay,noNote
 		if (data.events[day][timeStampToHit]['object'] == 'feedObjects') { var type = 'feed'; 
 		} else if (data.events[day][timeStampToHit]['object'] == 'commentObjects') { var type = 'comment'; 
 		} else if (data.events[day][timeStampToHit]['object'] == 'messageObjects') { var type = 'messages'; }
+		//console.log(day);
+		//console.log(timeStampToHit);
+		//console.log(data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']]);
 		if (data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']].autoTarget && data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']].autoTarget == 'choice') {
 			var queueChoice = data.choiceObjects[data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']].autoId];
 		} else {
@@ -419,7 +430,9 @@ queueFunc.check = function() {
 				clientData[sendQueue[0]['user']]['lastFeed'][sendQueue[0]['id']] = 1;
 			}
 			if (sendQueue[0]['noNote'] == 0) {
-				notifyUser('post',clientData[sendQueue[0]['user']]['reg'],data.users[sendQueue[0]['data']['fromId']][0],data.users[sendQueue[0]['data']['fromId']][4]);
+				if (clientData[sendQueue[0]['user']]['friends'][data.users[sendQueue[0]['data']['fromId']][0]] == 1) {
+					notifyUser('post',clientData[sendQueue[0]['user']]['reg'],data.users[sendQueue[0]['data']['fromId']][0],data.users[sendQueue[0]['data']['fromId']][4]);
+				}
 			}
 		}
 		sendQueue.shift();

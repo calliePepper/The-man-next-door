@@ -72,6 +72,7 @@ function requestStatusReply() {
             startTime:localStorage.getObject('gameSettings').startTime,
             lastUpdate:lastUpdate,
             currentTime:new Date(),
+            users:localStorage.getObject('gameData').users,
             timezone:localStorage.getObject('gameSettings').timezone,
             lastFeed:localStorage.getObject('gameSettings').lastFeed,
             lastMessage:localStorage.getObject('gameSettings').lastMessage,

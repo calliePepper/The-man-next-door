@@ -957,6 +957,10 @@ navigationControls.change = function(page) {
                 $('#acceptFriend').unbind();
                 gameUpdate.addFriend(2);
                 navigationControls.change('feed');
+                $('#feedContent').removeClass('navFlip');
+                $('.sideBar').removeClass('navFlip');
+                window.scrollTo(0,0);
+                $('body').removeClass('navFlip');
             });
         }
         navigationControls.setUp();

@@ -1035,6 +1035,7 @@ perspective effects (not including the modals and the overlay).
   position: fixed;
   height: 460px;
   width: 460px;
+  max-width: 100%;
   margin: auto;
   top: 0;
   right: 0;

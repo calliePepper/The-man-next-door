@@ -29,7 +29,7 @@ Storage.prototype.getObject = function(key) {
 }
 
 if (localStorage.getObject('gameSettings') == undefined || localStorage.getObject('gameSettings').name == undefined || localStorage.getObject('gameSettings').startTime == undefined || localStorage.getObject('gameSettings').lastUpdate == undefined || localStorage.getObject('gameSettings').timezone == undefined) {
-    window.location.replace('index.html');
+    window.location.replace('startup.html');
 } 
 
 var playerName = localStorage.getObject('gameSettings').name;
@@ -95,6 +95,12 @@ gameUpdate.removeReturn = function(id) {
     var tempData = localStorage.getObject('gameSettings');
     tempData.sendQueue[id] = undefined;
     localStorage.setObject('gameSettings',tempData);
+}
+
+gameUpdate.addFriend = function(id) {
+    var tempData = localStorage.getObject('gameData');
+    tempData.users[id].friended = 1;
+    localStorage.setObject('gameData',tempData);
 }
 
 gameUpdate.updateLocal = function(data,dataType,extraData,choiceId) {
@@ -886,10 +892,9 @@ navigationControls.change = function(page) {
     $('.aboutItem').off();
     if (page == 'restart') {
             window.localStorage.clear();
-            window.location.replace("index.html");
+            window.location.replace("startup.html");
     }
     $('#contentAim').load('content/'+page+'.html', null, function() {
-        users.load(); 
         $('body').attr('id','');
         //console.log(timestampify()+'Going to '+page);
         if (page == 'messages') {
@@ -897,7 +902,9 @@ navigationControls.change = function(page) {
             gameUpdate.updateNotifications('messages',1);
             messages.init();
             document.title = 'Twaddle - Messages';
+            users.load(); 
         } else if (page == 'robin') {
+            users.load(); 
             $('#userNav div').on('click touch', function() {
                 if ($(this).attr('id') != 'about') {
                     $('#aboutBody').hide();
@@ -922,7 +929,7 @@ navigationControls.change = function(page) {
                 $('.aboutContents').hide();
                 $('.'+$(this).attr('id')).show();
             });
-            
+            users.load(); 
             $('#posts').click();            
         } else if (page == 'feed') {
             gameUpdate.updateNotifications('posts',1);
@@ -942,7 +949,16 @@ navigationControls.change = function(page) {
             buildTrending();
             
             $('.userName_5').glitch({minint:1, maxint:3, maxglitch:15, hoffset:10, voffset:3, direction:'random'});
-        } 
+            users.load(); 
+        } else if (page == 'friendCal') {
+            $('#modal-11').addClass('md-show');
+            $('#acceptFriend').on('click touch', function() {
+                $('#modal-11').removeClass('md-show');
+                $('#acceptFriend').unbind();
+                gameUpdate.addFriend(2);
+                navigationControls.change('feed');
+            });
+        }
         navigationControls.setUp();
     });
 }
@@ -964,6 +980,8 @@ navigationControls.setUp = function() {
              navigationControls.change('robin');
          } else if ($(this).attr('id') == 'restartLink') {
              navigationControls.change('restart');
+         } else if ($(this).attr('id') == 'addCal') {
+             navigationControls.change('friendCal');
          }
     });
     if (localStorage.getObject('gameSettings').unread.messages > 0) {$('#messagesLink').find('.totalNew').html(localStorage.getObject('gameSettings').unread.messages);}
@@ -1109,7 +1127,7 @@ function updateQueue() {
 
 $('.resetLoading').on('click touch', function() {
     window.localStorage.clear();
-    window.location.replace("index.html?connection=error");   
+    window.location.replace("startup.html?connection=error");   
 })
 
 function timestampify() {
@@ -1123,3 +1141,83 @@ function timestampify() {
                 + currentdate.getSeconds()+'] ';
     return datetime;
 }
+/*!
+ * classie - class helper functions
+ * from bonzo https://github.com/ded/bonzo
+ * 
+ * classie.has( elem, 'my-class' ) -> true/false
+ * classie.add( elem, 'my-new-class' )
+ * classie.remove( elem, 'my-unwanted-class' )
+ * classie.toggle( elem, 'my-class' )
+ */
+
+/*jshint browser: true, strict: true, undef: true */
+/*global define: false */
+
+( function( window ) {
+
+'use strict';
+
+// class helper functions from bonzo https://github.com/ded/bonzo
+
+function classReg( className ) {
+  return new RegExp("(^|\\s+)" + className + "(\\s+|$)");
+}
+
+// classList support for class management
+// altho to be fair, the api sucks because it won't accept multiple classes at once
+var hasClass, addClass, removeClass;
+
+if ( 'classList' in document.documentElement ) {
+  hasClass = function( elem, c ) {
+    return elem.classList.contains( c );
+  };
+  addClass = function( elem, c ) {
+    elem.classList.add( c );
+  };
+  removeClass = function( elem, c ) {
+    elem.classList.remove( c );
+  };
+}
+else {
+  hasClass = function( elem, c ) {
+    return classReg( c ).test( elem.className );
+  };
+  addClass = function( elem, c ) {
+    if ( !hasClass( elem, c ) ) {
+      elem.className = elem.className + ' ' + c;
+    }
+  };
+  removeClass = function( elem, c ) {
+    elem.className = elem.className.replace( classReg( c ), ' ' );
+  };
+}
+
+function toggleClass( elem, c ) {
+  var fn = hasClass( elem, c ) ? removeClass : addClass;
+  fn( elem, c );
+}
+
+var classie = {
+  // full names
+  hasClass: hasClass,
+  addClass: addClass,
+  removeClass: removeClass,
+  toggleClass: toggleClass,
+  // short names
+  has: hasClass,
+  add: addClass,
+  remove: removeClass,
+  toggle: toggleClass
+};
+
+// transport
+if ( typeof define === 'function' && define.amd ) {
+  // AMD
+  define( classie );
+} else {
+  // browser global
+  window.classie = classie;
+}
+
+})( window );

@@ -53,6 +53,7 @@ function requestStatusReply() {
     var timerSet = 4000;
     if (firstRun == 1) {
         timerSet = 200;
+        introScreen();
     }
     retrieveTimer = setTimeout(function() {
        var lastUpdate = localStorage.getObject('gameSettings').lastUpdate;
@@ -84,6 +85,10 @@ function requestStatusReply() {
         });
         firstRun = 0;
     }, timerSet);
+}
+
+function introScreen() {
+    
 }
 
 socket.on('receivedChoice', function(data) {
@@ -120,7 +125,7 @@ function hideLoad() {
     $('#leftLoad').css('left','-50%');
     $('#rightLoad').css('right','-50%');
     setTimeout(function() {
-        $('#loadingSection').hide();
+        $('#loadingSection').fadeOut();
     },1000);
 }
 

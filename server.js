@@ -430,7 +430,7 @@ queueFunc.check = function() {
 				clientData[sendQueue[0]['user']]['lastFeed'][sendQueue[0]['id']] = 1;
 			}
 			if (sendQueue[0]['noNote'] == 0) {
-				if (clientData[sendQueue[0]['user']]['friends'][data.users[sendQueue[0]['data']['fromId']][0]] == 1) {
+				if (clientData[sendQueue[0]['user']]['friends'][sendQueue[0]['data']['fromId']] == 1) {
 					notifyUser('post',clientData[sendQueue[0]['user']]['reg'],data.users[sendQueue[0]['data']['fromId']][0],data.users[sendQueue[0]['data']['fromId']][4]);
 				}
 			}
@@ -440,7 +440,7 @@ queueFunc.check = function() {
 	}
 	var timer2 = new Date();
 	var timeTaken = timer2.getTime() - timer1.getTime();
-	if (timeTaken > 5) {
+	if (timeTaken > 5) {soldeviRevilo01
 		console.log(timestampify()+ '>>>>>>>>>>>>>>>>>>  Check function took '+timeTaken+'. didSend: '+didSend+' <<<<<<<<<<<<<<<<<<');
 	}
 }

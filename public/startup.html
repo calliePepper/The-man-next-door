@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html> 
+    <head> 
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">   
+        <title>The Man Next Door</title>
+        <link href="css/style.css" rel="stylesheet" type="text/css" />
+        <link href="css/font-awesome.min.css" rel="stylesheet" />
+    </head>
+    <body id="frontPage" class="frontPage">
+        <script>
+          if (localStorage.getItem('gameData')) {
+                window.location.replace("index.html");
+            }
+        </script>
+        <div class="infoBox">
+            <h1>The man next door</h1>
+            <p>The man next door is an interactive narrative, set on a fictional social media network. There are a couple of things you should know before you start:</p>
+            <ol>
+                <li>Please be aware this site uses some techniques which <strong class="colouredText">may trigger epileptic attacks</strong></li>
+                <li><strong class="colouredText">This narrative runs in real time</strong>. From the moment you hit start the story will unfold at its own pace, not yours</li>
+                <li>Occasionally, <strong class="colouredText">the page may play sounds</strong>. These sounds are not controllable, but muting the page will not cause you to miss out on any important information</li>
+            </ol>
+            <p>If you have understood all of this, please feel free to enter your name below, upload a thumbnail (optional) and then click the start button</p>
+            <div class="halfer">
+                <label for="name"><strong>Your name:</strong></label><br><input type="text" id="name" name="name" />
+            </div>
+            <div class="halfer">
+                <label for="file"><strong>Your thumbnail:</strong></label><br><span id="putThumbHere"></span><input type="file" name="file" id="file" />
+            </div>  
+            <div>
+                <label><strong>Debug options</strong></label><br>
+                    <div class="inputIndex">
+                        Start from day <br>
+                        <input type="radio" name="dayStart" checked='checked' value=0> Day 0
+                        <input type="radio" name="dayStart" value=1> Day 1
+                        <input type="radio" name="dayStart" value=2> Day 2
+                        <input type="radio" name="dayStart" value=3> Day 3
+                        <input type="radio" name="dayStart" value=4> Day 4
+                        <input type="radio" name="dayStart" value=5> Day 5
+                    </div>
+            </div>
+            <div class="startBlock">
+                <div id="startBtn" class="btn startBtn">Click here to start</div>   
+            </div>
+    	    
+        </div>
+        <script>
+            Storage.prototype.setObject = function(key, value) {
+                this.setItem(key, JSON.stringify(value));
+            }
+            
+            Storage.prototype.getObject = function(key) {
+                var value = this.getItem(key);
+                return value && JSON.parse(value);
+            }
+            
+        </script>
+        <script type="text/javascript" src="script/jquery.min.js"></script>
+        <script type="text/javascript" src="script/data.js"></script>
+        <script type="text/javascript" src="script/glitchText.js"></script>
+        <script>
+            $('h1').glitch({minint:1, maxint:3, maxglitch:15, hoffset:10, voffset:3, direction:'random'});
+            $('.colouredText').glitch();
+
+            var userAvatar = 'img/userAvatar.jpg';
+        
+            if (localStorage.thumb && localStorage.thumb != '') {
+                $('#putThumbHere').html('<img class="thumb" src="'+ localStorage.thumb +'" tile="Old icon"/>');
+                userAvatar = localStorage.thumb;
+            }
+        
+            function handleFile(evt) {
+                var file = evt.target.files;
+                
+                for (var i = 0, f; f = file[i]; i++) {
+                    
+                    if (!f.type.match('image.*')) {
+                        alert('Please upload an image');
+                    } else if (f.size > 1000000) { 
+                        alert('Please upload a smaller image (max 1mb)');
+                    } else {
+                        var reader = new FileReader();
+                        
+                        reader.onload = (function(theFile) {
+                            return function(e) {
+                                $('#putThumbHere').html('<img class="thumb" src="'+ e.target.result +'" tile="'+ escape(theFile.name) + '"/>');
+                                localStorage.setItem('thumb',e.target.result);
+                                userAvatar = e.target.result;
+                            }
+                        })(f);
+                        
+                        reader.readAsDataURL(f);
+                    }
+                }
+            }
+    
+            document.getElementById('file').addEventListener('change',handleFile, false);
+            
+            function createTimestamp(timeFrom) {
+                var d = new Date();
+                d.setHours(0,0,0,0);
+                var newDateObj = new Date(d.getTime() + (timeFrom*60000) - 86400000);
+                return newDateObj.getTime() / 1000;
+            }
+
+            $('#startBtn').on('click touch', function() {
+                if ($('#name').val() != '') {
+                    var day = $('input[name=dayStart]:checked').val();
+                    var startDate = new Date((new Date()).valueOf() - day*1000*3600*24);
+                    if (typeof(Storage) !== 'undefined') {
+                        var gameData = {
+                            name:$('#name').val(),
+                            startTime:startDate,
+                            lastUpdate:startDate,
+                            timezone:new Date().getTimezoneOffset(),
+                            messageWait: {},
+                            sendQueue: {},
+                            lastMessage: {},
+                            lastFeed: {},
+                            lastComment: {},
+                            firstLoad: 1,
+                            unread: {
+                                'posts':0,
+                                'messages':0
+                            }
+                        };
+                        console.log(gameData);
+                        localStorage.setObject('gameSettings',gameData);
+                        var comments = {
+                                1: [
+                                    new comment(1,2,createTimestamp(601),'Oh how the mighty has fallen... It is so good to have you home again, can\'t wait for some long overdue hangouts','','',2),
+                                    new comment(1,4,createTimestamp(603),'And you two can finally hook up','','',3),
+                                    new comment(1,3,createTimestamp(604),'Shut up Steve you massive dick, it\'s good to see you back Robin it has been too long','','',3),
+                                    new comment(1,4,createTimestamp(605),'I only call it as I see it','','',2),
+                                    new comment(1,2,createTimestamp(607),'You mean you wish you saw it','','',7)
+                                ],
+                                2: [
+                                    new comment(1,2,createTimestamp(803), 'I guess you forget when you are a big city folk living the high life at a fancy university just how weird suburbia is','','',0),
+                                    new comment(1,1,createTimestamp(805), 'No seriously, I think something might be wrong with him','','',0)
+                                ],
+                                3: [
+                                    new comment(1,5,createTimestamp(1230), 'It might be that I’ve forgotten the things you say, or that I’ve been underexposed to your presence, but I think we should fix that. I’ll be around later, okay?','','',0)
+                                ]
+                        }
+                        var choices = {
+                            3: new choice(3,'Deal with the problem yourself','Ignore it, it will go away','Skin the cat. It\'s the only solution. Skin. The. Cat')
+                        }
+                        var totalData = {
+                            posts: [
+                                new post(1,1,createTimestamp(600),'It\'s good to be home. Finally signed up to Twaddle so I can get back into contact with all of you, but god it\'s weird to be on a mainstream social media','','',14,comments[1],0,''),
+                                new post(2,1,createTimestamp(800),'Jesus, how did I never notice the guy next door was so weird. I just saw him water his flowers, he zoned out and was just standing there flooding his flower beds while his face was blank...','','',4,comments[2],0,''),
+                                new post(3,1,createTimestamp(1200),'TIL Mother Teresa was fucking bitch. I love when someone this revered turns out to be relatively evil','','65JxnUW7Wk4',3,comments[3],0,'')
+                            ],
+                            trending: [
+                                new trending(1,'Twaddle','A new social media for the masses, is looking for new employees'),
+                                new trending(1,'Puppy love','A puppy is a small regional zoo has made friends with a zebra, and they are the most unlikeliest of companions!'),
+                                new trending(1,'Baby Possom','Photos shared of baby marsupial snuggling with toy kangaroo'),
+                                new trending(1,'Skinning Cats','There are more than one way! Our top chefs look at old age techniques that you probably have never heard of'),
+                                new trending(1,'Netherworld vacation','Are you tired of your boring existance? Think you deserve a great vacation? We show you paths that the guides don\'t want you to know about'),
+                                new trending(1,'Get the body you have always wanted', 'We know where you buried it. We can lend you a shovel.')
+                            ],
+                            messages: [
+                            
+                            ],
+                            users: {
+                                0: new user($('#name').val(),'','they',1412314,userAvatar,'',0,0,0,0,0),
+                                1: new user('Robin','Creed','they',1429323,'img/samAvatar.png','samBg.jpg',1,100,1300,0,0),
+                                2: new user('Cal','Ransom','she',1423413,'img/calAvatar.jpg','calBg.jpg',0,70,1500,0,0),
+                                3: new user('Ambrose','Mitchell','he',1423413,'img/ambroseAvatar.jpg','amBg.jpg',0,120,2400,0,0),
+                                4: new user('Steve','Steve','he',1423412,'img/steveAvatar.jpg','stBg.jpg',0,140,3000,0,0),
+                                5: new user('Marcel','Artur','he',1423412,'img/marcelAvatar.jpg','maBg.jpg',0,1,1,0,0)
+                            }
+                        };          
+                        localStorage.setObject('gameData',totalData);
+                        window.location.replace("index.html");
+                    } else {
+                        alert('Sorry your device does not support the required technology (HTML5 Local storage)');
+                    }
+                } else {
+                    $('#name').addClass('badInput');
+                }
+            });
+            
+            var background = $('#frontPage').css('background-image');
+            var backgroundi = background.substring(background.length, background.length - 11);
+            backgroundi = backgroundi.substring(0, backgroundi.length - 5) + '_i.jpg';
+            
+            $('<img/>')[0].src = 'img/'+backgroundi;
+            
+            function setFlicker() {
+                console.log('Setting flicker up')
+                setTimeout(
+                    function() {
+                        $('#frontPage').css('background-image','url(img/'+backgroundi+')');
+                        $('<img/>')[0].src = 'img/'+backgroundi;
+                        console.log('Flickering!');
+                        setTimeout(
+                            function() {
+                                $('#frontPage').css('background-image',background);        
+                                setFlicker();
+                            }
+                        ,200);
+                    },getRandomInt(6000,12000)
+                );    
+            }
+            
+            function getRandomInt(min, max) {
+                return Math.floor(Math.random() * (max - min + 1)) + min;
+            }  
+            
+            //setTimeout(setFlicker(),20000);
+            
+            //testSound();
+        </script>
+    </body>	
+</html>

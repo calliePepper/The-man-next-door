@@ -909,7 +909,48 @@ input[type="text"] {
   position: fixed;
   width: 100%;
   height: 100%;
-  z-index: 4; }
+  z-index: 4;
+  background: url("../img/twaddleLeather.jpg");
+  background: #910101; }
+
+.twaddleLoad {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  width: 100%;
+  height: 100%;
+  background: -moz-radial-gradient(center, ellipse cover, #c20002 0%, rgba(141, 0, 1, 0) 80%, rgba(128, 1, 1, 0) 100%);
+  /* ff3.6+ */
+  background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, #c20002), color-stop(80%, rgba(141, 0, 1, 0)), color-stop(100%, rgba(128, 1, 1, 0)));
+  /* safari4+,chrome */
+  background: -webkit-radial-gradient(center, ellipse cover, #c20002 0%, rgba(141, 0, 1, 0) 80%, rgba(128, 1, 1, 0) 100%);
+  /* safari5.1+,chrome10+ */
+  background: -o-radial-gradient(center, ellipse cover, #c20002 0%, rgba(141, 0, 1, 0) 80%, rgba(128, 1, 1, 0) 100%);
+  /* opera 11.10+ */
+  background: -ms-radial-gradient(center, ellipse cover, #c20002 0%, rgba(141, 0, 1, 0) 80%, rgba(128, 1, 1, 0) 100%);
+  /* ie10+ */
+  background: radial-gradient(ellipse at center, #c20002 0%, rgba(141, 0, 1, 0) 80%, rgba(128, 1, 1, 0) 100%);
+  /* w3c */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#C20002', endColorstr='#800101',GradientType=1 );
+  /* ie6-9 */ }
+
+.logoText {
+  font-family: lobsterregular;
+  color: #fff;
+  text-align: center;
+  height: 100px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  text-shadow: 0 -1px 0 #888;
+  font-size: 4em; }
 
 .rightLoad, .leftLoad {
   background: #000;
@@ -969,6 +1010,153 @@ input[type="text"] {
   -moz-box-shadow: 0px 0px 10px 10px white;
   box-shadow: 0px 0px 10px 10px white;
   padding: 0px; }
+
+/* General styles for the modal */
+/* 
+Styles for the html/body for special modal where we want 3d effects
+Note that we need a container wrapping all content on the page for the 
+perspective effects (not including the modals and the overlay).
+*/
+.md-perspective, .md-perspective body {
+  height: 100%;
+  overflow: hidden; }
+
+.md-perspective body {
+  background: #222;
+  -webkit-perspective: 600px;
+  -moz-perspective: 600px;
+  perspective: 600px; }
+
+.container {
+  background: #e74c3c;
+  min-height: 100%; }
+
+.md-modal {
+  position: fixed;
+  height: 460px;
+  width: 460px;
+  margin: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2000;
+  visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border: 1px solid;
+  border-color: #e5e6e9 #dfe0e4 #d0d1d5;
+  border-radius: 3px;
+  background: #fff;
+  border: 0px; }
+
+.md-show {
+  visibility: visible; }
+
+.md-overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  visibility: hidden;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  opacity: 0;
+  background: rgba(0, 0, 0, 0.7);
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  transition: all 0.3s; }
+
+.md-show ~ .md-overlay {
+  opacity: 1;
+  visibility: visible; }
+
+/* Content styles */
+.md-content {
+  color: #000;
+  background: #fff;
+  position: relative;
+  border-radius: 3px;
+  margin: 0 auto; }
+
+.md-content h3 {
+  margin: 0;
+  padding: 0.4em;
+  text-align: center;
+  font-size: 2.4em;
+  font-weight: 300;
+  background: #910101;
+  border-bottom: 1px solid #600000;
+  border-radius: 3px 3px 0 0;
+  font-family: lobsterregular;
+  color: #fff; }
+
+.md-content > div {
+  padding: 15px 40px 30px;
+  margin: 0;
+  font-weight: 300;
+  font-size: 1.15em; }
+
+.md-content > div p {
+  margin: 0;
+  padding: 10px 0; }
+
+.md-content button {
+  display: block;
+  margin: 0 auto;
+  font-size: 0.8em; }
+
+/* Effect 11: Super scaled */
+.md-effect-11 .md-content {
+  -webkit-transform: scale(2);
+  -moz-transform: scale(2);
+  -ms-transform: scale(2);
+  transform: scale(2);
+  opacity: 0;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  transition: all 0.3s; }
+
+.friendAvatar {
+  width: 200px;
+  height: 200px;
+  padding: 10px;
+  margin: 0 auto;
+  border: 1px solid #ddd; }
+
+.friendAvatar img {
+  width: 100%;
+  height: 100%; }
+
+.md-show.md-effect-11 .md-content {
+  -webkit-transform: scale(1);
+  -moz-transform: scale(1);
+  -ms-transform: scale(1);
+  transform: scale(1);
+  opacity: 1; }
+
+.md-close {
+  color: #fff; }
+
+#overlay {
+  background: rgba(0, 0, 0, 0.4);
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; }
+
+#clickToClose {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; }
 
 @media screen and (max-width: 900px) {
   header {
@@ -1109,6 +1297,9 @@ input[type="text"] {
     padding: 0px;
     border-left: 0px; }
 
+  .logoText {
+    font-size: 3em; }
+
   #messagesPage .mainWrapper {
     top: 0px;
     padding-top: 42px; }
@@ -1197,6 +1388,9 @@ input[type="text"] {
     display: none; }
 
   .sentOn i {
-    margin-right: 4px; } }
+    margin-right: 4px; }
+
+  .logoText {
+    font-size: 2em; } }
 
 /*# sourceMappingURL=style.css.map */

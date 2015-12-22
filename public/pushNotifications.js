@@ -18,7 +18,8 @@ var app = {
         var push = PushNotification.init({
             "android": {
                 "senderID": "840758201462",
-                "icon": "ic_stat_notif" 
+                "icon": "ic_stat_notif",
+                "iconColor": "#910101"
             },
             "ios": {"alert": "true", "badge": "true", "sound": "true"}, 
             "windows": {} 

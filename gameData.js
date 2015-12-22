@@ -1000,6 +1000,14 @@ module.exports = {
             messageId:34,
             autoTarget:'',
             autoId:'',
+        },
+        201:{
+            messages:[
+                {msgId:'201_1',fromId:2,toId:2,timestamp:600,message:'Test message for notification and new character simulation',image:'',video:'',from:1},
+            ],
+            messageId:201,
+            autoTarget:'',
+            autoId:'',
         }
     },
     choiceObjects: {
@@ -1056,6 +1064,7 @@ module.exports = {
             585:{object:'feedObjects',id:'108'},
             599:{object:'commentObjects',id:'10801'},
             600:{object:'feedObjects',id:'109'},
+            601:{object:'messageObjects',id:'201'},
             605:{object:'commentObjects',id:'10901'},
             615:{object:'commentObjects',id:'10902'},
             625:{object:'commentObjects',id:'10903'},

@@ -246,20 +246,23 @@ var watcher = setInterval(function() {
 	}	
 },500);
 
-var notifyUser = function(type,reg,user,pic) {
+var notifyUser = function(type,reg,user,pic,shortData) {
 	if (reg != undefined && reg != 0) {
 		var sender = new gcm.Sender('AIzaSyBsDedWcDBATdqS69h7zFvlMYH97rRwq8w');
 		if (type == 'message') {
-			body = user + ' has sent you a message';
+			body = user + ': ' + shortData;
+			var title = 'New Messages';
 		} else if (type == 'post') {
-			body = user + ' has posted a new feed item';
+			body = user + ': ' + shortData;
+			var title = 'New Posts';
 		}
 		var message = new gcm.Message({
 		  notification: {
-		        title: "Twaddle update",
+		        title: title,
 		        body: body,
 		        style: "inbox",
 		        image: "www/"+pic,
+		        color: '#910101',
 		        summaryText: "There are %n% notifications"
 		    }
 		});
@@ -405,7 +408,11 @@ queueFunc.check = function() {
 				clientData[sendQueue[0]['user']]['lastMessage'][sendQueue[0]['id']] = 1;
 			}
 			if (sendQueue[0]['noNote'] == 0 && sendQueue[0]['fromChoice'] == undefined) {
-				notifyUser('message',clientData[sendQueue[0]['user']]['reg'],data.users[sendQueue[0]['data']['messages'][0]['fromId']][0],data.users[sendQueue[0]['data']['messages'][0]['fromId']][4]);
+				var shortData = sendQueue[0].data.messages[0].message;
+				if (shortData.length > 30) {
+					shortData = shortData.substr(0,30) + '...';
+				}
+				notifyUser('message',clientData[sendQueue[0]['user']]['reg'],data.users[sendQueue[0]['data']['messages'][0]['fromId']][0],data.users[sendQueue[0]['data']['messages'][0]['fromId']][4],shortData);
 			}
 		} else if (sendQueue[0]['type'] == 'comment') {
 			if (sendQueue[0]['user'] == undefined) {
@@ -431,7 +438,11 @@ queueFunc.check = function() {
 			}
 			if (sendQueue[0]['noNote'] == 0) {
 				if (clientData[sendQueue[0]['user']]['friends'][sendQueue[0]['data']['fromId']] == 1) {
-					notifyUser('post',clientData[sendQueue[0]['user']]['reg'],data.users[sendQueue[0]['data']['fromId']][0],data.users[sendQueue[0]['data']['fromId']][4]);
+					var shortData = sendQueue[0].data.text;
+					if (shortData.length > 30) {
+						shortData = shortData.substr(0,30) + '...';
+					}
+					notifyUser('post',clientData[sendQueue[0]['user']]['reg'],data.users[sendQueue[0]['data']['fromId']][0],data.users[sendQueue[0]['data']['fromId']][4],shortData);
 				}
 			}
 		}

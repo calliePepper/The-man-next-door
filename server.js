@@ -440,7 +440,7 @@ queueFunc.check = function() {
 	}
 	var timer2 = new Date();
 	var timeTaken = timer2.getTime() - timer1.getTime();
-	if (timeTaken > 5) {soldeviRevilo01
+	if (timeTaken > 5) {
 		console.log(timestampify()+ '>>>>>>>>>>>>>>>>>>  Check function took '+timeTaken+'. didSend: '+didSend+' <<<<<<<<<<<<<<<<<<');
 	}
 }

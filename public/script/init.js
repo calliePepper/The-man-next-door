@@ -92,6 +92,8 @@ function introScreen() {
 }
 
 socket.on('receivedChoice', function(data) {
+    console.log(timestampify()+'Received a choice');
+    console.log(data);
     gameUpdate.removeReturn(data.choiceId);
 });
 

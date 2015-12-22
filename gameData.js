@@ -179,8 +179,8 @@ module.exports = {
                 {order:2,user:1,date:630,text:'He was supposed to come over yesterday, but he never showed. I guess we\'ll chalk it up to yet another mystery.',image:'',video:'',like:1}
             ],
             commentId:10904,
-            autoTarget:'choice',
-            autoId:'5',
+            autoTarget:'',
+            autoId:'',
             feedId:'109'
         },
         10802:{
@@ -1008,7 +1008,7 @@ module.exports = {
         2: {choiceId:2,choice1:'Oh yeah, I\'m a regular there',choice2:'So you saw my name on there?',choice3:'Oh, you must have seen one of my posts',resultType:'message',result1:5,result2:5,result3:5,ttl:''},
         3: {choiceId:3,choice1:'That could help',choice2:'Why do you think I\'d know any better?',choice3:'Sounds good, what information do you have',resultType:'message',result1:6,result2:7,result3:6,ttl:''},
         4: {choiceId:4,choice1:'That\'s okay, I\'m interested.',choice2:'Just relax and tell me.',choice3:'I\'m not that interested',resultType:'message',result1:10,result2:9,result3:8,ttl:''},
-        5: {choiceId:5,choice1:'Try calling him',choice2:'Don\'t worry, he\'ll show up',choice3:'We already have enough mysteries',resultType:'',result1:0,result2:0,result3:0,ttl:''},
+        //5: {choiceId:5,choice1:'Try calling him',choice2:'Don\'t worry, he\'ll show up',choice3:'We already have enough mysteries',resultType:'',result1:0,result2:0,result3:0,ttl:''},
         6: {choiceId:6,choice1:'That\'s okay, I\'m interested.',choice2:'I am, but lay it out straight',choice3:'Just relax and tell me.',resultType:'',result1:10,result2:9,result3:9,ttl:''},
         7: {choiceId:7,choice1:'What were the symbols?',choice2:'So, he was painting in the rain. You\'re right, that\'s pretty weird',choice3:'This isn\'t sounding that strange so far',resultType:'message',result1:16,result2:15,result3:11,ttl:''},
         8: {choiceId:8,choice1:'What\'s he doing?',choice2:'Other things?',choice3:'Are you sure you\'re not overreacting?',resultType:'message',result1:12,result2:13,result3:11,ttl:''},
@@ -1021,7 +1021,7 @@ module.exports = {
         15: {choiceId:15,choice1:'I\'d never laugh at you',choice2:'Sounds good!',choice3:'Is there anything more active I can do?', resultType:'message',result1:28,result2:29,result3:30,ttl:''},
         16: {choiceId:16,choice1:'I could research what you find.',choice2:'What is it?',choice3:'Just message me when you need a hand', resultType:'message',result1:32,result2:31,result3:31,ttl:''},
         17: {choiceId:17,choice1:'What does it mean?',choice2:'I think I\'ve seen that before',choice3:'Whoa', resultType:'message',result1:34,result2:33,result3:34,ttl:''},
-        18: {choiceId:18,choice1:'Come on Cal, nothing wrong with a little dumpster diving?',choice2:'Ewww',choice3:'Find anything good?', resultType:'comment',result1:1502,result2:1503,result3:1504,ttl:''}
+        18: {choiceId:18,choice1:'Come on Cal, nothing wrong with a little dumpster diving?',choice2:'Ewww',choice3:'Find anything good?', resultType:'comment',result1:10502,result2:10503,result3:10504,ttl:''}
     },
     directionObject: {
         1: {directionId:1,attribute:'storyEvent1',operator:'=',value:'1',trueTarget:'message',trueId:'3',falseTarget:'message',falseId:'4'},

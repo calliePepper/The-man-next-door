@@ -13,7 +13,8 @@
 
             */
             
-var firstRun = 1;            
+var firstRun = 1;          
+var connected = 0;
             
 var rebootIfError = setTimeout(function() {
     window.localStorage.clear();
@@ -86,6 +87,10 @@ function requestStatusReply() {
         firstRun = 0;
     }, timerSet);
 }
+
+socket.on('playerReceived', function() {
+    connected = 1;
+});
 
 function introScreen() {
     
@@ -302,16 +307,53 @@ function processComment(receivedComment,nonote) {
     }
 }
 
+var choiceTimeout = [];
+
 function emitChoice(choiceId,choiceMade) {
-    socket.emit('choiceMade', {playerName:playerName,currentTime:new Date(),timezone:localStorage.getObject('gameSettings').timezone,choiceId:choiceId,choiceMade:choiceMade});
+    if (choiceTimeout[choiceId] != undefined) {
+        clearTimeout(choiceTimeout[choiceId]);
+    }
+    if (!socket.connected) {
+        connected = 0;
+    }
+    if (connected == 1) {
+        socket.emit('choiceMade', {playerName:playerName,currentTime:new Date(),timezone:localStorage.getObject('gameSettings').timezone,choiceId:choiceId,choiceMade:choiceMade});
+    } else {
+        console.log(timestampify()+'Not connected during emit function');
+        choiceTimeout[choiceId] = setTimeout(function() {emitChoice(choiceId,choiceMade);},500);
+    }
 }
+
+var afaTimeout = [];
 
 function askForAnother(nextOne) {
-    socket.emit('anotherMessage', {playerName:playerName,currentTime:new Date(),timezone:localStorage.getObject('gameSettings').timezone,nextId:nextOne});
+    if (afaTimeout[nextOne] != undefined) {
+        clearTimeout(afaTimeout[nextOne]);
+    }
+    if (!socket.connected) {
+        connected = 0;
+    }
+    if (connected == 1) {
+        socket.emit('anotherMessage', {playerName:playerName,currentTime:new Date(),timezone:localStorage.getObject('gameSettings').timezone,nextId:nextOne});
+    } else {
+        console.log(timestampify()+'Not connected during emit function');
+        afaTimeout[nextOne] = setTimeout(function() {askForAnother(nextOne);},500);
+    }
 }
 
+var emitTimeout;
+
 function emitReg() {
-    socket.emit('deviceReg', {playerName:playerName,currentTime:new Date(),device:deviceData});   
+    clearTimeout(emitTimeout);
+    if (!socket.connected) {
+        connected = 0;
+    }
+    if (connected == 1) {
+        socket.emit('deviceReg', {playerName:playerName,currentTime:new Date(),device:deviceData});   
+    } else {
+        console.log(timestampify()+'Not connected during emit function');
+        emitTimeout = setTimeout(function() {emitReg;},500);
+    }
 }
 
 if (mobNotifications == 1) {

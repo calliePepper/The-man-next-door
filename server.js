@@ -88,7 +88,6 @@ io.on('connection', function(socket) {
 		    }
 		    clientData[userId]['friends'][user] = page.users[user].friended;
 		}
-		console.log(clientData[userId]['friends']);
 		if (clientData[userId]['lastFeed'] == undefined || page.lastFeed.length > clientData[userId]['lastFeed'].length) {
 			clientData[userId]['lastFeed'] = page.lastFeed;
 		}
@@ -114,6 +113,7 @@ io.on('connection', function(socket) {
 		if (page.firstLoad == 1) {
 			io.to(userId).emit('newMessage',{messageItem:data.messageObjects[0],choices:data.choiceObjects[0],noNote:1});
 		}
+		io.to(userId).emit('playerReceived');
 	});
 	
 	socket.on('choiceMade', function(replyData) {

@@ -317,7 +317,7 @@ function emitChoice(choiceId,choiceMade) {
     if (!socket.connected) {
         connected = 0;
         $('#reconnect').fadeIn();
-        socket.socket.reconnect();
+        requestStatusReply()
     }
     if (connected == 1) {
         socket.emit('choiceMade', {playerName:playerName,currentTime:new Date(),timezone:localStorage.getObject('gameSettings').timezone,choiceId:choiceId,choiceMade:choiceMade});
@@ -336,7 +336,7 @@ function askForAnother(nextOne) {
     if (!socket.connected) {
         connected = 0;
         $('#reconnect').fadeIn();
-        socket.socket.reconnect();
+        requestStatusReply();
     }
     if (connected == 1) {
         socket.emit('anotherMessage', {playerName:playerName,currentTime:new Date(),timezone:localStorage.getObject('gameSettings').timezone,nextId:nextOne});
@@ -353,7 +353,7 @@ function emitReg() {
     if (!socket.connected) {
         connected = 0;
         $('#reconnect').fadeIn();
-        socket.socket.reconnect();
+        requestStatusReply()
     }
     if (connected == 1) {
         socket.emit('deviceReg', {playerName:playerName,currentTime:new Date(),device:deviceData});   
@@ -371,10 +371,13 @@ if (mobNotifications == 1) {
     function onResume() {
         console.log('Resuming');
         updateTheDateTime();
+        console.log(socket);
         if (!socket.connected) {
             connected = 0;
             $('#reconnect').fadeIn();
-            socket.socket.reconnect();
+            requestStatusReply();
+        } else {
+            requestStatusReply();
         }
     }
     

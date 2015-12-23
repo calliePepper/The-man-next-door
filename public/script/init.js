@@ -88,7 +88,7 @@ function requestStatusReply() {
     }, timerSet);
 }
 
-socket.on('playerReceived', function() {
+socket.on('connectionStrong', function() {
     connected = 1;
     $('#reconnect').fadeOut();
 });

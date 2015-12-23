@@ -113,7 +113,7 @@ io.on('connection', function(socket) {
 		if (page.firstLoad == 1) {
 			io.to(userId).emit('newMessage',{messageItem:data.messageObjects[0],choices:data.choiceObjects[0],noNote:1});
 		}
-		io.to(userId).emit('playerReceived');
+		io.to(userId).emit('connectionStrong');
 	});
 	
 	socket.on('choiceMade', function(replyData) {
@@ -164,6 +164,7 @@ io.on('connection', function(socket) {
 			sendQueue.push(object2);
 			organiseQueue();
 			io.to(userId).emit('receivedChoice',{choiceId:replyData.choiceId});
+			io.to(userId).emit('connectionStrong');
 		}
 	});
 	
@@ -175,6 +176,7 @@ io.on('connection', function(socket) {
 			var choiceResult = data.choiceObjects[messageItem.autoId]
 		}
 		io.to(userId).emit('newMessage',{messageItem:messageItem,choices:choiceResult});
+		io.to(userId).emit('connectionStrong');
 	});
 	
 	socket.on('deviceReg', function(regData) {

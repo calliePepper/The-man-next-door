@@ -376,7 +376,7 @@ if (mobNotifications == 1) {
         socket.io.reconnect();
         var rebootIfError = setTimeout(function() {
             location.reload();   
-        },2000);
+        },5000);
     }
     
     function onPause() {

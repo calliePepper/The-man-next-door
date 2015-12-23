@@ -371,7 +371,6 @@ if (mobNotifications == 1) {
     function onResume() {
         console.log('Resuming');
         updateTheDateTime();
-        console.log(socket);
         connected = 0;
         $('#reconnect').fadeIn();
         socket.io.reconnect();

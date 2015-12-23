@@ -913,6 +913,9 @@ input[type="text"] {
   background: url("../img/twaddleLeather.jpg");
   background: #910101; }
 
+.reconnect {
+  display: none; }
+
 .twaddleLoad {
   position: fixed;
   top: 0;

@@ -227,6 +227,7 @@ input[type="text"]{padding:8px;color:#fff;background:none;border:1px solid $majo
 
 
 .loadingSection{position:fixed;width:100%;height:100%;z-index:4;background:url("../img/twaddleLeather.jpg");background:$majorColour;}
+.reconnect{display:none;}
 .twaddleLoad{position:fixed;top:0;left:0;right:0;bottom:0;margin:auto;width:100%;height:100%;
 background: -moz-radial-gradient(center, ellipse cover, rgba(194,0,2,1) 0%, rgba(141,0,1,0) 80%, rgba(128,1,1,0) 100%); /* ff3.6+ */
 background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, rgba(194,0,2,1)), color-stop(80%, rgba(141,0,1,0)), color-stop(100%, rgba(128,1,1,0))); /* safari4+,chrome */

@@ -90,6 +90,7 @@ function requestStatusReply() {
 
 socket.on('playerReceived', function() {
     connected = 1;
+    $('#reconnect').fadeOut();
 });
 
 function introScreen() {
@@ -315,6 +316,8 @@ function emitChoice(choiceId,choiceMade) {
     }
     if (!socket.connected) {
         connected = 0;
+        $('#reconnect').fadeIn();
+        socket.reconnect();
     }
     if (connected == 1) {
         socket.emit('choiceMade', {playerName:playerName,currentTime:new Date(),timezone:localStorage.getObject('gameSettings').timezone,choiceId:choiceId,choiceMade:choiceMade});
@@ -332,6 +335,8 @@ function askForAnother(nextOne) {
     }
     if (!socket.connected) {
         connected = 0;
+        $('#reconnect').fadeIn();
+        socket.reconnect();
     }
     if (connected == 1) {
         socket.emit('anotherMessage', {playerName:playerName,currentTime:new Date(),timezone:localStorage.getObject('gameSettings').timezone,nextId:nextOne});
@@ -347,6 +352,8 @@ function emitReg() {
     clearTimeout(emitTimeout);
     if (!socket.connected) {
         connected = 0;
+        $('#reconnect').fadeIn();
+        socket.reconnect();
     }
     if (connected == 1) {
         socket.emit('deviceReg', {playerName:playerName,currentTime:new Date(),device:deviceData});   

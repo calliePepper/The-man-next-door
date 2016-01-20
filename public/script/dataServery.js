@@ -239,12 +239,13 @@ queueFunc.add = function(day,timeStampToHit,timeThroughDay,userDay,noNote) {
 		console.log(timestampify()+'Update found, Type: '+type+', id: '+data.events[day][timeStampToHit]['id']);
 		var dayDifTemp = userDay - day;
 		var tempStamp = new Date().getTime() / 1000;
+		var objectToSave = data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']];
 		var queueObject = {
 			timeStamp:tempStamp + ((timeStampToHit - timeThroughDay) * 60),
 			timeToHit:timeStampToHit,
 			type:type,
 			id:data.events[day][timeStampToHit]['id'],
-			data:data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']],
+			data:objectToSave,
 			choice:queueChoice,
 			queueDay:day,
 			dayDifference: dayDifTemp,
@@ -252,16 +253,17 @@ queueFunc.add = function(day,timeStampToHit,timeThroughDay,userDay,noNote) {
 			noNote:noNote
 		};
 		sendQueue.push(queueObject);
+		console.log(type);
 		if (type == 'messages' || type == 'message') {
     	    if (noNote == 0 && deviceData['type'] == 1) {
-    			var shortData = sendQueue[0].data.messages[0].message;
+    			var shortData = objectToSave.messages[0].message;
     			if (shortData.length > 30) {
     				shortData = shortData.substr(0,30) + '...';
     			}
     			socket.emit('prepareNote', {
                     type:'message',
-                    from:data.users[sendQueue[0]['data']['messages'][0]['fromId']][0],
-                    fromAvatar:data.users[sendQueue[0]['data']['messages'][0]['fromId']][4],
+                    from:data.users[objectToSave['messages'][0]['fromId']][0],
+                    fromAvatar:data.users[objectToSave['messages'][0]['fromId']][4],
                     reg:deviceData['reg'],
                     mob: deviceData['type'],
                     shortData:shortData,
@@ -270,15 +272,18 @@ queueFunc.add = function(day,timeStampToHit,timeThroughDay,userDay,noNote) {
     		}
 		}
 		if (type == 'feed') {
-		    if (localStorage.getObject('gameData').users[sendQueue[0]['data']['fromId']].friended == 1 && deviceData['type'] == 1) {
+		    console.log(objectToSave['fromId']);
+		    console.log(localStorage.getObject('gameData').users);
+		    console.log(objectToSave);
+		    if (localStorage.getObject('gameData').users[objectToSave['fromId']].friended == 1 && deviceData['type'] == 1) {
 				var shortData = sendQueue[0].data.text;
 				if (shortData.length > 30) {
 					shortData = shortData.substr(0,30) + '...';
 				}
 				socket.emit('prepareNote', {
                     type:'message',
-                    from:data.users[sendQueue[0]['data']['messages'][0]['fromId']][0],
-                    fromAvatar:data.users[sendQueue[0]['data']['messages'][0]['fromId']][4],
+                    from:data.users[objectToSave['messages'][0]['fromId']][0],
+                    fromAvatar:data.users[objectToSave['messages'][0]['fromId']][4],
                     reg:deviceData['reg'],
                     mob: deviceData['type'],
                     shortData:shortData,

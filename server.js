@@ -165,6 +165,7 @@ queueFunc.add = function(type,from,fromAvatar,reg,mob,sendTime,shortData) {
 		var queueObject = {
 			timeStamp:moment().unix() + (sendTime * 60),
 			from:from,
+			type:type,
 			fromAvatar:fromAvatar,
 			reg:reg,
 			mob:mob,

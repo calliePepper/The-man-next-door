@@ -226,7 +226,7 @@ queueFunc.add = function(day,timeStampToHit,timeThroughDay,userDay,noNote) {
 		sendQueue.push(queueObject);
 		console.log(type);
 		if (type == 'messages' || type == 'message') {
-    	    if (noNote == 0 && deviceData['type'] == 1) {
+    	    if (noNote == 0 && deviceData['type'] == 1 && dayDifTemp == 0 && timeStampToHit - timeThroughDay > 0) {
     			var shortData = objectToSave.messages[0].message;
     			if (shortData.length > 30) {
     				shortData = shortData.substr(0,30) + '...';
@@ -248,7 +248,7 @@ queueFunc.add = function(day,timeStampToHit,timeThroughDay,userDay,noNote) {
 		    console.log(objectToSave['fromId']);
 		    console.log(localStorage.getObject('gameData').users);
 		    console.log(localStorage.getObject('gameData').users[objectToSave['fromId']].friended);
-		    if (localStorage.getObject('gameData').users[objectToSave['fromId']].friended == 1) {
+		    if (localStorage.getObject('gameData').users[objectToSave['fromId']].friended == 1 && dayDifTemp == 0 && timeStampToHit - timeThroughDay > 0) {
 				var shortData = objectToSave.text;
 				if (shortData.length > 30) {
 					shortData = shortData.substr(0,30) + '...';

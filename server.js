@@ -68,7 +68,9 @@ io.on('connection', function(socket) {
 	});
 	
 	socket.on('prepareNote', function(data) {
-		console.log('Note found! Sending in '+data.sendTime);
+		console.log(timestampify()+'Note found - Sending in '+data.sendTime);
+		console.log(timestampify()+'|--- '+data.type+'|'+data.objectId+' from '+data.from+' containing '+data.shortData);
+		console.log(timestampify()+'|--- going to '+data.reg);
 		queueFunc.add(data.type,data.from,data.fromAvatar,data.reg,data.mob,data.sendTime,data.shortData);
 	});
 
@@ -160,9 +162,6 @@ var notifyUser = function(type,reg,user,pic,shortData) {
 var queueFunc = {};
 
 queueFunc.add = function(type,from,fromAvatar,reg,mob,sendTime,shortData) {
-	if (timeStampToHit != 0) {
-		console.log(timestampify()+'Update found, Type: '+type+', id: '+data.events[day][timeStampToHit]['id']);
-		var dayDifTemp = userDay - day;
 		var queueObject = {
 			timeStamp:moment().unix() + (sendTime * 60),
 			from:from,
@@ -173,7 +172,6 @@ queueFunc.add = function(type,from,fromAvatar,reg,mob,sendTime,shortData) {
 		};
 		sendQueue.push(queueObject);
 		organiseQueue()
-	}
 }
 
 queueFunc.getIndex = function(object) {

@@ -33,7 +33,7 @@ var app = {
             {
                 deviceData['reg'] = data.registrationId;
             }
-            requestStatusReply();
+            triggerCheck();
         });
 
         push.on('notification', function(data) {

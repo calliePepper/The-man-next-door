@@ -164,7 +164,12 @@ function processFeed(receivedFeed,nonote) {
         var dac = 0
         if (receivedFeed.comments && receivedFeed.comments.comments != '') {
             $.each(receivedFeed.comments.comments, function(index, value) {
-                var currentComment = new comment(value['order'],value['user'],createTimestamp(value['date'],receivedFeed.queueDay),value['text'],value['image'],value['video'],value['likes']);
+                var later = createTimestamp(value['date'],receivedFeed.queueDay)
+                var now = Math.floor(Date.now() / 1000);
+                if ((now - later) > 960) {
+                    now = later;
+                }
+                var currentComment = new comment(value['order'],value['user'],now,value['text'],value['image'],value['video'],value['likes']);
                 commentBuilder.push(currentComment);
                 dac += 4;
             });
@@ -174,7 +179,12 @@ function processFeed(receivedFeed,nonote) {
             var currentComment = new comment(0,0,'CHOICE',newChoice,'','',0);
             commentBuilder.push(currentComment);
         }
-        var currentFeed = new post(receivedFeed.feedItem.postId,receivedFeed.feedItem.fromId,createTimestamp(receivedFeed.feedItem['date'],receivedFeed.queueDay),receivedFeed.feedItem.text,receivedFeed.feedItem.image,receivedFeed.feedItem.video,receivedFeed.feedItem.likes,commentBuilder,0,receivedFeed.feedItem.caption);
+        var later = createTimestamp(receivedFeed.feedItem['date'],receivedFeed.queueDay)
+        var now = Math.floor(Date.now() / 1000);
+        if ((now - later) > 960) {
+            now = later;
+        }
+        var currentFeed = new post(receivedFeed.feedItem.postId,receivedFeed.feedItem.fromId,now,receivedFeed.feedItem.text,receivedFeed.feedItem.image,receivedFeed.feedItem.video,receivedFeed.feedItem.likes,commentBuilder,0,receivedFeed.feedItem.caption);
         gameUpdate.updateLocal(currentFeed,'posts');
         if ($(document).find("title").text() == 'Twaddle - A social media for the everyman') {
             if (nonote == 1) {

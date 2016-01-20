@@ -74,7 +74,7 @@
 		clientData['reg'] = page.reg;
 		clientData['device'] = page.mob;
 		console.log (clientData['reg'] + ' - ' + clientData['device'])
-		queueFunc.update(currentDay,timeThroughDay,updatedLast,localStorage.getObject('gameSettings').lastFeed,localStorage.getObject('gameSettings').lastMessage,localStorage.getObject('gameSettings').lastComment,page.firstRun)
+		queueFunc.update(currentDay,timeThroughDay,updatedLast,page.firstRun)
 		if (page.firstLoad == 1) {
 			newMessage({messageItem:data.messageObjects[0],choices:data.choiceObjects[0],noNote:1});
 		}
@@ -233,6 +233,7 @@ queueFunc.add = function(day,timeStampToHit,timeThroughDay,userDay,noNote) {
     			}
     			socket.emit('prepareNote', {
                     type:'message',
+                    objectId:data.events[day][timeStampToHit]['id'],
                     from:data.users[objectToSave['messages'][0]['fromId']][0],
                     fromAvatar:data.users[objectToSave['messages'][0]['fromId']][4],
                     reg:deviceData['reg'],
@@ -246,16 +247,17 @@ queueFunc.add = function(day,timeStampToHit,timeThroughDay,userDay,noNote) {
 		if (type == 'feed') {
 		    console.log(objectToSave['fromId']);
 		    console.log(localStorage.getObject('gameData').users);
-		    console.log(objectToSave);
-		    if (localStorage.getObject('gameData').users[objectToSave['fromId']].friended == 1 && deviceData['type'] == 1) {
+		    console.log(localStorage.getObject('gameData').users[objectToSave['fromId']].friended);
+		    if (localStorage.getObject('gameData').users[objectToSave['fromId']].friended == 1) {
 				var shortData = objectToSave.text;
 				if (shortData.length > 30) {
 					shortData = shortData.substr(0,30) + '...';
 				}
 				socket.emit('prepareNote', {
-                    type:'message',
-                    from:data.users[objectToSave['messages'][0]['fromId']][0],
-                    fromAvatar:data.users[objectToSave['messages'][0]['fromId']][4],
+                    type:'post',
+                    objectId:data.events[day][timeStampToHit]['id'],
+                    from:data.users[objectToSave['fromId']][0],
+                    fromAvatar:data.users[objectToSave['fromId']][4],
                     reg:deviceData['reg'],
                     mob: deviceData['type'],
                     shortData:shortData,
@@ -276,7 +278,7 @@ queueFunc.getIndex = function(object) {
 	return replyString.substr(0,replyString.length-1);
 }
 
-queueFunc.update = function(day,timeThroughDay,updatedLast,lastFeed,lastMessage,lastComment,noNote) {
+queueFunc.update = function(day,timeThroughDay,updatedLast,noNote) {
 	timeStampToHit = 0;
 	var itemsQueued = 0;
 	var itemsSent = 0;
@@ -285,18 +287,18 @@ queueFunc.update = function(day,timeThroughDay,updatedLast,lastFeed,lastMessage,
 	    console.log('Checking '+dayCheck);
 		for (var i in data.events[dayCheck]) {
 			var notDone = 1;
-			if (lastFeed != '' && data.events[dayCheck][i].object == 'feedObjects') {
-				if (lastFeed[data.events[dayCheck][i].id] == 1)  {
+			if (data.events[dayCheck][i].object == 'feedObjects') {
+				if (localStorage.getObject('gameSettings').lastFeed[data.events[dayCheck][i].id] == 1)  {
 					notDone = 0;
 				}
 			}
-			if (lastComment != null && data.events[dayCheck][i].object == 'commentObjects') {
-				if (lastComment[data.events[dayCheck][i].id] == 1) {
+			if (data.events[dayCheck][i].object == 'commentObjects') {
+				if (localStorage.getObject('gameSettings').lastComment[data.events[dayCheck][i].id] == 1) {
 					notDone = 0;
 				}
 			}
-			if (lastMessage != '' && data.events[dayCheck][i].object == 'messageObjects') {
-				if (lastMessage[data.events[dayCheck][i].id] == 1) {
+			if (data.events[dayCheck][i].object == 'messageObjects') {
+				if (localStorage.getObject('gameSettings').lastMessage[data.events[dayCheck][i].id] == 1) {
 					notDone = 0;
 				}
 			}
@@ -358,22 +360,24 @@ queueFunc.check = function() {
 			} else {
 				var choiceId = sendQueue[0]['fromChoice'];
 			}
+			localStorage.getObject('gameSettings').lastFeed[sendQueue[0]['id']] = 1;
 			newMessage({messageItem:sendQueue[0]['data'],choices:sendQueue[0]['choice'],noNote:sendQueue[0].noNote,queueDay:sendQueue[0].dayDifference,fromChoice:choiceId});
 			gameUpdate.updateMessages(sendQueue[0]['id']);
 		} else if (sendQueue[0]['type'] == 'comment') {
-				if (sendQueue[0]['fromChoice'] == undefined) {
-					var choiceID = 'NA';
-				} else {
-					var choiceId = sendQueue[0]['fromChoice'];
-				}
-			    newComment({comment:sendQueue[0]['data'],choices:sendQueue[0]['choice'],noNote:sendQueue[0].noNote,queueDay:sendQueue[0].dayDifference,fromChoice:choiceId});
-				gameUpdate.updateComment(sendQueue[0]['id']);
+			if (sendQueue[0]['fromChoice'] == undefined) {
+				var choiceID = 'NA';
+			} else {
+				var choiceId = sendQueue[0]['fromChoice'];
+			}
+			localStorage.getObject('gameSettings').lastComment[sendQueue[0]['id']] = 1;
+		    newComment({comment:sendQueue[0]['data'],choices:sendQueue[0]['choice'],noNote:sendQueue[0].noNote,queueDay:sendQueue[0].dayDifference,fromChoice:choiceId});
+			gameUpdate.updateComment(sendQueue[0]['id']);
 		} else if (sendQueue[0]['type'] == 'feed') {
-				if (sendQueue[0]['data'].comments != 0) {
-					var commentSend = data.commentObjects[sendQueue[0]['data'].comments];
-				}
-				newFeed({feedItem:sendQueue[0]['data'],choices:sendQueue[0]['choice'],comments:commentSend,noNote:sendQueue[0].noNote,queueDay:sendQueue[0].dayDifference});
-				gameUpdate.updateFeed(sendQueue[0]['id']);
+			if (sendQueue[0]['data'].comments != 0) {
+				var commentSend = data.commentObjects[sendQueue[0]['data'].comments];
+			}
+			newFeed({feedItem:sendQueue[0]['data'],choices:sendQueue[0]['choice'],comments:commentSend,noNote:sendQueue[0].noNote,queueDay:sendQueue[0].dayDifference});
+			gameUpdate.updateFeed(sendQueue[0]['id']);
 		}
 		sendQueue.shift();
 		organiseQueue()

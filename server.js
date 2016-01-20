@@ -68,6 +68,7 @@ io.on('connection', function(socket) {
 	});
 	
 	socket.on('prepareNote', function(data) {
+		console.log('Note found! Sending in '+data.sendTime);
 		queueFunc.add(data.type,data.from,data.fromAvatar,data.reg,data.mob,data.sendTime,data.shortData);
 	});
 

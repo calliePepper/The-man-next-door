@@ -301,9 +301,6 @@ if (mobNotifications == 1) {
     function onResume() {
         console.log('Resuming');
         updateTheDateTime();
-        connected = 0;
-        $('#reconnect').fadeIn();
-        socket.io.reconnect();
         clearTimeout(watcher);
         watcher = setInterval(function() {
         	if (sendQueue.length > 0) {

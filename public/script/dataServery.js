@@ -192,35 +192,6 @@ var watcher = setInterval(function() {
 	}	
 },800);
 
-var notifyUser = function(type,reg,user,pic,shortData) {
-	/*if (reg != undefined && reg != 0) {
-		var sender = new gcm.Sender('AIzaSyBsDedWcDBATdqS69h7zFvlMYH97rRwq8w');
-		if (type == 'message') {
-			body = user + ': ' + shortData;
-			var title = 'New Messages';
-		} else if (type == 'post') {
-			body = user + ': ' + shortData;
-			var title = 'New Posts';
-		}
-		var message = new gcm.Message({
-		  notification: {
-		        title: title,
-		        body: body,
-		        style: "inbox",
-		        image: "www/"+pic,
-		        color: '#910101',
-		        summaryText: "There are %n% notifications"
-		    }
-		});
-		var registrationIds = [];
-		registrationIds.push(reg);
-		sender.send(message, registrationIds, 4, function (err, result) {
-			console.log(err);
-		  	//console.log(result);
-		});
-	}*/
-}
-
 var queueFunc = {};
 
 queueFunc.add = function(day,timeStampToHit,timeThroughDay,userDay,noNote) {
@@ -269,6 +240,7 @@ queueFunc.add = function(day,timeStampToHit,timeThroughDay,userDay,noNote) {
                     shortData:shortData,
                     sendTime: timeStampToHit - timeThroughDay
                 });
+                console.log('Emitting a request for a message poke in '+ (timeStampToHit - timeThroughDay) + ' minutes');
     		}
 		}
 		if (type == 'feed') {
@@ -276,7 +248,7 @@ queueFunc.add = function(day,timeStampToHit,timeThroughDay,userDay,noNote) {
 		    console.log(localStorage.getObject('gameData').users);
 		    console.log(objectToSave);
 		    if (localStorage.getObject('gameData').users[objectToSave['fromId']].friended == 1 && deviceData['type'] == 1) {
-				var shortData = sendQueue[0].data.text;
+				var shortData = objectToSave.text;
 				if (shortData.length > 30) {
 					shortData = shortData.substr(0,30) + '...';
 				}
@@ -289,23 +261,8 @@ queueFunc.add = function(day,timeStampToHit,timeThroughDay,userDay,noNote) {
                     shortData:shortData,
                     sendTime: timeStampToHit - timeThroughDay
                 });
+                console.log('Emitting a request for a feed poke in '+ (timeStampToHit - timeThroughDay) + ' minutes');
 			}
-		    
-		    
-    	    if (noNote == 0 && deviceData['type'] == 1) {
-    			var shortData = sendQueue[0].data.messages[0].message;
-    			if (shortData.length > 30) {
-    				shortData = shortData.substr(0,30) + '...';
-    			}
-    			socket.emit('prepareNote', {
-                    type:'message',
-                    reg:clientData[sendQueue[0]['user']]['reg'],
-                    from:data.users[sendQueue[0]['data']['messages'][0]['fromId']][0],
-                    fromAvatar:data.users[sendQueue[0]['data']['messages'][0]['fromId']][4],
-                    reg:deviceData['reg'],
-                    mob: deviceData['type']
-                });
-    		}
 		}
 		organiseQueue()
 	}

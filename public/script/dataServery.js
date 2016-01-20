@@ -252,6 +252,56 @@ queueFunc.add = function(day,timeStampToHit,timeThroughDay,userDay,noNote) {
 			noNote:noNote
 		};
 		sendQueue.push(queueObject);
+		if (type == 'messages' || type == 'message') {
+    	    if (noNote == 0 && deviceData['type'] == 1) {
+    			var shortData = sendQueue[0].data.messages[0].message;
+    			if (shortData.length > 30) {
+    				shortData = shortData.substr(0,30) + '...';
+    			}
+    			socket.emit('prepareNote', {
+                    type:'message',
+                    from:data.users[sendQueue[0]['data']['messages'][0]['fromId']][0],
+                    fromAvatar:data.users[sendQueue[0]['data']['messages'][0]['fromId']][4],
+                    reg:deviceData['reg'],
+                    mob: deviceData['type'],
+                    shortData:shortData,
+                    sendTime: timeStampToHit - timeThroughDay
+                });
+    		}
+		}
+		if (type == 'feed') {
+		    if (localStorage.getObject('gameData').users[sendQueue[0]['data']['fromId']].friended == 1 && deviceData['type'] == 1) {
+				var shortData = sendQueue[0].data.text;
+				if (shortData.length > 30) {
+					shortData = shortData.substr(0,30) + '...';
+				}
+				socket.emit('prepareNote', {
+                    type:'message',
+                    from:data.users[sendQueue[0]['data']['messages'][0]['fromId']][0],
+                    fromAvatar:data.users[sendQueue[0]['data']['messages'][0]['fromId']][4],
+                    reg:deviceData['reg'],
+                    mob: deviceData['type'],
+                    shortData:shortData,
+                    sendTime: timeStampToHit - timeThroughDay
+                });
+			}
+		    
+		    
+    	    if (noNote == 0 && deviceData['type'] == 1) {
+    			var shortData = sendQueue[0].data.messages[0].message;
+    			if (shortData.length > 30) {
+    				shortData = shortData.substr(0,30) + '...';
+    			}
+    			socket.emit('prepareNote', {
+                    type:'message',
+                    reg:clientData[sendQueue[0]['user']]['reg'],
+                    from:data.users[sendQueue[0]['data']['messages'][0]['fromId']][0],
+                    fromAvatar:data.users[sendQueue[0]['data']['messages'][0]['fromId']][4],
+                    reg:deviceData['reg'],
+                    mob: deviceData['type']
+                });
+    		}
+		}
 		organiseQueue()
 	}
 }
@@ -320,11 +370,11 @@ queueFunc.report = function(limit) {
 		var replyString = '';
 		for (var i in sendQueue) {
 			if (sendQueue[i].type == 'feed') {
-				replyString += 'User: '+sendQueue[i].user.substr(0, 4)+'<->'+clientData[sendQueue[i].user].name+', Type: Post, Id: '+sendQueue[i].data.postId+'|';
+				replyString += 'Type: Post, Id: '+sendQueue[i].data.postId+'|';
 			} else if (sendQueue[i].type == 'comment') {
-				replyString += 'User: '+sendQueue[i].user.substr(0, 4)+'<->'+clientData[sendQueue[i].user].name+', Type: Comment, Id: '+sendQueue[i].data.commentId+'|';
+				replyString += 'Type: Comment, Id: '+sendQueue[i].data.commentId+'|';
 			} else if (sendQueue[i].type == 'message') {
-				replyString += 'User: '+sendQueue[i].user.substr(0, 4)+'<->'+clientData[sendQueue[i].user].name+', Type: Message, Id: '+sendQueue[i].data.messageId+'|';
+				replyString += 'Type: Message, Id: '+sendQueue[i].data.messageId+'|';
 			}
 		}
 		console.log(timestampify()+'Queue update, total in queue is '+sendQueue.length+', next update in '+Math.floor((sendQueue[0]['timeStamp'] - current) / 60)+' minutes');
@@ -348,13 +398,6 @@ queueFunc.check = function() {
 			}
 			newMessage({messageItem:sendQueue[0]['data'],choices:sendQueue[0]['choice'],noNote:sendQueue[0].noNote,queueDay:sendQueue[0].dayDifference,fromChoice:choiceId});
 			gameUpdate.updateMessages(sendQueue[0]['id']);
-			if (sendQueue[0]['noNote'] == 0 && sendQueue[0]['fromChoice'] == undefined) {
-				var shortData = sendQueue[0].data.messages[0].message;
-				if (shortData.length > 30) {
-					shortData = shortData.substr(0,30) + '...';
-				}
-				notifyUser('message',clientData[sendQueue[0]['user']]['reg'],data.users[sendQueue[0]['data']['messages'][0]['fromId']][0],data.users[sendQueue[0]['data']['messages'][0]['fromId']][4],shortData);
-			}
 		} else if (sendQueue[0]['type'] == 'comment') {
 				if (sendQueue[0]['fromChoice'] == undefined) {
 					var choiceID = 'NA';
@@ -369,15 +412,6 @@ queueFunc.check = function() {
 				}
 				newFeed({feedItem:sendQueue[0]['data'],choices:sendQueue[0]['choice'],comments:commentSend,noNote:sendQueue[0].noNote,queueDay:sendQueue[0].dayDifference});
 				gameUpdate.updateFeed(sendQueue[0]['id']);
-			if (sendQueue[0]['noNote'] == 0) {
-				if (clientData[sendQueue[0]['user']]['friends'][sendQueue[0]['data']['fromId']] == 1) {
-					var shortData = sendQueue[0].data.text;
-					if (shortData.length > 30) {
-						shortData = shortData.substr(0,30) + '...';
-					}
-					notifyUser('post',clientData[sendQueue[0]['user']]['reg'],data.users[sendQueue[0]['data']['fromId']][0],data.users[sendQueue[0]['data']['fromId']][4],shortData);
-				}
-			}
 		}
 		sendQueue.shift();
 		organiseQueue()
@@ -438,4 +472,4 @@ function countProperties(obj) {
     return count;
 }
 
-requestStatus()
+requestStatus();

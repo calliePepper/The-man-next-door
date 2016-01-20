@@ -265,16 +265,11 @@ function processComment(receivedComment,nonote) {
 
 var choiceTimeout = [];
 
-function emitChoice(choiceId,choiceMade) {
+function emitChoice(choiceId,choiceMadeData) {
     if (choiceTimeout[choiceId] != undefined) {
         clearTimeout(choiceTimeout[choiceId]);
     }
-    if (connected == 1) {
-        choiceMade({playerName:playerName,currentTime:new Date(),timezone:localStorage.getObject('gameSettings').timezone,choiceId:choiceId,choiceMade:choiceMade});
-    } else {
-        console.log(timestampify()+'Not connected during emit function');
-        choiceTimeout[choiceId] = setTimeout(function() {emitChoice(choiceId,choiceMade);},500);
-    }
+    choiceMade({currentTime:new Date(),timezone:localStorage.getObject('gameSettings').timezone,choiceId:choiceId,choiceMade:choiceMadeData});
 }
 
 var afaTimeout = [];
@@ -283,17 +278,7 @@ function askForAnother(nextOne) {
     if (afaTimeout[nextOne] != undefined) {
         clearTimeout(afaTimeout[nextOne]);
     }
-    if (!socket.connected) {
-        connected = 0;
-        $('#reconnect').fadeIn();
-        socket.io.reconnect();
-    }
-    if (connected == 1) {
-        anotherMessage({playerName:playerName,currentTime:new Date(),timezone:localStorage.getObject('gameSettings').timezone,nextId:nextOne});
-    } else {
-        console.log(timestampify()+'Not connected during emit function');
-        afaTimeout[nextOne] = setTimeout(function() {askForAnother(nextOne);},500);
-    }
+    anotherMessage({playerName:playerName,currentTime:new Date(),timezone:localStorage.getObject('gameSettings').timezone,nextId:nextOne});
 }
 
 var emitTimeout;

@@ -67,131 +67,10 @@ io.on('connection', function(socket) {
 		console.log(timestampify()+userId+' just disconnected, '+disconCounter+' events removed, '+sendQueue.length+' remaing');
 	});
 	
-	socket.on('pageLoad', function(page) {
-		var compDate = getPoint(page.startTime,page.currentTime,page.timezone); 
-		var currentDay = compDate.day;
-		var timeThroughDay = Math.round(compDate.timeThrough);
-		if (page.lastUpdate != 1440) {
-			var updatedLast = moment(page.currentTime).clone().diff(moment(page.lastUpdate), 'minutes');
-		} else {
-			var updatedLast = page.lastUpdate;
-		}
-		console.log(timestampify()+userId+': '+page.playerName+' - '+data.pages[page.page]+'. Time: '+currentDay+': '+timeThroughDay+'. Updated: '+updatedLast);
-		clientData[userId] = {};
-		clientData[userId]['name'] = page.playerName;
-		clientData[userId]['timezone'] = page.timezone;
-		clientData[userId]['lastUpdated'] = updatedLast;
-		clientData[userId]['friends'] = {};
-		for (user in page.users) {
-		    if (!page.users.hasOwnProperty(user)) {
-				continue;   	
-		    }
-		    clientData[userId]['friends'][user] = page.users[user].friended;
-		}
-		if (clientData[userId]['lastFeed'] == undefined || page.lastFeed.length > clientData[userId]['lastFeed'].length) {
-			clientData[userId]['lastFeed'] = page.lastFeed;
-		}
-		if (clientData[userId]['lastMessage'] == undefined || page.lastMessage.length > clientData[userId]['lastMessage'].length) {
-			clientData[userId]['lastMessage'] = page.lastMessage;
-		}
-		if (clientData[userId]['lastComment'] == undefined || page.lastComment.length > clientData[userId]['lastComment'].length) {
-			clientData[userId]['lastComment'] = page.lastComment;
-		}
-		if (clientData[userId]['lastFeed'] == undefined) {
-			clientData[userId]['lastFeed'] = {};
-		}
-		if (clientData[userId]['lastComment'] == undefined) {
-			clientData[userId]['lastComment'] = {};
-		}
-		if (clientData[userId]['lastMessage'] == undefined) {
-			clientData[userId]['lastMessage'] = {};
-		}
-		clientData[userId]['reg'] = page.reg;
-		clientData[userId]['device'] = page.mob;
-		console.log (clientData[userId]['reg'] + ' - ' + clientData[userId]['device'])
-		queueFunc.update(userId,currentDay,timeThroughDay,updatedLast,clientData[userId]['lastFeed'],clientData[userId]['lastMessage'],clientData[userId]['lastComment'],page.firstRun)
-		if (page.firstLoad == 1) {
-			io.to(userId).emit('newMessage',{messageItem:data.messageObjects[0],choices:data.choiceObjects[0],noNote:1});
-		}
-		io.to(userId).emit('connectionStrong');
+	socket.on('prepareNote', function(data) {
+		queueFunc.add(data.type,data.from,data.fromAvatar,data.reg,data.mob,data.sendTime,data.shortData);
 	});
-	
-	socket.on('choiceMade', function(replyData) {
-		console.log(timestampify()+replyData.playerName+' came across choice '+replyData.choiceId+' and took path '+replyData.choiceMade);	
-		if (data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade] != 0) {
-			if (data.choiceObjects[replyData.choiceId].resultType == 'comment') {
-				var resultTest = 'result'+replyData.choiceMade;
-				var commentResult = data.commentObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]];
-				var choiceResult = '';
-				if (data.commentObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].autoTarget == 'choice') {
-					var choiceResult = data.choiceObjects[data.commentObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].autoId]
-				}
-				//commentResult.feedId = replyData.additionalTarget;
-				var object2 = {
-					timeStamp:0,
-					user:userId,
-					type:'comment',
-					data:commentResult,
-					choice:choiceResult,
-					id: data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade],
-					queueDay:0,
-					userDay:5,
-					dayDifference: 0,
-					noNote:0,
-					fromChoice:replyData.choiceId
-				};
-			} else if (data.choiceObjects[replyData.choiceId].resultType == 'message') {
-				var messageResult = data.messageObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]];
-				var choiceResult = '';
-				if (data.messageObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].autoTarget == 'choice') {
-					var choiceResult = data.choiceObjects[data.messageObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].autoId]
-				}
-				choiceResult.additionalTarget = replyData.additionalTarget;
-				var object2 = {
-					timeStamp:0,
-					user:userId,
-					type:'message',
-					data:messageResult,
-					choice:choiceResult,
-					id: data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade],
-					queueDay:0,
-					userDay:5,
-					dayDifference: 0,
-					noNote:0,
-					fromChoice:replyData.choiceId
-				};
-			}
-			sendQueue.push(object2);
-			organiseQueue();
-			io.to(userId).emit('receivedChoice',{choiceId:replyData.choiceId});
-			io.to(userId).emit('connectionStrong');
-		}
-	});
-	
-	socket.on('anotherMessage', function(replyData) {
-		console.log(timestampify()+replyData.playerName+' asked for another message (Message: '+replyData.nextId+')');	
-		var messageItem = data.messageObjects[replyData.nextId];
-		var choiceResult = '';
-		if (messageItem.autoTarget == 'choice') {
-			var choiceResult = data.choiceObjects[messageItem.autoId]
-		}
-		io.to(userId).emit('newMessage',{messageItem:messageItem,choices:choiceResult});
-		io.to(userId).emit('connectionStrong');
-	});
-	
-	socket.on('deviceReg', function(regData) {
-		if (regData.device.type != undefined) {
-			console.log(timestampify()+regData.playerName+' just handed in their device reg');	
-			if (clients[userId] == undefined) {
-				clients[userId] = [];
-			}
-		}
-	});
-	
-	socket.on('messageWait', function(data) {
-		console.log(timestampify()+' -= Message Wait warning =-');
-		console.log(data);	
-	});
+
 });
 
 
@@ -279,33 +158,17 @@ var notifyUser = function(type,reg,user,pic,shortData) {
 
 var queueFunc = {};
 
-queueFunc.add = function(day,timeStampToHit,userId,timeThroughDay,userDay,noNote) {
+queueFunc.add = function(type,from,fromAvatar,reg,mob,sendTime,shortData) {
 	if (timeStampToHit != 0) {
-		if (data.events[day][timeStampToHit]['object'] == 'feedObjects') { var type = 'feed'; 
-		} else if (data.events[day][timeStampToHit]['object'] == 'commentObjects') { var type = 'comment'; 
-		} else if (data.events[day][timeStampToHit]['object'] == 'messageObjects') { var type = 'messages'; }
-		//console.log(day);
-		//console.log(timeStampToHit);
-		//console.log(data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']]);
-		if (data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']].autoTarget && data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']].autoTarget == 'choice') {
-			var queueChoice = data.choiceObjects[data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']].autoId];
-		} else {
-			var queueChoice = '';
-		}
 		console.log(timestampify()+'Update found, Type: '+type+', id: '+data.events[day][timeStampToHit]['id']);
 		var dayDifTemp = userDay - day;
 		var queueObject = {
-			timeStamp:moment().unix() + ((timeStampToHit - timeThroughDay) * 60),
-			timeToHit:timeStampToHit,
-			user:userId,
-			type:type,
-			id:data.events[day][timeStampToHit]['id'],
-			data:data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']],
-			choice:queueChoice,
-			queueDay:day,
-			dayDifference: dayDifTemp,
-			userDay:userDay,
-			noNote:noNote
+			timeStamp:moment().unix() + (sendTime * 60),
+			from:from,
+			fromAvatar:fromAvatar,
+			reg:reg,
+			mob:mob,
+			shortData:shortData
 		};
 		sendQueue.push(queueObject);
 		organiseQueue()
@@ -320,72 +183,11 @@ queueFunc.getIndex = function(object) {
 	return replyString.substr(0,replyString.length-1);
 }
 
-queueFunc.update = function(userId,day,timeThroughDay,updatedLast,lastFeed,lastMessage,lastComment,noNote) {
-	console.log(timestampify()+'Checking update for '+userId.substr(0,4)+'<->'+clientData[userId].name + ' . '+queueFunc.getIndex(lastFeed)+'|'+queueFunc.getIndex(lastMessage)+'|'+queueFunc.getIndex(lastComment));
-	timeStampToHit = 0;
-	var itemsQueued = 0;
-	var itemsSent = 0;
-	var currentDay = 0;
-	function checkEvents(dayCheck) {
-		for (var i in data.events[dayCheck]) {
-			var notDone = 1;
-			if (lastFeed != '' && data.events[dayCheck][i].object == 'feedObjects') {
-				if (lastFeed[data.events[dayCheck][i].id] == 1)  {
-					notDone = 0;
-				}
-			}
-			if (lastComment != null && data.events[dayCheck][i].object == 'commentObjects') {
-				if (lastComment[data.events[dayCheck][i].id] == 1) {
-					notDone = 0;
-				}
-			}
-			if (lastMessage != '' && data.events[dayCheck][i].object == 'messageObjects') {
-				if (lastMessage[data.events[dayCheck][i].id] == 1) {
-					notDone = 0;
-				}
-			}
-			if (notDone == 1) {
-				queueFunc.add(dayCheck,i,userId,timeThroughDay,day,noNote);
-				var dayDiff = day - dayCheck;
-				if (i > timeThroughDay && dayDiff <= 0 && data.events[dayCheck][i].object == 'feedObjects' || i > timeThroughDay && dayDiff <= 0 && data.events[dayCheck][i].object == 'messageObjects') {
-					itemsQueued++;
-					break;
-				} else {
-					itemsSent++;
-				}
-			}
-		}
-		if (currentDay < day) {
-			currentDay++;
-			checkEvents(currentDay);
-		}
-	}
-	checkEvents(currentDay);
-	io.to(userId).emit('hideLoad');
-	var initialLength = sendQueue.length;
-	sendQueue = uniqueTest(sendQueue);
-	if (sendQueue.length > initialLength) {
-		console.log(timestampify()+'Found '+parseInt(initialLength) - parseInt(sendQueue.length)+' duplicates');	
-	} else {
-		console.log(timestampify()+'No duplicates found');
-	}
-}
 
 queueFunc.report = function(limit) {
 	var current = moment().unix();
 	if (limit == 0 || current % 600 <= 1) {
-		var replyString = '';
-		for (var i in sendQueue) {
-			if (sendQueue[i].type == 'feed') {
-				replyString += 'User: '+sendQueue[i].user.substr(0, 4)+'<->'+clientData[sendQueue[i].user].name+', Type: Post, Id: '+sendQueue[i].data.postId+'|';
-			} else if (sendQueue[i].type == 'comment') {
-				replyString += 'User: '+sendQueue[i].user.substr(0, 4)+'<->'+clientData[sendQueue[i].user].name+', Type: Comment, Id: '+sendQueue[i].data.commentId+'|';
-			} else if (sendQueue[i].type == 'message') {
-				replyString += 'User: '+sendQueue[i].user.substr(0, 4)+'<->'+clientData[sendQueue[i].user].name+', Type: Message, Id: '+sendQueue[i].data.messageId+'|';
-			}
-		}
-		console.log(timestampify()+'Queue update, total in queue is '+sendQueue.length+', next update in '+Math.floor((sendQueue[0]['timeStamp'] - current) / 60)+' minutes');
-		console.log(timestampify()+replyString.substr(0,replyString.length-1));
+
 	}
 }
 
@@ -396,58 +198,7 @@ queueFunc.check = function() {
 	var didSend = 0;
 	while (sendQueue[0] != undefined && sendQueue[0]['timeStamp'] <= current || sendQueue[0] != undefined && sendQueue[0].queueDay < sendQueue[0].userDay ) {
 		didSend = 1;
-		console.log(timestampify()+'Sending '+sendQueue[0]['type'] + '|'+sendQueue[0]['id']+' to '+sendQueue[0].user.substr(0, 4)+'<->'+clientData[sendQueue[0]['user']]['name']);
-		if (sendQueue[0]['type'] == 'messages' || sendQueue[0]['type'] == 'message') {
-			if (sendQueue[0]['user'] == undefined) {
-				console.log(timestampify()+'Shit. Error.');
-			} else {
-				if (sendQueue[0]['fromChoice'] == undefined) {
-					var choiceID = 'NA';
-				} else {
-					var choiceId = sendQueue[0]['fromChoice'];
-				}
-				io.to(sendQueue[0]['user']).emit('newMessage',{messageItem:sendQueue[0]['data'],choices:sendQueue[0]['choice'],noNote:sendQueue[0].noNote,queueDay:sendQueue[0].dayDifference,fromChoice:choiceId});
-				clientData[sendQueue[0]['user']]['lastMessage'][sendQueue[0]['id']] = 1;
-			}
-			if (sendQueue[0]['noNote'] == 0 && sendQueue[0]['fromChoice'] == undefined) {
-				var shortData = sendQueue[0].data.messages[0].message;
-				if (shortData.length > 30) {
-					shortData = shortData.substr(0,30) + '...';
-				}
-				notifyUser('message',clientData[sendQueue[0]['user']]['reg'],data.users[sendQueue[0]['data']['messages'][0]['fromId']][0],data.users[sendQueue[0]['data']['messages'][0]['fromId']][4],shortData);
-			}
-		} else if (sendQueue[0]['type'] == 'comment') {
-			if (sendQueue[0]['user'] == undefined) {
-				console.log(timestampify()+'Shit. Error.');
-			} else {
-				if (sendQueue[0]['fromChoice'] == undefined) {
-					var choiceID = 'NA';
-				} else {
-					var choiceId = sendQueue[0]['fromChoice'];
-				}
-				io.to(sendQueue[0]['user']).emit('newComment',{comment:sendQueue[0]['data'],choices:sendQueue[0]['choice'],noNote:sendQueue[0].noNote,queueDay:sendQueue[0].dayDifference,fromChoice:choiceId});
-				clientData[sendQueue[0]['user']]['lastComment'][sendQueue[0]['id']] = 1;
-			}
-		} else if (sendQueue[0]['type'] == 'feed') {
-			if (sendQueue[0]['user'] == undefined) {
-				console.log(timestampify()+'Shit. Error.');
-			} else {
-				if (sendQueue[0]['data'].comments != 0) {
-					var commentSend = data.commentObjects[sendQueue[0]['data'].comments];
-				}
-				io.to(sendQueue[0]['user']).emit('newFeed',{feedItem:sendQueue[0]['data'],choices:sendQueue[0]['choice'],comments:commentSend,noNote:sendQueue[0].noNote,queueDay:sendQueue[0].dayDifference});
-				clientData[sendQueue[0]['user']]['lastFeed'][sendQueue[0]['id']] = 1;
-			}
-			if (sendQueue[0]['noNote'] == 0) {
-				if (clientData[sendQueue[0]['user']]['friends'][sendQueue[0]['data']['fromId']] == 1) {
-					var shortData = sendQueue[0].data.text;
-					if (shortData.length > 30) {
-						shortData = shortData.substr(0,30) + '...';
-					}
-					notifyUser('post',clientData[sendQueue[0]['user']]['reg'],data.users[sendQueue[0]['data']['fromId']][0],data.users[sendQueue[0]['data']['fromId']][4],shortData);
-				}
-			}
-		}
+		notifyUser(sendQueue[0]['type'],sendQueue[0]['reg'],sendQueue[0]['from'],sendQueue[0]['fromAvatar'],sendQueue[0]['shortData']);
 		sendQueue.shift();
 		organiseQueue()
 	}

@@ -1,4 +1,6 @@
 
+	var data = localStorage.getObject('dataCache');
+
     clientData = {};
     var sendQueue = [];
 
@@ -24,6 +26,14 @@
                 tempData.firstLoad = 0;
                 firstLoadTime = 1;
                 localStorage.setObject('gameSettings',tempData);
+                for (var i in data.prologue) {
+                    data.feedObjects[data.prologue[i]['id']].comments
+                    if (data.feedObjects[data.prologue[i]['id']].comments != 0) {
+        				var commentSend = data.commentObjects[data.feedObjects[data.prologue[i]['id']].comments];
+        			}
+        			newFeed({feedItem:data.feedObjects[data.prologue[i]['id']],choices:'',comments:commentSend,noNote:1,queueDay:1});
+        			gameUpdate.updateFeed(data.prologue[i]['id']);
+                };
             }
             console.log(timestampify()+'Retrieving data');
             var page = {
@@ -225,9 +235,9 @@ queueFunc.add = function(day,timeStampToHit,timeThroughDay,userDay,noNote) {
 		};
 		sendQueue.push(queueObject);
 		console.log(type);
-		if (type == 'messages' || type == 'message') {
+		if (type == 'messages' && deviceData['type'] == 1 || type == 'message' && deviceData['type'] == 1) {
     	    if (noNote == 0 && deviceData['type'] == 1 && dayDifTemp == 0 && timeStampToHit - timeThroughDay > 0) {
-    			var shortData = objectToSave.messages[0].message;
+    			/*var shortData = objectToSave.messages[0].message;
     			if (shortData.length > 30) {
     				shortData = shortData.substr(0,30) + '...';
     			}
@@ -241,15 +251,15 @@ queueFunc.add = function(day,timeStampToHit,timeThroughDay,userDay,noNote) {
                     shortData:shortData,
                     sendTime: timeStampToHit - timeThroughDay
                 });
-                console.log('Emitting a request for a message poke in '+ (timeStampToHit - timeThroughDay) + ' minutes');
+                console.log('Emitting a request for a message poke in '+ (timeStampToHit - timeThroughDay) + ' minutes');*/
     		}
 		}
-		if (type == 'feed') {
+		if (type == 'feed' && deviceData['type'] == 1) {
 		    console.log(objectToSave['fromId']);
 		    console.log(localStorage.getObject('gameData').users);
 		    console.log(localStorage.getObject('gameData').users[objectToSave['fromId']].friended);
 		    if (localStorage.getObject('gameData').users[objectToSave['fromId']].friended == 1 && dayDifTemp == 0 && timeStampToHit - timeThroughDay > 0) {
-				var shortData = objectToSave.text;
+				/*var shortData = objectToSave.text;
 				if (shortData.length > 30) {
 					shortData = shortData.substr(0,30) + '...';
 				}
@@ -263,7 +273,7 @@ queueFunc.add = function(day,timeStampToHit,timeThroughDay,userDay,noNote) {
                     shortData:shortData,
                     sendTime: timeStampToHit - timeThroughDay
                 });
-                console.log('Emitting a request for a feed poke in '+ (timeStampToHit - timeThroughDay) + ' minutes');
+                console.log('Emitting a request for a feed poke in '+ (timeStampToHit - timeThroughDay) + ' minutes');*/
 			}
 		}
 		organiseQueue()
@@ -282,7 +292,7 @@ queueFunc.update = function(day,timeThroughDay,updatedLast,noNote) {
 	timeStampToHit = 0;
 	var itemsQueued = 0;
 	var itemsSent = 0;
-	var currentDay = 0;
+	var currentDay = -1;
 	function checkEvents(dayCheck) {
 	    console.log('Checking '+dayCheck);
 		for (var i in data.events[dayCheck]) {

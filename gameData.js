@@ -1,6 +1,10 @@
 module.exports = {
-    
     feedObjects: {
+        1:{postId:1,fromId:1,date:600,text:'It\'s good to be home. Finally signed up to Twaddle so I can get back into contact with all of you, but god it\'s weird to be on a mainstream social media',image:'',caption:'',video:'',likes:14,comments:1},
+        2:{postId:2,fromId:2,date:680,text:'I don’t know what to do now that the semester is over. Meticulously crafted notes and scheduling are no longer guiding my days. Should I relax and watch a documentary?',image:'',caption:'',video:'',likes:11,comments:2},
+        3:{postId:3,fromId:2,date:820,text:'“The truth is: the natural world is changing. And we are totally dependent on that world. It provides our food, water and air. It is the most precious thing we have and we need to defend it.” - David Attenborough<br><br>David Attenborough always manages to sound eloquent in what he says. It may simply be the accent, but I think it may be more to do with a lifetime of living and studying in the environment he loves.',image:'',caption:'',video:'',likes:5,comments:3},
+        4:{postId:4,fromId:1,date:800,text:'Jesus, how did I never notice the guy next door was so weird. I just saw him water his flowers, he zoned out and was just standing there flooding his flower beds while his face was blank...',image:'',caption:'',video:'',likes:3,comments:4},
+        5:{postId:5,fromId:1,date:1200,text:'TIL Mother Teresa was fucking bitch. I love when someone this revered turns out to be relatively evil',image:'',caption:'',video:'65JxnUW7Wk4',likes:2,comments:5},
         104:{postId:104,fromId:1,date:3,text:'Holy shit, did anyone else feel that? Was there an earthquake or something?',image:'',caption:'',video:'',likes:2,comments:0},
         105:{postId:105,fromId:1,date:21,text:'Late night scavenging. One person\'s garbage is another person\'s treasure. Or, well. Still actually garbage.',image:'',caption:'',video:'',likes:4,comments:0},
 	    107:{postId:107,fromId:1,date:563,text:'You\'d think that I’d know how to study by now.',image:'',caption:'',video:'',likes:2,comments:0},
@@ -23,6 +27,66 @@ module.exports = {
         2105:{postId:2105,fromId:1,date:640,text:'I joke about these things a lot, but seriously has anyone heard from Marcel? You out there buddy?',image:'',caption:'',video:'',likes:7,comments:0}
     },
     commentObjects: {
+        1:{
+            comments:[
+                {order:1,user:2,date:601,text:'Oh how the mighty has fallen... It is so good to have you home again, can\'t wait for some long overdue hangouts',image:'',video:'',likes:2},
+                {order:1,user:4,date:603,text:'And you two can finally hook up',image:'',video:'',likes:2},
+                {order:1,user:3,date:604,text:'Shut up Steve you massive dick, it\'s good to see you back Robin it has been too long',image:'',video:'',likes:2},
+                {order:1,user:4,date:605,text:'I only call it as I see it',image:'',video:'',likes:2},
+                {order:1,user:2,date:607,text:'You mean you wish you saw it',image:'',video:'',likes:2},
+            ],
+            commentId:1,
+            autoTarget:'',
+            autoId:'',
+            feedId:''
+        },
+        2:{
+            comments:[
+                {order:1,user:1,date:692,text:'Go, live that wild life',image:'',video:'',likes:2},
+                {order:1,user:2,date:705,text:'I intend to. Now, the question is, what should I watch?',image:'',video:'',likes:2},
+                {order:1,user:1,date:733,text:'I know a couple of really good documentaries. How about Loose Change? or The Hidden Enemy? or Everything is a Rich Man’s Trick?',image:'',video:'',likes:2},
+                {order:1,user:2,date:757,text:'Can you think of anything that isn’t based around conspiracies?',image:'',video:'',likes:2},
+                {order:1,user:1,date:762,text:'They ARE kinda my thing. You could always go for the classics. Attenborough?',image:'',video:'',likes:2},
+                {order:1,user:2,date:768,text:'I could always go for some Attenborough. I could re-watch some of my favourites.',image:'',video:'',likes:2},
+                {order:1,user:1,date:775,text:'Success!',image:'',video:'',likes:2},
+            ],
+            commentId:2,
+            autoTarget:'',
+            autoId:'',
+            feedId:''
+        },
+        3:{
+            comments:[
+                {order:1,user:4,date:827,text:'Luv me some Dave',image:'',video:'',likes:2},
+                {order:1,user:2,date:836,text:'Is that true? Name something he narrated.',image:'',video:'',likes:2},
+                {order:1,user:4,date:851,text:'Life on Earth?',image:'',video:'',likes:2},
+                {order:1,user:2,date:856,text:'Why did you type the question mark? Did you have to look that up?',image:'',video:'',likes:2},
+                {order:1,user:3,date:859,text:'Steve and Cal, play nice. Also, really Steve? Really?',image:'',video:'',likes:2},
+            ],
+            commentId:3,
+            autoTarget:'',
+            autoId:'',
+            feedId:''
+        },
+        4:{
+            comments:[
+                {order:1,user:2,date:803,text:'I guess you forget when you are a big city folk living the high life at a fancy university just how weird suburbia is',image:'',video:'',likes:2},
+                {order:1,user:2,date:805,text:'No seriously, I think something might be wrong with him',image:'',video:'',likes:2},
+            ],
+            commentId:4,
+            autoTarget:'',
+            autoId:'',
+            feedId:''
+        },
+        5:{
+            comments:[
+                {order:1,user:5,date:1230,text:'It might be that I’ve forgotten the things you say, or that I’ve been underexposed to your presence, but I think we should fix that. I’ll be around later, okay?',image:'',video:'',likes:2},
+            ],
+            commentId:5,
+            autoTarget:'',
+            autoId:'',
+            feedId:''
+        },
         10601:{
             comments:[
                 {order:1,user:2,date:540,text:'You are such a rebel Robin',image:'',video:'',likes:2},
@@ -1047,9 +1111,16 @@ module.exports = {
         'Twaddle - Messages': 'Messages',
         'Robin Creed': 'Robin'
     },
+    prologue: {
+            600:{object:'feedObjects',id:'1'},
+            680:{object:'feedObjects',id:'2'},
+            820:{object:'feedObjects',id:'3'},
+            800:{object:'feedObjects',id:'4'},
+            1200:{object:'feedObjects',id:'5'},
+    },
     
     events: {
-        0: {
+        '0': {
             3:{object:'feedObjects',id:'104'},
             21:{object:'feedObjects',id:'105'},
             501:{object:'commentObjects',id:'10401'},
@@ -1103,7 +1174,7 @@ module.exports = {
             1245:{object:'commentObjects',id:'11702'},
             1251:{object:'commentObjects',id:'11703'},
         },
-        1: {
+        '1': {
             480:{object:'feedObjects',id:'2101'},
             510:{object:'feedObjects',id:'2102'},
             540:{object:'commentObjects',id:'210201'},

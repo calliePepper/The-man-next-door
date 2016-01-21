@@ -185,6 +185,10 @@ a {
 .inputIndex {
   padding-left: 60px; }
 
+.loadBlock {
+  padding: 30px;
+  text-align: center; }
+
 body {
   background: #e9eaed;
   font-family: -apple-system, helvetica, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", arial, san-serif; }
@@ -860,7 +864,8 @@ iframe {
 .startBlock {
   padding: 10px;
   width: 100%;
-  text-align: center; }
+  text-align: center;
+  display: none; }
 
 .startBtn {
   margin-top: 10px;

@@ -8,6 +8,7 @@ The client side is a simple html / javascript engine with a heavy emphasis on ti
 
 # Server side
 A Node.js server sits on the back end and supplies three major functions:
+
 1. A system for recording analytics on the players
 2. An automatic update of the storyline when there are updates
 3. Providing notifications via the GCM system

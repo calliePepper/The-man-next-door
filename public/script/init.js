@@ -147,6 +147,7 @@ function processMessage(receivedMessages,nonote) {
 
 function askForNotes() {
     firstLoadTime = 0;
+    console.log(timestampify()+'Notes please server!');
     var lastUpdate = localStorage.getObject('gameSettings').lastUpdate;
      if (localStorage.getObject('gameSettings').firstLoad == 1) {
         console.log(timestampify()+'omg first load');

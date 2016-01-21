@@ -246,22 +246,27 @@ queueFunc.update = function(userId,day,timeThroughDay,updatedLast,lastFeed,lastM
 	function checkEvents(dayCheck) {
 		for (var i in data.events[dayCheck]) {
 			var notDone = 1;
+			var friendedUser = 0;
 			if (lastFeed != '' && data.events[dayCheck][i].object == 'feedObjects') {
 				if (lastFeed[data.events[dayCheck][i].id] == 1)  {
 					notDone = 0;
+				} 
+				if (clientData[userId]['friends'][data.feedObjects[data.events[dayCheck][i].id]['fromId']] == 1) {
+					friendedUser = 1;		
 				}
 			}
-			if (lastComment != null && data.events[dayCheck][i].object == 'commentObjects') {
-				if (lastComment[data.events[dayCheck][i].id] == 1) {
-					notDone = 0;
-				}
+			if (data.events[dayCheck][i].object == 'commentObjects') {
+				notDone = 0;
 			}
 			if (lastMessage != '' && data.events[dayCheck][i].object == 'messageObjects') {
 				if (lastMessage[data.events[dayCheck][i].id] == 1) {
 					notDone = 0;
 				}
+				if (clientData[userId]['friends'][data.messageObjects[data.events[dayCheck][i].id][0]['toId']] == 1) {
+					friendedUser = 1;		
+				}
 			}
-			if (notDone == 1) {
+			if (notDone == 1 && friendedUser == 1) {
 				queueFunc.add(dayCheck,i,userId,timeThroughDay,day,noNote);
 				var dayDiff = day - dayCheck;
 				if (i > timeThroughDay && dayDiff <= 0 && data.events[dayCheck][i].object == 'feedObjects' || i > timeThroughDay && dayDiff <= 0 && data.events[dayCheck][i].object == 'messageObjects') {
@@ -311,7 +316,7 @@ queueFunc.check = function() {
 	var didSend = 0;
 	while (sendQueue[0] != undefined && sendQueue[0]['timeStamp'] <= current || sendQueue[0] != undefined && sendQueue[0].queueDay < sendQueue[0].userDay ) {
 		didSend = 1;
-		console.log(timestampify()+'Sending '+sendQueue[0]['type'] + '|'+sendQueue[0]['id']+' to '+sendQueue[0].user.substr(0, 4)+'<->'+clientData[sendQueue[0]['user']]['name']);
+		console.log(timestampify()+'Sending notification for '+sendQueue[0]['type'] + '|'+sendQueue[0]['id']+' to '+sendQueue[0].reg.substr(0, 4)+'<->'+clientData[sendQueue[0]['user']]['name']);
 		if (sendQueue[0]['type'] == 'messages' || sendQueue[0]['type'] == 'message') {
 			if (sendQueue[0]['noNote'] == 0 && sendQueue[0]['fromChoice'] == undefined) {
 				var shortData = sendQueue[0].data.messages[0].message;

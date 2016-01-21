@@ -68,6 +68,7 @@ io.on('connection', function(socket) {
 	});
 	
 	socket.on('pageLoad', function(page) {
+		console.log(page);
 		var compDate = getPoint(page.startTime,page.currentTime,page.timezone); 
 		var currentDay = compDate.day;
 		var timeThroughDay = Math.round(compDate.timeThrough);
@@ -91,7 +92,7 @@ io.on('connection', function(socket) {
 		clientData[userId]['reg'] = page.reg;
 		clientData[userId]['device'] = page.mob;
 		console.log (clientData[userId]['reg'] + ' - ' + clientData[userId]['device'])
-		queueFunc.update(userId,currentDay,timeThroughDay,updatedLast,clientData[userId]['lastFeed'],clientData[userId]['lastMessage'],clientData[userId]['lastComment'],page.firstRun)
+		queueFunc.update(userId,currentDay,timeThroughDay,updatedLast,page['lastFeed'],page['lastMessage'],page['lastComment'],page.firstRun)
 	});
 	
 	socket.on('prepareNote', function(data) {

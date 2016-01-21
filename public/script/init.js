@@ -145,6 +145,34 @@ function processMessage(receivedMessages,nonote) {
     }
 }
 
+function askForNotes() {
+     if (localStorage.getObject('gameSettings').firstLoad == 1) {
+        console.log(timestampify()+'omg first load');
+        lastUpdate = 1440;
+        var tempData = localStorage.getObject('gameSettings');
+        tempData.firstLoad = 0;
+        firstLoadTime = 1;
+        localStorage.setObject('gameSettings',tempData);
+    }
+    console.log(timestampify()+'Retrieving data');
+    socket.emit('pageLoad', {
+        page:$(document).find("title").text(),
+        playerName:playerName,
+        startTime:localStorage.getObject('gameSettings').startTime,
+        lastUpdate:lastUpdate,
+        currentTime:new Date(),
+        users:localStorage.getObject('gameData').users,
+        timezone:localStorage.getObject('gameSettings').timezone,
+        lastFeed:localStorage.getObject('gameSettings').lastFeed,
+        lastMessage:localStorage.getObject('gameSettings').lastMessage,
+        lastComment:localStorage.getObject('gameSettings').lastComment,
+        firstLoad:firstLoadTime,
+        firstRun:firstRun,
+        reg:deviceData['reg'],
+        mob: deviceData['type']
+    });
+}
+
 function newFeed(receivedFeed) {
     processFeed(receivedFeed,receivedFeed.noNote);
     gameUpdate.updateTime(80);

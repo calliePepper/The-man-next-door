@@ -68,7 +68,6 @@ io.on('connection', function(socket) {
 	});
 	
 	socket.on('pageLoad', function(page) {
-		console.log(page);
 		var compDate = getPoint(page.startTime,page.currentTime,page.timezone); 
 		var currentDay = compDate.day;
 		var timeThroughDay = Math.round(compDate.timeThrough);
@@ -198,28 +197,33 @@ queueFunc.add = function(day,timeStampToHit,userId,timeThroughDay,userDay,noNote
 		if (data.events[day][timeStampToHit]['object'] == 'feedObjects') { var type = 'feed'; 
 		} else if (data.events[day][timeStampToHit]['object'] == 'commentObjects') { var type = 'comment'; 
 		} else if (data.events[day][timeStampToHit]['object'] == 'messageObjects') { var type = 'messages'; }
-		if (data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']].autoTarget && data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']].autoTarget == 'choice') {
-			var queueChoice = data.choiceObjects[data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']].autoId];
-		} else {
-			var queueChoice = '';
+		if (data.events[day][timeStampToHit]['object'] == 'feedObjects' || data.events[day][timeStampToHit]['object'] == 'messageObjects') { 
+			var dayDifTemp = userDay - day;
+			if (dayDifTemp == 0 && timeThroughDay < timeStampToHit) {
+				if (data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']].autoTarget && data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']].autoTarget == 'choice') {
+					var queueChoice = data.choiceObjects[data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']].autoId];
+				} else {
+					var queueChoice = '';
+				}
+				console.log(timestampify()+'Update found, Type: '+type+', id: '+data.events[day][timeStampToHit]['id']);
+				var dayDifTemp = userDay - day;
+				var queueObject = {
+					timeStamp:moment().unix() + ((timeStampToHit - timeThroughDay) * 60),
+					timeToHit:timeStampToHit,
+					user:userId,
+					type:type,
+					id:data.events[day][timeStampToHit]['id'],
+					data:data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']],
+					choice:queueChoice,
+					queueDay:day,
+					dayDifference: dayDifTemp,
+					userDay:userDay,
+					noNote:noNote
+				};
+				sendQueue.push(queueObject);
+				organiseQueue();
+			}
 		}
-		console.log(timestampify()+'Update found, Type: '+type+', id: '+data.events[day][timeStampToHit]['id']);
-		var dayDifTemp = userDay - day;
-		var queueObject = {
-			timeStamp:moment().unix() + ((timeStampToHit - timeThroughDay) * 60),
-			timeToHit:timeStampToHit,
-			user:userId,
-			type:type,
-			id:data.events[day][timeStampToHit]['id'],
-			data:data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']],
-			choice:queueChoice,
-			queueDay:day,
-			dayDifference: dayDifTemp,
-			userDay:userDay,
-			noNote:noNote
-		};
-		sendQueue.push(queueObject);
-		organiseQueue()
 	}
 }
 

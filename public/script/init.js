@@ -146,6 +146,8 @@ function processMessage(receivedMessages,nonote) {
 }
 
 function askForNotes() {
+    firstLoadTime = 0;
+    var lastUpdate = localStorage.getObject('gameSettings').lastUpdate;
      if (localStorage.getObject('gameSettings').firstLoad == 1) {
         console.log(timestampify()+'omg first load');
         lastUpdate = 1440;

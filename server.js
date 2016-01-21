@@ -55,6 +55,7 @@ io.on('connection', function(socket) {
 	io.sockets.connected[userId].emit('requestStatus');
 	clients[socket.id] = [];
 	clients[socket.id]['socket'] = socket;
+	console.log(timestampify()+userId+' connected');
 	
 	socket.on('disconnect', function() {
 		var disconCounter = 0;
@@ -64,7 +65,7 @@ io.on('connection', function(socket) {
 		        disconCounter++;
 		    }
 		}
-		console.log(timestampify()+userId+' just disconnected, '+disconCounter+' events removed, '+sendQueue.length+' remaing');
+		console.log(timestampify()+userId+' disconnected');
 	});
 	
 	socket.on('pageLoad', function(page) {
@@ -218,7 +219,8 @@ queueFunc.add = function(day,timeStampToHit,userId,timeThroughDay,userDay,noNote
 					queueDay:day,
 					dayDifference: dayDifTemp,
 					userDay:userDay,
-					noNote:noNote
+					noNote:noNote,
+					reg:clientData[userId]['reg']
 				};
 				sendQueue.push(queueObject);
 				organiseQueue();
@@ -292,11 +294,9 @@ queueFunc.report = function(limit) {
 		var replyString = '';
 		for (var i in sendQueue) {
 			if (sendQueue[i].type == 'feed') {
-				replyString += 'User: '+sendQueue[i].user.substr(0, 4)+'<->'+clientData[sendQueue[i].user].name+', Type: Post, Id: '+sendQueue[i].data.postId+'|';
-			} else if (sendQueue[i].type == 'comment') {
-				replyString += 'User: '+sendQueue[i].user.substr(0, 4)+'<->'+clientData[sendQueue[i].user].name+', Type: Comment, Id: '+sendQueue[i].data.commentId+'|';
+				replyString += 'User: '+sendQueue[i].reg.substr(0, 4)+'<->'+clientData[sendQueue[i].user].name+', Type: Post, Id: '+sendQueue[i].data.postId+'|';
 			} else if (sendQueue[i].type == 'message') {
-				replyString += 'User: '+sendQueue[i].user.substr(0, 4)+'<->'+clientData[sendQueue[i].user].name+', Type: Message, Id: '+sendQueue[i].data.messageId+'|';
+				replyString += 'User: '+sendQueue[i].reg.substr(0, 4)+'<->'+clientData[sendQueue[i].user].name+', Type: Message, Id: '+sendQueue[i].data.messageId+'|';
 			}
 		}
 		console.log(timestampify()+'Queue update, total in queue is '+sendQueue.length+', next update in '+Math.floor((sendQueue[0]['timeStamp'] - current) / 60)+' minutes');
@@ -349,7 +349,7 @@ function uniqueTest(arr) {
     console.log(timestampify()+'-----Unique test-----');
   for (i = 0, n = arr.length; i < n; i++) {
     var item = arr[i];
-    arrResult[item.timeToHit + " - " + item.user] = item;
+    arrResult[item.timeStamp + " - " + item.reg] = item;
   }
   i = 0;
   for (var item in arrResult) {

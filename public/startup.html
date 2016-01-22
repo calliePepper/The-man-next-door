@@ -40,10 +40,8 @@
                         <input type="radio" name="dayStart" value=5> Day 5
                     </div>
             </div>
-            <div class="loadBlock">
-                <img src="img/loading.gif" class="loadingImage" />
-            </div>
             <div class="startBlock">
+                <div id="loadBtn" class="btn loadBtn"><img src="img/loading.gif" class="loadingImage" /></div>
                 <div id="startBtn" class="btn startBtn">Click here to start</div>   
             </div>
     	    
@@ -77,8 +75,8 @@
                 
                 localStorage.setObject('dataCache',updateData.data);
                 
-                $('.startBlock').show();
-                $('.loadBlock').hide();
+                $('.startBtn').css('display','inline-block');
+                $('.loadBtn').hide();
                             
                var ua = navigator.userAgent.toLowerCase();
                 var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");

@@ -361,8 +361,10 @@ queueFunc.check = function() {
 	var timer1 = new Date();
 	queueFunc.report(1);
 	var didSend = 0;
-	if (current % 600 <= 1 && deviceData['type'] == 1) {
-		askForNotes();
+	if (current % 300 <= 1 && deviceData['type'] == 1) {
+		setTimeout(function() {
+			askForNotes();	
+		},20000);
 	}
 	while (sendQueue[0] != undefined && sendQueue[0]['timeStamp'] <= current || sendQueue[0] != undefined && sendQueue[0].queueDay < sendQueue[0].userDay ) {
 		didSend = 1;

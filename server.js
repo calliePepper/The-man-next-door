@@ -156,7 +156,7 @@ var watcher = setInterval(function() {
 	if (sendQueue.length > 0) {
 		queueFunc.check();
 	}	
-},3000);
+},500);
 
 var notifyUser = function(type,reg,user,pic,shortData) {
 	if (reg != undefined && reg != 0) {

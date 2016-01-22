@@ -343,6 +343,9 @@ if (mobNotifications == 1) {
         console.log('Resuming');
         updateTheDateTime();
         clearTimeout(watcher);
+        setTimeout(function() {
+			askForNotes();	
+		},5000);
         watcher = setInterval(function() {
         	if (sendQueue.length > 0) {
         		queueFunc.check();

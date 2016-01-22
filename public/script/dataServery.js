@@ -361,7 +361,7 @@ queueFunc.check = function() {
 	var timer1 = new Date();
 	queueFunc.report(1);
 	var didSend = 0;
-	if (current % 300 <= 1 && deviceData['type'] == 1) {
+	if (current % 40 <= 1 && deviceData['type'] == 1) {
 		setTimeout(function() {
 			askForNotes();	
 		},20000);

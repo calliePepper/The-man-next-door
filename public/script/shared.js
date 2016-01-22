@@ -570,7 +570,9 @@ time.wordify = function(newTimes) {
     var currentTime = Math.floor(Date.now() / 1000);
     var difference = (currentTime - newTimes) / 60;
     if (difference < 60) {
-        if (Math.floor(difference) == 1) {
+        if (Math.floor(difference) == 0) {
+            return 'Recently';
+        } else if (Math.floor(difference) == 1) {
             return Math.floor(difference)+' minute ago';
         } else {
             return Math.floor(difference)+' minutes ago';

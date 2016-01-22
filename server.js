@@ -59,12 +59,6 @@ io.on('connection', function(socket) {
 	
 	socket.on('disconnect', function() {
 		var disconCounter = 0;
-		for (var i = sendQueue.length - 1; i >= 0; i--) {
-			if (sendQueue[i]['user'] == userId) {
-		        sendQueue.splice(i,1);
-		        disconCounter++;
-		    }
-		}
 		console.log(timestampify()+userId+' disconnected');
 	});
 	
@@ -154,13 +148,15 @@ function organiseQueue() {
 	}
     
     sendQueue.sort(compare);
+    
+    sendQueue = uniqueTest(sendQueue);
 }
 
 var watcher = setInterval(function() {
 	if (sendQueue.length > 0) {
 		queueFunc.check();
 	}	
-},500);
+},3000);
 
 var notifyUser = function(type,reg,user,pic,shortData) {
 	if (reg != undefined && reg != 0) {
@@ -209,7 +205,7 @@ queueFunc.add = function(day,timeStampToHit,userId,timeThroughDay,userDay,noNote
 				console.log(timestampify()+'Update found, Type: '+type+', id: '+data.events[day][timeStampToHit]['id']);
 				var dayDifTemp = userDay - day;
 				var queueObject = {
-					timeStamp:moment().unix() + ((timeStampToHit - timeThroughDay) * 60),
+					timeStamp:moment().startOf('minute').unix() + ((timeStampToHit - timeThroughDay) * 60),
 					timeToHit:timeStampToHit,
 					user:userId,
 					type:type,
@@ -262,7 +258,7 @@ queueFunc.update = function(userId,day,timeThroughDay,updatedLast,lastFeed,lastM
 				if (lastMessage[data.events[dayCheck][i].id] == 1) {
 					notDone = 0;
 				}
-				if (clientData[userId]['friends'][data.messageObjects[data.events[dayCheck][i].id][0]['toId']] == 1) {
+				if (clientData[userId]['friends'][data.messageObjects[data.events[dayCheck][i].id].messages[0]['toId']] == 1) {
 					friendedUser = 1;		
 				}
 			}
@@ -285,27 +281,26 @@ queueFunc.update = function(userId,day,timeThroughDay,updatedLast,lastFeed,lastM
 	checkEvents(currentDay);
 	io.to(userId).emit('hideLoad');
 	var initialLength = sendQueue.length;
-	sendQueue = uniqueTest(sendQueue);
-	if (sendQueue.length > initialLength) {
-		console.log(timestampify()+'Found '+parseInt(initialLength) - parseInt(sendQueue.length)+' duplicates');	
-	} else {
-		console.log(timestampify()+'No duplicates found');
-	}
+	organiseQueue();
 }
+
+var reportBlock = 0;
 
 queueFunc.report = function(limit) {
 	var current = moment().unix();
-	if (limit == 0 || current % 600 <= 1) {
-		var replyString = '';
+	if (limit == 0  && reportBlock == 0 || current % 100 <= 1 && reportBlock == 0) {
+		reportBlock = 1;
+		console.log(timestampify()+'--------Queue update--------');
 		for (var i in sendQueue) {
 			if (sendQueue[i].type == 'feed') {
-				replyString += 'User: '+sendQueue[i].reg.substr(0, 4)+'<->'+clientData[sendQueue[i].user].name+', Type: Post, Id: '+sendQueue[i].data.postId+'|';
+				console.log(clientData[sendQueue[i].user].name + ' at '+sendQueue[i].reg.substr(0, 4)+' will get Post | '+sendQueue[i].data.postId+' in '+Math.floor((sendQueue[i]['timeStamp'] - current) / 60)+' minutes');
 			} else if (sendQueue[i].type == 'message') {
-				replyString += 'User: '+sendQueue[i].reg.substr(0, 4)+'<->'+clientData[sendQueue[i].user].name+', Type: Message, Id: '+sendQueue[i].data.messageId+'|';
+				console.log(clientData[sendQueue[i].user].name + ' at '+sendQueue[i].reg.substr(0, 4)+' will get Message | '+sendQueue[i].data.messageId+' in '+Math.floor((sendQueue[i]['timeStamp'] - current) / 60)+' minutes');
 			}
 		}
-		console.log(timestampify()+'Queue update, total in queue is '+sendQueue.length+', next update in '+Math.floor((sendQueue[0]['timeStamp'] - current) / 60)+' minutes');
-		console.log(timestampify()+replyString.substr(0,replyString.length-1));
+		console.log(timestampify()+'Next send in '+Math.floor((sendQueue[0]['timeStamp'] - current) / 60)+' minutes');
+	} else {
+		reportBlock = 0;
 	}
 }
 
@@ -314,7 +309,7 @@ queueFunc.check = function() {
 	var timer1 = new Date();
 	queueFunc.report(1);
 	var didSend = 0;
-	while (sendQueue[0] != undefined && sendQueue[0]['timeStamp'] <= current || sendQueue[0] != undefined && sendQueue[0].queueDay < sendQueue[0].userDay ) {
+	while (sendQueue[0] != undefined && sendQueue[0]['timeStamp'] <= current) {
 		didSend = 1;
 		console.log(timestampify()+'Sending notification for '+sendQueue[0]['type'] + '|'+sendQueue[0]['id']+' to '+sendQueue[0].reg.substr(0, 4)+'<->'+clientData[sendQueue[0]['user']]['name']);
 		if (sendQueue[0]['type'] == 'messages' || sendQueue[0]['type'] == 'message') {
@@ -337,7 +332,7 @@ queueFunc.check = function() {
 			}
 		}
 		sendQueue.shift();
-		organiseQueue()
+		organiseQueue();
 	}
 	var timer2 = new Date();
 	var timeTaken = timer2.getTime() - timer1.getTime();
@@ -351,7 +346,6 @@ function uniqueTest(arr) {
   var n, y, x, i, r;
   var arrResult = {},
     unique = [];
-    console.log(timestampify()+'-----Unique test-----');
   for (i = 0, n = arr.length; i < n; i++) {
     var item = arr[i];
     arrResult[item.timeStamp + " - " + item.reg] = item;
@@ -359,6 +353,10 @@ function uniqueTest(arr) {
   i = 0;
   for (var item in arrResult) {
     unique[i++] = arrResult[item];
+  }
+  if (arr.length > unique.length) {
+  	var duplicates = arr.length - unique.length;
+	console.log(timestampify()+'---- Found '+duplicates+' duplicates');	
   }
   return unique;
 }

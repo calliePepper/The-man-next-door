@@ -28,7 +28,7 @@ Storage.prototype.getObject = function(key) {
     return value && JSON.parse(value);
 }
 
-if (localStorage.getObject('gameSettings') == undefined || localStorage.getObject('gameSettings').name == undefined || localStorage.getObject('gameSettings').startTime == undefined || localStorage.getObject('gameSettings').lastUpdate == undefined || localStorage.getObject('gameSettings').timezone == undefined) {
+if (localStorage.getObject('dataCache') == undefined || localStorage.getObject('gameSettings') == undefined || localStorage.getObject('gameSettings').name == undefined || localStorage.getObject('gameSettings').startTime == undefined || localStorage.getObject('gameSettings').lastUpdate == undefined || localStorage.getObject('gameSettings').timezone == undefined) {
     window.location.replace('startup.html');
 } 
 

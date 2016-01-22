@@ -41,6 +41,7 @@
                     </div>
             </div>
             <div class="startBlock">
+                <div id="loadBtn" class="btn loadBtn"><img src="img/loading.gif" class="loadingImage" /></div>
                 <div id="startBtn" class="btn startBtn">Click here to start</div>   
             </div>
     	    
@@ -59,7 +60,35 @@
         <script type="text/javascript" src="script/jquery.min.js"></script>
         <script type="text/javascript" src="script/data.js"></script>
         <script type="text/javascript" src="script/glitchText.js"></script>
+        <script type="text/javascript" src="script/socket.io.js"></script>
+        <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
         <script>
+        
+            var socket = io('https://the-man-next-door-soldevifae.c9.io');
+            
+            socket.on('requestStatus', function(data) {
+                socket.emit('dataMeUp');    
+            });
+            
+            socket.on('systemUpdate', function(updateData) {
+                console.log(updateData.data);
+                
+                localStorage.setObject('dataCache',updateData.data);
+                
+                $('.startBtn').css('display','inline-block');
+                $('.loadBtn').hide();
+                            
+               var ua = navigator.userAgent.toLowerCase();
+                var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
+                var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
+                
+                if(isAndroid) {
+                    
+                } else {
+    
+                }
+            });
+            
             $('h1').glitch({minint:1, maxint:3, maxglitch:15, hoffset:10, voffset:3, direction:'random'});
             $('.colouredText').glitch();
 
@@ -104,6 +133,7 @@
                 return newDateObj.getTime() / 1000;
             }
 
+
             $('#startBtn').on('click touch', function() {
                 if ($('#name').val() != '') {
                     var day = $('input[name=dayStart]:checked').val();
@@ -127,51 +157,8 @@
                         };
                         console.log(gameData);
                         localStorage.setObject('gameSettings',gameData);
-                        var comments = {
-                                0: [
-                                    new comment(1,2,createTimestamp(601),'Oh how the mighty has fallen... It is so good to have you home again, can\'t wait for some long overdue hangouts','','',2),
-                                    new comment(1,4,createTimestamp(603),'And you two can finally hook up','','',3),
-                                    new comment(1,3,createTimestamp(604),'Shut up Steve you massive dick, it\'s good to see you back Robin it has been too long','','',3),
-                                    new comment(1,4,createTimestamp(605),'I only call it as I see it','','',2),
-                                    new comment(1,2,createTimestamp(607),'You mean you wish you saw it','','',7)
-                                ],
-                                1: [
-                                    new comment(1,1,createTimestamp(692),'Go, live that wild life','','',2),
-                                    new comment(1,2,createTimestamp(705),'I intend to. Now, the question is, what should I watch?','','',3),
-                                    new comment(1,1,createTimestamp(733),'I know a couple of really good documentaries. How about Loose Change? or The Hidden Enemy? or Everything is a Rich Man’s Trick?','','',3),
-                                    new comment(1,2,createTimestamp(757),'Can you think of anything that isn’t based around conspiracies?','','',2),
-                                    new comment(1,1,createTimestamp(762),'They ARE kinda my thing. You could always go for the classics. Attenborough? ','','',7),
-                                    new comment(1,2,createTimestamp(768),'I could always go for some Attenborough. I could re-watch some of my favourites.','','',7),
-                                    new comment(1,1,createTimestamp(775),'Success!','','',7)
-                                ],
-                                2: [
-                                    new comment(1,4,createTimestamp(827),'Luv me some Dave','','',2),
-                                    new comment(1,2,createTimestamp(836),'Is that true? Name something he narrated.','','',3),
-                                    new comment(1,4,createTimestamp(851),'Life on Earth?','','',3),
-                                    new comment(1,2,createTimestamp(856),'Why did you type the question mark? Did you have to look that up?','','',2),
-                                    new comment(1,3,createTimestamp(859),'Steve and Cal, play nice. Also, really Steve? Really?','','',7),
-                                ],
-                                3: [
-                                    new comment(1,2,createTimestamp(803), 'I guess you forget when you are a big city folk living the high life at a fancy university just how weird suburbia is','','',0),
-                                    new comment(1,1,createTimestamp(805), 'No seriously, I think something might be wrong with him','','',0)
-                                ],
-                                4: [
-                                    new comment(1,5,createTimestamp(1230), 'It might be that I’ve forgotten the things you say, or that I’ve been underexposed to your presence, but I think we should fix that. I’ll be around later, okay?','','',0)
-                                ]
-                        }
-                        var choices = {
-                            3: new choice(3,'Deal with the problem yourself','Ignore it, it will go away','Skin the cat. It\'s the only solution. Skin. The. Cat')
-                        }
                         var totalData = {
-                            posts: [
-                                new post(0,1,createTimestamp(600),'It\'s good to be home. Finally signed up to Twaddle so I can get back into contact with all of you, but god it\'s weird to be on a mainstream social media','','',14,comments[0],0,''),
-                                new post(1,2,createTimestamp(680),'I don’t know what to do now that the semester is over. Meticulously crafted notes and scheduling are no longer guiding my days. Should I relax and watch a documentary?','','',11,comments[1],0,''),
-                                new post(2,2,createTimestamp(820),' “The truth is: the natural world is changing. And we are totally dependent on that world. It provides our food, water and air. It is the most precious thing we have and we need to defend it.” - David Attenborough<br><br>David Attenborough always manages to sound eloquent in what he says. It may simply be the accent, but I think it may be more to do with a lifetime of living and studying in the environment he loves.','','',11,comments[2],0,''),
-                                new post(3,1,createTimestamp(800),'Jesus, how did I never notice the guy next door was so weird. I just saw him water his flowers, he zoned out and was just standing there flooding his flower beds while his face was blank...','','',4,comments[3],0,''),
-                                new post(4,1,createTimestamp(1200),'TIL Mother Teresa was fucking bitch. I love when someone this revered turns out to be relatively evil','','65JxnUW7Wk4',3,comments[4],0,'')
-                                
-                               
-                            ],
+                            posts: [],
                             trending: [
                                 new trending(1,'Twaddle','A new social media for the masses, is looking for new employees'),
                                 new trending(1,'Puppy love','A puppy is a small regional zoo has made friends with a zebra, and they are the most unlikeliest of companions!'),
@@ -192,7 +179,7 @@
                                 5: new user('Marcel','Artur','he',1423412,'img/marcelAvatar.jpg','maBg.jpg',0,1,1,0,0)
                             }
                         };          
-                        localStorage.setObject('gameData',totalData);
+                        localStorage.setObject('gameData',totalData); 
                         window.location.replace("index.html");
                     } else {
                         alert('Sorry your device does not support the required technology (HTML5 Local storage)');

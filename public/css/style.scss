@@ -216,7 +216,9 @@ iframe{width:100%;}
 .infoBox p{color:#fff;padding-bottom:30px;}
 .infoBox li{padding-bottom:30px;}
 .startBlock{padding:10px;width:100%;text-align:center;}
-.startBtn{margin-top:10px;width:auto;display: inline-block;cursor:pointer;font-size:1.2em;padding:14px 30px;}
+.loadBtn{margin-top:10px;display:inline-block;padding:0px;background:#2a2826;border-color:#2a2826;}
+.loadBtn img{width:200px;}
+.startBtn{margin-top:10px;width:auto;display: inline-block;cursor:pointer;font-size:1.2em;padding:14px 30px;display:none;}
 input[type="text"]{padding:8px;color:#fff;background:none;border:1px solid $majorColour;margin-left:$paddingVal;}
 .halfer input{margin-left: 60px;    margin-top: 15px;}
 .badInput{background:rgba(255,0,0,0.5) !important;}

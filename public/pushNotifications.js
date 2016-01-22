@@ -33,13 +33,14 @@ var app = {
             {
                 deviceData['reg'] = data.registrationId;
             }
-            requestStatusReply();
+            triggerCheck();
+            setTimeout(function() {askForNotes()},20000);
         });
 
         push.on('notification', function(data) {
             console.log("notification event");
             console.log(JSON.stringify(data));
-            
+            setTimeout(function() {askForNotes()},20000);
             push.finish(function () {
                 console.log('finish successfully called');
             });

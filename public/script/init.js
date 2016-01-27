@@ -176,8 +176,8 @@ function askForNotes() {
     });
 }
 
-function newFeed(receivedFeed) {
-    processFeed(receivedFeed,receivedFeed.noNote);
+function newFeed(receivedFeed,day) {
+    processFeed(receivedFeed,receivedFeed.noNote,day);
     gameUpdate.updateTime(80);
     setTimeout(function(){
         triggerCheck();
@@ -185,7 +185,7 @@ function newFeed(receivedFeed) {
     hideLoad();
 };
 
-function processFeed(receivedFeed,nonote) {
+function processFeed(receivedFeed,nonote,day) {
     gameUpdate.updateFeed(receivedFeed.feedItem.postId);
     console.log(timestampify()+'new feed item retrieved');
     console.log(receivedFeed);
@@ -216,7 +216,7 @@ function processFeed(receivedFeed,nonote) {
             now = later;
         }
         var currentFeed = new post(receivedFeed.feedItem.postId,receivedFeed.feedItem.fromId,now,receivedFeed.feedItem.text,receivedFeed.feedItem.image,receivedFeed.feedItem.video,receivedFeed.feedItem.likes,commentBuilder,0,receivedFeed.feedItem.caption);
-        gameUpdate.updateLocal(currentFeed,'posts');
+        gameUpdate.updateLocal(currentFeed,'posts',day,receivedFeed.feedItem['date']);
         if ($(document).find("title").text() == 'Twaddle - A social media for the everyman') {
             if (nonote == 1) {
                 feed.backlog(currentFeed);
@@ -279,18 +279,21 @@ function processComment(receivedComment,nonote) {
 
     var tempData = localStorage.getObject('gameData');
     var aim = 0;
-    $.each(tempData.posts, function(index, value) {
-        if (value.postId == receivedComment.comment.feedId) {
-            aim = index;
-        }
+    $.each(tempData.posts, function(day, dayData) {
+        $.each(dayData, function(index,value) {
+           if (value.postId == receivedComment.comment.feedId) {
+                aim = index;
+                aimDay = day;
+            } 
+        });
     });
     console.log(timestampify()+'Applying to '+aim);
     $.each(tempComments, function(index, value) {
-        if (tempData.posts[aim].comments == 0) {
-            tempData.posts[aim].comments = [];
+        if (tempData.posts[aimDay][aim].comments == 0) {
+            tempData.posts[aimDay][aim].comments = [];
         }
-        console.log(tempData.posts[aim]);
-        tempData.posts[aim].comments.push(value);
+        console.log(tempData.posts[aimDay][aim]);
+        tempData.posts[aimDay][aim].comments.push(value);
     });
     localStorage.setObject('gameData',tempData);
     if (nonote == 1) {

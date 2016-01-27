@@ -121,6 +121,7 @@ function getPoint(start,currentTime,timezone) {
 	var startMidnight = startDate.clone().startOf('day').utcOffset(timezone * -1);
 	var thisMidnight = thisDate.clone().startOf('day').utcOffset(timezone * -1);
 	var day =  moment(thisMidnight).diff(startMidnight, 'days');
+	day = day + 1;
 	var timeThroughDay = thisDate.clone().diff(thisMidnight, 'minutes');
 	//console.log('Start time is '+start+'. Current time is '+currentTime+'. Difference is '+(parseInt(currentTime) - parseInt(start))+'. Which should be the same as '+timeThroughDay);
 	return {day:day,timeThrough:timeThroughDay};
@@ -348,7 +349,7 @@ function uniqueTest(arr) {
     unique = [];
   for (i = 0, n = arr.length; i < n; i++) {
     var item = arr[i];
-    arrResult[item.timeStamp + " - " + item.reg] = item;
+    arrResult[item.timeStamp + " - " + item.queueDay + " - " + item.reg] = item;
   }
   i = 0;
   for (var item in arrResult) {

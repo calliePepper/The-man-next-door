@@ -7,8 +7,8 @@ module.exports = {
         */
         1:{postId:1,fromId:1,date:600,text:'It\'s good to be home. Finally signed up to Twaddle so I can get back into contact with all of you, but god it\'s weird to be on a mainstream social media',image:'',caption:'',video:'',likes:14,comments:1},
         2:{postId:2,fromId:2,date:680,text:'I don’t know what to do now that the semester is over. Meticulously crafted notes and scheduling are no longer guiding my days. Should I relax and watch a documentary?',image:'',caption:'',video:'',likes:11,comments:2},
-        3:{postId:3,fromId:2,date:820,text:'“The truth is: the natural world is changing. And we are totally dependent on that world. It provides our food, water and air. It is the most precious thing we have and we need to defend it.” - David Attenborough<br><br>David Attenborough always manages to sound eloquent in what he says. It may simply be the accent, but I think it may be more to do with a lifetime of living and studying in the environment he loves.',image:'',caption:'',video:'',likes:5,comments:3},
-        4:{postId:4,fromId:1,date:800,text:'Jesus, how did I never notice the guy next door was so weird. I just saw him water his flowers, he zoned out and was just standing there flooding his flower beds while his face was blank...',image:'',caption:'',video:'',likes:3,comments:4},
+        3:{postId:3,fromId:1,date:800,text:'Jesus, how did I never notice the guy next door was so weird. I just saw him water his flowers, he zoned out and was just standing there flooding his flower beds while his face was blank...',image:'',caption:'',video:'',likes:3,comments:4},
+        4:{postId:4,fromId:2,date:820,text:'“The truth is: the natural world is changing. And we are totally dependent on that world. It provides our food, water and air. It is the most precious thing we have and we need to defend it.” - David Attenborough<br><br>David Attenborough always manages to sound eloquent in what he says. It may simply be the accent, but I think it may be more to do with a lifetime of living and studying in the environment he loves.',image:'',caption:'',video:'',likes:5,comments:3},
         5:{postId:5,fromId:1,date:1200,text:'TIL Mother Teresa was fucking bitch. I love when someone this revered turns out to be relatively evil',image:'',caption:'',video:'65JxnUW7Wk4',likes:2,comments:5},
         104:{postId:104,fromId:1,date:3,text:'Holy shit, did anyone else feel that? Was there an earthquake or something?',image:'',caption:'',video:'',likes:2,comments:0},
         105:{postId:105,fromId:1,date:21,text:'Late night scavenging. One person\'s garbage is another person\'s treasure. Or, well. Still actually garbage.',image:'',caption:'',video:'',likes:4,comments:0},
@@ -823,7 +823,7 @@ module.exports = {
         },
         110708: {
             comments:[
-                {order:1,user:2,date:998,text:'“It’s quiet. Too quiet”?',image:'',video:'',like:''},
+                {order:1,user:2,date:998,text:'“It’s quiet. Too quiet���?',image:'',video:'',like:''},
             ],
             commentId:110708,
             autoTarget:'',
@@ -1305,16 +1305,15 @@ module.exports = {
         'Twaddle - Messages': 'Messages',
         'Robin Creed': 'Robin'
     },
-    prologue: {
+    events: {
+        0: {
             600:{object:'feedObjects',id:'1'},
             680:{object:'feedObjects',id:'2'},
-            820:{object:'feedObjects',id:'3'},
-            800:{object:'feedObjects',id:'4'},
+            800:{object:'feedObjects',id:'3'},
+            820:{object:'feedObjects',id:'4'},
             1200:{object:'feedObjects',id:'5'},
-    },
-    
-    events: {
-        '0': {
+        },
+        1: {
             3:{object:'feedObjects',id:'104'},
             21:{object:'feedObjects',id:'105'},
             501:{object:'commentObjects',id:'10401'},
@@ -1368,7 +1367,7 @@ module.exports = {
             1245:{object:'commentObjects',id:'11702'},
             1251:{object:'commentObjects',id:'11703'},
         },
-        '1': {
+        2: {
             480:{object:'feedObjects',id:'1101'},
             510:{object:'feedObjects',id:'1102'},
             540:{object:'commentObjects',id:'110201'},

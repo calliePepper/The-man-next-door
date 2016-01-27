@@ -26,14 +26,6 @@
                 tempData.firstLoad = 0;
                 firstLoadTime = 1;
                 localStorage.setObject('gameSettings',tempData);
-                for (var i in data.prologue) {
-                    data.feedObjects[data.prologue[i]['id']].comments
-                    if (data.feedObjects[data.prologue[i]['id']].comments != 0) {
-        				var commentSend = data.commentObjects[data.feedObjects[data.prologue[i]['id']].comments];
-        			}
-        			newFeed({feedItem:data.feedObjects[data.prologue[i]['id']],choices:'',comments:commentSend,noNote:1,queueDay:1});
-        			gameUpdate.updateFeed(data.prologue[i]['id']);
-                };
             }
             console.log(timestampify()+'Retrieving data');
             var page = {
@@ -171,6 +163,7 @@ function getPoint(start,currentTime,timezone) {
 	startMidnight.setHours(0,0,0);
 	thisMidnight.setHours(0,0,0);
 	var day = currentTime.getDay() - start.getDay();
+	day = day + 1;
 	var timeDiff = Math.abs(currentTime.getTime() - thisMidnight.getTime());
 	console.log(timeDiff);
 	var timeThroughDay =  Math.ceil(timeDiff / (1000 * 60));
@@ -276,7 +269,7 @@ queueFunc.add = function(day,timeStampToHit,timeThroughDay,userDay,noNote) {
                 console.log('Emitting a request for a feed poke in '+ (timeStampToHit - timeThroughDay) + ' minutes');*/
 			}
 		}
-		organiseQueue()
+		organiseQueue();
 	}
 }
 
@@ -292,12 +285,13 @@ queueFunc.update = function(day,timeThroughDay,updatedLast,noNote) {
 	timeStampToHit = 0;
 	var itemsQueued = 0;
 	var itemsSent = 0;
-	var currentDay = -1;
+	var currentDay = 0;
 	function checkEvents(dayCheck) {
-	    console.log('Checking '+dayCheck);
+	    console.log('Checking day '+dayCheck);
 		for (var i in data.events[dayCheck]) {
 			var notDone = 1;
 			if (data.events[dayCheck][i].object == 'feedObjects') {
+				console.log('Checking object '+i);
 				if (localStorage.getObject('gameSettings').lastFeed[data.events[dayCheck][i].id] == 1)  {
 					notDone = 0;
 				}
@@ -385,13 +379,13 @@ queueFunc.check = function() {
 				var choiceId = sendQueue[0]['fromChoice'];
 			}
 			localStorage.getObject('gameSettings').lastComment[sendQueue[0]['id']] = 1;
-		    newComment({comment:sendQueue[0]['data'],choices:sendQueue[0]['choice'],noNote:sendQueue[0].noNote,queueDay:sendQueue[0].dayDifference,fromChoice:choiceId});
+		    newComment({comment:sendQueue[0]['data'],choices:sendQueue[0]['choice'],noNote:sendQueue[0].noNote,queueDay:sendQueue[0].dayDifference,fromChoice:choiceId},sendQueue[0].queueDay);
 			gameUpdate.updateComment(sendQueue[0]['id']);
 		} else if (sendQueue[0]['type'] == 'feed') {
 			if (sendQueue[0]['data'].comments != 0) {
 				var commentSend = data.commentObjects[sendQueue[0]['data'].comments];
 			}
-			newFeed({feedItem:sendQueue[0]['data'],choices:sendQueue[0]['choice'],comments:commentSend,noNote:sendQueue[0].noNote,queueDay:sendQueue[0].dayDifference});
+			newFeed({feedItem:sendQueue[0]['data'],choices:sendQueue[0]['choice'],comments:commentSend,noNote:sendQueue[0].noNote,queueDay:sendQueue[0].dayDifference},sendQueue[0].queueDay);
 			gameUpdate.updateFeed(sendQueue[0]['id']);
 		}
 		sendQueue.shift();
@@ -412,7 +406,7 @@ function uniqueTest(arr) {
     console.log(timestampify()+'-----Unique test-----');
   for (i = 0, n = arr.length; i < n; i++) {
     var item = arr[i];
-    arrResult[item.timeToHit + " - " + item.user] = item;
+    arrResult[item.timeToHit + " - " + item.queueDay + " - " + item.user] = item;
   }
   i = 0;
   for (var item in arrResult) {

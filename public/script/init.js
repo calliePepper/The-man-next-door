@@ -22,6 +22,13 @@ var rebootIfError = setTimeout(function() {
 },20000);
 
 
+/*    FIX OLD DATA FORMAT   */
+
+if (localStorage.getObject('gameData').posts != undefined && localStorage.getObject('gameData').posts[0].date != undefined) {
+    window.localStorage.clear();
+    window.location.replace("index.html?connection=error");    
+}
+
 function requestStatus() {
     clearTimeout(rebootIfError);
     if (mobNotifications == 1) {

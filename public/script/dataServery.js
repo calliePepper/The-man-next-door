@@ -384,7 +384,11 @@ queueFunc.check = function() {
 		} else if (sendQueue[0]['type'] == 'feed') {
 			if (sendQueue[0]['data'].comments != 0) {
 				var commentSend = data.commentObjects[sendQueue[0]['data'].comments];
+			} else {
+				var commentSend = '';
 			}
+			console.log('Sending feed, it has a comment value '+sendQueue[0]['data'].comments);
+			console.log(commentSend);
 			newFeed({feedItem:sendQueue[0]['data'],choices:sendQueue[0]['choice'],comments:commentSend,noNote:sendQueue[0].noNote,queueDay:sendQueue[0].dayDifference},sendQueue[0].queueDay);
 			gameUpdate.updateFeed(sendQueue[0]['id']);
 		}

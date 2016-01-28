@@ -34,120 +34,165 @@ if (localStorage.getObject('dataCache') == undefined || localStorage.getObject('
 
 var playerName = localStorage.getObject('gameSettings').name;
 
-var gameUpdate = {};
+var saveRepo = [];
+var currentSave = [];
+var saving = 0;
+var saveTimeout;
 
-gameUpdate.updateTime = function(varTime) {
-    if (varTime == undefined) {varTime = 0;}
-    var currentTime = Math.floor(Date.now() / 1000 + varTime);
-    var tempData = localStorage.getObject('gameSettings');
-    tempData.lastUpdate = new Date();
-    localStorage.setObject('gameSettings',tempData);
+function gameUpdate(type, saveType, data, dataType, extraData,choiceId) {
+    var savePocket = {
+        type: type,
+        saveType: saveType,
+        data: data,
+        dataType: dataType,
+        extraData: extraData,
+        choiceId: choiceId
+    }
+    saveRepo.push(savePocket);
+    triggerSave();
 }
 
-gameUpdate.updateFeed = function(feedId) {
-    var tempData = localStorage.getObject('gameSettings');        
-    tempData.lastFeed[feedId.toString()] = 1;
-    localStorage.setObject('gameSettings',tempData);
-}
-
-gameUpdate.updateMessages = function(messageId) {
-    var tempData = localStorage.getObject('gameSettings');
-    tempData.lastMessage[messageId] = 1;
-    localStorage.setObject('gameSettings',tempData);
-}
-
-gameUpdate.messageWait = function(messageId) {
-    var tempData = localStorage.getObject('gameSettings');
-    tempData.messageWait[messageId] = 1;
-    localStorage.setObject('gameSettings',tempData);
-}
-
-gameUpdate.removeMessages = function(messageId) {
-    var tempData = localStorage.getObject('gameSettings');
-    tempData.messageWait[messageId] = undefined;
-    localStorage.setObject('gameSettings',tempData);
-}
-
-gameUpdate.updateComment = function(commentId) {
-    var tempData = localStorage.getObject('gameSettings');
-    tempData.lastComment[commentId.toString()] = 1;
-    localStorage.setObject('gameSettings',tempData);
-}
-
-gameUpdate.updateNotifications = function(type,clear) {
-    if (clear == '1') {
-        var newNumber = 0;
+function triggerSave() {
+    
+    if (saving == 0) {
+        saving = 1;
+        currentSave = saveRepo;
+        saveRepo = [];   
+        processSave();
     } else {
-        var newNumber = localStorage.getObject('gameSettings').unread[type] + 1;
+        setTimeout(function() {
+           triggerSave(); 
+        },10);
+        console.log(timestampify()+'PAUSING TICK ----------');
     }
-    var tempData = localStorage.getObject('gameSettings');
-    tempData.unread[type] = newNumber;
-    localStorage.setObject('gameSettings',tempData);
 }
 
-gameUpdate.updateReturn = function(id,choice,additional) {
-    var tempData = localStorage.getObject('gameSettings');
-    tempData.sendQueue[id] = [choice,additional];
-    localStorage.setObject('gameSettings',tempData);
-}
-
-gameUpdate.removeReturn = function(id) {
-    var tempData = localStorage.getObject('gameSettings');
-    tempData.sendQueue[id] = undefined;
-    localStorage.setObject('gameSettings',tempData);
-}
-
-gameUpdate.addFriend = function(id) {
-    var tempData = localStorage.getObject('gameData');
-    tempData.users[id].friended = 1;
-    localStorage.setObject('gameData',tempData);
-}
-
-gameUpdate.updateLocal = function(data,dataType,extraData,choiceId) {
-    updating = 1;
-    //console.log(timestampify()+'Have hit the update section. dataType is '+dataType+'. Data is '+data);
-    var tempStorage = localStorage.getObject('gameData');
-    if (dataType == 'comment') {
-        var lookup = {};
-        for (var i = 0, len = tempStorage['posts'].length; i < len; i++) {
-            lookup[tempStorage['posts'][i].postId] = i;
+function processSave() {
+    $.each(currentSave, function(index,value) {
+        var type = value['type'];
+        var saveType = value['saveType'];
+        var data = value['data'];
+        var dataType = value['dataType'];
+        var extraData = value['extraData'];
+        var choiceId = value['choiceId'];
+        console.log(timestampify()+'Processing a save tick --------- '+saveType+ ' ' +type);
+        var tempData = localStorage.getObject('gameData');
+        if (saveType == 'settings') {tempData = localStorage.getObject('gameSettings');}
+        switch(type) {
+            case 'firstLoad':
+                tempData.firstLoad = 0;
+                firstLoadTime = 1;
+                break;
+            case 'updateTime':
+                if (data == undefined) {data = 0;}
+                var currentTime = Math.floor(Date.now() / 1000 + data);
+                tempData.lastUpdate = new Date();
+                break;
+            case 'updateFeed':
+                tempData.lastFeed[data.toString()] = 1;
+                break;
+            case 'updateMessages':
+                tempData.lastMessage[data] = 1;
+                break;
+            case 'messageWait':
+                tempData.messageWait[data] = 1;
+                break;
+            case 'removeMessages':
+                tempData.messageWait[data] = undefined;
+                break;
+            case 'updateComment':
+                tempData.lastComment[data.toString()] = 1;
+                break;
+            case 'timerNull':
+                tempData.timers[data] = undefined;
+                break;
+            case 'updateNotifications':
+                if (dataType == '1') {
+                    var newNumber = 0;
+                } else {
+                    var newNumber = localStorage.getObject('gameSettings').unread[data] + 1;
+                }
+                tempData.unread[data] = newNumber;
+                break;
+            case 'updateReturn':
+                tempData.sendQueue[data] = [dataType,extraData];
+                break;
+            case 'removeReturn':
+                tempData.sendQueue[data] = undefined;
+                break;
+            case 'addFriend':
+                tempData.users[data].friended = 1;
+                break;
+            case 'updateLocal':
+                console.log('Updating local data save');
+                if (dataType == 'comment') {
+                    var lookup = {};
+                    for (var i = 0, len = tempData['posts'].length; i < len; i++) {
+                        lookup[tempData['posts'][i].postId] = i;
+                    }
+                    tempData['posts'][lookup[extraData]].comments.push(data);
+                } else if (dataType == 'comments') {
+                    var aim = 0;
+                    $.each(tempData.posts, function(day, dayData) {
+                        $.each(dayData, function(index,value) {
+                           if (value.postId == extraData.comment.feedId) {
+                                aim = index;
+                                aimDay = day;
+                            } 
+                        });
+                    });
+                    $.each(data, function(index, value) {
+                        if (tempData.posts[aimDay][aim].comments == 0) {
+                            tempData.posts[aimDay][aim].comments = [];
+                        }
+                        tempData.posts[aimDay][aim].comments.push(value);
+                    });
+                } else if (dataType == 'choice') {
+                    var cameFrom = extraData.split('_');
+                    if (cameFrom[0] != 'message') {
+                        var lookup = {};
+                        for (var i = 0, len = tempData['posts'].length; i < len; i++) {
+                            lookup[tempData['posts'][i].postId] = i;
+                        }
+                        //console.log(cameFrom[1]);
+                        tempData['posts'][lookup[cameFrom[1]]].commented = 1;
+                    }
+                } else if (dataType == 'liked') {
+                    var lookup = {};
+                    for (var i = 0, len = tempData['posts'].length; i < len; i++) {
+                        lookup[tempData['posts'][i].postId] = i;
+                    }
+                    tempData['posts'][lookup[extraData]].liked = 1;
+                    tempData['posts'][lookup[extraData]].likes += 1;
+                } else if (dataType == 'messages') {
+                    console.log('Pushing message');
+                    console.log(data);
+                    console.log(tempData['messages']);
+                    tempData['messages'].push(data);
+                    console.log(tempData['messages']);
+                } else if (dataType == 'posts') {
+                    tempData['posts'][extraData] = tempData['posts'][extraData] || {}; 
+                    tempData['posts'][extraData][choiceId] = data;
+                } else {
+                    console.log(timestampify()+'Local update error. Type '+data+' not found');
+                }
+                break;
+            case 'updateTimer':
+                var updateTime = createTimestamp(dataType);
+                var ttlData = {
+                    time:updateTime,
+                    target:extraData,
+                    id:choiceId
+                };
+                tempData.timers[data] = ttlData;
+                break;
+            default:
+                console.log(timestampify()+'Something went wrong with the save, datatype: '+dataType);
         }
-        tempStorage['posts'][lookup[extraData]].comments.push(data);
-        localStorage.setObject('gameData',tempStorage);
-    } else if (dataType == 'choice') {
-        var cameFrom = extraData.split('_');
-        if (cameFrom[0] == 'message') {
-            
-        } else {
-            var lookup = {};
-            for (var i = 0, len = tempStorage['posts'].length; i < len; i++) {
-                lookup[tempStorage['posts'][i].postId] = i;
-            }
-            //console.log(cameFrom[1]);
-            tempStorage['posts'][lookup[cameFrom[1]]].commented = 1;
-        }
-        localStorage.setObject('gameData',tempStorage);
-    } else if (dataType == 'liked') {
-        var lookup = {};
-        for (var i = 0, len = tempStorage['posts'].length; i < len; i++) {
-            lookup[tempStorage['posts'][i].postId] = i;
-        }
-        tempStorage['posts'][lookup[extraData]].liked = 1;
-        tempStorage['posts'][lookup[extraData]].likes += 1;
-        localStorage.setObject('gameData',tempStorage);
-    } else if (dataType == 'messages') {
-        tempStorage['messages'].push(data);
-        localStorage.setObject('gameData',tempStorage);
-        
-    } else if (dataType == 'posts') {
-        tempStorage['posts'][extraData] = tempStorage['posts'][extraData] || {}; 
-        console.log('---- this is what I see ----');
-        console.log(data.date);
-        tempStorage['posts'][extraData][choiceId] = data;
-        console.log(tempStorage['posts'])
-        localStorage.setObject('gameData',tempStorage);
-    }
-    updating = 0;
+        if (saveType == 'settings') {tempData = localStorage.setObject('gameSettings',tempData);}
+        else {localStorage.setObject('gameData',tempData);}
+    });
+    saving = 0;
 }
 
 /*
@@ -207,14 +252,11 @@ choiceControls.choose = function(id,choice,targetType) {
         additionalTarget = id;
         var newComment = new comment('',0,now,theChoice,'','',0);
         //console.log(timestampify()+'Submitting comment data. '+newComment+ '. '+commentTarg);
-        gameUpdate.updateLocal(newComment,'comment',commentTarg);
+        gameUpdate('updateLocal','data',newComment,'comment',commentTarg);
         //console.log(timestampify()+'Submitting choice data. '+choiceMade+ '. '+commentTarg);
-        gameUpdate.updateLocal(choiceMade,'choice','comment_'+commentTarg,id);
+        gameUpdate('updateLocal','data',choiceMade,'choice','comment_'+commentTarg,id);
         
     } else if (targetType == 'message') {
-        var tempStorage = localStorage.getObject('gameData');
-        tempStorage.messages.pop();
-        localStorage.setObject('gameData',tempStorage);
         var date = time.date(Math.floor(Date.now() / 1000));
         var usersAvatar = localStorage.getObject('gameData')['users'][0]['avatar'];
         var usersFirstname = localStorage.getObject('gameData')['users'][0]['firstname'];
@@ -222,17 +264,17 @@ choiceControls.choose = function(id,choice,targetType) {
         var imageLink = '';
         var choiceMade = choice.replace('choice','');
         var newMessage = new message(0,currentlyViewing,Math.floor(Date.now() / 1000),theChoice,'','',deviceData['type']);
-        //gameUpdate.updateMessages(receivedMessages.messageItem.messageId);
+        //gameUpdate('updateMessages','settings',receivedMessages.messageItem.messageId);
         var commentTarg = currentlyViewing;
         //var fromText = '<i class="fa fa-desktop"></i><span class="sentFrom">Sent from desktop</span>';
         if (deviceData['type'] == 1){var fromText = '<i class="fa fa-mobile"></i><span class="sentFrom">Sent from mobile</span>';} else {var fromText = '<i class="fa fa-desktop"></i><span class="sentFrom">Sent from desktop</span>';}
         $('#messagesCont').append('<div class="messageCont"><img class="messageAvatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /><div class="sentOn">'+fromText+date+'</div><div class="messageName">'+usersFirstname+'</div><div class="messageContents">'+theChoice+'</div></div>');
         var objDiv = document.getElementById("messagesCont");objDiv.scrollTop = objDiv.scrollHeight;
         $('#choiceBlock_'+id).remove();
-        gameUpdate.updateLocal(newMessage,'messages');
-        gameUpdate.updateLocal(choiceMade,'choice','message_'+commentTarg,id);
+        gameUpdate('updateLocal','data',newMessage,'messages');
+        gameUpdate('updateLocal','data',choiceMade,'choice','message_'+commentTarg,id);
     }
-    gameUpdate.updateReturn(id,choice.replace('choice',''),additionalTarget);
+    gameUpdate('updateReturn','settings',id,choice.replace('choice',''),additionalTarget);
 }
 
 /*
@@ -325,14 +367,15 @@ messages.load = function(id) {
     var firstMessages = {};
     var thisUser = '';
     currentlyViewing = id;
+    var isChoice = 0;
+    var choiceId = 0;
+    var choice1 = '';
+    var choice2 = '';
+    var choice3 = '';
     $.each(localStorage.getObject('gameData')['messages'], function(index,value) {
         if (value['toId'] == id) {
             //console.log(Object.keys(value).length);
-            if (value.date == 'CHOICE') {
-                console.log(timestampify()+'Building a choice');
-                console.log(value);
-                choiceControls.create(value.text.choiceId,'messagesCont','message','',value.text.choice1,value.text.choice2,value.text.choice3);                
-            } else {
+            if (value.date != 'CHOICE') { 
                 var usersAvatar = localStorage.getObject('gameData')['users'][value['fromId']]['avatar'];
                 var usersFirstname = localStorage.getObject('gameData')['users'][value['fromId']]['firstname'];
                 var usersLastname = localStorage.getObject('gameData')['users'][value['fromId']]['lastname'];
@@ -349,9 +392,20 @@ messages.load = function(id) {
                 if (value['from'] == 1){var fromText = '<i class="fa fa-mobile"></i><span class="sentFrom">Sent from mobile</span>';} else {var fromText = '<i class="fa fa-desktop"></i><span class="sentFrom">Sent from desktop</span>';}
                 $('#messagesCont').append('<div class="messageCont"><img class="messageAvatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /><div class="sentOn" data-date="'+value['date']+'">'+fromText+date+'</div><div class="messageName">'+usersFirstname+' '+usersLastname+'</div><div class="messageContents">'+value['text']+'</div>'+videoLink+imageLink+'</div>');
                 var objDiv = document.getElementById("messagesCont");objDiv.scrollTop = objDiv.scrollHeight;
+                isChoice = 0;
+            } else {
+                isChoice = 1;
+                choiceId = value.text.choiceId;
+                choice1 = value.text.choice1;
+                choice2 = value.text.choice2;
+                choice3 = value.text.choice3;
             }
         }
     });
+    if (isChoice == 1) {
+        console.log(timestampify()+'Building a choice');
+        choiceControls.create(choiceId,'messagesCont','message','',choice1,choice2,choice3);                
+    }
     $('#messagesCont').prepend('<div class="messagesStart">Conversation started</div>');
     $('.messageTitle').html('&lt; '+thisUser);
     var objDiv = document.getElementById("messagesCont");objDiv.scrollTop = objDiv.scrollHeight;
@@ -430,7 +484,7 @@ messages.new.currentMsg = function(messageFrom,messageTo,cameIn,text,ttw,fullMes
     }
             if (fullMessage['from'] == 1){var fromText = '<i class="fa fa-mobile"></i><span class="sentFrom">Sent from mobile</span>';} else {var fromText = '<i class="fa fa-desktop"></i><span class="sentFrom">Sent from desktop</span>';}
     fullMessage.date = Math.floor(Date.now() / 1000);
-    gameUpdate.updateLocal(fullMessage,'messages');
+    gameUpdate('updateLocal','data',fullMessage,'messages');
     setTimeout(function() {
         $('#typing').remove();
         if (currentlyViewing == messageFrom) {
@@ -455,7 +509,7 @@ messages.new.notCurrentMsg = function(messageFrom,messageTo,cameIn,text,ttw,full
     var notificationNoise = new Audio("../sounds/tapNote.mp3");
     console.log(timestampify()+'New message from '+localStorage.getObject('gameData').users[messageFrom].firstname+' at '+cameIn);
     fullMessage.date = Math.floor(Date.now() / 1000);
-    gameUpdate.updateLocal(fullMessage,'messages');
+    gameUpdate('updateLocal','data',fullMessage,'messages');
     setTimeout(function() {
         if(text.length > 15) text = text.substring(0,15) + '...';
         var date = time.minidate(cameIn);
@@ -474,18 +528,18 @@ messages.new.differentPage = function(messageFrom,messageTo,cameIn,text,ttw,full
     var notificationNoise = new Audio("../sounds/tapNote.mp3");
     console.log(timestampify()+'New message from '+localStorage.getObject('gameData').users[messageFrom].firstname+' at '+cameIn);
     notificationNoise.play();
-    gameUpdate.updateNotifications('messages');
+    gameUpdate('updateNotifications','settings','messages');
     localStorage.getObject('gameSettings').unread.messages
     $('#messagesLink').find('.totalNew').html(localStorage.getObject('gameSettings').unread.messages);
     fullMessage.date = Math.floor(Date.now() / 1000);
-    gameUpdate.updateLocal(fullMessage,'messages');
+    gameUpdate('updateLocal','data',fullMessage,'messages');
 }
 
 messages.new.noNotification = function(messageFrom,messageTo,cameIn,text,ttw,fullMessage) {
     console.log(timestampify()+'New message with no notification from '+localStorage.getObject('gameData').users[messageFrom].firstname+' at '+cameIn);
     fullMessage.date = createTimestamp(fullMessage['date']);
-    gameUpdate.updateLocal(fullMessage,'messages');
-    gameUpdate.updateNotifications('messages');
+    gameUpdate('updateLocal','data',fullMessage,'messages');
+    gameUpdate('updateNotifications','settings','messages');
     $('#messagesLink').find('.totalNew').html(localStorage.getObject('gameSettings').unread.messages);
 }
 
@@ -501,9 +555,9 @@ messages.packed = function(messageArray,choices,noNote,nextOne) {
         console.log(timestampify()+'Looping through message of length '+messageArray[counter].text.length+' next message should send in '+typingTime+' with a noNote value of '+noNote);
         userForMsg = messageArray[counter].toId;
         var thisMessage = messageArray[counter].msgId;
-        gameUpdate.messageWait(thisMessage);
+        gameUpdate('messageWait','settings',thisMessage);
         if (lastMessage != 0) {
-            gameUpdate.removeMessages(lastMessage);
+            gameUpdate('removeMessages','settings',lastMessage);
         }
         if (noNote != undefined && noNote == 1) {
             //console.log(timestampify()+'Time for no notification!');
@@ -534,21 +588,21 @@ messages.packed = function(messageArray,choices,noNote,nextOne) {
         } else if (choices != undefined && choices != '') {
             console.log(timestampify()+'Yay a choice found');
             console.log(choices);
-            gameUpdate.removeMessages(lastMessage);
+            gameUpdate('removeMessages','settings',lastMessage);
             var newChoice = new choice(choices.choiceId,choices.choice1,choices.choice2,choices.choice3)
             new choice(3,'Deal with the problem yourself','Ignore it, it will go away','Skin the cat. It\'s the only solution. Skin. The. Cat')
             var newMessage = new message(0,userForMsg,'CHOICE',newChoice,'','',1);
-            gameUpdate.updateLocal(newMessage,'messages');
+            gameUpdate('updateLocal','data',newMessage,'messages');
             setTimeout(function() {
                 if (currentlyViewing == userForMsg) {
                     choiceControls.create(choices.choiceId,'messagesCont','message','',choices.choice1,choices.choice2,choices.choice3);
                 }  
             },timer);
         } else if (nextOne != 0) {
-            gameUpdate.removeMessages(lastMessage);
+            gameUpdate('removeMessages','settings',lastMessage);
             setTimeout(function() {askForAnother(nextOne);},timer);
         } else {
-            gameUpdate.removeMessages(lastMessage);
+            gameUpdate('removeMessages','settings',lastMessage);
         }
     }
     loopMessages()
@@ -674,7 +728,7 @@ feed.create = function(target,objects,processNormal) {
                         } else {
                             $('#feed_'+value['postId']+' .likedSection .colouredText').html(parseInt($('#feed_'+value['postId']+' .likedSection .colouredText').html()) + 1);   
                         }
-                        gameUpdate.updateLocal('1','liked',value['postId']);
+                        gameUpdate('updateLocal','data','1','liked',value['postId']);
                     });
                 }
                 if (processNormal == 1) {
@@ -754,7 +808,7 @@ feed.backlog = function(value) {
                 $('#like_'+value['postId']).unbind();
                 $('#like_'+value['postId']).addClass('liked');
                 $('#feed_'+value['postId']+' .likedSection .colouredText').html(parseInt($('#feed_'+value['postId']+' .likedSection .colouredText').html()) + 1);
-                gameUpdate.updateLocal('1','liked',value['postId']);
+                gameUpdate('updateLocal','data','1','liked',value['postId']);
             });
         }
     }
@@ -844,7 +898,7 @@ feed.commentBuilder = function(comments,postId,noNote) {
 feed.new = function() {
     var notificationNoise = new Audio("../sounds/tapNote.mp3");
     notificationNoise.play();
-    gameUpdate.updateNotifications('posts');
+    gameUpdate('updateNotifications','settings','posts');
     $('#newsFeedLink').find('.totalNew').html(localStorage.getObject('gameSettings').unread.messages);
 }
 
@@ -909,7 +963,7 @@ navigationControls.change = function(page) {
         //console.log(timestampify()+'Going to '+page);
         if (page == 'messages') {
             $('body').attr('id','messagesPage');
-            gameUpdate.updateNotifications('messages',1);
+            gameUpdate('updateNotifications','settings','messages',1);
             messages.init();
             document.title = 'Twaddle - Messages';
             users.load(); 
@@ -942,7 +996,7 @@ navigationControls.change = function(page) {
             users.load(); 
             $('#posts').click();            
         } else if (page == 'feed') {
-            gameUpdate.updateNotifications('posts',1);
+            gameUpdate('updateNotifications','settings','posts',1);
             document.title = 'Twaddle - A social media for the everyman';
             feed.create('feedContent',localStorage.getObject('gameData').posts,1);
             //setTimeout(function() {spawnNotification('This notification system will be used to let you know about new updates','img/samAvatar.png','Welcome to the man next door!');},3000);
@@ -965,7 +1019,7 @@ navigationControls.change = function(page) {
             $('#acceptFriend').on('click touch', function() {
                 $('#modal-11').removeClass('md-show');
                 $('#acceptFriend').unbind();
-                gameUpdate.addFriend(2);
+                gameUpdate('addFriend','settings',2);
                 navigationControls.change('feed');
                 $('#feedContent').removeClass('navFlip');
                 $('.sideBar').removeClass('navFlip');

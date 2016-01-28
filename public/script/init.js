@@ -63,7 +63,7 @@ function introScreen() {
 function receivedChoice(data) {
     console.log(timestampify()+'Received a choice');
     console.log(data);
-    gameUpdate.removeReturn(data.choiceId);
+    gameUpdate('removeReturn','settings',data.choiceId);
 };
 
 function updateData(updateData) {
@@ -100,7 +100,7 @@ function newMessage(receivedMessages) {
     console.log(timestampify()+'PING - New message');
     console.log(receivedMessages);
     processMessage(receivedMessages,receivedMessages.noNote);
-    gameUpdate.updateTime(80);
+    gameUpdate('updateTime','settings',80);
     setTimeout(function(){
         triggerCheck();
     },20000);
@@ -109,36 +109,30 @@ function newMessage(receivedMessages) {
 
 function processMessage(receivedMessages,nonote) {
     if (receivedMessages.fromChoice  != undefined && receivedMessages.fromChoice != 'NA') {
-        gameUpdate.removeReturn(receivedMessages.fromChoice);
+        gameUpdate('removeReturn','settings',receivedMessages.fromChoice);
     }
     console.log(timestampify()+'New message with a nonote value of '+nonote);
     console.log(receivedMessages);
     var messageGroup = [];
     var updatePause;
     function process() {
-        gameUpdate.updateTime(300);
+        gameUpdate('updateTime','settings',300);
         $.each(receivedMessages.messageItem.messages, function(index,value) {
             console.log(timestampify()+'Reading through');
             console.log(value);
             var incomingMessage =  new message(value.fromId,value.toId,value.timestamp,value.message,value.image,value.video,deviceData['type'],value.msgId);
             messageGroup.push(incomingMessage);
-            //gameUpdate.updateLocal(incomingMessage,'messages');
         });
-        /*if (receivedMessages.choices && receivedMessages.choices != '') {
-            console.log(timestampify()+'Message answers!');
-            console.log(receivedMessages.choices);
-            var newChoice = new choice(receivedMessages.choices.choiceId,receivedMessages.choices.choice1,receivedMessages.choices.choice2,receivedMessages.choices.choice3);
-            var currentComment = new comment(0,0,'CHOICE',newChoice,'','',0);
-            messageGroup.push(currentComment);
-        }*/
+        var nextMsg = 0;
         if (receivedMessages.messageItem.autoTarget == 'message') {
-            var nextMsg = receivedMessages.messageItem.autoId;
-        } else {
-            var nextMsg = 0;
+            nextMsg = receivedMessages.messageItem.autoId;
+        }
+        if (receivedMessages.messageItem.ttl != undefined && receivedMessages.messageItem.ttl != 0) {
+            console.log(timestampify()+'TIME TILL LIFE');
+            gameUpdate('updateTimer','data',receivedMessages.messageItem.messages[0].toId,receivedMessages.messageItem.ttl,receivedMessages.messageItem.ttlTarget,receivedMessages.messageItem.ttlId);
         }
         messages.packed(messageGroup,receivedMessages.choices,nonote,nextMsg);
-        //messages.new(message.userId,message.timestamp,message.message,typingTime);
-        gameUpdate.updateMessages(receivedMessages.messageItem.messageId);
+        gameUpdate('updateMessages','settings',receivedMessages.messageItem.messageId);
     }
     if (updating == 1) {
         while (updating == 1) {
@@ -159,10 +153,7 @@ function askForNotes() {
      if (localStorage.getObject('gameSettings').firstLoad == 1) {
         console.log(timestampify()+'omg first load');
         lastUpdate = 1440;
-        var tempData = localStorage.getObject('gameSettings');
-        tempData.firstLoad = 0;
-        firstLoadTime = 1;
-        localStorage.setObject('gameSettings',tempData);
+        gameUpdate('firstLoad','settings');
     }
     console.log(timestampify()+'Retrieving data');
     socket.emit('pageLoad', {
@@ -185,7 +176,7 @@ function askForNotes() {
 
 function newFeed(receivedFeed,day) {
     processFeed(receivedFeed,receivedFeed.noNote,day);
-    gameUpdate.updateTime(80);
+    gameUpdate('updateTime','settings',80);
     setTimeout(function(){
         triggerCheck();
     },20000);
@@ -193,12 +184,12 @@ function newFeed(receivedFeed,day) {
 };
 
 function processFeed(receivedFeed,nonote,day) {
-    gameUpdate.updateFeed(receivedFeed.feedItem.postId);
+    gameUpdate('updateFeed','settings',receivedFeed.feedItem.postId);
     console.log(timestampify()+'new feed item retrieved');
     console.log(receivedFeed);
     function process() {
         var commentBuilder = [];
-        gameUpdate.updateTime(300);
+        gameUpdate('updateTime','settings',300);
         var dac = 0
         if (receivedFeed.comments && receivedFeed.comments.comments != '') {
             $.each(receivedFeed.comments.comments, function(index, value) {
@@ -223,7 +214,7 @@ function processFeed(receivedFeed,nonote,day) {
             now = later;
         }
         var currentFeed = new post(receivedFeed.feedItem.postId,receivedFeed.feedItem.fromId,now,receivedFeed.feedItem.text,receivedFeed.feedItem.image,receivedFeed.feedItem.video,receivedFeed.feedItem.likes,commentBuilder,0,receivedFeed.feedItem.caption);
-        gameUpdate.updateLocal(currentFeed,'posts',day,receivedFeed.feedItem['date']);
+        gameUpdate('updateLocal','data',currentFeed,'posts',day,receivedFeed.feedItem['date']);
         if ($(document).find("title").text() == 'Twaddle - A social media for the everyman') {
             if (nonote == 1) {
                 feed.backlog(currentFeed);
@@ -251,7 +242,7 @@ function newComment(receivedFeed) {
     console.log(timestampify()+'New comment');
     console.log(receivedFeed);
     processComment(receivedFeed,receivedFeed.noNote);
-    gameUpdate.updateTime(80);
+    gameUpdate('updateTime','settings',80);
     setTimeout(function(){
         triggerCheck();
     },20000);
@@ -260,14 +251,14 @@ function newComment(receivedFeed) {
 
 function processComment(receivedComment,nonote) {
     if (receivedComment.fromChoice != undefined && receivedComment.fromChoice != 'NA') {
-        gameUpdate.removeReturn(receivedComment.fromChoice);
+        gameUpdate('removeReturn','settings',receivedComment.fromChoice);
     }
     console.log(receivedComment);
-    gameUpdate.updateComment(receivedComment.comment.commentId);
+    gameUpdate('updateComment','settings',receivedComment.comment.commentId);
     if (nonote == 1) {
         var now = createTimestamp(receivedComment.comment.comments[0].date,receivedComment.queueDay)
     } else {
-        var later = createTimestamp(receivedComment.comment.comments[0].date,receivedComment.queueDay)
+        var later = createTimestamp(receivedComment.comment.comments[0].date,receivedComment.queueDay);
         var now = Math.floor(Date.now() / 1000);
         if ((now - later) > 960) {
             now = later;
@@ -283,26 +274,7 @@ function processComment(receivedComment,nonote) {
         var currentComment = new comment(0,0,'CHOICE',newChoice,'','',0);
         tempComments.push(currentComment);
     }
-
-    var tempData = localStorage.getObject('gameData');
-    var aim = 0;
-    $.each(tempData.posts, function(day, dayData) {
-        $.each(dayData, function(index,value) {
-           if (value.postId == receivedComment.comment.feedId) {
-                aim = index;
-                aimDay = day;
-            } 
-        });
-    });
-    console.log(timestampify()+'Applying to '+aim);
-    $.each(tempComments, function(index, value) {
-        if (tempData.posts[aimDay][aim].comments == 0) {
-            tempData.posts[aimDay][aim].comments = [];
-        }
-        console.log(tempData.posts[aimDay][aim]);
-        tempData.posts[aimDay][aim].comments.push(value);
-    });
-    localStorage.setObject('gameData',tempData);
+    gameUpdate('updateLocal','data',tempComments,'comments',receivedComment);
     if (nonote == 1) {
         var tempAppend = feed.commentBuilder(tempComments,receivedComment.comment.feedId,1);
         $('#comments_'+receivedComment.comment.feedId).append(tempAppend);
@@ -314,12 +286,7 @@ function processComment(receivedComment,nonote) {
     }
 }
 
-var choiceTimeout = [];
-
 function emitChoice(choiceId,choiceMadeData) {
-    if (choiceTimeout[choiceId] != undefined) {
-        clearTimeout(choiceTimeout[choiceId]);
-    }
     choiceMade({currentTime:new Date(),timezone:localStorage.getObject('gameSettings').timezone,choiceId:choiceId,choiceMade:choiceMadeData});
 }
 

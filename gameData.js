@@ -910,7 +910,10 @@ module.exports = {
             ],
             messageId:0,
             autoTarget:'choice',
-            autoId:'0'
+            autoId:'0',
+            ttl:1435,
+            ttlTarget:'message',
+            ttlId:50
         },
         1:{
             messages:[
@@ -924,7 +927,10 @@ module.exports = {
             ],
             messageId:1,
             autoTarget:'choice',
-            autoId:'1'
+            autoId:'1',
+            ttl:1435,
+            ttlTarget:'message',
+            ttlId:50
         },
         2:{
             messages:[
@@ -1256,6 +1262,16 @@ module.exports = {
                 {msgId:'34_6',fromId:1,toId:1,timestamp:600,message:'Talk to you soon =)',image:'',video:'',from:1},
             ],
             messageId:34,
+            autoTarget:'',
+            autoId:'',
+        },
+        50:{
+            messages:[
+                {msgId:'50_1',fromId:1,toId:1,timestamp:600,message:'I was really hoping you could help me... I guess you\'re too busy',image:'',video:'',from:1},
+                {msgId:'50_2',fromId:1,toId:1,timestamp:600,message:'Welp',image:'',video:'',from:1},
+                {msgId:'50_3',fromId:1,toId:1,timestamp:600,message:'Have a shitty life I guess',image:'',video:'',from:1},
+            ],
+            messageId:50,
             autoTarget:'',
             autoId:'',
         },

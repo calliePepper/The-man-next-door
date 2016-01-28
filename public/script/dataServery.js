@@ -17,6 +17,7 @@
             introScreen();
         }
         retrieveTimer = setTimeout(function() {
+           console.log(timestampify()+arguments.callee.name+' Opening localStorage for writing');
            var lastUpdate = localStorage.getObject('gameSettings').lastUpdate;
            var firstLoadTime = 0
             if (localStorage.getObject('gameSettings').firstLoad == 1) {
@@ -26,6 +27,7 @@
                 tempData.firstLoad = 0;
                 firstLoadTime = 1;
                 localStorage.setObject('gameSettings',tempData);
+                console.log(timestampify()+arguments.callee.name+' Closing localStorage');
             }
             console.log(timestampify()+'Retrieving data');
             var page = {
@@ -323,6 +325,25 @@ queueFunc.update = function(day,timeThroughDay,updatedLast,noNote) {
 		}
 	}
 	checkEvents(currentDay);
+	var timerCheck = localStorage.getObject('gameData');
+	for (var i in localStorage.getObject('gameData').timers) {
+		console.log(timestampify()+'Checking timer '+i);
+		var now = Math.floor(Date.now() / 1000);
+		console.log(now + ' vs ' +localStorage.getObject('gameData').timers[i].time);
+		if (now >= localStorage.getObject('gameData').timers[i].time) {
+			var messageAim = data.messageObjects[localStorage.getObject('gameData').timers[i].id];
+			if (messageAim.autoTarget == 'choice') {
+				var choice = data.choiceObjects[messageAim.autoId];
+			}
+			if ($(document).find("title").text() == 'Twaddle - Messages') {
+                if (currentlyViewing == i) {
+                	$('.choiceBlock').hide();
+                }
+			}
+			newMessage({messageItem:data.messageObjects[localStorage.getObject('gameData').timers[i].id],choices:choice,noNote:0});
+			gameUpdate('timerNull','data',i);
+		}
+	}
 	var initialLength = sendQueue.length;
 	sendQueue = uniqueTest(sendQueue);
 	if (sendQueue.length > initialLength) {
@@ -371,7 +392,7 @@ queueFunc.check = function() {
 			}
 			localStorage.getObject('gameSettings').lastFeed[sendQueue[0]['id']] = 1;
 			newMessage({messageItem:sendQueue[0]['data'],choices:sendQueue[0]['choice'],noNote:sendQueue[0].noNote,queueDay:sendQueue[0].dayDifference,fromChoice:choiceId});
-			gameUpdate.updateMessages(sendQueue[0]['id']);
+			gameUpdate('updateMessages','settings',sendQueue[0]['id']);
 		} else if (sendQueue[0]['type'] == 'comment') {
 			if (sendQueue[0]['fromChoice'] == undefined) {
 				var choiceID = 'NA';
@@ -380,7 +401,7 @@ queueFunc.check = function() {
 			}
 			localStorage.getObject('gameSettings').lastComment[sendQueue[0]['id']] = 1;
 		    newComment({comment:sendQueue[0]['data'],choices:sendQueue[0]['choice'],noNote:sendQueue[0].noNote,queueDay:sendQueue[0].dayDifference,fromChoice:choiceId},sendQueue[0].queueDay);
-			gameUpdate.updateComment(sendQueue[0]['id']);
+			gameUpdate('updateComment','settings',sendQueue[0]['id']);
 		} else if (sendQueue[0]['type'] == 'feed') {
 			if (sendQueue[0]['data'].comments != 0) {
 				var commentSend = data.commentObjects[sendQueue[0]['data'].comments];
@@ -390,7 +411,7 @@ queueFunc.check = function() {
 			console.log('Sending feed, it has a comment value '+sendQueue[0]['data'].comments);
 			console.log(commentSend);
 			newFeed({feedItem:sendQueue[0]['data'],choices:sendQueue[0]['choice'],comments:commentSend,noNote:sendQueue[0].noNote,queueDay:sendQueue[0].dayDifference},sendQueue[0].queueDay);
-			gameUpdate.updateFeed(sendQueue[0]['id']);
+			gameUpdate('updateFeed','settings',sendQueue[0]['id']);
 		}
 		sendQueue.shift();
 		organiseQueue()

@@ -17,7 +17,7 @@ $paddingVal:10px;
 
 html, body, div, span, applet, object, iframe,h1, h2, h3, h4, h5, h6, p, blockquote, pre,a, abbr, acronym, address, big, cite, code,del, dfn, em, img, ins, kbd, q, s, samp,small, strike, sub, sup, tt, var,b, u, i, center,dl, dt, dd, ol, ul, li,fieldset, form, label, legend,table, caption, tbody, tfoot, thead, tr, th, td,article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary,time, mark, audio, video {	margin: 0;	padding: 0;	border: 0;	font-size: 100%;	font: inherit;	vertical-align: baseline;}/* HTML5 display-role reset for older browsers */article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {	display: block;}body {	line-height: 1;}ol, ul {	list-style: none;}blockquote, q {	quotes: none;}blockquote:before, blockquote:after,q:before, q:after {	content: '';	content: none;}table {	border-collapse: collapse;	border-spacing: 0;}p {line-height:1.5;margin-bottom:18px;color:#333;}.muted {color:#666;}h1, h2, h3, h4, h5, h6 {line-height:1.1;color:#000;letter-spacing:-0.025em;}
 ul{list-style:disc;margin-bottom:1.5em;}ol{list-style:decimal;margin-bottom:1.5em;}strong{font-weight:bold;}em{font-style:italic;}body, caption, th, td, input, textarea, select, option, legend, fieldset, h1, h2, h3, h4, h5, h6 {font-size-adjust: 0.5;}
-html {box-sizing: border-box;height:100%;}*, *:before, *:after {box-sizing: inherit;}
+html {box-sizing: border-box;height:100%;}*, *:before, *:after {box-sizing: inherit;-webkit-backface-visibility: hidden;}
 body{line-height: 1.25;min-height:100%;}
 h1 {font-size: 2em;line-height: 1.25;margin-top: 0.9375em;margin-bottom: 0.3125em;}
 h2 {font-size: 1.625em;line-height: 1.15384615;margin-top: 1.15384616em;margin-bottom: 0.38461539em;}
@@ -27,6 +27,8 @@ blockquote {font-size: 1.25em; line-height: 1.25;}
 abbr {text-transform:uppercase;font-size:0.8em;letter-spacing:0.1em;}
 li{margin-left:30px;}
 a{color:$majorColour;}
+
+.errorLine{line-height:1.5;padding:10px 0;border-bottom:1px solid #dfe0e4;word-wrap: break-word;}
 
 @media (min-width: 43.75em) {
 	body {font-size: 1em;line-height: 1.375;}

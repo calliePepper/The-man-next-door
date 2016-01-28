@@ -19,6 +19,33 @@ var deviceData = {};
 deviceData['type'] = 0;
 var emergencyStop;
 
+var consoleData;
+
+var baseLogFunction = console.log;
+
+console.log = function() {
+    baseLogFunction.apply(console,arguments);
+    
+    var args = Array.prototype.slice.call(arguments);
+    for (var i=0;i<args.length;i++) {
+        var node = createLogNode(args[i]);
+        consoleData = consoleData + node;
+    }
+}
+
+function createLogNode(message) {
+    if (typeof message === 'object') {
+        var textNode = "<div class='errorLine'>"+JSON.stringify(message).replace(RegExp("\\n","g"), "\n")+"</div>";
+    } else {
+        var textNode = "<div class='errorLine'>"+message+"</div>";   
+    }
+    return textNode;
+}
+
+window.onerror = function(message,url,linenumber) {
+    console.log("Javascript error: " + message + " on line " + linenumber + " for " + url);
+}
+
 Storage.prototype.setObject = function(key, value) {
     this.setItem(key, JSON.stringify(value));
 }
@@ -172,10 +199,7 @@ function processSave() {
                     });
                 } else if (dataType == 'messages') {
                     console.log('Pushing message');
-                    console.log(data);
-                    console.log(tempData['messages']);
                     tempData['messages'].push(data);
-                    console.log(tempData['messages']);
                 } else if (dataType == 'posts') {
                     tempData['posts'][extraData] = tempData['posts'][extraData] || {}; 
                     tempData['posts'][extraData][choiceId] = data;
@@ -694,7 +718,6 @@ feed.create = function(target,objects,processNormal) {
     $.each(objects, function(day,dayData) {
         $.each(dayData, function(index,value) {
             console.log(value);
-            console.log(localStorage.getObject('gameData')['users']);
             if (localStorage.getObject('gameData')['users'][value['user']]['friended'] == 1) {
                 var videoLink = '';
                 if (value['video'] != '' && value['video'] != undefined) {
@@ -709,7 +732,13 @@ feed.create = function(target,objects,processNormal) {
                 }
                 var likedText = '';
                 if (value['likes'] != '' && value['likes'] != undefined) {
-                    likedText = '<span class="colouredText">'+value['likes']+'</span> people like this';
+                    if (value['likes'] == 0) {
+                        likedText = '<span class="colouredText"></span>No one likes this yet, be the first!';
+                    } else if (value['likes'] == 1) {
+                        likedText = '<span class="colouredText">'+value['likes']+'</span> person likes this';
+                    } else {
+                        likedText = '<span class="colouredText">'+value['likes']+'</span> people like this';
+                    }
                 }
                 var sinceText = time.wordify(value['date']);
                 var usersAvatar = localStorage.getObject('gameData')['users'][value['user']]['avatar'];
@@ -730,9 +759,10 @@ feed.create = function(target,objects,processNormal) {
                         $('#like_'+value['postId']).off('click touch');
                         $('#like_'+value['postId']).addClass('liked');
                         if ($('#feed_'+value['postId']+' .likedSection').html() == '') {
-                            $('#feed_'+value['postId']+' .likedSection').html('<span class="colouredText">1</span> people like this');
+                            $('#feed_'+value['postId']+' .likedSection').html('<span class="colouredText">1</span> person likes this');
                         } else {
-                            $('#feed_'+value['postId']+' .likedSection .colouredText').html(parseInt($('#feed_'+value['postId']+' .likedSection .colouredText').html()) + 1);   
+                            likedText = '<span class="colouredText">'+(parseInt($('#feed_'+value['postId']+' .likedSection .colouredText').html()) + 1)+'</span> people like this';
+                            $('#feed_'+value['postId']+' .likedSection').html(likedText);   
                         }
                         gameUpdate('updateLocal','data','1','liked',value['postId']);
                     });
@@ -785,7 +815,13 @@ feed.backlog = function(value) {
         }
         var likedText = '';
         if (value['likes'] != '' && value['likes'] != undefined) {
-            likedText = '<span class="colouredText">'+value['likes']+'</span> people like this';
+            if (value['likes'] == 0) {
+                likedText = '<span class="colouredText"></span>No one likes this yet, be the first!';
+            } else if (value['likes'] == 1) {
+                likedText = '<span class="colouredText">'+value['likes']+'</span> person likes this';
+            } else {
+                likedText = '<span class="colouredText">'+value['likes']+'</span> people like this';
+            }
         }
         var sinceText = time.wordify(value['date']);
         var usersAvatar = localStorage.getObject('gameData')['users'][value['user']]['avatar'];
@@ -813,7 +849,12 @@ feed.backlog = function(value) {
             $('#like_'+value['postId']).on('click touch', function() {
                 $('#like_'+value['postId']).unbind();
                 $('#like_'+value['postId']).addClass('liked');
-                $('#feed_'+value['postId']+' .likedSection .colouredText').html(parseInt($('#feed_'+value['postId']+' .likedSection .colouredText').html()) + 1);
+                if ($('#feed_'+value['postId']+' .likedSection').html() == '') {
+                    $('#feed_'+value['postId']+' .likedSection').html('<span class="colouredText">1</span> person likes this');
+                } else {
+                    likedText = '<span class="colouredText">'+(parseInt($('#feed_'+value['postId']+' .likedSection .colouredText').html()) + 1)+'</span> people like this';
+                    $('#feed_'+value['postId']+' .likedSection').html(likedText);   
+                }
                 gameUpdate('updateLocal','data','1','liked',value['postId']);
             });
         }
@@ -1032,6 +1073,9 @@ navigationControls.change = function(page) {
                 window.scrollTo(0,0);
                 $('body').removeClass('navFlip');
             });
+        } else if (page == 'debug') {
+            document.title = 'Twaddle - SOMETHING IS BORKED';
+            $('#debugCont').html(consoleData);
         }
         navigationControls.setUp();
     });
@@ -1056,6 +1100,8 @@ navigationControls.setUp = function() {
              navigationControls.change('restart');
          } else if ($(this).attr('id') == 'addCal') {
              navigationControls.change('friendCal');
+         } else if ($(this).attr('id') == 'debugLink') {
+             navigationControls.change('debug');
          }
     });
     if (localStorage.getObject('gameSettings').unread.messages > 0) {$('#messagesLink').find('.totalNew').html(localStorage.getObject('gameSettings').unread.messages);}

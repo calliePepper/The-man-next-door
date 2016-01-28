@@ -183,7 +183,7 @@ var notifyUser = function(type,reg,user,pic,shortData) {
 		registrationIds.push(reg);
 		sender.send(message, registrationIds, 4, function (err, result) {
 			console.log(err);
-		  	//console.log(result);
+		  	console.log(result);
 		});
 	}
 }

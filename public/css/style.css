@@ -65,7 +65,8 @@ html {
   height: 100%; }
 
 *, *:before, *:after {
-  box-sizing: inherit; }
+  box-sizing: inherit;
+  -webkit-backface-visibility: hidden; }
 
 body {
   line-height: 1.25;
@@ -109,6 +110,12 @@ li {
 
 a {
   color: #910101; }
+
+.errorLine {
+  line-height: 1.5;
+  padding: 10px 0;
+  border-bottom: 1px solid #dfe0e4;
+  word-wrap: break-word; }
 
 @media (min-width: 43.75em) {
   body {

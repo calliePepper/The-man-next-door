@@ -44,7 +44,6 @@ function requestStatus() {
     }
     if (firstRun == 1 && waitCount > 0) {
         console.log(timestampify()+'Uh oh, there is a messageWait');
-        console.log(localStorage.getObject('gameSettings').messageWait);
         messageWait({messageWait:localStorage.getObject('gameSettings').messageWait});
     }
 };

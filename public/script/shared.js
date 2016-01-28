@@ -126,11 +126,13 @@ function processSave() {
             case 'updateLocal':
                 console.log('Updating local data save');
                 if (dataType == 'comment') {
-                    var lookup = {};
-                    for (var i = 0, len = tempData['posts'].length; i < len; i++) {
-                        lookup[tempData['posts'][i].postId] = i;
-                    }
-                    tempData['posts'][lookup[extraData]].comments.push(data);
+                    $.each(tempData['posts'],function(day,value) {
+                        $.each(value,function(time,value) {
+                            if (extraData == value.postId) {
+                                value.comments.push(data);         
+                            }
+                        });
+                    });
                 } else if (dataType == 'comments') {
                     var aim = 0;
                     $.each(tempData.posts, function(day, dayData) {
@@ -150,20 +152,24 @@ function processSave() {
                 } else if (dataType == 'choice') {
                     var cameFrom = extraData.split('_');
                     if (cameFrom[0] != 'message') {
-                        var lookup = {};
-                        for (var i = 0, len = tempData['posts'].length; i < len; i++) {
-                            lookup[tempData['posts'][i].postId] = i;
-                        }
-                        //console.log(cameFrom[1]);
-                        tempData['posts'][lookup[cameFrom[1]]].commented = 1;
+                        $.each(tempData['posts'],function(day,value) {
+                            $.each(value,function(time,value) {
+                                if (extraData == value.postId) {
+                                    value.commented = 1;         
+                                }
+                            });
+                        });
                     }
                 } else if (dataType == 'liked') {
                     var lookup = {};
-                    for (var i = 0, len = tempData['posts'].length; i < len; i++) {
-                        lookup[tempData['posts'][i].postId] = i;
-                    }
-                    tempData['posts'][lookup[extraData]].liked = 1;
-                    tempData['posts'][lookup[extraData]].likes += 1;
+                    $.each(tempData['posts'],function(day,value) {
+                        $.each(value,function(time,value) {
+                            if (extraData == value.postId) {
+                                value.liked = 1;
+                                value.likes += 1            
+                            }
+                        });
+                    });
                 } else if (dataType == 'messages') {
                     console.log('Pushing message');
                     console.log(data);
@@ -1019,7 +1025,7 @@ navigationControls.change = function(page) {
             $('#acceptFriend').on('click touch', function() {
                 $('#modal-11').removeClass('md-show');
                 $('#acceptFriend').unbind();
-                gameUpdate('addFriend','settings',2);
+                gameUpdate('addFriend','data',2);
                 navigationControls.change('feed');
                 $('#feedContent').removeClass('navFlip');
                 $('.sideBar').removeClass('navFlip');

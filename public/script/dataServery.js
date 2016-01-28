@@ -106,6 +106,7 @@
 					userDay:5,
 					dayDifference: 0,
 					noNote:0,
+					ignoreTime:1,
 					fromChoice:replyData.choiceId
 				};
 			} else if (data.choiceObjects[replyData.choiceId].resultType == 'message') {
@@ -399,8 +400,10 @@ queueFunc.check = function() {
 			} else {
 				var choiceId = sendQueue[0]['fromChoice'];
 			}
+			var ignoreTime = 0;
+			if (sendQueue[0].ignoreTime != undefined && sendQueue[0].ignoreTime == 1) { ignoreTime = 1;}
 			localStorage.getObject('gameSettings').lastComment[sendQueue[0]['id']] = 1;
-		    newComment({comment:sendQueue[0]['data'],choices:sendQueue[0]['choice'],noNote:sendQueue[0].noNote,queueDay:sendQueue[0].dayDifference,fromChoice:choiceId},sendQueue[0].queueDay);
+		    newComment({comment:sendQueue[0]['data'],choices:sendQueue[0]['choice'],noNote:sendQueue[0].noNote,queueDay:sendQueue[0].dayDifference,fromChoice:choiceId,ignoreTime:ignoreTime},sendQueue[0].queueDay);
 			gameUpdate('updateComment','settings',sendQueue[0]['id']);
 		} else if (sendQueue[0]['type'] == 'feed') {
 			if (sendQueue[0]['data'].comments != 0) {

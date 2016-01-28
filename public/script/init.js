@@ -260,7 +260,7 @@ function processComment(receivedComment,nonote) {
     } else {
         var later = createTimestamp(receivedComment.comment.comments[0].date,receivedComment.queueDay);
         var now = Math.floor(Date.now() / 1000);
-        if ((now - later) > 960) {
+        if ((now - later) > 960 && receivedComment.ignoreTime == 0) {
             now = later;
         }
     }

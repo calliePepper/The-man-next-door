@@ -40,10 +40,6 @@ var app = {
         push.on('notification', function(data) {
             console.log("notification event");
             console.log(JSON.stringify(data));
-            setTimeout(function() {askForNotes()},5000);
-            push.finish(function () {
-                console.log('finish successfully called');
-            });
         });
 
         push.on('error', function(e) {

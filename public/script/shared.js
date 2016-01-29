@@ -19,7 +19,7 @@ var deviceData = {};
 deviceData['type'] = 0;
 var emergencyStop;
 
-var consoleData;
+var consoleData = [];
 
 var baseLogFunction = console.log;
 
@@ -29,7 +29,10 @@ console.log = function() {
     var args = Array.prototype.slice.call(arguments);
     for (var i=0;i<args.length;i++) {
         var node = createLogNode(args[i]);
-        consoleData = consoleData + node;
+        consoleData.unshift(node);
+        if (consoleData.length > 30) {
+            consoleData.pop();
+        }
     }
 }
 
@@ -752,31 +755,17 @@ feed.create = function(target,objects,processNormal) {
                 if (processNormal == 1) {
                     var commentsString = feed.commentBuilder(value['comments'],value['postId'],0);
                 }
-                $('#'+target).prepend('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'<div class="feedControls"><span class="feedControl likeControl usableControls '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'"><i class="fa fa-comment"></i>Comment</span></div></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
-                if (value['liked'] == 0) {
-                    $('#like_'+value['postId']).on('click touch', function() {
-                        $('#like_'+value['postId']).unbind('click touch');
-                        $('#like_'+value['postId']).off('click touch');
-                        $('#like_'+value['postId']).addClass('liked');
-                        if ($('#feed_'+value['postId']+' .likedSection').html() == '') {
-                            $('#feed_'+value['postId']+' .likedSection').html('<span class="colouredText">1</span> person likes this');
-                        } else {
-                            likedText = '<span class="colouredText">'+(parseInt($('#feed_'+value['postId']+' .likedSection .colouredText').html()) + 1)+'</span> people like this';
-                            $('#feed_'+value['postId']+' .likedSection').html(likedText);   
-                        }
-                        gameUpdate('updateLocal','data','1','liked',value['postId']);
-                    });
+                var possibleChoice = value['comments'][value['comments'].length-1];
+                if (possibleChoice && possibleChoice.date == 'CHOICE') {
+                    $('#'+target).prepend('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'<div class="feedControls"><span class="feedControl likeControl usableControls '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'" data-id="'+possibleChoice.text.choiceId+'" data-choice1="'+possibleChoice.text.choice1+'" data-choice2="'+possibleChoice.text.choice2+'" data-choice3="'+possibleChoice.text.choice3+'"><i class="fa fa-comment"></i>Comment</span></div></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
+                } else {
+                    $('#'+target).prepend('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'<div class="feedControls"><span class="feedControl likeControl usableControls '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'"><i class="fa fa-comment"></i>Comment</span></div></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
                 }
                 if (processNormal == 1) {
                     if (commentsString != '') {
                         var possibleChoice = value['comments'][value['comments'].length-1];
                         if (possibleChoice && possibleChoice.date == 'CHOICE') {
                             $('#comment_'+value['postId']).addClass('usableControls');
-                            $('#comment_'+value['postId']).on('click touch', function() {
-                                $('#comment_'+value['postId']).unbind();
-                                $('#comment_'+value['postId']).addClass('choiceBeing');
-                                choiceControls.create(possibleChoice.text.choiceId,'feed_'+value['postId'],'comment','comment_'+value['postId'],possibleChoice.text.choice1,possibleChoice.text.choice2,possibleChoice.text.choice3);                
-                            });
                         }
                     }
                 } else {
@@ -788,13 +777,32 @@ feed.create = function(target,objects,processNormal) {
     });
 }      
 
+$(document).on('touch tap click', '.likeControl', function(){
+    if (!$(this).hasClass('liked')) {
+        var postId = $(this).attr('id').split('_')[1];
+        $('#like_'+postId).addClass('liked');
+        if ($('#feed_'+postId+' .likedSection').html() == '') {
+            $('#feed_'+postId+' .likedSection').html('<span class="colouredText">1</span> person likes this');
+        } else {
+            likedText = '<span class="colouredText">'+(parseInt($('#feed_'+postId+' .likedSection .colouredText').html()) + 1)+'</span> people like this';
+            $('#feed_'+postId+' .likedSection').html(likedText);   
+        }
+        gameUpdate('updateLocal','data','1','liked',postId);
+    }
+});
+
+$(document).on('touch tap click', '.commentControl.usableControls', function(){
+    var postId = $(this).attr('id').split('_')[1];
+    $('#comment_'+postId).addClass('choiceBeing');
+    choiceControls.create($(this).attr('data-id'),'feed_'+postId,'comment','comment_'+postId,$(this).attr('data-choice1'),$(this).attr('data-choice2'),$(this).attr('data-choice3'));                
+});
+
 feed.createComment = function(postId,possibleChoice) {
     $('#comment_'+postId).addClass('usableControls');
-    $('#comment_'+postId).on('click touch', function() {
-        $('#comment_'+postId).unbind();
-        $('#comment_'+postId).addClass('choiceBeing');
-        choiceControls.create(possibleChoice.choiceId,'feed_'+postId,'comment','comment_'+postId,possibleChoice.choice1,possibleChoice.choice2,possibleChoice.choice3);                
-    });
+    $('#comment_'+postId).attr('data-id',possibleChoice.choiceId);
+    $('#comment_'+postId).attr('data-choice1',possibleChoice.choice1);
+    $('#comment_'+postId).attr('data-choice2',possibleChoice.choice2);
+    $('#comment_'+postId).attr('data-choice3',possibleChoice.choice3);
 }
 
 feed.backlog = function(value) {
@@ -832,31 +840,19 @@ feed.backlog = function(value) {
         if (value['liked'] != undefined && value['liked'] == 1) {likedCondition = 'liked';}
         if (value['choices'] != undefined && value['choices'] != '' && value['commented'] == 0) {canComment = 'usableControls';}
         var commentsString = feed.commentBuilder(value['comments'],value['postId']);
-        $('#'+target).prepend('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy userName_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'<div class="feedControls"><span class="feedControl likeControl usableControls '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'"><i class="fa fa-comment"></i>Comment</span></div></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
+        var possibleChoice = value['comments'][value['comments'].length-1];
+        console.log(possibleChoice);
+        if (possibleChoice && possibleChoice.date == 'CHOICE') {
+            $('#'+target).prepend('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'<div class="feedControls"><span class="feedControl likeControl usableControls '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'" data-id="'+possibleChoice.text.choiceId+'" data-choice1="'+possibleChoice.text.choice1+'" data-choice2="'+possibleChoice.text.choice2+'" data-choice3="'+possibleChoice.text.choice3+'"><i class="fa fa-comment"></i>Comment</span></div></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
+        } else {
+            $('#'+target).prepend('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'<div class="feedControls"><span class="feedControl likeControl usableControls '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'"><i class="fa fa-comment"></i>Comment</span></div></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
+        }
         if (commentsString != '') {
             var possibleChoice = value['comments'][value['comments'].length-1];
             console.log(possibleChoice);
             if (possibleChoice && possibleChoice.date == 'CHOICE') {
                 $('#comment_'+value['postId']).addClass('usableControls');
-                $('#comment_'+value['postId']).on('click touch', function() {
-                    $('#comment_'+value['postId']).unbind();
-                    $('#comment_'+value['postId']).addClass('choiceBeing');
-                    choiceControls.create(possibleChoice.text.choiceId,'feed_'+value['postId'],'comment','comment_'+value['postId'],possibleChoice.text.choice1,possibleChoice.text.choice2,possibleChoice.text.choice3);                
-                });
             }
-        }
-        if (value['liked'] == 0) {
-            $('#like_'+value['postId']).on('click touch', function() {
-                $('#like_'+value['postId']).unbind();
-                $('#like_'+value['postId']).addClass('liked');
-                if ($('#feed_'+value['postId']+' .likedSection').html() == '') {
-                    $('#feed_'+value['postId']+' .likedSection').html('<span class="colouredText">1</span> person likes this');
-                } else {
-                    likedText = '<span class="colouredText">'+(parseInt($('#feed_'+value['postId']+' .likedSection .colouredText').html()) + 1)+'</span> people like this';
-                    $('#feed_'+value['postId']+' .likedSection').html(likedText);   
-                }
-                gameUpdate('updateLocal','data','1','liked',value['postId']);
-            });
         }
     }
 }
@@ -897,11 +893,10 @@ feed.commentPoster = function(comments,postId) {
                 console.log(timestampify()+'There is a choice on #comment_'+postId);
                 $('#comment_'+postId).addClass('usableControls');
                 $('#comment_'+postId).removeClass('commented');
-                $('#comment_'+postId).on('click touch', function() {
-                    $('#comment_'+postId).unbind();
-                    $('#comment_'+postId).addClass('choiceBeing');
-                    choiceControls.create(possibleChoice.text.choiceId,'feed_'+postId,'comment','comment_'+postId,possibleChoice.text.choice1,possibleChoice.text.choice2,possibleChoice.text.choice3);                
-                });
+                $('#comment_'+postId).attr('data-id',possibleChoice.text.choiceId);
+                $('#comment_'+postId).attr('data-choice1',possibleChoice.text.choice1);
+                $('#comment_'+postId).attr('data-choice2',possibleChoice.text.choice2);
+                $('#comment_'+postId).attr('data-choice3',possibleChoice.text.choice3);
             }
         }
     }
@@ -1075,7 +1070,10 @@ navigationControls.change = function(page) {
             });
         } else if (page == 'debug') {
             document.title = 'Twaddle - SOMETHING IS BORKED';
-            $('#debugCont').html(consoleData);
+            users.load(); 
+            for (var i=0;i<consoleData.length && i<20;i++) {
+                $('#debugCont').append(consoleData[i]);
+            }
         }
         navigationControls.setUp();
     });

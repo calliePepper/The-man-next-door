@@ -256,6 +256,7 @@ choiceControls.create = function(choiceId,target,targetType,remove,choice1,choic
         var objDiv = document.getElementById("messagesCont");objDiv.scrollTop = objDiv.scrollHeight;
     }
     $('.choice').on('click touch', function() {
+        $('.choice').unbind();
         if (remove != '') {
             $('#'+remove).removeClass('choiceBeing').addClass('commented');
         }
@@ -478,6 +479,7 @@ messages.users = function(firstMessages) {
                 $('.messages').toggleClass('flipped');
             });
         } else {
+            $('.messageUserList').off();
             $('.messageUserList').on('click touch', function() {
                 if ($(this).hasClass('current')) {
                     
@@ -777,26 +779,6 @@ feed.create = function(target,objects,processNormal) {
     });
 }      
 
-$(document).on('touch tap click', '.likeControl', function(){
-    if (!$(this).hasClass('liked')) {
-        var postId = $(this).attr('id').split('_')[1];
-        $('#like_'+postId).addClass('liked');
-        if ($('#feed_'+postId+' .likedSection').html() == '') {
-            $('#feed_'+postId+' .likedSection').html('<span class="colouredText">1</span> person likes this');
-        } else {
-            likedText = '<span class="colouredText">'+(parseInt($('#feed_'+postId+' .likedSection .colouredText').html()) + 1)+'</span> people like this';
-            $('#feed_'+postId+' .likedSection').html(likedText);   
-        }
-        gameUpdate('updateLocal','data','1','liked',postId);
-    }
-});
-
-$(document).on('touch tap click', '.commentControl.usableControls', function(){
-    var postId = $(this).attr('id').split('_')[1];
-    $('#comment_'+postId).addClass('choiceBeing');
-    choiceControls.create($(this).attr('data-id'),'feed_'+postId,'comment','comment_'+postId,$(this).attr('data-choice1'),$(this).attr('data-choice2'),$(this).attr('data-choice3'));                
-});
-
 feed.createComment = function(postId,possibleChoice) {
     $('#comment_'+postId).addClass('usableControls');
     $('#comment_'+postId).attr('data-id',possibleChoice.choiceId);
@@ -996,48 +978,35 @@ navigationControls.change = function(page) {
     $('.sideLink').off();
     $('#userNav div').off();
     $('.aboutItem').off();
+    $('.messageTitle').off();
+    $('.messageUserList').off();
+    $('.sponsored').html('');
+    $('#feedContent').html('');
+    $('#feedContent').addClass('noSponsored');
+    $('.sideLink').removeClass('current');
     if (page == 'restart') {
             window.localStorage.clear();
             window.location.replace("startup.html");
     }
-    $('#contentAim').load('content/'+page+'.html', null, function() {
+    //$('#contentAim').html('<object data="content/'+page+'.html">');
+    $('#feedContent').fadeOut('fast', function() {
+        $('#feedContent').fadeIn();
         $('body').attr('id','');
         //console.log(timestampify()+'Going to '+page);
         if (page == 'messages') {
+            $('#feedContent').html('<div class="messagesBox" id="messagesBox"><div class="messageList" id="messageList"></div><div class="messages" id="messages"><div class="mobile messageTitle"></div><div class="messagesCont" id="messagesCont"></div></div></div>');
             $('body').attr('id','messagesPage');
             gameUpdate('updateNotifications','settings','messages',1);
             messages.init();
             document.title = 'Twaddle - Messages';
-            users.load(); 
         } else if (page == 'robin') {
-            users.load(); 
-            $('#userNav div').on('click touch', function() {
-                if ($(this).attr('id') != 'about') {
-                    $('#aboutBody').hide();
-                    $('#userBody').html('');
-                    $('#userHeader').addClass('noHero');
-                    $('#userNav div').removeClass('current');
-                    $('#posts').addClass('current');
-                    feed.create('userBody',localStorage.getObject('gameData').posts,1);
-                } else{
-                    $('#userBody').html('');
-                    $('#userHeader').removeClass('noHero');
-                    $('#userNav div').removeClass('current');
-                    $('#about').addClass('current');
-                    $('#aboutBody').show();
-                    $('.overview').show();
-                }
+            $('#feedContent').load('content/robin.html', null, function() {
+               document.title = 'Robin Creed';
+                $('#posts').click();             
             });
-            document.title = 'Robin Creed';
-            $('.aboutItem').on('click touch', function() {
-                $('.aboutItem').removeClass('current');
-                $(this).addClass('current');
-                $('.aboutContents').hide();
-                $('.'+$(this).attr('id')).show();
-            });
-            users.load(); 
-            $('#posts').click();            
         } else if (page == 'feed') {
+            $('.sponsored').html('<div class="trending"><div class="sideHeader">Trending</div><div id="trendingSection"></div><div class="games"><div class="sideHeader">New games</div><div class="gameBlock"><div class="gameImg"></div></div><div class="gameBlock"><div class="gameImg"></div></div></div></div>')       
+            $('#feedContent').removeClass('noSponsored');
             gameUpdate('updateNotifications','settings','posts',1);
             document.title = 'Twaddle - A social media for the everyman';
             feed.create('feedContent',localStorage.getObject('gameData').posts,1);
@@ -1055,7 +1024,6 @@ navigationControls.change = function(page) {
             buildTrending();
             
             $('.userName_5').glitch({minint:1, maxint:3, maxglitch:15, hoffset:10, voffset:3, direction:'random'});
-            users.load(); 
         } else if (page == 'friendCal') {
             $('#modal-11').addClass('md-show');
             $('#acceptFriend').on('click touch', function() {
@@ -1069,42 +1037,94 @@ navigationControls.change = function(page) {
                 $('body').removeClass('navFlip');
             });
         } else if (page == 'debug') {
+            $('#feedContent').html('<div class="feedObject"><div class="innerFeed" id="debugCont" ></div></div>');
             document.title = 'Twaddle - SOMETHING IS BORKED';
-            users.load(); 
             for (var i=0;i<consoleData.length && i<20;i++) {
                 $('#debugCont').append(consoleData[i]);
             }
         }
         navigationControls.setUp();
+
     });
 }
 
 navigationControls.setUp = function() {
-    $('#mobileNav').on('click touch', function() {
-        $('#feedContent').toggleClass('navFlip');
-        $('.sideBar').toggleClass('navFlip');
-        window.scrollTo(0,0);
-        $('body').toggleClass('navFlip');
-    });  
-    $('.sideLink').on('click touch', function(ev) {
-         ev.preventDefault();
-         if ($(this).attr('id') == 'newsFeedLink') {
-             navigationControls.change('feed');
-         } else if ($(this).attr('id') == 'messagesLink') {
-             navigationControls.change('messages');
-         } else if ($(this).attr('id') == 'Robin') {
-             navigationControls.change('robin');
-         } else if ($(this).attr('id') == 'restartLink') {
-             navigationControls.change('restart');
-         } else if ($(this).attr('id') == 'addCal') {
-             navigationControls.change('friendCal');
-         } else if ($(this).attr('id') == 'debugLink') {
-             navigationControls.change('debug');
-         }
-    });
     if (localStorage.getObject('gameSettings').unread.messages > 0) {$('#messagesLink').find('.totalNew').html(localStorage.getObject('gameSettings').unread.messages);}
     if (localStorage.getObject('gameSettings').unread.posts > 0) {$('#newsFeedLink').find('.totalNew').html(localStorage.getObject('gameSettings').unread.posts);}
 };
+
+users.load(); 
+
+$(document).on('click touch', '#mobileNav', function() {
+    $('#feedContent').toggleClass('navFlip');
+    $('.sideBar').toggleClass('navFlip');
+    window.scrollTo(0,0);
+    $('body').toggleClass('navFlip');
+});  
+
+$(document).on('click touch', '.sideLink', function(ev) {
+     ev.preventDefault();
+     if ($(this).attr('id') == 'newsFeedLink') {
+         navigationControls.change('feed');
+     } else if ($(this).attr('id') == 'messagesLink') {
+         navigationControls.change('messages');
+     } else if ($(this).attr('id') == 'Robin') {
+         navigationControls.change('robin');
+     } else if ($(this).attr('id') == 'restartLink') {
+         navigationControls.change('restart');
+     } else if ($(this).attr('id') == 'addCal') {
+         navigationControls.change('friendCal');
+     } else if ($(this).attr('id') == 'debugLink') {
+         navigationControls.change('debug');
+     }
+});
+
+
+$(document).on('touch tap click', '.likeControl', function(){
+    if (!$(this).hasClass('liked')) {
+        var postId = $(this).attr('id').split('_')[1];
+        $('#like_'+postId).addClass('liked');
+        if ($('#feed_'+postId+' .likedSection').html() == '') {
+            $('#feed_'+postId+' .likedSection').html('<span class="colouredText">1</span> person likes this');
+        } else {
+            likedText = '<span class="colouredText">'+(parseInt($('#feed_'+postId+' .likedSection .colouredText').html()) + 1)+'</span> people like this';
+            $('#feed_'+postId+' .likedSection').html(likedText);   
+        }
+        gameUpdate('updateLocal','data','1','liked',postId);
+    }
+});
+
+$(document).on('touch tap click', '.commentControl.usableControls', function(){
+    var postId = $(this).attr('id').split('_')[1];
+    $('#comment_'+postId).addClass('choiceBeing');
+    choiceControls.create($(this).attr('data-id'),'feed_'+postId,'comment','comment_'+postId,$(this).attr('data-choice1'),$(this).attr('data-choice2'),$(this).attr('data-choice3'));                
+});
+
+$(document).on('click touch', '#userNav div', function() {
+    if ($(this).attr('id') != 'about') {
+        $('#aboutBody').hide();
+        $('#userBody').html('');
+        $('#userHeader').addClass('noHero');
+        $('#userNav div').removeClass('current');
+        $('#posts').addClass('current');
+        feed.create('userBody',localStorage.getObject('gameData').posts,1);
+    } else{
+        $('#userBody').html('');
+        $('#userHeader').removeClass('noHero');
+        $('#userNav div').removeClass('current');
+        $('#about').addClass('current');
+        $('#aboutBody').show();
+        $('.overview').show();
+    }
+});
+
+$(document).on('click touch', '.aboutItem', function() {
+    $('.aboutItem').removeClass('current');
+    $(this).addClass('current');
+    $('.aboutContents').hide();
+    $('.'+$(this).attr('id')).show();
+});
+
 
 /*
 

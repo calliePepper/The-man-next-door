@@ -1,125 +1,84 @@
-        <div class="mobileFix">
-        	<header>
-                <div class="wrapper">
-                    <div id="logo" class="logo">Twaddle</div>
-                    <div class="mobileNav">
-                        <i id="mobileNav" class="fa fa-bars fa-2x"></i>
-                    </div>
+<div id="userHeader" class="userHeader noHero">
+    <div class="userHero"></div>
+    <div class="userAvatar"><img class="avatar" src="img/samAvatar.png" alt="Robin's Avatar" /></div>
+    <div class="userName">Robin Creed</div>
+    <div class="userNav" id="userNav">
+        <div id="posts">Wall</div><div id="about">About</div>
+    </div>
+</div>
+<div id="userBody">
+    
+</div>
+<div id="aboutBody" class="aboutBody">
+    <div class="cardTitle">About</div>
+    <div class="aboutNav">
+        <div class="aboutItem current" id="overview">Overview</div>
+        <div class="aboutItem" id="family">Family and Relationships</div>
+        <div class="aboutItem" id="events">Life Events</div>
+    </div>
+    <div class="outerAbout">
+        <div id="aboutContent" class="aboutContent">
+            <div class="aboutContents overview">
+                <div class="aboutSection">
+                    <div class="miniHeader">General Information</div>
+                    <table class="infoTable">
+                        <tr>
+                            <td class="labelTd">Date of Birth</td>
+                            <td>1 April</td>
+                        </tr>
+                        <tr>
+                            <td class="labelTd">Gender</td>
+                            <td class="hiddenInfo">Not shared</td>
+                        </tr>
+                    </table>
                 </div>
-            </header>
-            <div class="wrapper mainWrapper">
-                <div class="sideBar" id="sideBar">
-                    <a id="newsFeedLink" class="feed sideLink">
-                        <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-rss fa-stack-1x fa-inverse"></i></span>
-                        <i id="feedIcon" class="desktop fa fa-rss"></i>News Feed<span class="totalNew"></span>
-                    </a>
-                    <a id="messagesLink" class="feed sideLink">
-                        <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i></span>
-                        <i id="feedIcon" class="desktop fa fa-envelope-o"></i>Messaging<span class="totalNew"></span>
-                    </a>
-                    <div class="sideHeader">Friends</div>
-                    <div id="friendContainer">
-                        
-                    </div>
-                    <div class="sideHeader">Admin</div>
-                    <a id="debugLink" class="feed sideLink">
-                        <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-bug fa-stack-1x fa-inverse"></i></span>
-                        <i id="feedIcon" class="desktop fa fa-bug"></i>Show debug info
-                    </a>
-                    <a id="restartLink" class="feed sideLink">
-                        <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-fire fa-stack-1x fa-inverse"></i></span>
-                        <i id="feedIcon" class="desktop fa fa-fire"></i>Restart Game
-                    </a>
-                    <a id="addCal" class="feed sideLink">
-                        <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-child fa-stack-1x fa-inverse"></i></span>
-                        <i id="feedIcon" class="desktop fa fa-child"></i>Friend Cal
-                    </a>
+                <div class="aboutSection">
+                    <div class="miniHeader">Favourite Quote</div>
+                    <p>And now I see with eye serene,<br>
+                    The very pulse of the machine.<br>
+                    -Wordsworth</p>
                 </div>
-                <div id="feedContent" class="mainContent noSponsored">
-                    <div id="userHeader" class="userHeader noHero">
-                        <div class="userHero"></div>
-                        <div class="userAvatar"><img class="avatar" src="img/samAvatar.png" alt="Robin's Avatar" /></div>
-                        <div class="userName">Robin Creed</div>
-                        <div class="userNav" id="userNav">
-                            <div id="posts">Wall</div><div id="about">About</div>
-                        </div>
-                    </div>
-                    <div id="userBody">
-                        
-                    </div>
-                    <div id="aboutBody" class="aboutBody">
-                        <div class="cardTitle">About</div>
-                        <div class="aboutNav">
-                            <div class="aboutItem current" id="overview">Overview</div>
-                            <div class="aboutItem" id="family">Family and Relationships</div>
-                            <div class="aboutItem" id="events">Life Events</div>
-                        </div>
-                        <div class="outerAbout">
-                            <div id="aboutContent" class="aboutContent">
-                                <div class="aboutContents overview">
-                                    <div class="aboutSection">
-                                        <div class="miniHeader">General Information</div>
-                                        <table class="infoTable">
-                                            <tr>
-                                                <td class="labelTd">Date of Birth</td>
-                                                <td>1 April</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="labelTd">Gender</td>
-                                                <td class="hiddenInfo">Not shared</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                    <div class="aboutSection">
-                                        <div class="miniHeader">Favourite Quote</div>
-                                        <p>And now I see with eye serene,<br>
-                                        The very pulse of the machine.<br>
-                                        -Wordsworth</p>
-                                    </div>
-                                </div>                    
-                                <div class="aboutContents family">
-                                    <div class="aboutSection">
-                                        <div class="miniHeader">Relationship</div>
-                                        <p>Not shared</p>
-                                    </div>
-                                    <div class="aboutSection">
-                                        <div class="miniHeader">Family</div>
-                                        <table class="infoTable">
-                                            <tr>
-                                                <td>
-                                                    <img src="" class="aboutAvatar" alt="family avatar"/>
-                                                    <div class="aboutFamilyName">James Creed</div>
-                                                    <div class="aboutFamilyRel">Brother</div>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="aboutContents events">
-                                    <div class="miniHeader">Life events</div>            
-                                    <table class="infoTable">
-                                            <tr>
-                                                <td class="labelTd">2015</td>
-                                                <td>Robin is in an open relationship</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="labelTd">2014</td>
-                                                <td>Graduated from Elridge Private School</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="labelTd">1997</td>
-                                                <td>James Creed was born</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="labelTd">1995</td>
-                                                <td>Born on 1 April</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            </div>                    
+            <div class="aboutContents family">
+                <div class="aboutSection">
+                    <div class="miniHeader">Relationship</div>
+                    <p>Not shared</p>
+                </div>
+                <div class="aboutSection">
+                    <div class="miniHeader">Family</div>
+                    <table class="infoTable">
+                        <tr>
+                            <td>
+                                <img src="" class="aboutAvatar" alt="family avatar"/>
+                                <div class="aboutFamilyName">James Creed</div>
+                                <div class="aboutFamilyRel">Brother</div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="aboutContents events">
+                <div class="miniHeader">Life events</div>            
+                <table class="infoTable">
+                        <tr>
+                            <td class="labelTd">2015</td>
+                            <td>Robin is in an open relationship</td>
+                        </tr>
+                        <tr>
+                            <td class="labelTd">2014</td>
+                            <td>Graduated from Elridge Private School</td>
+                        </tr>
+                        <tr>
+                            <td class="labelTd">1997</td>
+                            <td>James Creed was born</td>
+                        </tr>
+                        <tr>
+                            <td class="labelTd">1995</td>
+                            <td>Born on 1 April</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
+    </div>
+</div>

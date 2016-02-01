@@ -1177,7 +1177,9 @@ function infiniteCheck() {
 function loadInfinite(direction) {
     if (direction == 1) {
         $('#feedContent').append('<div class="loadingFeed">Loading more Feed Data</div>');
-        $(document).scrollTop($(document).height());
+        if (Math.floor($(document).height() - $(document).scrollTop() - $(window).height()) == 0) {
+            $(document).scrollTop($(document).height());
+        }
         var total = 0;
             $.each(localStorage.getObject('gameData').posts.reverse(), function(day,dayData) {
                 if (total < 5) {

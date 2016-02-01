@@ -974,23 +974,22 @@ function createTrender(data) {
 var navigationControls = {};
 
 navigationControls.change = function(page) {
-    $('#mobileNav').off();
-    $('.sideLink').off();
     $('#userNav div').off();
     $('.aboutItem').off();
-    $('.messageTitle').off();
-    $('.messageUserList').off();
     $('.sponsored').html('');
     $('#feedContent').html('');
     $('#feedContent').addClass('noSponsored');
     $('.sideLink').removeClass('current');
+    $('#feedContent').removeClass('navFlip');
+    $('.sideBar').removeClass('navFlip');
+    window.scrollTo(0,0);
+    $('body').removeClass('navFlip');
     if (page == 'restart') {
             window.localStorage.clear();
             window.location.replace("startup.html");
     }
     //$('#contentAim').html('<object data="content/'+page+'.html">');
     $('#feedContent').fadeOut('fast', function() {
-        $('#feedContent').fadeIn();
         $('body').attr('id','');
         //console.log(timestampify()+'Going to '+page);
         if (page == 'messages') {
@@ -999,10 +998,12 @@ navigationControls.change = function(page) {
             gameUpdate('updateNotifications','settings','messages',1);
             messages.init();
             document.title = 'Twaddle - Messages';
+            $('#feedContent').fadeIn();
         } else if (page == 'robin') {
             $('#feedContent').load('content/robin.html', null, function() {
                document.title = 'Robin Creed';
-                $('#posts').click();             
+                $('#posts').click();   
+                $('#feedContent').fadeIn();
             });
         } else if (page == 'feed') {
             $('.sponsored').html('<div class="trending"><div class="sideHeader">Trending</div><div id="trendingSection"></div><div class="games"><div class="sideHeader">New games</div><div class="gameBlock"><div class="gameImg"></div></div><div class="gameBlock"><div class="gameImg"></div></div></div></div>')       
@@ -1024,7 +1025,9 @@ navigationControls.change = function(page) {
             buildTrending();
             
             $('.userName_5').glitch({minint:1, maxint:3, maxglitch:15, hoffset:10, voffset:3, direction:'random'});
+            $('#feedContent').fadeIn();
         } else if (page == 'friendCal') {
+            $('#feedContent').fadeIn();
             $('#modal-11').addClass('md-show');
             $('#acceptFriend').on('click touch', function() {
                 $('#modal-11').removeClass('md-show');
@@ -1036,12 +1039,14 @@ navigationControls.change = function(page) {
                 window.scrollTo(0,0);
                 $('body').removeClass('navFlip');
             });
+            
         } else if (page == 'debug') {
             $('#feedContent').html('<div class="feedObject"><div class="innerFeed" id="debugCont" ></div></div>');
             document.title = 'Twaddle - SOMETHING IS BORKED';
             for (var i=0;i<consoleData.length && i<20;i++) {
                 $('#debugCont').append(consoleData[i]);
             }
+            $('#feedContent').fadeIn();
         }
         navigationControls.setUp();
 

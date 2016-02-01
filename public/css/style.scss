@@ -88,6 +88,7 @@ header:after{clear:both;display:block;height:1px;visibility:none;content:"";}
 .sideBar{width:$sideWidth;position:absolute;left:0px;top:0px;padding:$paddingVal $paddingVal 0 0;z-index:3;}
 .sponsored{width:$sponWidth;position:absolute;right:0px;top:0px;padding:$paddingVal 0 0 $paddingVal;}
 .trending{@include cardDeets;padding:$paddingVal;}
+.loadingFeed{@include cardDeets;padding:$paddingVal;text-align:center;}
 .cardTitle{width:100%;border-bottom:1px solid #d3d6db;background:#f6f7f8;padding:10px 0 10px 20px;font-size:1.4em;font-weight:bold;color:$majorColour;}
 .feedObject{margin-bottom:$paddingVal;@include cardDeets;padding:0;}
 .innerFeed{padding:$paddingVal;}

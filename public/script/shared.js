@@ -1164,16 +1164,20 @@ var range = {};
 $(window).on('scroll', $.debounce(100,infiniteCheck));
 
 function infiniteCheck() {
-    if (Math.floor($(document).height() - $(document).scrollTop() - $(window).height()) < 600) {
-        loadInfinite(1);
-    } else if ($(document).scrollTop() < 600) {
-        loadInfinite(0);
+    if ($(document).find("title").text() == 'Twaddle - A social media for the everyman') {
+        if (Math.floor($(document).height() - $(document).scrollTop() - $(window).height()) < 600) {
+            loadInfinite(1);
+        } else if ($(document).scrollTop() < 600) {
+            loadInfinite(0);
+        }
+        console.log('Scrolled from top '+$(document).scrollTop());
     }
-    console.log('Scrolled from top '+$(document).scrollTop());
 }
 
 function loadInfinite(direction) {
     if (direction == 1) {
+        $('#feedContent').append('<div class="loadingFeed">Loading more Feed Data</div>');
+        $(document).scrollTop($(document).height());
         var total = 0;
             $.each(localStorage.getObject('gameData').posts.reverse(), function(day,dayData) {
                 if (total < 5) {
@@ -1195,6 +1199,7 @@ function loadInfinite(direction) {
                     });
                 }
             });
+            $('.loadingFeed').remove();
     } else {
         //Maybe put something in here later, do some tests
     }

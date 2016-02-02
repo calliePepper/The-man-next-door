@@ -23,6 +23,17 @@ var consoleData = [];
 
 var baseLogFunction = console.log;
 
+var $canvas      = $('#canvasFront');
+var canvas       = $canvas[0];
+canvas.width  = window.innerWidth;
+canvas.height = window.innerHeight;
+
+var $canvasB      = $('#canvasBack');
+var canvasB      = $canvasB[0];
+canvasB.width  = window.innerWidth;
+canvasB.height = window.innerHeight;
+/*
+
 console.log = function() {
     baseLogFunction.apply(console,arguments);
     
@@ -47,7 +58,7 @@ function createLogNode(message) {
 
 window.onerror = function(message,url,linenumber) {
     console.log("Javascript error: " + message + " on line " + linenumber + " for " + url);
-}
+}*/
 
 Storage.prototype.setObject = function(key, value) {
     this.setItem(key, JSON.stringify(value));
@@ -1440,3 +1451,60 @@ if ( typeof define === 'function' && define.amd ) {
 }
 
 })( window );
+
+
+if(canvas.getContext) {
+    var ctx = canvas.getContext('2d');
+    var w = canvas.width;
+    var h = canvas.height;
+    ctx.strokeStyle = 'rgba(174,194,224,0.5)';
+    ctx.lineWidth = 1;
+    ctx.lineCap = 'round';
+    
+    
+    var init = [];
+    var maxParts = 1000;
+    for(var a = 0; a < maxParts; a++) {
+      init.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        l: Math.random() * 1,
+        xs: -4 + Math.random() * 4 + 2,
+        ys: Math.random() * 10 + 10
+      })
+    }
+    
+    var particles = [];
+    for(var b = 0; b < maxParts; b++) {
+      particles[b] = init[b];
+    }
+    
+    function draw() {
+      ctx.clearRect(0, 0, w, h);
+      for(var c = 0; c < particles.length; c++) {
+        var p = particles[c];
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+        ctx.lineTo(p.x + p.l * p.xs, p.y + p.l * p.ys);
+        ctx.stroke();
+      }
+      move();
+    }
+    
+    function move() {
+      for(var b = 0; b < particles.length; b++) {
+        var p = particles[b];
+        p.x += p.xs;
+        p.y += p.ys;
+        if(p.x > w || p.y > h) {
+          p.x = Math.random() * w;
+          p.y = -20;
+        }
+      }
+    }
+    
+     $(document).on('touch tap click', '.userName_2', function(e) {
+         setInterval(draw, 30);
+    });
+
+}

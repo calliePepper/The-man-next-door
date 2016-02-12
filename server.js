@@ -86,7 +86,9 @@ io.on('connection', function(socket) {
 		clientData[userId]['reg'] = page.reg;
 		clientData[userId]['device'] = page.mob;
 		console.log (clientData[userId]['reg'] + ' - ' + clientData[userId]['device'])
-		queueFunc.update(userId,currentDay,timeThroughDay,updatedLast,page['lastFeed'],page['lastMessage'],page['lastComment'],page.firstRun)
+		if (clientData[userId]['reg'] != undefined) {
+			queueFunc.update(userId,currentDay,timeThroughDay,updatedLast,page['lastFeed'],page['lastMessage'],page['lastComment'],page.firstRun)
+		}
 	});
 	
 	socket.on('prepareNote', function(data) {

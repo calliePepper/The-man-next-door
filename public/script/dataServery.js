@@ -215,6 +215,7 @@ queueFunc.add = function(day,timeStampToHit,timeThroughDay,userDay,noNote) {
 		}
 		console.log(timestampify()+'Update found, Type: '+type+', id: '+data.events[day][timeStampToHit]['id']);
 		var dayDifTemp = userDay - day;
+		console.log(timestampify()+'User day is '+userDay+'. Object is at '+day+'. Therefore difference is '+dayDifTemp);
 		var tempStamp = new Date().getTime() / 1000;
 		var objectToSave = data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']];
 		var queueObject = {

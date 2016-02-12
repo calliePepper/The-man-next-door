@@ -175,7 +175,6 @@ var notifyUser = function(type,reg,user,pic,shortData) {
 		  notification: {
 		        title: title,
 		        body: body,
-		        style: "inbox",
 		        image: "www/"+pic,
 		        color: '#910101',
 		        summaryText: "There are %n% notifications"

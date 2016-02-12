@@ -1217,15 +1217,7 @@ $(document).on('click touch', '.aboutItem', function() {
                 $("#Cal").click();
             }  else if (userid == "3") {
                // $("#Ambrose").click();
-               var now = new Date().getTime();
-               var in5Seconds = new Date(now + 5 * 1000);
-               cordova.plugins.notification.local.schedule({
-                   id:1,
-                    text: 'Test time',
-                    at: in5Seconds,
-                    title: '5 Second delay',
-                    icon: "www/samAvatar.png",
-               });
+               notificationTimers.add(3,22,"God damnit it\'s a bloopel",5);
             }
         }
     });
@@ -1351,6 +1343,32 @@ function spawnNotification(theBody,theIcon,theTitle)
         };*/
         return true;
     } 
+}
+
+var notificationTimers;
+
+notificationTimers.add = function(user,id,message,time) {
+   var now = new Date().getTime();
+   var soon = new Date(now + time * 1000);
+   var shortData = message;
+	if (shortData.length > 30) {
+		shortData = shortData.substr(0,30) + '...';
+	}
+   var body = localStorage.getObject('gameData')['users'][user]['firstname'] + ': ' + shortData;
+   cordova.plugins.notification.local.schedule({
+        id:id,
+        text: body,
+        at: soon,
+        title: 'New Messages',
+        image: "file://"+ localStorage.getObject('gameData')['users'][user]['avatar'],
+        smallIcon: "res://ic_stat_notif",
+   });
+}
+
+notificationTimers.remove = function(id) {
+    cordova.plugins.notification.local.cancel(id, function() {
+        alert("Message "+id+" cancellend");
+    });
 }
 
 // Page visibility

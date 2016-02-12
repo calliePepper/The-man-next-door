@@ -1215,8 +1215,17 @@ $(document).on('click touch', '.aboutItem', function() {
                 $("#Robin").click();
             } else if (userid == "2" && localStorage.getObject('gameData')['users'][2]['friended'] == 1) {
                 $("#Cal").click();
-            }  else if (userid == "3" && localStorage.getObject('gameData')['users'][3]['friended'] == 1) {
-                $("#Ambrose").click();
+            }  else if (userid == "3") {
+               // $("#Ambrose").click();
+               var now = new Date().getTime();
+               var in5Seconds = new Date(now + 5 * 1000);
+               cordova.plugins.notification.local.schedule({
+                   id:1,
+                    text: 'Test time',
+                    at: in5Seconds,
+                    title: '5 Second delay',
+                    icon: "www/samAvatar.png",
+               });
             }
         }
     });

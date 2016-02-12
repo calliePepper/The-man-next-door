@@ -1345,7 +1345,7 @@ function spawnNotification(theBody,theIcon,theTitle)
     } 
 }
 
-var notificationTimers;
+var notificationTimers = [];
 
 notificationTimers.add = function(user,id,message,time) {
    var now = new Date().getTime();
@@ -1360,7 +1360,7 @@ notificationTimers.add = function(user,id,message,time) {
         text: body,
         at: soon,
         title: 'New Messages',
-        image: "file://"+ localStorage.getObject('gameData')['users'][user]['avatar'],
+        icon: "file://"+ localStorage.getObject('gameData')['users'][user]['avatar'],
         smallIcon: "res://ic_stat_notif",
    });
 }

@@ -1278,12 +1278,468 @@ module.exports = {
         },
         201:{
             messages:[
-                {msgId:'201_1',fromId:2,toId:2,timestamp:600,message:'Test message for notification and new character simulation',image:'',video:'',from:1},
+                {msgId:'201_1',fromId:2,toId:2,timestamp:600,message:'Hey, you\'re that friend that Robin keeps talking about, right?',image:'',video:'',from:2},
+                {msgId:'201_2',fromId:2,toId:2,timestamp:600,message:'Are you available?',image:'',video:'',from:2},
+                {msgId:'201_3',fromId:2,toId:2,timestamp:600,message:'Seriously, I need to talk to you',image:'',video:'',from:2},
             ],
             messageId:201,
+            autoTarget:'choice',
+            autoId:'201',
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
+        202:{
+            messages:[
+                {msgId:'202_1',fromId:2,toId:2,timestamp:600,message:'Wow. Okay.',image:'',video:'',from:2},
+                {msgId:'202_2',fromId:2,toId:2,timestamp:600,message:'Well, fuck you.',image:'',video:'',from:2},
+                {msgId:'202_3',fromId:2,toId:2,timestamp:600,message:'Do you really think that would make me calmer?',image:'',video:'',from:2},
+            ],
+            messageId:202,
+            autoTarget:'choice',
+            autoId:'202',
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
+        203:{
+            messages:[
+                {msgId:'203_1',fromId:2,toId:2,timestamp:600,message:'Wow. Okay.',image:'',video:'',from:2},
+                {msgId:'203_2',fromId:2,toId:2,timestamp:600,message:'Well, fuck you.',image:'',video:'',from:2},
+                {msgId:'203_3',fromId:2,toId:2,timestamp:600,message:'I\'m worried, okay? I mean, Robin has always had a fascination with this conspiracy stuff.',image:'',video:'',from:2},
+                {msgId:'203_4',fromId:2,toId:2,timestamp:600,message:'I wanted to check what he\'d told you. You know, compare notes.',image:'',video:'',from:2},
+            ],
+            messageId:203,
+            autoTarget:'choice',
+            autoId:'204',
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
+        204:{
+            messages:[
+                {msgId:'204_1',fromId:2,toId:2,timestamp:600,message:'Thank god you\'re here, I\'m really starting to freak out',image:'',video:'',from:2},
+                {msgId:'204_2',fromId:2,toId:2,timestamp:600,message:'I think Robin is totally getting carried away with this whole \'neighbour\' situation',image:'',video:'',from:2},
+                {msgId:'204_3',fromId:2,toId:2,timestamp:600,message:'Last night I was bombarded with messages about how the neighbour is actually a lizard person',image:'',video:'',from:2},
+                {msgId:'204_4',fromId:2,toId:2,timestamp:600,message:'It\'s seriously getting out of hand',image:'',video:'',from:2},
+            ],
+            messageId:204,
+            autoTarget:'choice',
+            autoId:'206',
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
+        205:{
+            messages:[
+                {msgId:'205_1',fromId:2,toId:2,timestamp:600,message:'You try restraining yourself when your best friend is obsessed with neighbourly lizard men.',image:'',video:'',from:2},
+                {msgId:'205_2',fromId:2,toId:2,timestamp:600,message:'Okay, that came out weird.',image:'',video:'',from:2},
+            ],
+            messageId:205,
+            autoTarget:'choice',
+            autoId:'203',
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
+        206:{
+            messages:[
+                {msgId:'206_1',fromId:2,toId:2,timestamp:600,message:'You could be right. Robin does love conspiracy theories. Never bring up the moon landing.',image:'',video:'',from:2},
+                {msgId:'206_2',fromId:2,toId:2,timestamp:600,message:'At least, I think that\'s a joke.',image:'',video:'',from:2},
+                {msgId:'206_3',fromId:2,toId:2,timestamp:600,message:'Oh god, I hope so.',image:'',video:'',from:2},
+                {msgId:'206_4',fromId:2,toId:2,timestamp:600,message:'This seems different though.',image:'',video:'',from:2},
+            ],
+            messageId:206,
+            autoTarget:'choice',
+            autoId:'207',
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
+        207:{
+            messages:[
+                {msgId:'207_1',fromId:2,toId:2,timestamp:600,message:'Okay, that sounds good.',image:'',video:'',from:2},
+                {msgId:'207_2',fromId:2,toId:2,timestamp:600,message:'Well, Robin has been obsessed with this reptilian theory lately.',image:'',video:'',from:2},
+                {msgId:'207_3',fromId:2,toId:2,timestamp:600,message:'As in Robin\'s neigbhbour is a repti- Lizard person. That sounds stupid just saying it.',image:'',video:'',from:2},
+                {msgId:'207_4',fromId:2,toId:2,timestamp:600,message:'I\'ve been bombarded with messages about it.',image:'',video:'',from:2},
+            ],
+            messageId:207,
+            autoTarget:'choice',
+            autoId:'206',
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
+        208:{
+            messages:[
+                {msgId:'208_1',fromId:2,toId:2,timestamp:600,message:'I should probably start at the start.',image:'',video:'',from:2},
+                {msgId:'208_2',fromId:2,toId:2,timestamp:600,message:'Robin has been obsessed with this idea that the man living next door is a lizard person.',image:'',video:'',from:2},
+                {msgId:'208_3',fromId:2,toId:2,timestamp:600,message:'Robin has been sending me so many messages on the subject. It\'s been worrying me.',image:'',video:'',from:2},
+            ],
+            messageId:208,
+            autoTarget:'choice',
+            autoId:'206',
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
+        209:{
+            messages:[
+                {msgId:'209_1',fromId:2,toId:2,timestamp:600,message:'Well then. It\'s been a pleasure.',image:'',video:'',from:2},
+                {msgId:'209_2',fromId:2,toId:2,timestamp:600,message:'&lt; FAIL, EXTREMELY BAD CHOICES &gt;',image:'',video:'',from:2},
+            ],
+            messageId:209,
             autoTarget:'',
             autoId:'',
-        }
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
+        210:{
+            messages:[
+                {msgId:'210_1',fromId:2,toId:2,timestamp:600,message:'Well, I\'m pissed off.',image:'',video:'',from:2},
+                {msgId:'210_2',fromId:2,toId:2,timestamp:600,message:'I guess I did just send you a bunch of messages. In a short space of time.',image:'',video:'',from:2},
+                {type:'delay',time:'20000'},
+                {msgId:'210_3',fromId:2,toId:2,timestamp:600,message:'Okay, I\'m calm. -er.',image:'',video:'',from:2},
+                {msgId:'210_4',fromId:2,toId:2,timestamp:600,message:'But seriously. Has Robin said anything to you?',image:'',video:'',from:2},
+            ],
+            messageId:210,
+            autoTarget:'choice',
+            autoId:'205',
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
+        211:{
+            messages:[
+                {msgId:'211_1',fromId:2,toId:2,timestamp:600,message:'I had to scroll up for twenty seconds to get to the beginning.',image:'',video:'',from:2},
+                {msgId:'211_2',fromId:2,toId:2,timestamp:600,message:'This wouldn\'t be the first time though.',image:'',video:'',from:2},
+                {msgId:'211_3',fromId:2,toId:2,timestamp:600,message:'This whole man next door thing is strange though.',image:'',video:'',from:2},
+            ],
+            messageId:211,
+            autoTarget:'choice',
+            autoId:'208',
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
+        212:{
+            messages:[
+                {msgId:'212_1',fromId:2,toId:2,timestamp:600,message:'Robin does this pretty often.',image:'',video:'',from:2},
+                {msgId:'212_2',fromId:2,toId:2,timestamp:600,message:'Discovering and researching subjects that most people would dismiss.',image:'',video:'',from:2},
+            ],
+            messageId:212,
+            autoTarget:'message',
+            autoId:'213',
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
+        213:{
+            messages:[
+                {msgId:'213_1',fromId:2,toId:2,timestamp:600,message:'Well, Robin\'s never this focused. It\'s usually jump between subjects, posting erratically about them. This is different. This obsession with the man next door.',image:'',video:'',from:2},
+            ],
+            messageId:212,
+            autoTarget:'choice',
+            autoId:'209',
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
+        214:{
+            messages:[
+                {msgId:'214_1',fromId:2,toId:2,timestamp:600,message:'I know that this may seem intrusive. ',image:'',video:'',from:2},
+                {msgId:'214_2',fromId:2,toId:2,timestamp:600,message:'Robin added you for a reason.',image:'',video:'',from:2},
+                {msgId:'214_3',fromId:2,toId:2,timestamp:600,message:'I\'m really worried about all this stuff.',image:'',video:'',from:2},
+            ],
+            messageId:214,
+            autoTarget:'choice',
+            autoId:'210',
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
+        215:{
+            messages:[
+                {msgId:'215_1',fromId:2,toId:2,timestamp:600,message:'It\'s more or less a weekly thing. ',image:'',video:'',from:2},
+                {msgId:'215_2',fromId:2,toId:2,timestamp:600,message:'Usually, I wouldn\'t worry about things like this.',image:'',video:'',from:2},
+            ],
+            messageId:215,
+            autoTarget:'choice',
+            autoId:'211',
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
+        216:{
+            messages:[
+                {msgId:'216_1',fromId:2,toId:2,timestamp:600,message:'I wish I did.',image:'',video:'',from:2},
+                {msgId:'216_2',fromId:2,toId:2,timestamp:600,message:'I would love to share in Robin\'s passion.',image:'',video:'',from:2},
+                {msgId:'216_3',fromId:2,toId:2,timestamp:600,message:'It\'s just not logical though. I always feel that a simpler explanation suffices instead of looking for some complicated angle.',image:'',video:'',from:2},
+            ],
+            messageId:216,
+            autoTarget:'choice',
+            autoId:'212',
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
+        217:{
+            messages:[
+                {msgId:'217_1',fromId:2,toId:2,timestamp:600,message:'Of course. it\'s about looking after Robin.',image:'',video:'',from:2},
+                {msgId:'217_2',fromId:2,toId:2,timestamp:600,message:'Look, it isn\'t complicated.',image:'',video:'',from:2},
+            ],
+            messageId:217,
+            autoTarget:'message',
+            autoId:'224',
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
+        218:{
+            messages:[
+                {msgId:'218_1',fromId:2,toId:2,timestamp:600,message:'What? No.',image:'',video:'',from:2},
+            ],
+            messageId:218,
+            autoTarget:'message',
+            autoId:'228',
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
+        219:{
+            messages:[
+                {msgId:'219_1',fromId:2,toId:2,timestamp:600,message:'I\'m worried because the subjects of conspiracy theories never happen close to home.',image:'',video:'',from:2},
+                {msgId:'219_2',fromId:2,toId:2,timestamp:600,message:'The fact that the subject is literally existing a land plot away from Robin is concerning, especially when no-one else is around to witness it.',image:'',video:'',from:2},
+                {msgId:'219_3',fromId:2,toId:2,timestamp:600,message:'Which brings me to why I started talking to you.',image:'',video:'',from:2},
+            ],
+            messageId:219,
+            autoTarget:'choice',
+            autoId:'214',
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
+        220:{
+            messages:[
+                {msgId:'220_1',fromId:2,toId:2,timestamp:600,message:'I\'d like to hope that.',image:'',video:'',from:2},
+                {msgId:'220_2',fromId:2,toId:2,timestamp:600,message:'Which comes to why I started talking to you.',image:'',video:'',from:2},
+                {msgId:'220_3',fromId:2,toId:2,timestamp:600,message:'I need to ask a favour.',image:'',video:'',from:2},
+            ],
+            messageId:220,
+            autoTarget:'message',
+            autoId:'228',
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
+        221:{
+            messages:[
+                {msgId:'221_1',fromId:2,toId:2,timestamp:600,message:'Thank you.',image:'',video:'',from:2},
+                {msgId:'221_2',fromId:2,toId:2,timestamp:600,message:'I\'m glad I chose to talk to you about this.',image:'',video:'',from:2},
+                {msgId:'221_3',fromId:2,toId:2,timestamp:600,message:'So, that leads me to why I started talking to you about this.',image:'',video:'',from:2},
+            ],
+            messageId:221,
+            autoTarget:'choice',
+            autoId:'219',
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
+        222:{
+            messages:[
+                {msgId:'222_1',fromId:2,toId:2,timestamp:600,message:'Of course, I see the fun in it. ',image:'',video:'',from:2},
+                {msgId:'222_2',fromId:2,toId:2,timestamp:600,message:'I just don\'t believe in it.',image:'',video:'',from:2},
+                {msgId:'222_3',fromId:2,toId:2,timestamp:600,message:'Listen, I started talking to you for a specific reason.',image:'',video:'',from:2},
+            ],
+            messageId:222,
+            autoTarget:'choice',
+            autoId:'215',
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
+        223:{
+            messages:[
+                {msgId:'223_1',fromId:2,toId:2,timestamp:600,message:'I don\'t see it as humouring Robin.',image:'',video:'',from:2},
+                {msgId:'223_2',fromId:2,toId:2,timestamp:600,message:'I enjoy listening to Robin talking about it. I just don\'t believe in it.',image:'',video:'',from:2},
+            ],
+            messageId:223,
+            autoTarget:'message',
+            autoId:'222',
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
+        224:{
+            messages:[
+                {msgId:'224_1',fromId:2,toId:2,timestamp:600,message:'It\'s pretty simple.',image:'',video:'',from:2},
+                {msgId:'224_2',fromId:2,toId:2,timestamp:600,message:'Robin feels like you\'re the right person to talk about all of this to.',image:'',video:'',from:2},
+                {msgId:'224_3',fromId:2,toId:2,timestamp:600,message:'I just want you to tell me if Robin starts saying anything alarming. Something that wouldn\'t be said to me.',image:'',video:'',from:2},
+                {msgId:'224_4',fromId:2,toId:2,timestamp:600,message:'Can you do that?',image:'',video:'',from:2},
+            ],
+            messageId:224,
+            autoTarget:'choice',
+            autoId:'213',
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
+        225:{
+            messages:[
+                {msgId:'225_1',fromId:2,toId:2,timestamp:600,message:'Great. Thank you for that.',image:'',video:'',from:2},
+                {msgId:'225_2',fromId:2,toId:2,timestamp:600,message:'I\'ll talk to you later then.',image:'',video:'',from:2},
+                {msgId:'225_3',fromId:2,toId:2,timestamp:600,message:'Sorry for the rather strange intrusion.',image:'',video:'',from:2},
+                {msgId:'225_4',fromId:2,toId:2,timestamp:600,message:'&lt; SUCCESSFUL PATH. HOORAY FOR YOU &gt;',image:'',video:'',from:2},
+            ],
+            messageId:225,
+            autoTarget:'',
+            autoId:'',
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
+        226:{
+            messages:[
+                {msgId:'226_1',fromId:2,toId:2,timestamp:600,message:'Okay. I guess I can\'t force you.',image:'',video:'',from:2},
+                {msgId:'226_2',fromId:2,toId:2,timestamp:600,message:'&lt; FAILURE. CAL WAS NOT IMPRESSED WITH YOU. SHAME, SHAME. &gt;',image:'',video:'',from:2},
+            ],
+            messageId:226,
+            autoTarget:'',
+            autoId:'',
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
+        227:{
+            messages:[
+                {msgId:'227_1',fromId:2,toId:2,timestamp:600,message:'Not so much spy as, well, let me know what Robin says.',image:'',video:'',from:2},
+            ],
+            messageId:227,
+            autoTarget:'message',
+            autoId:'228',
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
+        228:{
+            messages:[
+                {msgId:'228_1',fromId:2,toId:2,timestamp:600,message:'I just need someone to tell me if Robin\'s passion becomes worrying.',image:'',video:'',from:2},
+                {msgId:'228_2',fromId:2,toId:2,timestamp:600,message:'If anything is said that would set off some alarms.',image:'',video:'',from:2},
+                {msgId:'228_3',fromId:2,toId:2,timestamp:600,message:'Does that sound okay?',image:'',video:'',from:2},
+            ],
+            messageId:228,
+            autoTarget:'choice',
+            autoId:'216',
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
+        229:{
+            messages:[
+                {msgId:'229_1',fromId:2,toId:2,timestamp:600,message:'I guess I\'ll have to find someone else then.',image:'',video:'',from:2},
+                {msgId:'229_2',fromId:2,toId:2,timestamp:600,message:'See you.',image:'',video:'',from:2},
+                {msgId:'229_3',fromId:2,toId:2,timestamp:600,message:'&lt; FAILURE. YOU\'RE SUPPOSED TO SAY YES. SAY YES IN GAMES &gt;',image:'',video:'',from:2},
+            ],
+            messageId:229,
+            autoTarget:'',
+            autoId:'',
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
+        230:{
+            messages:[
+                {msgId:'230_1',fromId:2,toId:2,timestamp:600,message:'It\'s really nothing that complicated.',image:'',video:'',from:2},
+            ],
+            messageId:230,
+            autoTarget:'message',
+            autoId:'228',
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
+        231:{
+            messages:[
+                {msgId:'231_1',fromId:2,toId:2,timestamp:600,message:'Wow, I can see why Robin added you.',image:'',video:'',from:2},
+            ],
+            messageId:231,
+            autoTarget:'choice',
+            autoId:'217',
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
+        232:{
+            messages:[
+                {msgId:'232_1',fromId:2,toId:2,timestamp:600,message:'By this point, I assume Robin has told you about the Man-next-door.',image:'',video:'',from:2},
+                {msgId:'232_2',fromId:2,toId:2,timestamp:600,message:'All I want you to do is tell me if anything extra strange is said.',image:'',video:'',from:2},
+                {msgId:'232_3',fromId:2,toId:2,timestamp:600,message:'Anything that could be construed as extra worrying.',image:'',video:'',from:2},
+                {msgId:'232_4',fromId:2,toId:2,timestamp:600,message:'Say, for example, a house invasion.',image:'',video:'',from:2},
+                {msgId:'232_5',fromId:2,toId:2,timestamp:600,message:'That\'s a code red.',image:'',video:'',from:2},
+                {msgId:'232_6',fromId:2,toId:2,timestamp:600,message:'Could you do that for me?',image:'',video:'',from:2},
+            ],
+            messageId:232,
+            autoTarget:'choice',
+            autoId:'218',
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
+        233:{
+            messages:[
+                {msgId:'233_1',fromId:2,toId:2,timestamp:600,message:'Thank you.',image:'',video:'',from:2},
+                {msgId:'233_2',fromId:2,toId:2,timestamp:600,message:'Sorry for the strange nature of these messages.',image:'',video:'',from:2},
+                {msgId:'233_3',fromId:2,toId:2,timestamp:600,message:'It\'s good to know I have someone on the inside to look out for Robin.',image:'',video:'',from:2},
+                {msgId:'233_4',fromId:2,toId:2,timestamp:600,message:'I\'ll chat to you later.',image:'',video:'',from:2},
+                {msgId:'233_5',fromId:2,toId:2,timestamp:600,message:'&lt; SUCCESSFUL PATH. CAL TRUSTS YOU WITH LOOKING OUT FOR ROBIN. ACHIEVEMENT GET! &gt;',image:'',video:'',from:2},
+            ],
+            messageId:233,
+            autoTarget:'',
+            autoId:'',
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
+        234:{
+            messages:[
+                {msgId:'234_1',fromId:2,toId:2,timestamp:600,message:'Thank you.',image:'',video:'',from:2},
+                {msgId:'234_2',fromId:2,toId:2,timestamp:600,message:'Not just for that though. It\'s been good to get this off my chest.',image:'',video:'',from:2},
+                {msgId:'234_3',fromId:2,toId:2,timestamp:600,message:'I\'ll talk to you later.',image:'',video:'',from:2},
+                {msgId:'234_4',fromId:2,toId:2,timestamp:600,message:'&lt; SUCCESSFUL PATH, GO YOU! &gt;',image:'',video:'',from:2},
+            ],
+            messageId:234,
+            autoTarget:'',
+            autoId:'',
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
+        235:{
+            messages:[
+                {msgId:'235_1',fromId:2,toId:2,timestamp:600,message:'Well, please, at least think about it.',image:'',video:'',from:2},
+                {msgId:'235_2',fromId:2,toId:2,timestamp:600,message:'Chat to you later',image:'',video:'',from:2},
+                {msgId:'235_3',fromId:2,toId:2,timestamp:600,message:'&lt; NEUTRAL PATH. YOU DIDN\'T FAIL, BUT NOR DID YOU SUCCEED. ENJOY PURGATORY &gt;',image:'',video:'',from:2},
+            ],
+            messageId:235,
+            autoTarget:'',
+            autoId:'',
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
+        236:{
+            messages:[
+                {msgId:'236_1',fromId:2,toId:2,timestamp:600,message:'Thank you. I know this is a little strange.',image:'',video:'',from:2},
+                {msgId:'236_2',fromId:2,toId:2,timestamp:600,message:'&lt; NEUTRAL PATH ACHIEVED. CONGRATULATIONS, MORE OR LESS &gt;',image:'',video:'',from:2},
+            ],
+            messageId:236,
+            autoTarget:'',
+            autoId:'',
+            ttl:'',
+            ttlTarget:'message',
+            ttlId:''
+        },
     },
     choiceObjects: {
         0: {choiceId:0,choice1:'I\'m here',choice2:'Hello?',choice3:'Yeah',resultType:'message',result1:1,result2:1,result3:1,ttl:360},
@@ -1304,7 +1760,27 @@ module.exports = {
         15: {choiceId:15,choice1:'I\'d never laugh at you',choice2:'Sounds good!',choice3:'Is there anything more active I can do?', resultType:'message',result1:28,result2:29,result3:30,ttl:''},
         16: {choiceId:16,choice1:'I could research what you find.',choice2:'What is it?',choice3:'Just message me when you need a hand', resultType:'message',result1:32,result2:31,result3:31,ttl:''},
         17: {choiceId:17,choice1:'What does it mean?',choice2:'I think I\'ve seen that before',choice3:'Whoa', resultType:'message',result1:34,result2:33,result3:34,ttl:''},
-        18: {choiceId:18,choice1:'Come on Cal, nothing wrong with a little dumpster diving?',choice2:'Ewww',choice3:'Find anything good?', resultType:'comment',result1:10502,result2:10503,result3:10504,ttl:''}
+        18: {choiceId:18,choice1:'Come on Cal, nothing wrong with a little dumpster diving?',choice2:'Ewww',choice3:'Find anything good?', resultType:'comment',result1:10502,result2:10503,result3:10504,ttl:''},
+        
+        201: {choiceId:201,choice1:'I\'m going to ignore you until you calm down',choice2:'It can\'t be that serious',choice3:'Ok I\'m  here, what\'s wrong?',resultType:'message',result1:202,result2:203,result3:204,ttl:''},
+        202: {choiceId:202,choice1:'You just sent three messages to someone you don\'t know.',choice2:'I\'m sorry',resultType:'message',result1:205,result2:210,ttl:''},
+        203: {choiceId:203,choice1:'Maybe this got off to a weird start. Let\'s go back to the start',choice2:'So... Lizard men?',choice3:'I don\'t think I want anything to do with this',resultType:'message',result1:207,result2:208,result3:209,ttl:''},
+        204: {choiceId:204,choice1:'I\'m sorry',choice2:'Let\'s go back to the start. What do you need?',resultType:'message',result1:210,result2:207,ttl:360},
+        205: {choiceId:205,choice1:'Not much really, maybe you could tell me what\'s going on',choice2:'I don\'t think I want anything to do with this',choice3:'Has Robin been saying anything to you?',resultType:'message',result1:207,result2:209,result3:211,ttl:''},
+        206: {choiceId:206,choice1:'Judging by Robin\'s Twaddle page, it looks pretty normal.',choice2:'Well, what if he is a lizard person?',choice3:'How many messages has Robin sent?',resultType:'message',result1:206,result2:231,result3:211,ttl:''},
+        207: {choiceId:207,choice1:'Different, how?',choice2:'How much has Robin been talking about it?',choice3:'So, this is normal for Robin?',resultType:'message',result1:213,result2:211,result3:212,ttl:''},
+        208: {choiceId:208,choice1:'Why is it strange?',choice2:'Maybe Robin is on to something though.',choice3:'Are you sure I\'m the right person to be talking to?',resultType:'message',result1:213,result2:231,result3:214,ttl:''},
+        209: {choiceId:209,choice1:'How frequently does Robin fixate on things like this?',choice2:'So, you don\'t believe in any of this stuff?',choice3:'I don\'t mean to be rude, but I don\'t think this is any of my business',resultType:'message',result1:215,result2:216,result3:214,ttl:''},
+        210: {choiceId:210,choice1:'But you don\'t believe in any of this?',choice2:'So you\'re just looking out for Robin?',choice3:'If you\'re worried, just tell me what you want me to do.',resultType:'message',result1:216,result2:217,result3:232,ttl:''},
+        211: {choiceId:211,choice1:'Why are you so worried',choice2:'Maybe Robin will just get over it',resultType:'message',result1:219,result2:220,ttl:360},
+        212: {choiceId:212,choice1:'Logic is the way to go.',choice2:'Don\'t you think it makes life more interesting?',choice3:'Isn\'t it worse to just humour Robin?',resultType:'message',result1:221,result2:222,result3:223,ttl:''},
+        213: {choiceId:213,choice1:'Sure, I\'d be happy to.',choice2:'I guess I could do that',choice3:'I don\'t really know either of you',resultType:'message',result1:225,result2:225,result3:226,ttl:''},
+        214: {choiceId:214,choice1:'You want me to spy on Robin?',choice2:'What do you need?',choice3:'I don\'t know if I\'m the best person for this',resultType:'message',result1:227,result2:228,result3:230,ttl:''},
+        215: {choiceId:215,choice1:'What\'s the reason?',choice2:'What do you need',choice3:'So, this is about Robin?',resultType:'message',result1:224,result2:224,result3:217,ttl:''},
+        216: {choiceId:216,choice1:'Sure, I can do that',choice2:'I\'m not sure',choice3:'I\'m not comfortable with that',resultType:'message',result1:234,result2:235,result3:226,ttl:''},
+        217: {choiceId:217,choice1:'So, you don\'t believe in any of this stuff?',choice2:'So you don\'t think there\'s any chance it\'s true?',choice3:'Should you really be talking to me about this',resultType:'message',result1:216,result2:232,result3:214,ttl:''},
+        218: {choiceId:218,choice1:'Sure, I\'ll tell you if Robin says anything extra strange',choice2:'I think I can do that',choice3:'I don\'t think I\'m the right person for this',resultType:'message',result1:233,result2:236,result3:229,ttl:''},
+        219: {choiceId:219,choice1:'What do you need?',choice2:'You want me to spy on Robin?',choice3:'Do you need someone to take care of the lizard man?',resultType:'message',result1:228,result2:227,result3:218,ttl:''}
     },
     directionObject: {
         1: {directionId:1,attribute:'storyEvent1',operator:'=',value:'1',trueTarget:'message',trueId:'3',falseTarget:'message',falseId:'4'},
@@ -1314,7 +1790,7 @@ module.exports = {
         1:['Robin','Creed','they',1429323,'img/samAvatar.png','samBg.jpg',1,100,1300,0,0],
         2:['Cal','Ransom','she',1423413,'img/calAvatar.jpg','calBg.jpg',0,70,1500,0,0],
         3:['Ambrose','Mitchell','he',1423413,'img/ambroseAvatar.jpg','amBg.jpg',0,120,2400,0,0],
-        4:['Steve','Steve','he',1423412,'img/steveAvatar.jpg','stBg.jpg',0,140,3000,0,0],
+            4:['Steve','Steve','he',1423412,'img/steveAvatar.jpg','stBg.jpg',0,140,3000,0,0],
         5:['Marcel','Artur','he',1423412,'img/marcelAvatar.jpg','maBg.jpg',0,1,1,0,0]
     },
     pages: {
@@ -1331,6 +1807,7 @@ module.exports = {
             1200:{object:'feedObjects',id:'5'},
         },
         1: {
+            2:{object:'messageObjects',id:'201'},
             3:{object:'feedObjects',id:'104'},
             21:{object:'feedObjects',id:'105'},
             501:{object:'commentObjects',id:'10401'},
@@ -1345,7 +1822,6 @@ module.exports = {
             585:{object:'feedObjects',id:'108'},
             599:{object:'commentObjects',id:'10801'},
             600:{object:'feedObjects',id:'109'},
-            601:{object:'messageObjects',id:'201'},
             605:{object:'commentObjects',id:'10901'},
             615:{object:'commentObjects',id:'10902'},
             625:{object:'commentObjects',id:'10903'},

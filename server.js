@@ -19,25 +19,28 @@ var sequence = 1;
 
 
 router.get("/", function(req,res) {
-	res.sendFile(__dirname + '/public/index.html');
-});
-
-router.get("/feed", function(req,res) {
-	res.sendFile(__dirname + '/public/feed.html');
-});
-
-router.get("/sam", function(req,res) {
-	res.sendFile(__dirname + '/public/sam.html');
+	res.sendFile(__dirname + 'index.html');
 });
 
 router.get("/messages", function(req,res) {
-	res.sendFile(__dirname + '/public/messages.html');
+	res.sendFile(__dirname + '/index.html');
+	res.redirect('/index.html?page=messages');
 });
 
-router.get("/twaddle", function(req,res) {
-	res.sendFile(__dirname + '/public/twaddle.html');
+router.get("/feed", function(req,res) {
+	res.sendFile(__dirname + '/index.html');
+	res.redirect('/index.html?page=feed');
 });
 
+router.get("/cal", function(req,res) {
+	res.sendFile(__dirname + '/index.html');
+	res.redirect('/index.html?page=cal');
+});
+
+router.get("/robin", function(req,res) {
+	res.sendFile(__dirname + '/index.html');
+	res.redirect('/index.html?page=robin');
+});
 
 
 var server = app.listen(process.env.PORT, process.env.IP);

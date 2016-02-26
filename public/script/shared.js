@@ -22,15 +22,18 @@ var emergencyStop;
 var consoleData = [];
 
 var baseLogFunction = console.log;
+var actualInnerWidth = $("body").width();
 
 var $canvas      = $('#canvasFront');
 var canvas       = $canvas[0];
-canvas.width  = window.innerWidth;
-canvas.height = window.innerHeight;
+
+//canvas.width  = actualInnerWidth;
+//canvas.height = window.innerHeight;
 
 var $canvasB      = $('#canvasBack');
 var canvasB      = $canvasB[0];
-canvasB.width  = $('body').width();
+
+canvasB.width  = actualInnerWidth;
 canvasB.height = $('body').height();
 /*
 
@@ -260,7 +263,7 @@ choiceControls.create = function(choiceId,target,targetType,remove,choice1,choic
     var choiceString = '';
     if (choice1!=0) {choiceString += '<div id="choice1" class="choice btn">'+choice1+'</div>';}
     if (choice2!=0) {choiceString += '<div id="choice2" class="choice btn">'+choice2+'</div>';}
-    if (choice3!=0) {choiceString += '<div id="choice3" class="choice btn">'+choice3+'</div>';}
+    if (choice3!=0&&choice3!=undefined) {choiceString += '<div id="choice3" class="choice btn">'+choice3+'</div>';}
     $('#'+target).append('<div id="choiceBlock_'+choiceId+'" class="choiceBlock">'+choiceString+'</div>');
     $('#choiceBlock').css('max-height','300px');
     if ($('#messagesCont').length > 0) {
@@ -315,6 +318,7 @@ choiceControls.choose = function(id,choice,targetType) {
         if (deviceData['type'] == 1){var fromText = '<i class="fa fa-mobile"></i><span class="sentFrom">Sent from mobile</span>';} else {var fromText = '<i class="fa fa-desktop"></i><span class="sentFrom">Sent from desktop</span>';}
         $('#messagesCont').append('<div class="messageCont"><img class="messageAvatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /><div class="sentOn">'+fromText+date+'</div><div class="messageName">'+usersFirstname+'</div><div class="messageContents">'+theChoice+'</div></div>');
         var objDiv = document.getElementById("messagesCont");objDiv.scrollTop = objDiv.scrollHeight;
+        setTimeout(function() {objDiv.scrollTop = objDiv.scrollHeight;},100);
         $('#choiceBlock_'+id).remove();
         gameUpdate('updateLocal','data',newMessage,'messages');
         gameUpdate('updateLocal','data',choiceMade,'choice','message_'+commentTarg,id);
@@ -455,6 +459,7 @@ messages.load = function(id) {
     $('#messagesCont').prepend('<div class="messagesStart">Conversation started</div>');
     $('.messageTitle').html('&lt; '+thisUser);
     var objDiv = document.getElementById("messagesCont");objDiv.scrollTop = objDiv.scrollHeight;
+    setTimeout(function() {objDiv.scrollTop = objDiv.scrollHeight;},100);
 }
 
 messages.create = function(userId,time,content,image,from) {
@@ -629,6 +634,12 @@ messages.packed = function(messageArray,choices,noNote,nextOne) {
         }
         lastMessage = thisMessage;
         if (messageArray[counter] != undefined) {
+            console.log(messageArray[counter]);
+            if (messageArray[counter].type != undefined && messageArray[counter].type == 'delay') {
+                timer = timer + parseInt(messageArray[counter].time);
+                counter++;
+                console.log('Extending that shit');
+            }
            setTimeout(function() {
                 loopMessages();
            },timer);
@@ -1045,6 +1056,7 @@ navigationControls.change = function(page) {
             $('body').attr('id','messagesPage');
             gameUpdate('updateNotifications','settings','messages',1);
             messages.init();
+            history.pushState('', 'Twaddle - Messages', 'messages');
             document.title = 'Twaddle - Messages';
             $('#feedContent').fadeIn();
         } else if (page == 'feed') {
@@ -1052,6 +1064,7 @@ navigationControls.change = function(page) {
             $('.sponsored').html('<div class="trending"><div class="sideHeader">Trending</div><div id="trendingSection"></div><div class="games"><div class="sideHeader">New games</div><div class="gameBlock"><div class="gameImg"></div></div><div class="gameBlock"><div class="gameImg"></div></div></div></div>')       
             $('#feedContent').removeClass('noSponsored');
             gameUpdate('updateNotifications','settings','posts',1);
+            history.pushState('', 'Twaddle - A social media for the everyman', 'feed');
             document.title = 'Twaddle - A social media for the everyman';
             feed.create('feedContent',localStorage.getObject('gameData').posts,1,0);
             //setTimeout(function() {spawnNotification('This notification system will be used to let you know about new updates','img/samAvatar.png','Welcome to the man next door!');},3000);
@@ -1082,6 +1095,7 @@ navigationControls.change = function(page) {
             });
         } else if (page == 'debug') {
             $('#feedContent').html('<div class="feedObject"><div class="innerFeed" id="debugCont" ></div></div>');
+            history.pushState('', 'Twaddle - SOMETHING IS BORKED', 'borkborkbork');
             document.title = 'Twaddle - SOMETHING IS BORKED';
             for (var i=0;i<consoleData.length && i<20;i++) {
                 $('#debugCont').append(consoleData[i]);
@@ -1091,7 +1105,8 @@ navigationControls.change = function(page) {
             $('#feedContent').html('<div id="userHeader" class="userHeader noHero"><div class="userHero"></div><div class="userAvatar"><img class="avatar" id="aboutAvatar" src="" alt="User\'s Avatar" /></div><div class="userName" id="aboutUsername"></div><div class="userNav" id="userNav"><div id="posts">Wall</div><div id="about">About</div></div></div><div id="userBody"></div><div id="aboutBody" class="aboutBody"><div class="cardTitle">About</div><div class="aboutNav"><div class="aboutItem current" id="overview">Overview</div><div class="aboutItem" id="family">Family and Relationships</div><div class="aboutItem" id="events">Life Events</div></div><div class="outerAbout"><div id="aboutContent" class="aboutContent"><div class="aboutContents overview"><div class="aboutSection"><div class="miniHeader">General Information</div><table class="infoTable" id="generalTable"></table></div><div class="aboutSection"><div class="miniHeader">Favourite Quote</div><p id="userQuote"></p></div></div><div class="aboutContents family">                <div class="aboutSection"><div class="miniHeader">Relationship</div><div id="relationshipData"></div></div><div class="aboutSection"><div class="miniHeader">Family</div><table class="infoTable" id="familyData"></table></div></div><div class="aboutContents events"><div class="miniHeader">Life events</div><table class="infoTable" id="lifeEvents"></table></div></div></div></div></div>');
              if (page == 'robin') {
                  userPage = 1;
-                   document.title = 'Robin Creed';
+                  history.pushState('', 'Twaddle - Robin Creed', 'robin');
+                  document.title = 'Twaddle - Robin Creed';
                    $('#aboutUsername').html('Robin Creed');
                    $("#aboutAvatar").attr('src','img/samAvatar.png');
                    $('.userHero').addClass('robinHero');
@@ -1105,7 +1120,8 @@ navigationControls.change = function(page) {
                     
             } else if (page == 'cal') {
                  userPage = 2;
-                   document.title = 'Calliope Ransom';
+                 history.pushState('', 'Twaddle - Calliope Ransom', 'cal');
+                 document.title = 'Twaddle - Calliope Ransom';
                    $('#aboutUsername').html('Calliope Ransom');
                    $("#aboutAvatar").attr('src','img/calAvatar.png');
                    $('.userHero').addClass('calHero');
@@ -1156,6 +1172,8 @@ $(document).on('click touch', '.sideLink', function(ev) {
          navigationControls.change('friendCal');
      } else if ($(this).attr('id') == 'debugLink') {
          navigationControls.change('debug');
+     } else if ($(this).attr('id') == 'crackLink') {
+         $('#canvasFront').toggleClass('cracked');
      }
 });
 
@@ -1532,6 +1550,26 @@ if ( typeof define === 'function' && define.amd ) {
 }
 
 })( window );
+
+$(document).on("pagecontainerbeforechange", function (e, data) {
+    if (typeof data.toPage == "string" && data.options.direction == "back" && document.title != 'Twaddle - A social media for the everyman') {
+        return false;
+        $('#newsFeedLink').click();
+    } else if (typeof data.toPage == "string" && data.options.direction == "back" && document.title == 'Twaddle - A social media for the everyman') {
+        return true;
+    }
+});
+
+function getQueryVariable(variable)
+{
+   var query = window.location.search.substring(1);
+   var vars = query.split("&");
+   for (var i=0;i<vars.length;i++) {
+           var pair = vars[i].split("=");
+           if(pair[0] == variable){return pair[1];}
+   }
+   return(false);
+}
 
 
 if(canvas.getContext) {

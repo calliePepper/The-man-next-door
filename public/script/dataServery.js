@@ -295,7 +295,6 @@ queueFunc.update = function(day,timeThroughDay,updatedLast,noNote) {
 		for (var i in data.events[dayCheck]) {
 			var notDone = 1;
 			if (data.events[dayCheck][i].object == 'feedObjects') {
-				console.log('Checking object '+i);
 				if (localStorage.getObject('gameSettings').lastFeed[data.events[dayCheck][i].id] == 1)  {
 					notDone = 0;
 				}

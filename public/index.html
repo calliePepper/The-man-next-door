@@ -69,6 +69,10 @@
                             <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-child fa-stack-1x fa-inverse"></i></span>
                             <i id="feedIcon" class="desktop fa fa-child"></i>Friend Cal
                         </a>
+                        <a id="crackLink" class="feed sideLink">
+                            <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-heart fa-stack-1x fa-inverse"></i></span>
+                            <i id="feedIcon" class="desktop fa fa-heart"></i>Toggle cracked Screen
+                        </a>
                     </div>
                     <div id="feedContent" class="mainContent">
                     </div>
@@ -104,7 +108,18 @@
         <script type="text/javascript" src="script/glitch.js"></script>
         <script type="text/javascript" src="script/glitchText.js"></script>
         <script>
+            var pageId = getQueryVariable('page');
+            if (pageId == 'feed') {
               navigationControls.change('feed');
+            } else if (pageId == 'messages') {
+                navigationControls.change('messages');
+            } else if (pageId == 'robin') {
+                navigationControls.change('robin');
+            } else if (pageId == 'cal') {
+                navigationControls.change('cal');
+            } else {
+                navigationControls.change('feed');
+            }
         </script>
     </body>	
 </html>

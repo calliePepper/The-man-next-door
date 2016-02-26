@@ -119,7 +119,11 @@ function processMessage(receivedMessages,nonote) {
         $.each(receivedMessages.messageItem.messages, function(index,value) {
             console.log(timestampify()+'Reading through');
             console.log(value);
-            var incomingMessage =  new message(value.fromId,value.toId,value.timestamp,value.message,value.image,value.video,deviceData['type'],value.msgId);
+            if (value.type != undefined && value.type == 'delay') {
+                var incomingMessage = value;
+            } else {
+                var incomingMessage =  new message(value.fromId,value.toId,value.timestamp,value.message,value.image,value.video,deviceData['type'],value.msgId);
+            }
             messageGroup.push(incomingMessage);
         });
         var nextMsg = 0;
@@ -292,7 +296,7 @@ function emitChoice(choiceId,choiceMadeData) {
 var afaTimeout = [];
 
 function askForAnother(nextOne) {
-    if (afaTimeout[nextOne] != undefined) {
+    if (afaTimeout != undefined && afaTimeout[nextOne] != undefined) {
         clearTimeout(afaTimeout[nextOne]);
     }
     anotherMessage({playerName:playerName,currentTime:new Date(),timezone:localStorage.getObject('gameSettings').timezone,nextId:nextOne});

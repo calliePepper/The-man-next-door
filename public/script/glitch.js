@@ -166,12 +166,19 @@ function glitchThis(targetImage) {
             // console.log(imgDataArr.slice(0, 30));
             // console.log (img.src.substring(0,30));
         };
+        
+        var pathMachine = '../img/'
+        
+        if (mobNotifications == 1) {
+            var pathMachine = '../www/img/';
+        }
+        
         if (targetImage == "marcel") {
-            initialImage.src = "../img/marcelAvatar.jpg";
+            initialImage.src = pathMachine + "marcelAvatar.jpg";
         } else if (targetImage == "backyard") {
-            initialImage.src = "../img/backyard.jpg";
-            initialImage2.src = "../img/backyard_w_hound.jpg";
+            initialImage.src = pathMachine + "backyard.jpg";
+            initialImage2.src = pathMachine + "backyard_w_hound.jpg";
         } else {
-            initialImage.src = "../img/code.jpg";
+            initialImage.src = pathMachine + "code.jpg";
         }
 }

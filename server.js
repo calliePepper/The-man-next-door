@@ -371,7 +371,7 @@ var indexOf = function(needle) {
         indexOf = Array.prototype.indexOf;
     } else {
         indexOf = function(needle) {
-            var i = -1, index = -1;
+            var i = -1, index = -1;5
 
             for(i = 0; i < this.length; i++) {
                 if(this[i] === needle) {

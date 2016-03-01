@@ -103,8 +103,9 @@ function glitchThis(targetImage) {
                     if (Math.floor(Math.random() * 2) + 1 == 2 || replaceGlitch == 0) {
                         ctx.drawImage(initialImage,200 - cw / 2, 200 - ch / 2,cw,ch);
                         replaceGlitch = 10;
-                    } else {
+                    } else if (replaceGlitch == 10) {
                         ctx.drawImage(initialImage2,200 - cw / 2, 200 - ch / 2,cw,ch);
+                    } else {
                         replaceGlitch--;
                     }
                     var imgData = canvas.toDataURL("image/jpeg");

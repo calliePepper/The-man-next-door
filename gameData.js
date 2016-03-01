@@ -1597,7 +1597,9 @@ module.exports = {
             autoId:'',
             ttl:'',
             ttlTarget:'message',
-            ttlId:''
+            ttlId:'',
+            result:'friend',
+            resultTarget:'2'
         },
         226:{
             messages:[
@@ -1699,7 +1701,9 @@ module.exports = {
             autoId:'',
             ttl:'',
             ttlTarget:'message',
-            ttlId:''
+            ttlId:'',
+            result:'friend',
+            resultTarget:'2'
         },
         234:{
             messages:[
@@ -1713,7 +1717,9 @@ module.exports = {
             autoId:'',
             ttl:'',
             ttlTarget:'message',
-            ttlId:''
+            ttlId:'',
+            result:'friend',
+            resultTarget:'2'
         },
         235:{
             messages:[

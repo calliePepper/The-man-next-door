@@ -547,6 +547,7 @@ messages.new.currentMsg = function(messageFrom,messageTo,cameIn,text,ttw,fullMes
         }
         if(text.length > 15) text = text.substring(0,15) + '...';
         var date2 = time.minidate(Math.floor(Date.now() / 1000));
+        $('#messageList').prepend($('#messageLink_'+messageFrom));
         $('#messageLink_'+messageFrom).find('.sentOn').html(date2);
         $('#messageLink_'+messageFrom).find('.messageContents').html(text);
         $('#messageLink_'+messageFrom).addClass('pulse');
@@ -565,6 +566,7 @@ messages.new.notCurrentMsg = function(messageFrom,messageTo,cameIn,text,ttw,full
     setTimeout(function() {
         if(text.length > 15) text = text.substring(0,15) + '...';
         var date = time.minidate(cameIn);
+        $('#messageList').prepend($('#messageLink_'+messageFrom));
         $('#messageLink_'+messageFrom).find('.sentOn').html(date);
         $('#messageLink_'+messageFrom).find('.messageContents').html(text);
         $('#messageLink_'+messageFrom).addClass('pulse');
@@ -624,6 +626,28 @@ messages.packed = function(messageArray,choices,noNote,nextOne) {
                 }            
             } else {
                 messages.new.differentPage(messageArray[counter].fromId,messageArray[counter].toId,messageArray[counter].date,messageArray[counter].text,typingTime,messageArray[counter]);
+            }
+            if (messageArray[counter] == undefined) {
+                if (messageArray.result != undefined) {
+                    switch(messageArray.result) {
+                        case "friend":
+                            $('#feedContent').fadeIn();
+                            $('#modal-11').addClass('md-show');
+                            $('#acceptFriend').on('click touch', function() {
+                                 userPage = 0;
+                                $('#modal-11').removeClass('md-show');
+                                $('#acceptFriend').unbind();
+                                gameUpdate('addFriend','data',2);
+                                console.log(timestampify()+'Building feed based off message content');
+                                feed.create('feedContent',localStorage.getObject('gameData').posts,1,0);
+                                users.load(); 
+                            });
+                            break;
+                        default:
+                            console.log("Something went really fucking wrong");
+                            break;
+                    }
+                }
             }
         }
         counter++;
@@ -805,12 +829,14 @@ feed.individualPost = function(value,processNormal,target,direction) {
     }
     var possibleChoice = value['comments'][value['comments'].length-1];
     if (direction == 'append') {
+        console.log(timestampify()+'Appending new data to feed via individualpost');
         if (possibleChoice && possibleChoice.date == 'CHOICE') {
             $('#'+target).append('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy userLink username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'<div class="feedControls"><span class="feedControl likeControl usableControls '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'" data-id="'+possibleChoice.text.choiceId+'" data-choice1="'+possibleChoice.text.choice1+'" data-choice2="'+possibleChoice.text.choice2+'" data-choice3="'+possibleChoice.text.choice3+'"><i class="fa fa-comment"></i>Comment</span></div></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
         } else {
             $('#'+target).append('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy userLink username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'<div class="feedControls"><span class="feedControl likeControl usableControls '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'"><i class="fa fa-comment"></i>Comment</span></div></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
         }
     } else {
+        console.log(timestampify()+'Prepending new data to feed via individualpost');
         if (possibleChoice && possibleChoice.date == 'CHOICE') {
             $('#'+target).prepend('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy userLink username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'<div class="feedControls"><span class="feedControl likeControl usableControls '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'" data-id="'+possibleChoice.text.choiceId+'" data-choice1="'+possibleChoice.text.choice1+'" data-choice2="'+possibleChoice.text.choice2+'" data-choice3="'+possibleChoice.text.choice3+'"><i class="fa fa-comment"></i>Comment</span></div></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
         } else {
@@ -876,6 +902,7 @@ feed.backlog = function(value) {
         var commentsString = feed.commentBuilder(value['comments'],value['postId']);
         var possibleChoice = value['comments'][value['comments'].length-1];
         console.log(possibleChoice);
+        console.log(timestampify()+'Clearing and building feed via the .backlog');
         if (possibleChoice && possibleChoice.date == 'CHOICE') {
             $('#'+target).prepend('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy userLink username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'<div class="feedControls"><span class="feedControl likeControl usableControls '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'" data-id="'+possibleChoice.text.choiceId+'" data-choice1="'+possibleChoice.text.choice1+'" data-choice2="'+possibleChoice.text.choice2+'" data-choice3="'+possibleChoice.text.choice3+'"><i class="fa fa-comment"></i>Comment</span></div></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
         } else {
@@ -1034,6 +1061,7 @@ navigationControls.change = function(page) {
     $('.aboutItem').off();
     $('.sponsored').html('');
     if (page != 'friendCal') {
+        console.log(timestampify()+'Clearing feed, navigation click');
         $('#feedContent').html('');
     }
     $('#feedContent').addClass('noSponsored');
@@ -1052,6 +1080,7 @@ navigationControls.change = function(page) {
         $('body').attr('id','');
         //console.log(timestampify()+'Going to '+page);
         if (page == 'messages') {
+            console.log(timestampify()+'Building feed for messages');
             $('#feedContent').html('<div class="messagesBox" id="messagesBox"><div class="messageList" id="messageList"></div><div class="messages" id="messages"><div class="mobile messageTitle"></div><div class="messagesCont" id="messagesCont"></div></div></div>');
             $('body').attr('id','messagesPage');
             gameUpdate('updateNotifications','settings','messages',1);
@@ -1090,10 +1119,12 @@ navigationControls.change = function(page) {
                 $('#modal-11').removeClass('md-show');
                 $('#acceptFriend').unbind();
                 gameUpdate('addFriend','data',2);
+                console.log(timestampify()+'friendCal!');
                 feed.create('feedContent',localStorage.getObject('gameData').posts,1,0);
                 users.load(); 
             });
         } else if (page == 'debug') {
+            console.log(timestampify()+'Building feed for debug');
             $('#feedContent').html('<div class="feedObject"><div class="innerFeed" id="debugCont" ></div></div>');
             history.pushState('', 'Twaddle - SOMETHING IS BORKED', 'borkborkbork');
             document.title = 'Twaddle - SOMETHING IS BORKED';
@@ -1102,6 +1133,7 @@ navigationControls.change = function(page) {
             }
             $('#feedContent').fadeIn();
         } else {
+            console.log(timestampify()+'Building feed for user page');
             $('#feedContent').html('<div id="userHeader" class="userHeader noHero"><div class="userHero"></div><div class="userAvatar"><img class="avatar" id="aboutAvatar" src="" alt="User\'s Avatar" /></div><div class="userName" id="aboutUsername"></div><div class="userNav" id="userNav"><div id="posts">Wall</div><div id="about">About</div></div></div><div id="userBody"></div><div id="aboutBody" class="aboutBody"><div class="cardTitle">About</div><div class="aboutNav"><div class="aboutItem current" id="overview">Overview</div><div class="aboutItem" id="family">Family and Relationships</div><div class="aboutItem" id="events">Life Events</div></div><div class="outerAbout"><div id="aboutContent" class="aboutContent"><div class="aboutContents overview"><div class="aboutSection"><div class="miniHeader">General Information</div><table class="infoTable" id="generalTable"></table></div><div class="aboutSection"><div class="miniHeader">Favourite Quote</div><p id="userQuote"></p></div></div><div class="aboutContents family">                <div class="aboutSection"><div class="miniHeader">Relationship</div><div id="relationshipData"></div></div><div class="aboutSection"><div class="miniHeader">Family</div><table class="infoTable" id="familyData"></table></div></div><div class="aboutContents events"><div class="miniHeader">Life events</div><table class="infoTable" id="lifeEvents"></table></div></div></div></div></div>');
              if (page == 'robin') {
                  userPage = 1;
@@ -1156,6 +1188,8 @@ $(document).on('click touch', '#mobileNav', function() {
     $('body').toggleClass('navFlip');
 });  
 
+var glitch = 0;
+
 $(document).on('click touch', '.sideLink', function(ev) {
      ev.preventDefault();
      if ($(this).attr('id') == 'newsFeedLink') {
@@ -1173,7 +1207,24 @@ $(document).on('click touch', '.sideLink', function(ev) {
      } else if ($(this).attr('id') == 'debugLink') {
          navigationControls.change('debug');
      } else if ($(this).attr('id') == 'crackLink') {
-         $('#canvasFront').toggleClass('cracked');
+         $('#canvasFront').removeClass('cracked');
+         $('.sideBar').removeClass('navFlip');
+        window.scrollTo(0,0);
+        $('body').removeClass('navFlip');
+        $('#feedContent').removeClass('navFlip');
+         if (glitch == 0) {
+            $('#canvasFront').addClass('cracked');
+            glitch = 1;
+         } else if (glitch == 1) {
+             glitchThis('night');
+             glitch = 2;
+         } else if (glitch == 2) {
+             glitchThis('marcel');
+             glitch = 3;
+         } else if (glitch == 3) {
+             glitchThis('backyard');
+             glitch = 0;
+         }
      }
 });
 
@@ -1258,6 +1309,7 @@ function infiniteCheck() {
 
 function loadInfinite(direction) {
     if (direction == 1) {
+        console.log(timestampify()+'Building more feed based off infinite scroll');
         $('#feedContent').append('<div class="loadingFeed">Loading more Feed Data</div>');
         if (Math.floor($(document).height() - $(document).scrollTop() - $(window).height()) == 0) {
             $(document).scrollTop($(document).height());

@@ -1,13 +1,9 @@
-function glitchThis() {
-        $('body').prepend('<audio id="whispers" src="sounds/whispers.mp3" volume="0.2"></audio>');
-        $('#whispers').prop('volume',0.06);
-        var audioEl = document.getElementById('whispers');
-
-        $('body').prepend('<canvas id="glitched" class="glitchCanvas"></canvas>');
-        var canvas = document.getElementById('glitched');
-        
-
-        
+function glitchThis(targetImage) {
+        //$('body').prepend('<audio id="whispers" src="sounds/whispers.mp3" volume="0.2"></audio>');
+        //$('#whispers').prop('volume',0.06);
+       // var audioEl = document.getElementById('whispers');
+        var canvas = document.getElementById('canvasFront');
+    
         var ctx = canvas.getContext('2d');
         var jpgHeaderLength;
         var base64Chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
@@ -81,29 +77,81 @@ function glitchThis() {
             strArr[rnd] = Math.floor(Math.random() * 256);
         }
         
+        var glitchCounter = 0;
+        var replaceGlitch = 10;
+        
         function glitchJpeg() {
-            var glitchCopy = imgDataArr.slice();
-            for (var i = 0; i < 10; i++) {
-                glitchJpegBytes(glitchCopy);
+            if (glitchCounter >= 40) {
+                var img = ctx.createImageData(400, 400);
+                for (var i = img.data.length; --i >= 0; )
+                    img.data[i] = 0;
+                ctx.putImageData(img, 0, 0);
+            } else {
+                glitchCounter++;
+                if (targetImage == "backyard") {
+                    var w = window.innerWidth;
+                    var h = window.innerHeight;
+                    var cw = 400, ch = 400, th = 0, tw = 0;
+                    if (h > w) {
+                        console.log(w + ' vs ' + h)
+                        cw = ((h / 0.707) / w) * 400;
+                        console.log(cw);
+                    } else {
+                        ch = ((w * 0.707) / h) * 400;
+                        console.log(ch);
+                    }
+                    if (Math.floor(Math.random() * 2) + 1 == 2 || replaceGlitch == 0) {
+                        ctx.drawImage(initialImage,200 - cw / 2, 200 - ch / 2,cw,ch);
+                        replaceGlitch = 10;
+                    } else {
+                        ctx.drawImage(initialImage2,200 - cw / 2, 200 - ch / 2,cw,ch);
+                        replaceGlitch--;
+                    }
+                    var imgData = canvas.toDataURL("image/jpeg");
+                    imgDataArr = base64ToByteArray(imgData);
+                    detectJpegHeaderSize(imgDataArr);
+                }
+                var glitchCopy = imgDataArr.slice();
+                for (var i = 0; i < 10; i++) {
+                    glitchJpegBytes(glitchCopy);
+                }
+                var img = new Image();
+                img.onload = function() {
+                    ctx.drawImage(img, 0, 0);
+                    setTimeout(glitchJpeg, 50);
+                }
+                img.onerror = function() {
+                    var img = ctx.createImageData(400, 400);
+                    for (var i = img.data.length; --i >= 0; )
+                        img.data[i] = 0;
+                    ctx.putImageData(img, 0, 0);
+                }
+                img.src = byteArrayToBase64(glitchCopy);
             }
-            var img = new Image();
-            img.onload = function() {
-                ctx.drawImage(img, 0, 0);
-                setTimeout(glitchJpeg, 50);
-            }
-            img.src = byteArrayToBase64(glitchCopy);
         }
         
         var initialImage = new Image();
+        var initialImage2 = new Image();
         var imgDataArr;
         initialImage.onload = function() {
-            ctx.drawImage(initialImage, 0, 0);
+            var w = window.innerWidth;
+            var h = window.innerHeight;
+            var cw = 400, ch = 400, th = 0, tw = 0;
+            if (h > w) {
+                console.log(w + ' vs ' + h)
+                cw = ((h / 0.707) / w) * 400;
+                console.log(cw);
+            } else {
+                ch = ((w * 0.707) / h) * 400;
+                console.log(ch);
+            }
+            ctx.drawImage(initialImage,200 - cw / 2, 200 - ch / 2,cw,ch);
             var imgData = canvas.toDataURL("image/jpeg");
             imgDataArr = base64ToByteArray(imgData);
             detectJpegHeaderSize(imgDataArr);
             glitchJpeg();
             
-            audioEl.play();
+            /*audioEl.play();
             $('#glitched').fadeIn('fast',function() {
                 setTimeout(function() {
                     $('#glitched').fadeOut('fast',function() {
@@ -112,10 +160,17 @@ function glitchThis() {
                         $('#whispers').remove();
                     });
                 }, 800);
-            });
+            });*/
             // console.log(imgData.substring(0,30));
             // console.log(imgDataArr.slice(0, 30));
             // console.log (img.src.substring(0,30));
         };
-        initialImage.src = "../img/code.jpg";
+        if (targetImage == "marcel") {
+            initialImage.src = "../img/marcelAvatar.jpg";
+        } else if (targetImage == "backyard") {
+            initialImage.src = "../img/backyard.jpg";
+            initialImage2.src = "../img/backyard_w_hound.jpg";
+        } else {
+            initialImage.src = "../img/code.jpg";
+        }
 }

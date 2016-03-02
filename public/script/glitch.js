@@ -93,34 +93,6 @@ function glitchThis(targetImage) {
                 ctx.putImageData(img, 0, 0);
             } else {
                 glitchCounter++;
-                /*if (targetImage == "backyard") {
-                    var w = window.innerWidth;
-                    var h = window.innerHeight;
-                    var cw = 400, ch = 400, th = 0, tw = 0;
-                    if (h > w) {
-                        console.log(w + ' vs ' + h)
-                        cw = ((h / 0.707) / w) * 400;
-                        console.log(cw);
-                    } else {
-                        ch = ((w * 0.707) / h) * 400;
-                        console.log(ch);
-                    }
-                    if (Math.floor(Math.random() * 2) + 1 == 2 || replaceGlitch == 0) {
-                        ctx.drawImage(initialImage,200 - cw / 2, 200 - ch / 2,cw,ch);
-                        replaceGlitch = 5;
-                        var imgData = canvas.toDataURL("image/jpeg");
-                        imgDataArr = base64ToByteArray(imgData);
-                        detectJpegHeaderSize(imgDataArr);
-                    } else if (replaceGlitch == 5) {
-                        ctx.drawImage(initialImage2,200 - cw / 2, 200 - ch / 2,cw,ch);
-                        var imgData = canvas.toDataURL("image/jpeg");
-                        imgDataArr = base64ToByteArray(imgData);
-                        detectJpegHeaderSize(imgDataArr);
-                    } else {
-                        replaceGlitch--;
-                    }
-                    
-                }*/
                 var glitchCopy = imgDataArr.slice();
                 for (var i = 0; i < 10; i++) {
                     glitchJpegBytes(glitchCopy);
@@ -154,10 +126,10 @@ function glitchThis(targetImage) {
             var cw = 400, ch = 400, th = 0, tw = 0;
             if (h > w) {
                 console.log(w + ' vs ' + h)
-                cw = ((h / 0.707) / w) * 400;
+                cw = (h / w) * 400;
                 console.log(cw);
             } else {
-                ch = ((w * 0.707) / h) * 400;
+                ch = (w / h) * 400;
                 console.log(ch);
             }
             ctx.drawImage(initialImage,200 - cw / 2, 200 - ch / 2,cw,ch);
@@ -188,7 +160,7 @@ function glitchThis(targetImage) {
         }
         
         if (targetImage == "marcel") {
-            initialImage.src = pathMachine + "marcelAvatar.jpg";
+            initialImage.src = pathMachine + "marcelAvatarGlitch.jpg";
         } else if (targetImage == "backyard") {
             //initialImage.src = pathMachine + "backyard.jpg";
             //initialImage2.src = pathMachine + "backyard_w_hound.jpg";

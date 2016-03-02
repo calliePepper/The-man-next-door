@@ -86,7 +86,7 @@ function glitchThis(targetImage) {
         
         function glitchJpeg() {
             var header;
-            if (glitchCounter > 4) {
+            if (glitchCounter > 20) {
                 var img = ctx.createImageData(400, 400);
                 for (var i = img.data.length; --i >= 0; )
                     img.data[i] = 0;
@@ -122,12 +122,12 @@ function glitchThis(targetImage) {
                     
                 }*/
                 var glitchCopy = imgDataArr.slice();
-                for (var i = 0; i < 4; i++) {
+                for (var i = 0; i < 10; i++) {
                     glitchJpegBytes(glitchCopy);
                 }
                 var img = new Image();
                 img.onload = function() {
-                    ctx.drawImage(img, 0, 0);
+                    //ctx.drawImage(img, 0, 0);
                     setTimeout(glitchJpeg, 100);
                 }
                 img.onerror = function(evt) {
@@ -135,10 +135,10 @@ function glitchThis(targetImage) {
                     console.log('It glitched '+glitchCounter+'. Tried to change object '+stringChange+', with the data '+changeData+'. The header was this long ' +jpgHeaderLength+'. It should have changed ' + originalData+', glitch is now:');
                     console.log(glitchCopy);
                     console.log(evt);
-                    /*var img = ctx.createImageData(400, 400);
+                    var img = ctx.createImageData(400, 400);
                     for (var i = img.data.length; --i >= 0; )
                         img.data[i] = 0;
-                    ctx.putImageData(img, 0, 0);*/
+                    ctx.putImageData(img, 0, 0);
                     //glitchThis('night');
                 }
                 img.src = byteArrayToBase64(glitchCopy);

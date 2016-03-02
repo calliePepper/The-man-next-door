@@ -15,7 +15,7 @@ function glitchThis(targetImage) {
             for (var i = 0, l = data.length; i < l; i++) {
                 if (data[i] == 0xFF && data[i+1] == 0xDA) {
                     //console.log("xxxxxxx<<<<", data[i], data[i+1], i, l);
-                    jpgHeaderLength = i + 2; return;
+                    jpgHeaderLength = i+10; return;
                 }
             }
         }
@@ -71,24 +71,29 @@ function glitchThis(targetImage) {
             }
             return result.join("");
         }
+        var stringChange;
+        var changeData;
         
         function glitchJpegBytes(strArr) {
-            var rnd = Math.floor(jpgHeaderLength + Math.random() * (strArr.length - jpgHeaderLength - 4));
-            strArr[rnd] = Math.floor(Math.random() * 256);
+            stringChange = Math.floor(jpgHeaderLength + Math.random() * (strArr.length - jpgHeaderLength));
+            originalData = strArr[stringChange];
+            changeData = Math.floor(Math.random() * 254)
+            strArr[stringChange] = changeData;
         }
         
         var glitchCounter = 0;
         var replaceGlitch = 10;
         
         function glitchJpeg() {
-            if (glitchCounter >= 40) {
+            var header;
+            if (glitchCounter > 40) {
                 var img = ctx.createImageData(400, 400);
                 for (var i = img.data.length; --i >= 0; )
                     img.data[i] = 0;
                 ctx.putImageData(img, 0, 0);
             } else {
                 glitchCounter++;
-                if (targetImage == "backyard") {
+                /*if (targetImage == "backyard") {
                     var w = window.innerWidth;
                     var h = window.innerHeight;
                     var cw = 400, ch = 400, th = 0, tw = 0;
@@ -102,30 +107,39 @@ function glitchThis(targetImage) {
                     }
                     if (Math.floor(Math.random() * 2) + 1 == 2 || replaceGlitch == 0) {
                         ctx.drawImage(initialImage,200 - cw / 2, 200 - ch / 2,cw,ch);
-                        replaceGlitch = 10;
-                    } else if (replaceGlitch == 10) {
+                        replaceGlitch = 5;
+                        var imgData = canvas.toDataURL("image/jpeg");
+                        imgDataArr = base64ToByteArray(imgData);
+                        detectJpegHeaderSize(imgDataArr);
+                    } else if (replaceGlitch == 5) {
                         ctx.drawImage(initialImage2,200 - cw / 2, 200 - ch / 2,cw,ch);
+                        var imgData = canvas.toDataURL("image/jpeg");
+                        imgDataArr = base64ToByteArray(imgData);
+                        detectJpegHeaderSize(imgDataArr);
                     } else {
                         replaceGlitch--;
                     }
-                    var imgData = canvas.toDataURL("image/jpeg");
-                    imgDataArr = base64ToByteArray(imgData);
-                    detectJpegHeaderSize(imgDataArr);
-                }
+                    
+                }*/
                 var glitchCopy = imgDataArr.slice();
-                for (var i = 0; i < 10; i++) {
+                for (var i = 0; i < 4; i++) {
                     glitchJpegBytes(glitchCopy);
                 }
                 var img = new Image();
                 img.onload = function() {
                     ctx.drawImage(img, 0, 0);
-                    setTimeout(glitchJpeg, 50);
+                    setTimeout(glitchJpeg, 5);
                 }
-                img.onerror = function() {
+                img.onerror = function(evt) {
+                    console.log(timestampify()+'Glitch broke!');
+                    console.log('It glitched '+glitchCounter+'. Tried to change object '+stringChange+', with the data '+changeData+'. The header was this long ' +jpgHeaderLength+'. It should have changed ' + originalData+', glitch is now:');
+                    console.log(glitchCopy);
+                    console.log(evt);
                     var img = ctx.createImageData(400, 400);
                     for (var i = img.data.length; --i >= 0; )
                         img.data[i] = 0;
                     ctx.putImageData(img, 0, 0);
+                    //glitchThis('night');
                 }
                 img.src = byteArrayToBase64(glitchCopy);
             }
@@ -176,8 +190,9 @@ function glitchThis(targetImage) {
         if (targetImage == "marcel") {
             initialImage.src = pathMachine + "marcelAvatar.jpg";
         } else if (targetImage == "backyard") {
-            initialImage.src = pathMachine + "backyard.jpg";
-            initialImage2.src = pathMachine + "backyard_w_hound.jpg";
+            //initialImage.src = pathMachine + "backyard.jpg";
+            //initialImage2.src = pathMachine + "backyard_w_hound.jpg";
+            initialImage.src = pathMachine + "backyard_w_hound.jpg";
         } else {
             initialImage.src = pathMachine + "code.jpg";
         }

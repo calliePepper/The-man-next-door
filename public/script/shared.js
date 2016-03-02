@@ -30,11 +30,11 @@ var canvas       = $canvas[0];
 //canvas.width  = actualInnerWidth;
 //canvas.height = window.innerHeight;
 
-var $canvasB      = $('#canvasBack');
+/*var $canvasB      = $('#canvasBack');
 var canvasB      = $canvasB[0];
 
 canvasB.width  = actualInnerWidth;
-canvasB.height = $('body').height();
+canvasB.height = $('body').height();*/
 /*
 
 console.log = function() {

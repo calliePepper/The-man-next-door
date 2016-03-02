@@ -1,7 +1,8 @@
 function glitchThis(targetImage) {
-        //$('body').prepend('<audio id="whispers" src="sounds/whispers.mp3" volume="0.2"></audio>');
-        //$('#whispers').prop('volume',0.06);
-       // var audioEl = document.getElementById('whispers');
+    console.log(' SON OF A GLITCH ');
+        $('body').prepend('<audio id="whispers" src="sounds/whispers.mp3" volume="0.2"></audio>');
+        $('#whispers').prop('volume',0.06);
+        var audioEl = document.getElementById('whispers');
         var canvas = document.getElementById('canvasFront');
     
         var ctx = canvas.getContext('2d');
@@ -87,19 +88,18 @@ function glitchThis(targetImage) {
         function glitchJpeg() {
             var header;
             if (glitchCounter > 20) {
-                var img = ctx.createImageData(400, 400);
-                for (var i = img.data.length; --i >= 0; )
-                    img.data[i] = 0;
-                ctx.putImageData(img, 0, 0);
+                ctx.clearRect(0, 0, 400,400);
+                $('#canvasFront').remove();
+                $('body').prepend('<canvas id="canvasFront" width="400px" height="400px"></canvas>');
             } else {
                 glitchCounter++;
                 var glitchCopy = imgDataArr.slice();
-                for (var i = 0; i < 10; i++) {
+                for (var i = 0; i < 5; i++) {
                     glitchJpegBytes(glitchCopy);
                 }
                 var img = new Image();
                 img.onload = function() {
-                    //ctx.drawImage(img, 0, 0);
+                    ctx.drawImage(img, 0, 0);
                     setTimeout(glitchJpeg, 100);
                 }
                 img.onerror = function(evt) {
@@ -107,13 +107,12 @@ function glitchThis(targetImage) {
                     console.log('It glitched '+glitchCounter+'. Tried to change object '+stringChange+', with the data '+changeData+'. The header was this long ' +jpgHeaderLength+'. It should have changed ' + originalData+', glitch is now:');
                     console.log(glitchCopy);
                     console.log(evt);
-                    var img = ctx.createImageData(400, 400);
-                    for (var i = img.data.length; --i >= 0; )
-                        img.data[i] = 0;
-                    ctx.putImageData(img, 0, 0);
-                    //glitchThis('night');
+                    ctx.clearRect(0, 0, 400,400);
+                    $('#canvasFront').remove();
+                    $('body').prepend('<canvas id="canvasFront" width="400px" height="400px"></canvas>');
                 }
                 img.src = byteArrayToBase64(glitchCopy);
+                setTimeout(glitchJpeg, 100);
             }
         }
         
@@ -138,19 +137,11 @@ function glitchThis(targetImage) {
             detectJpegHeaderSize(imgDataArr);
             glitchJpeg();
             
-            /*audioEl.play();
-            $('#glitched').fadeIn('fast',function() {
+            audioEl.play();
                 setTimeout(function() {
-                    $('#glitched').fadeOut('fast',function() {
-                        $('#glitched').remove();
                         audioEl.pause();
                         $('#whispers').remove();
-                    });
                 }, 800);
-            });*/
-            // console.log(imgData.substring(0,30));
-            // console.log(imgDataArr.slice(0, 30));
-            // console.log (img.src.substring(0,30));
         };
         
         var pathMachine = '../img/'

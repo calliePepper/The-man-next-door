@@ -91,29 +91,29 @@ function glitchThis(targetImage) {
                 ctx.clearRect(0, 0, 400,400);
                 $('#canvasFront').remove();
                 $('body').prepend('<canvas id="canvasFront" width="400px" height="400px"></canvas>');
+                
             } else {
                 glitchCounter++;
                 var glitchCopy = imgDataArr.slice();
-                for (var i = 0; i < 5; i++) {
+                for (var i = 0; i < 4; i++) {
                     glitchJpegBytes(glitchCopy);
                 }
                 var img = new Image();
                 img.onload = function() {
-                    ctx.drawImage(img, 0, 0);
-                    setTimeout(glitchJpeg, 100);
+                    freeData(img, glitch);
                 }
                 img.onerror = function(evt) {
-                    console.log(timestampify()+'Glitch broke!');
-                    console.log('It glitched '+glitchCounter+'. Tried to change object '+stringChange+', with the data '+changeData+'. The header was this long ' +jpgHeaderLength+'. It should have changed ' + originalData+', glitch is now:');
-                    console.log(glitchCopy);
-                    console.log(evt);
                     ctx.clearRect(0, 0, 400,400);
                     $('#canvasFront').remove();
                     $('body').prepend('<canvas id="canvasFront" width="400px" height="400px"></canvas>');
                 }
                 img.src = byteArrayToBase64(glitchCopy);
-                setTimeout(glitchJpeg, 100);
             }
+        }
+        
+        function freeData(img, glitch) {
+            ctx.drawImage(img, 0, 0);
+            setTimeout(glitchJpeg, 10);
         }
         
         var initialImage = new Image();

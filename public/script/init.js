@@ -91,7 +91,10 @@ function hideLoad() {
     $('#leftLoad').css('left','-50%');
     $('#rightLoad').css('right','-50%');
     setTimeout(function() {
-        $('#loadingSection').fadeOut();
+        $('#overlayData').fadeOut("fast", function() {
+            $('#overlayData').removeClass();
+            $('#overlayData').html("");
+        });
     },1000);
 }
 

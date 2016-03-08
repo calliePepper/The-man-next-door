@@ -10,26 +10,11 @@
     </head>
     <body>
         <canvas id="canvasFront" width="400px" height="400px"></canvas>
-        <div id="loadingSection" class="loadingSection">
+        <div id="overlayData" class="loadingSection">
             <div class="twaddleLoad">
                 <div class="logoText">Twaddle</div>
             </div>
         </div>
-        <div id="reconnect" class="loadingSection reconnect">
-            <div class="twaddleLoad">
-                <div class="logoText">Connecting to server...</div>
-            </div>
-        </div>
-        <div class="md-modal md-effect-11" id="modal-11">
-			<div class="md-content">
-				<h3>Friend request</h3>
-				<div>
-				    <div class="friendAvatar"><img id="friendPortrait" src="img/calAvatar.jpg" alt="Cals avatar" /></div>
-					<p><span id="friendName" class="colouredText">Calliope Ransom</span> would like to be friends with you, click the button below to begin your journey of friendship!</p>
-					<button id="acceptFriend" class="md-close btn">Add to friend list</button>
-				</div>
-			</div>
-		</div>
         <div class="md-overlay"></div><!-- the overlay element -->
         <div id="contentAim">
             <div class="mobileFix">
@@ -93,12 +78,8 @@
         </div>
         <script type="text/javascript" src="script/jquery.min.js"></script>
         <script type="text/javascript" src="script/debounce.js"></script>
-        <script>
-            $('#loadingLine').addClass('load');
-        </script>
         <script type="text/javascript" src="script/socket.io.js"></script>
         <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
-        <!--<script type="text/javascript" src="script/theDarkness.js"></script>-->
         <script type="text/javascript" src="script/shared.js"></script>
         <script type="text/javascript" src="script/data.js"></script>
         <script type="text/javascript" charset="utf-8" src="pushNotifications.js"></script>

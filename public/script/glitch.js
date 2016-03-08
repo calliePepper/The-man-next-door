@@ -23,7 +23,8 @@ function glitchThis(targetImage) {
         
         // base64 is 2^6, byte is 2^8, every 4 base64 values create three bytes
         function base64ToByteArray(str) {
-            var result = [], digitNum, cur, prev;
+            result = []
+            var digitNum, cur, prev;
             for (var i = 23, l = str.length; i < l; i++) {
                 cur = reverseBase64Map[str.charAt(i)];
                 digitNum = (i-23) % 4;
@@ -44,8 +45,12 @@ function glitchThis(targetImage) {
             return result;
         }
         
+        var result
+        var byteNum, cur, prev;
+        
         function byteArrayToBase64(arr) {
-           var result = ["data:image/jpeg;base64,"], byteNum, cur, prev;
+           result = ["data:image/jpeg;base64,"]
+           
             for (var i = 0, l = arr.length; i < l; i++) {
                 cur = arr[i];
                 byteNum = i % 3;
@@ -72,6 +77,7 @@ function glitchThis(targetImage) {
             }
             return result.join("");
         }
+        
         var stringChange;
         var changeData;
         
@@ -85,6 +91,19 @@ function glitchThis(targetImage) {
         var glitchCounter = 0;
         var replaceGlitch = 10;
         
+        var glitchCopy
+        var glitchImg = new Image();
+        
+        glitchImg.onload = function() {
+            freeData(glitchImg, glitch);
+        }
+        
+        glitchImg.onerror = function(evt) {
+            ctx.clearRect(0, 0, 400,400);
+            $('#canvasFront').remove();
+            $('body').prepend('<canvas id="canvasFront" width="400px" height="400px"></canvas>');
+        }
+        
         function glitchJpeg() {
             var header;
             if (glitchCounter > 20) {
@@ -94,26 +113,25 @@ function glitchThis(targetImage) {
                 
             } else {
                 glitchCounter++;
-                var glitchCopy = imgDataArr.slice();
-                for (var i = 0; i < 4; i++) {
+                glitchCopy = imgDataArr.slice();
+                for (var i = 0; i < 7; i++) {
                     glitchJpegBytes(glitchCopy);
                 }
-                var img = new Image();
-                img.onload = function() {
-                    freeData(img, glitch);
-                }
-                img.onerror = function(evt) {
-                    ctx.clearRect(0, 0, 400,400);
-                    $('#canvasFront').remove();
-                    $('body').prepend('<canvas id="canvasFront" width="400px" height="400px"></canvas>');
-                }
-                img.src = byteArrayToBase64(glitchCopy);
+                glitchImg.src = byteArrayToBase64(glitchCopy);
             }
         }
         
         function freeData(img, glitch) {
             ctx.drawImage(img, 0, 0);
-            setTimeout(glitchJpeg, 10);
+            if (Math.floor(Math.random() * 8) == 0) {
+                var timer = Math.floor(Math.random() * 200) + 100;
+                console.log(glitchCounter + ' - ' + timer);
+                setTimeout(glitchJpeg, timer);
+            } else {
+                var timer = Math.floor(Math.random() * 50) + 10;
+                console.log(glitchCounter + ' - ' + timer);
+                setTimeout(glitchJpeg, timer);
+            }
         }
         
         var initialImage = new Image();

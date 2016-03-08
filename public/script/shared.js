@@ -335,7 +335,7 @@ choiceControls.choose = function(id,choice,targetType) {
 | |   | |(_____  )|  __)   |     __)(_____  )
 | |   | |      ) || (      | (\ (         ) |
 | (___) |/\____) || (____/\| ) \ \__/\____) |
-(_______)\_______)(_______/|/   \__/\_______)
+(_______)\_______)(_______/|/   \__/\_______       
                                  
 
 */
@@ -353,6 +353,22 @@ users.load = function() {
             }
             $('#friendContainer').append('<a id="'+value['firstname']+'" class="friend sideLink '+isCurrent+'"><img src="'+value['avatar']+'" class="navAvatar mobile" alt="Navigation avatar" /><i id="userIcon" class="desktop fa fa-user"></i>'+value['firstname']+' '+value['lastname']+'</a>');    
         }
+    });
+}
+
+users.makeFriends = function(friend) {
+    var userTarget = localStorage.getObject('gameData')['users'][friend];
+    var friendData = '<div class="md-content"><h3>Friend request</h3><div><div class="friendAvatar"><img id="friendPortrait" src="'+userTarget['avatar']+'" alt="'+userTarget['firstname']+' avatar" /></div><p><span id="friendName" class="colouredText">'+userTarget['firstname']+' '+userTarget['lastname']+'</span> would like to be friends with you, click the button below to begin your journey of friendship!</p><button id="acceptFriend" class="md-close btn">Add to friend list</button></div></div></div>';
+	$('#overlayData').show().addClass('md-modal').addClass('md-effect-11').addClass('md-show').html(friendData);
+    $('#acceptFriend').on('click touch', function() {
+         userPage = 0;
+         $('#overlayData').hide();
+        $('#overlayData').removeClass();
+        $('#overlayData').html('');
+        gameUpdate('addFriend','data',2);
+        console.log(timestampify()+'friendCal!');
+        feed.create('feedContent',localStorage.getObject('gameData').posts,1,0);
+        users.load(); 
     });
 }
 
@@ -631,17 +647,7 @@ messages.packed = function(messageArray,choices,noNote,nextOne) {
                 if (messageArray.result != undefined) {
                     switch(messageArray.result) {
                         case "friend":
-                            $('#feedContent').fadeIn();
-                            $('#modal-11').addClass('md-show');
-                            $('#acceptFriend').on('click touch', function() {
-                                 userPage = 0;
-                                $('#modal-11').removeClass('md-show');
-                                $('#acceptFriend').unbind();
-                                gameUpdate('addFriend','data',2);
-                                console.log(timestampify()+'Building feed based off message content');
-                                feed.create('feedContent',localStorage.getObject('gameData').posts,1,0);
-                                users.load(); 
-                            });
+                            users.makeFriends(messageArray[counter].fromId)
                             break;
                         default:
                             console.log("Something went really fucking wrong");
@@ -1113,16 +1119,7 @@ navigationControls.change = function(page) {
             $('#feedContent').fadeIn();
         } else if (page == 'friendCal') {
             $('#feedContent').fadeIn();
-            $('#modal-11').addClass('md-show');
-            $('#acceptFriend').on('click touch', function() {
-                 userPage = 0;
-                $('#modal-11').removeClass('md-show');
-                $('#acceptFriend').unbind();
-                gameUpdate('addFriend','data',2);
-                console.log(timestampify()+'friendCal!');
-                feed.create('feedContent',localStorage.getObject('gameData').posts,1,0);
-                users.load(); 
-            });
+            users.makeFriends(2);
         } else if (page == 'debug') {
             console.log(timestampify()+'Building feed for debug');
             $('#feedContent').html('<div class="feedObject"><div class="innerFeed" id="debugCont" ></div></div>');
@@ -1336,8 +1333,8 @@ function loadInfinite(direction) {
                 }
             });
             $('.loadingFeed').remove();
-            canvasB.width  = $('body').width();
-            canvasB.height = $('body').height();
+            //canvasB.width  = $('body').width();
+            //canvasB.height = $('body').height();
     } else {
         //Maybe put something in here later, do some tests
     }

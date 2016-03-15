@@ -92,6 +92,7 @@ function gameUpdate(type, saveType, data, dataType, extraData,choiceId) {
         extraData: extraData,
         choiceId: choiceId
     }
+    console.log(savePocket)
     saveRepo.push(savePocket);
     triggerSave();
 }
@@ -107,7 +108,7 @@ function triggerSave() {
         setTimeout(function() {
            triggerSave(); 
         },10);
-        console.log(timestampify()+'PAUSING TICK ----------');
+        //console.log(timestampify()+'PAUSING TICK ----------');
     }
 }
 
@@ -119,7 +120,7 @@ function processSave() {
         var dataType = value['dataType'];
         var extraData = value['extraData'];
         var choiceId = value['choiceId'];
-        console.log(timestampify()+'Processing a save tick --------- '+saveType+ ' ' +type);
+        //console.log(timestampify()+'Processing a save tick --------- '+saveType+ ' ' +type);
         var tempData = localStorage.getObject('gameData');
         if (saveType == 'settings') {tempData = localStorage.getObject('gameSettings');}
         switch(type) {
@@ -168,7 +169,7 @@ function processSave() {
                 tempData.users[data].friended = 1;
                 break;
             case 'updateLocal':
-                console.log('Updating local data save');
+                //console.log('Updating local data save');
                 if (dataType == 'comment') {
                     $.each(tempData['posts'],function(day,value) {
                         $.each(value,function(time,value) {
@@ -215,8 +216,21 @@ function processSave() {
                         });
                     });
                 } else if (dataType == 'messages') {
+                    if (tempData['messages'][extraData[0]] == undefined) {
+                        tempData['messages'][extraData[0]] = {};
+                    }
+                    if (tempData['messages'][extraData[0]][extraData[1]] == undefined) {
+                        tempData['messages'][extraData[0]][extraData[1]] = {};
+                    }
+                    var targetTime = extraData[2];
+                    console.log(targetTime);
+                    console.log(tempData['messages'][extraData[0]][extraData[1]][targetTime]);
+                    while (tempData['messages'][extraData[0]][extraData[1]][targetTime] != undefined) {
+                        targetTime++;
+                        console.log('Upping!');
+                    }
+                    tempData['messages'][extraData[0]][extraData[1]][targetTime] = data;
                     console.log('Pushing message');
-                    tempData['messages'].push(data);
                 } else if (dataType == 'posts') {
                     tempData['posts'][extraData] = tempData['posts'][extraData] || {}; 
                     tempData['posts'][extraData][choiceId] = data;
@@ -320,7 +334,7 @@ choiceControls.choose = function(id,choice,targetType) {
         var objDiv = document.getElementById("messagesCont");objDiv.scrollTop = objDiv.scrollHeight;
         setTimeout(function() {objDiv.scrollTop = objDiv.scrollHeight;},100);
         $('#choiceBlock_'+id).remove();
-        gameUpdate('updateLocal','data',newMessage,'messages');
+        gameUpdate('updateLocal','data',newMessage,'messages',[userForMsg,day,date]);
         gameUpdate('updateLocal','data',choiceMade,'choice','message_'+commentTarg,id);
     }
     gameUpdate('updateReturn','settings',id,choice.replace('choice',''),additionalTarget);
@@ -394,22 +408,31 @@ messages.init = function() {
     var thisUser = '';
     var firstUser = 0;
     var firstMessage = 0;
-    $.each(localStorage.getObject('gameData')['messages'], function(index,value) {
-        if (value['date'] != 'CHOICE') {
-            if (typeof firstMessages[value['toId']]  === 'undefined'){
-                firstMessages[value['toId']] = {};
-                firstMessages[value['toId']].index = value['toId'];
-                firstMessages[value['toId']].posted = 0;
-            }
-            if (value['date'] > firstMessages[value['toId']].posted) {
-                firstMessages[value['toId']].posted = value['date'];
-                firstMessages[value['toId']].dateTime = time.minidate(value['date']);
-                firstMessages[value['toId']].text = value['text'];
-            }
-            if (value['date'] > firstMessage) {
-                firstMessage = value['date'];
-                firstUser = index;
-            }
+    $.each(localStorage.getObject('gameData')['messages'], function(user,userData) {
+        if (userData != null) {
+            $.each(userData, function(day,dayData) {
+                if (dayData != null) {
+                    $.each(dayData, function(index,value) {
+                        if (value['date'] != 'CHOICE') {
+                            if (typeof firstMessages[value['toId']]  === 'undefined'){
+                                firstMessages[value['toId']] = {};
+                                firstMessages[value['toId']].index = value['toId'];
+                                firstMessages[value['toId']].posted = 0;
+                            }
+                            if (value['date'] > firstMessages[value['toId']].posted) {
+                                firstMessages[value['toId']].posted = value['date'];
+                                firstMessages[value['toId']].dateTime = time.minidate(value['date']);
+                                firstMessages[value['toId']].text = value['text'];
+                            }
+                            if (value['date'] > firstMessage) {
+                                firstMessage = value['date'];
+                                firstUser = index;
+                            }
+                        }
+                    });
+                }
+
+           });
         }
     });
     $.each(firstMessages, function(index,value) {
@@ -438,8 +461,8 @@ messages.load = function(id) {
     var choice1 = '';
     var choice2 = '';
     var choice3 = '';
-    $.each(localStorage.getObject('gameData')['messages'], function(index,value) {
-        if (value['toId'] == id) {
+    $.each(localStorage.getObject('gameData')['messages'][id], function(day,dayData) {
+        $.each(dayData, function(index,value) {
             //console.log(Object.keys(value).length);
             if (value.date != 'CHOICE') { 
                 var usersAvatar = localStorage.getObject('gameData')['users'][value['fromId']]['avatar'];
@@ -466,10 +489,10 @@ messages.load = function(id) {
                 choice2 = value.text.choice2;
                 choice3 = value.text.choice3;
             }
-        }
+        });
     });
     if (isChoice == 1) {
-        console.log(timestampify()+'Building a choice');
+        //console.log(timestampify()+'Building a choice');
         choiceControls.create(choiceId,'messagesCont','message','',choice1,choice2,choice3);                
     }
     $('#messagesCont').prepend('<div class="messagesStart">Conversation started</div>');
@@ -531,7 +554,7 @@ var messageQueue = [];
 
 messages.new = [];
 
-messages.new.currentMsg = function(messageFrom,messageTo,cameIn,text,ttw,fullMessage) {
+messages.new.currentMsg = function(messageFrom,messageTo,cameIn,text,ttw,fullMessage,day) {
     $('#messagesCont').append('<div id="typing" class="typing">'+localStorage.getObject('gameData').users[messageFrom].firstname+' is typing...</div>');
     var objDiv = document.getElementById("messagesCont");objDiv.scrollTop = objDiv.scrollHeight;
     var notificationNoise = new Audio("sounds/tapNote.mp3");
@@ -552,7 +575,7 @@ messages.new.currentMsg = function(messageFrom,messageTo,cameIn,text,ttw,fullMes
     }
             if (fullMessage['from'] == 1){var fromText = '<i class="fa fa-mobile"></i><span class="sentFrom">Sent from mobile</span>';} else {var fromText = '<i class="fa fa-desktop"></i><span class="sentFrom">Sent from desktop</span>';}
     fullMessage.date = Math.floor(Date.now() / 1000);
-    gameUpdate('updateLocal','data',fullMessage,'messages');
+    gameUpdate('updateLocal','data',fullMessage,'messages',[messageTo,day,date]);
     setTimeout(function() {
         $('#typing').remove();
         if (currentlyViewing == messageFrom) {
@@ -574,11 +597,11 @@ messages.new.currentMsg = function(messageFrom,messageTo,cameIn,text,ttw,fullMes
     },ttw);
 }
 
-messages.new.notCurrentMsg = function(messageFrom,messageTo,cameIn,text,ttw,fullMessage) {
+messages.new.notCurrentMsg = function(messageFrom,messageTo,cameIn,text,ttw,fullMessage,day) {
     var notificationNoise = new Audio("../sounds/tapNote.mp3");
     console.log(timestampify()+'New message from '+localStorage.getObject('gameData').users[messageFrom].firstname+' at '+cameIn);
     fullMessage.date = Math.floor(Date.now() / 1000);
-    gameUpdate('updateLocal','data',fullMessage,'messages');
+    gameUpdate('updateLocal','data',fullMessage,'messages',[messageTo,day,fullMessage.date]);
     setTimeout(function() {
         if(text.length > 15) text = text.substring(0,15) + '...';
         var date = time.minidate(cameIn);
@@ -594,7 +617,7 @@ messages.new.notCurrentMsg = function(messageFrom,messageTo,cameIn,text,ttw,full
     },ttw);
 }
 
-messages.new.differentPage = function(messageFrom,messageTo,cameIn,text,ttw,fullMessage) {
+messages.new.differentPage = function(messageFrom,messageTo,cameIn,text,ttw,fullMessage,day) {
     var notificationNoise = new Audio("../sounds/tapNote.mp3");
     console.log(timestampify()+'New message from '+localStorage.getObject('gameData').users[messageFrom].firstname+' at '+cameIn);
     notificationNoise.play();
@@ -602,24 +625,25 @@ messages.new.differentPage = function(messageFrom,messageTo,cameIn,text,ttw,full
     localStorage.getObject('gameSettings').unread.messages
     $('#messagesLink').find('.totalNew').html(localStorage.getObject('gameSettings').unread.messages);
     fullMessage.date = Math.floor(Date.now() / 1000);
-    gameUpdate('updateLocal','data',fullMessage,'messages');
+    gameUpdate('updateLocal','data',fullMessage,'messages',[messageTo,day,fullMessage.date]);
 }
 
-messages.new.noNotification = function(messageFrom,messageTo,cameIn,text,ttw,fullMessage) {
-    console.log(timestampify()+'New message with no notification from '+localStorage.getObject('gameData').users[messageFrom].firstname+' at '+cameIn);
-    fullMessage.date = createTimestamp(fullMessage['date']);
-    gameUpdate('updateLocal','data',fullMessage,'messages');
+messages.new.noNotification = function(messageFrom,messageTo,cameIn,text,ttw,fullMessage,difference,day) {
+    console.log(timestampify()+'New message with no notification from '+localStorage.getObject('gameData').users[messageFrom].firstname+' at '+cameIn+'. It should be on day '+day+' which was '+difference+' days ago.');
+    fullMessage.date = createTimestamp(fullMessage['date'],difference);
+    gameUpdate('updateLocal','data',fullMessage,'messages',[messageTo,day,fullMessage.date]);
     gameUpdate('updateNotifications','settings','messages');
     $('#messagesLink').find('.totalNew').html(localStorage.getObject('gameSettings').unread.messages);
 }
 
-messages.packed = function(messageArray,choices,noNote,nextOne) {
+messages.packed = function(messageArray,choices,noNote,nextOne,difference,day,noFighting) {
     var counter = 0;
     var userForMsg = 0;
     console.log(timestampify()+'Message pack');
     console.log(messageArray);
     var lastMessage = 0;
     function loopMessages() {
+        console.log(messageArray[counter]);
         var typingTime = messageArray[counter].text.length * localStorage.getObject('gameData')['users'][messageArray[counter].fromId]['typingSpeed'];
         var waitTime = localStorage.getObject('gameData')['users'][messageArray[counter].fromId]['waitTime'];
         console.log(timestampify()+'Looping through message of length '+messageArray[counter].text.length+' next message should send in '+typingTime+' with a noNote value of '+noNote);
@@ -631,17 +655,17 @@ messages.packed = function(messageArray,choices,noNote,nextOne) {
         }
         if (noNote != undefined && noNote == 1) {
             //console.log(timestampify()+'Time for no notification!');
-            messages.new.noNotification(messageArray[counter].fromId,messageArray[counter].toId,messageArray[counter].date,messageArray[counter].text,typingTime,messageArray[counter]);    
+            messages.new.noNotification(messageArray[counter].fromId,messageArray[counter].toId,messageArray[counter].date,messageArray[counter].text,typingTime,messageArray[counter],difference,day);    
             typingTime = 100;
         } else {
             if ($(document).find("title").text() == 'Twaddle - Messages') {
                 if (currentlyViewing == userForMsg) {
-                    messages.new.currentMsg(messageArray[counter].fromId,messageArray[counter].toId,messageArray[counter].date,messageArray[counter].text,typingTime,messageArray[counter]);
+                    messages.new.currentMsg(messageArray[counter].fromId,messageArray[counter].toId,messageArray[counter].date,messageArray[counter].text,typingTime,messageArray[counter],day);
                 } else {
-                    messages.new.notCurrentMsg(messageArray[counter].fromId,messageArray[counter].toId,messageArray[counter].date,messageArray[counter].text,typingTime,messageArray[counter]);         
+                    messages.new.notCurrentMsg(messageArray[counter].fromId,messageArray[counter].toId,messageArray[counter].date,messageArray[counter].text,typingTime,messageArray[counter],day);         
                 }            
             } else {
-                messages.new.differentPage(messageArray[counter].fromId,messageArray[counter].toId,messageArray[counter].date,messageArray[counter].text,typingTime,messageArray[counter]);
+                messages.new.differentPage(messageArray[counter].fromId,messageArray[counter].toId,messageArray[counter].date,messageArray[counter].text,typingTime,messageArray[counter],day);
             }
             if (messageArray[counter] == undefined) {
                 if (messageArray.result != undefined) {
@@ -665,22 +689,24 @@ messages.packed = function(messageArray,choices,noNote,nextOne) {
         lastMessage = thisMessage;
         if (messageArray[counter] != undefined) {
             console.log(messageArray[counter]);
-            if (messageArray[counter].type != undefined && messageArray[counter].type == 'delay') {
+            if (messageArray[counter].type != undefined && messageArray[counter].type == 'delay' && noNote != 1) {
                 timer = timer + parseInt(messageArray[counter].time);
                 counter++;
                 console.log('Extending that shit');
+            } else if (messageArray[counter].type != undefined && messageArray[counter].type == 'delay') {
+                counter++;
             }
            setTimeout(function() {
                 loopMessages();
            },timer);
-        } else if (choices != undefined && choices != '') {
+        } else if (choices != undefined && choices != '' && noFighting == 0) {
             console.log(timestampify()+'Yay a choice found');
             console.log(choices);
             gameUpdate('removeMessages','settings',lastMessage);
             var newChoice = new choice(choices.choiceId,choices.choice1,choices.choice2,choices.choice3)
-            new choice(3,'Deal with the problem yourself','Ignore it, it will go away','Skin the cat. It\'s the only solution. Skin. The. Cat')
+            //new choice(3,'Deal with the problem yourself','Ignore it, it will go away','Skin the cat. It\'s the only solution. Skin. The. Cat')
             var newMessage = new message(0,userForMsg,'CHOICE',newChoice,'','',1);
-            gameUpdate('updateLocal','data',newMessage,'messages');
+            gameUpdate('updateLocal','data',newMessage,'messages',[userForMsg,day,Math.floor(Date.now() / 1000)]);
             setTimeout(function() {
                 if (currentlyViewing == userForMsg) {
                     choiceControls.create(choices.choiceId,'messagesCont','message','',choices.choice1,choices.choice2,choices.choice3);
@@ -688,7 +714,9 @@ messages.packed = function(messageArray,choices,noNote,nextOne) {
             },timer);
         } else if (nextOne != 0) {
             gameUpdate('removeMessages','settings',lastMessage);
-            setTimeout(function() {askForAnother(nextOne);},timer);
+            if (noFighting != 1) {
+                setTimeout(function() {askForAnother(nextOne,noNote);},timer);
+            }
         } else {
             gameUpdate('removeMessages','settings',lastMessage);
         }
@@ -746,7 +774,7 @@ time.date = function(newTimes) {
     var year = date.getFullYear();
     var month = date.getMonth() + 1;
     var date = date.getDate();
-    return date+'/'+month+'/'+year+' '+hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+    return date+'/'+month+'/'+year+' '+hours + ':' + minutes.substr(-2);
 }
 
 time.minidate = function(newTimes) {
@@ -835,14 +863,14 @@ feed.individualPost = function(value,processNormal,target,direction) {
     }
     var possibleChoice = value['comments'][value['comments'].length-1];
     if (direction == 'append') {
-        console.log(timestampify()+'Appending new data to feed via individualpost');
+        //console.log(timestampify()+'Appending new data to feed via individualpost');
         if (possibleChoice && possibleChoice.date == 'CHOICE') {
             $('#'+target).append('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy userLink username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'<div class="feedControls"><span class="feedControl likeControl usableControls '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'" data-id="'+possibleChoice.text.choiceId+'" data-choice1="'+possibleChoice.text.choice1+'" data-choice2="'+possibleChoice.text.choice2+'" data-choice3="'+possibleChoice.text.choice3+'"><i class="fa fa-comment"></i>Comment</span></div></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
         } else {
             $('#'+target).append('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy userLink username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'<div class="feedControls"><span class="feedControl likeControl usableControls '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'"><i class="fa fa-comment"></i>Comment</span></div></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
         }
     } else {
-        console.log(timestampify()+'Prepending new data to feed via individualpost');
+        //console.log(timestampify()+'Prepending new data to feed via individualpost');
         if (possibleChoice && possibleChoice.date == 'CHOICE') {
             $('#'+target).prepend('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy userLink username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'<div class="feedControls"><span class="feedControl likeControl usableControls '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'" data-id="'+possibleChoice.text.choiceId+'" data-choice1="'+possibleChoice.text.choice1+'" data-choice2="'+possibleChoice.text.choice2+'" data-choice3="'+possibleChoice.text.choice3+'"><i class="fa fa-comment"></i>Comment</span></div></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
         } else {
@@ -858,7 +886,7 @@ feed.individualPost = function(value,processNormal,target,direction) {
             }
         }
     } else {
-        console.log(timestampify()+'Triggering the commentPoster!');
+        //console.log(timestampify()+'Triggering the commentPoster!');
         feed.commentPoster(value['comments'],value['postId']);
     }
 }
@@ -873,7 +901,7 @@ feed.createComment = function(postId,possibleChoice) {
 
 feed.backlog = function(value) {
     var target = 'feedContent';
-    console.log(timestampify()+'Feed backlog with feedId ' +value['postId']);
+    //console.log(timestampify()+'Feed backlog with feedId ' +value['postId']);
     //console.log(value);
     if (localStorage.getObject('gameData')['users'][value['user']]['friended'] == 1) {
         var videoLink = '';
@@ -907,8 +935,8 @@ feed.backlog = function(value) {
         if (value['choices'] != undefined && value['choices'] != '' && value['commented'] == 0) {canComment = 'usableControls';}
         var commentsString = feed.commentBuilder(value['comments'],value['postId']);
         var possibleChoice = value['comments'][value['comments'].length-1];
-        console.log(possibleChoice);
-        console.log(timestampify()+'Clearing and building feed via the .backlog');
+        //console.log(possibleChoice);
+        //console.log(timestampify()+'Clearing and building feed via the .backlog');
         if (possibleChoice && possibleChoice.date == 'CHOICE') {
             $('#'+target).prepend('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy userLink username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'<div class="feedControls"><span class="feedControl likeControl usableControls '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'" data-id="'+possibleChoice.text.choiceId+'" data-choice1="'+possibleChoice.text.choice1+'" data-choice2="'+possibleChoice.text.choice2+'" data-choice3="'+possibleChoice.text.choice3+'"><i class="fa fa-comment"></i>Comment</span></div></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
         } else {
@@ -916,7 +944,7 @@ feed.backlog = function(value) {
         }
         if (commentsString != '') {
             var possibleChoice = value['comments'][value['comments'].length-1];
-            console.log(possibleChoice);
+            //console.log(possibleChoice);
             if (possibleChoice && possibleChoice.date == 'CHOICE') {
                 $('#comment_'+value['postId']).addClass('usableControls');
             }
@@ -928,7 +956,7 @@ feed.backlog = function(value) {
 
 feed.commentPoster = function(comments,postId) {
     var counter = 0;
-    console.log(timestampify()+'Posting comment');
+    //console.log(timestampify()+'Posting comment');
     //console.log(comments);
     var timer = 10000;
     function postComment() {
@@ -959,7 +987,7 @@ feed.commentPoster = function(comments,postId) {
         } else if (comments[counter] != undefined && comments[counter].date == 'CHOICE') {
             var possibleChoice = comments[comments.length-1];
             if (possibleChoice.date == 'CHOICE') {
-                console.log(timestampify()+'There is a choice on #comment_'+postId);
+                //console.log(timestampify()+'There is a choice on #comment_'+postId);
                 $('#comment_'+postId).addClass('usableControls');
                 $('#comment_'+postId).removeClass('commented');
                 $('#comment_'+postId).attr('data-id',possibleChoice.text.choiceId);
@@ -1086,7 +1114,7 @@ navigationControls.change = function(page) {
         $('body').attr('id','');
         //console.log(timestampify()+'Going to '+page);
         if (page == 'messages') {
-            console.log(timestampify()+'Building feed for messages');
+            //console.log(timestampify()+'Building feed for messages');
             $('#feedContent').html('<div class="messagesBox" id="messagesBox"><div class="messageList" id="messageList"></div><div class="messages" id="messages"><div class="mobile messageTitle"></div><div class="messagesCont" id="messagesCont"></div></div></div>');
             $('body').attr('id','messagesPage');
             gameUpdate('updateNotifications','settings','messages',1);
@@ -1121,7 +1149,7 @@ navigationControls.change = function(page) {
             $('#feedContent').fadeIn();
             users.makeFriends(2);
         } else if (page == 'debug') {
-            console.log(timestampify()+'Building feed for debug');
+            //console.log(timestampify()+'Building feed for debug');
             $('#feedContent').html('<div class="feedObject"><div class="innerFeed" id="debugCont" ></div></div>');
             history.pushState('', 'Twaddle - SOMETHING IS BORKED', 'borkborkbork');
             document.title = 'Twaddle - SOMETHING IS BORKED';
@@ -1130,7 +1158,7 @@ navigationControls.change = function(page) {
             }
             $('#feedContent').fadeIn();
         } else {
-            console.log(timestampify()+'Building feed for user page');
+            //console.log(timestampify()+'Building feed for user page');
             $('#feedContent').html('<div id="userHeader" class="userHeader noHero"><div class="userHero"></div><div class="userAvatar"><img class="avatar" id="aboutAvatar" src="" alt="User\'s Avatar" /></div><div class="userName" id="aboutUsername"></div><div class="userNav" id="userNav"><div id="posts">Wall</div><div id="about">About</div></div></div><div id="userBody"></div><div id="aboutBody" class="aboutBody"><div class="cardTitle">About</div><div class="aboutNav"><div class="aboutItem current" id="overview">Overview</div><div class="aboutItem" id="family">Family and Relationships</div><div class="aboutItem" id="events">Life Events</div></div><div class="outerAbout"><div id="aboutContent" class="aboutContent"><div class="aboutContents overview"><div class="aboutSection"><div class="miniHeader">General Information</div><table class="infoTable" id="generalTable"></table></div><div class="aboutSection"><div class="miniHeader">Favourite Quote</div><p id="userQuote"></p></div></div><div class="aboutContents family">                <div class="aboutSection"><div class="miniHeader">Relationship</div><div id="relationshipData"></div></div><div class="aboutSection"><div class="miniHeader">Family</div><table class="infoTable" id="familyData"></table></div></div><div class="aboutContents events"><div class="miniHeader">Life events</div><table class="infoTable" id="lifeEvents"></table></div></div></div></div></div>');
              if (page == 'robin') {
                  userPage = 1;
@@ -1225,7 +1253,6 @@ $(document).on('click touch', '.sideLink', function(ev) {
      }
 });
 
-
 $(document).on('touch tap click', '.likeControl', function(){
     if (!$(this).hasClass('liked')) {
         var postId = $(this).attr('id').split('_')[1];
@@ -1276,7 +1303,7 @@ $(document).on('click touch', '.aboutItem', function() {
     $.each(classList, function(index, item) {
         if (item.indexOf("username_") >= 0) {
             var userid = item.split('_')[1];
-            console.log(userid);
+            //console.log(userid);
             if (userid == "1") {
                 $("#Robin").click();
             } else if (userid == "2" && localStorage.getObject('gameData')['users'][2]['friended'] == 1) {
@@ -1300,13 +1327,13 @@ function infiniteCheck() {
         } else if ($(document).scrollTop() < 600) {
             loadInfinite(0);
         }
-        console.log('Scrolled from top '+$(document).scrollTop());
+        //console.log('Scrolled from top '+$(document).scrollTop());
     }
 }
 
 function loadInfinite(direction) {
     if (direction == 1) {
-        console.log(timestampify()+'Building more feed based off infinite scroll');
+        //console.log(timestampify()+'Building more feed based off infinite scroll');
         $('#feedContent').append('<div class="loadingFeed">Loading more Feed Data</div>');
         if (Math.floor($(document).height() - $(document).scrollTop() - $(window).height()) == 0) {
             $(document).scrollTop($(document).height());
@@ -1314,7 +1341,7 @@ function loadInfinite(direction) {
         var total = 0;
             $.each(localStorage.getObject('gameData').posts.reverse(), function(day,dayData) {
                 if (total < 5) {
-                    console.log(dayData);
+                    //console.log(dayData);
                     var arr = [];
                     for (var name in dayData) {
                         if (feedCheck.indexOf(dayData[name]['postId']) < 0) {
@@ -1486,7 +1513,7 @@ emergencyStop = setInterval(
     },60000);
 
 function updateTheDateTime() {
-    console.log(timestampify() + 'Triggering the date update');
+    //console.log(timestampify() + 'Triggering the date update');
     $('.dateUpdate').each(function() {
         $(this).html(time.wordify($(this).attr('data-date')));
     });

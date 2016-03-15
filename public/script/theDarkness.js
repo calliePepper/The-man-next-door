@@ -386,7 +386,7 @@ var Recursion = new function() {
 			onResize();
 
 			if(!started) {
-			    $(document).on('touch tap click', '.username_5', function(e) {
+			    $(document).on('touch tap click', '.userName_5', function(e) {
 			        console.log(e);
             		Recursion.reset();
             		spawn(e.pageX, e.pageY - 80);

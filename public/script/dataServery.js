@@ -4,7 +4,7 @@
     clientData = {};
     var sendQueue = [];
 
-    function triggerCheck() {
+    function triggerCheck(backlog) {
         clearTimeout(retrieveTimer);
         clearTimeout(emergencyStop);
         emergencyStop = setInterval(
@@ -80,7 +80,7 @@
 		console.log (clientData['reg'] + ' - ' + clientData['device'])
 		queueFunc.update(currentDay,timeThroughDay,updatedLast,page.firstRun)
 		if (page.firstLoad == 1) {
-			newMessage({messageItem:data.messageObjects[0],choices:data.choiceObjects[0],noNote:1});
+			newMessage({messageItem:data.messageObjects[0],choices:data.choiceObjects[0],noNote:1,queueDay:0});
 		}
 		hideLoad();
 	};
@@ -136,13 +136,14 @@
 	};
 	
 	function anotherMessage(replyData) {
-		console.log(timestampify()+replyData.playerName+' asked for another message (Message: '+replyData.nextId+')');	
+		console.log(timestampify()+replyData.playerName+' asked for another message (Message: '+replyData.nextId+'). No note is '+replyData.noNote);	
 		var messageItem = data.messageObjects[replyData.nextId];
 		var choiceResult = '';
 		if (messageItem.autoTarget == 'choice') {
 			var choiceResult = data.choiceObjects[messageItem.autoId]
 		}
-		newMessage({messageItem:messageItem,choices:choiceResult});
+		messageItem.noNote = replyData.noNote;
+		newMessage({messageItem:messageItem,choices:choiceResult,queueDay:messageItem.day,noNote:replyData.noNote});
 	};
 	
 
@@ -165,14 +166,16 @@ function getPoint(start,currentTime,timezone) {
     thisMidnight = new Date(currentTime);
 	startMidnight.setHours(0,0,0);
 	thisMidnight.setHours(0,0,0);
-	var day = currentTime.getDay() - start.getDay();
-	day = day + 1;
+	var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
+	var diffDays = Math.round(Math.abs((currentTime.getTime() - start.getTime())/(oneDay)));
+	day = diffDays;
 	var timeDiff = Math.abs(currentTime.getTime() - thisMidnight.getTime());
 	console.log(timeDiff);
 	var timeThroughDay =  Math.ceil(timeDiff / (1000 * 60));
-	console.log('Day: ' + day + '.Start time is '+start+'. Current time is '+currentTime+'. Difference is '+((parseInt(currentTime.getTime()) - parseInt(start.getTime())) / 1000 / 60)+'. Which should be the same as '+timeThroughDay);
-	return {day:day,timeThrough:timeThroughDay};
+	console.log('Day: ' + day + '.Start time is '+start+'. Current time is '+currentTime+'. Time through day is '+timeThroughDay);
+	return {day:day+1,timeThrough:timeThroughDay};
 }
+
 
 function organiseQueue() {
 	function compare(a,b) {
@@ -341,7 +344,7 @@ queueFunc.update = function(day,timeThroughDay,updatedLast,noNote) {
                 	$('.choiceBlock').hide();
                 }
 			}
-			newMessage({messageItem:data.messageObjects[localStorage.getObject('gameData').timers[i].id],choices:choice,noNote:0});
+			newMessage({messageItem:data.messageObjects[localStorage.getObject('gameData').timers[i].id],choices:choice,noNote:0,queueDay:data.messageObjects[localStorage.getObject('gameData').timers[i].id].day});
 			gameUpdate('timerNull','data',i);
 		}
 	}
@@ -392,7 +395,7 @@ queueFunc.check = function() {
 				var choiceId = sendQueue[0]['fromChoice'];
 			}
 			localStorage.getObject('gameSettings').lastFeed[sendQueue[0]['id']] = 1;
-			newMessage({messageItem:sendQueue[0]['data'],choices:sendQueue[0]['choice'],noNote:sendQueue[0].noNote,queueDay:sendQueue[0].dayDifference,fromChoice:choiceId});
+			newMessage({messageItem:sendQueue[0]['data'],choices:sendQueue[0]['choice'],noNote:sendQueue[0].noNote,queueDay:sendQueue[0].queueDay-1,fromChoice:choiceId});
 			gameUpdate('updateMessages','settings',sendQueue[0]['id']);
 		} else if (sendQueue[0]['type'] == 'comment') {
 			if (sendQueue[0]['fromChoice'] == undefined) {
@@ -475,4 +478,4 @@ function countProperties(obj) {
     return count;
 }
 
-requestStatus();
+requestStatus(1);

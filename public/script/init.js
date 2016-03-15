@@ -29,12 +29,13 @@ if (localStorage.getObject('gameData').posts != undefined && localStorage.getObj
     window.location.replace("index.html?connection=error");    
 }
 
-function requestStatus() {
+function requestStatus(backlog) {
+    if (backlog == undefined) {backlog = 0;}
     clearTimeout(rebootIfError);
-    if (mobNotifications == 1) {
+    if (mobNotifications == 1) {zs
         app.initialize();
     } else {
-        triggerCheck();
+        triggerCheck(backlog);
     }
     var waitCount = 0;
     for (var prop in localStorage.getObject('gameSettings').messageWait) {
@@ -101,7 +102,7 @@ function hideLoad() {
 function newMessage(receivedMessages) {
     console.log(timestampify()+'PING - New message');
     console.log(receivedMessages);
-    processMessage(receivedMessages,receivedMessages.noNote);
+    processMessage(receivedMessages,receivedMessages.noNote,receivedMessages.queueDay);
     gameUpdate('updateTime','settings',80);
     setTimeout(function(){
         triggerCheck();
@@ -109,7 +110,7 @@ function newMessage(receivedMessages) {
     hideLoad();
 };
 
-function processMessage(receivedMessages,nonote) {
+function processMessage(receivedMessages,nonote,day) {
     if (receivedMessages.fromChoice  != undefined && receivedMessages.fromChoice != 'NA') {
         gameUpdate('removeReturn','settings',receivedMessages.fromChoice);
     }
@@ -133,11 +134,37 @@ function processMessage(receivedMessages,nonote) {
         if (receivedMessages.messageItem.autoTarget == 'message') {
             nextMsg = receivedMessages.messageItem.autoId;
         }
+        var compDate = getPoint(localStorage.getObject('gameSettings').startTime,new Date(),localStorage.getObject('gameSettings').timezone); 
+	    var currentDay = compDate.day - 1;
+	    var difference = currentDay - receivedMessages.messageItem.day;
+	    var noFighting = 0;
+	   
         if (receivedMessages.messageItem.ttl != undefined && receivedMessages.messageItem.ttl != 0) {
-            console.log(timestampify()+'TIME TILL LIFE');
-            gameUpdate('updateTimer','data',receivedMessages.messageItem.messages[0].toId,receivedMessages.messageItem.ttl,receivedMessages.messageItem.ttlTarget,receivedMessages.messageItem.ttlId);
+            console.log(receivedMessages.messageItem.ttl);
+            console.log(Math.floor(Date.now() / 1000) + ' vs ' + createTimestamp(receivedMessages.messageItem.ttl,difference));
+            if (Math.floor(Date.now() / 1000) > createTimestamp(receivedMessages.messageItem.ttl,difference)) {
+                var data = localStorage.getObject('dataCache');
+                console.log(difference);
+                console.log('SGUITSAGHASF');
+                console.log(receivedMessages);
+                var messageAim = data.messageObjects[receivedMessages.messageItem.ttlId];
+                console.log(messageAim);
+    			if (messageAim.autoTarget == 'choice') {
+    				var choice = data.choiceObjects[messageAim.autoId];
+    			}
+    			if ($(document).find("title").text() == 'Twaddle - Messages') {
+                    if (currentlyViewing == messageAim.messages[0].toId) {
+                    	$('.choiceBlock').hide();
+                    }
+    			}
+    			newMessage({messageItem:data.messageObjects[receivedMessages.messageItem.ttlId],choices:choice,noNote:1});
+    			noFighting = 1;
+            } else {
+                console.log(timestampify()+'TIME TILL LIFE');
+                gameUpdate('updateTimer','data',receivedMessages.messageItem.messages[0].toId,receivedMessages.messageItem.ttl,receivedMessages.messageItem.ttlTarget,receivedMessages.messageItem.ttlId);
+            }
         }
-        messages.packed(messageGroup,receivedMessages.choices,nonote,nextMsg);
+        messages.packed(messageGroup,receivedMessages.choices,nonote,nextMsg,difference,receivedMessages.messageItem.day,noFighting);
         gameUpdate('updateMessages','settings',receivedMessages.messageItem.messageId);
     }
     if (updating == 1) {
@@ -298,11 +325,12 @@ function emitChoice(choiceId,choiceMadeData) {
 
 var afaTimeout = [];
 
-function askForAnother(nextOne) {
+function askForAnother(nextOne,noNote) {
+    console.log('Next one please! ('+noNote+')');
     if (afaTimeout != undefined && afaTimeout[nextOne] != undefined) {
         clearTimeout(afaTimeout[nextOne]);
     }
-    anotherMessage({playerName:playerName,currentTime:new Date(),timezone:localStorage.getObject('gameSettings').timezone,nextId:nextOne});
+    anotherMessage({playerName:playerName,currentTime:new Date(),timezone:localStorage.getObject('gameSettings').timezone,nextId:nextOne,noNote:noNote});
 }
 
 var emitTimeout;

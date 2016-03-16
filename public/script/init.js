@@ -139,7 +139,7 @@ function processMessage(receivedMessages,nonote,day) {
 	    var difference = currentDay - receivedMessages.messageItem.day;
 	    var noFighting = 0;
 	   
-        if (receivedMessages.messageItem.ttl != undefined && receivedMessages.messageItem.ttl != 0) {
+        if (receivedMessages.messageItem.ttl != undefined && receivedMessages.messageItem.ttl != '' && receivedMessages.messageItem.ttl != 0) {
             console.log(receivedMessages.messageItem.ttl);
             console.log(Math.floor(Date.now() / 1000) + ' vs ' + createTimestamp(receivedMessages.messageItem.ttl,difference));
             if (Math.floor(Date.now() / 1000) > createTimestamp(receivedMessages.messageItem.ttl,difference)) {

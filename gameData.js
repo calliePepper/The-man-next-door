@@ -1877,7 +1877,7 @@ module.exports = {
             messageId:1101,
             autoTarget:'choice',
             autoId:'1101',
-            ttl:'40',
+            ttl:'50',
             ttlTarget:'message',
             ttlId:'1102'
         },
@@ -1906,7 +1906,7 @@ module.exports = {
             messageId:1103,
             autoTarget:'choice',
             autoId:'1102',
-            ttl:'40',
+            ttl:'50',
             ttlTarget:'message',
             ttlId:'1104'
         },
@@ -1922,11 +1922,73 @@ module.exports = {
             ],
             day:1,
             messageId:1104,
-            /*autoTarget:'choice',
+            autoTarget:'choice',
             autoId:'1103',
-            ttl:'40',
+            ttl:'50',
             ttlTarget:'message',
-            ttlId:'1105'*/
+            ttlId:'1105'
+        },
+        1105:{
+            messages:[
+                {msgId:'1105_1',fromId:1,toId:1,timestamp:33,message:'Yeahhh. That\'s not working. It sounds terrible (And my description really wasn\'t much better), but I think you need to appreciate this awful sound',image:'',video:'',from:1},
+                {msgId:'1105_2',fromId:1,toId:1,timestamp:33,message:'I\'ll just record it',image:'',video:'',from:1},
+                {msgId:'1105_3',fromId:1,toId:1,timestamp:36,message:'<audio controls><source src="sounds/roar.wav" type="audio/ogg">Your browser does not support the audio element.</audio>',image:'',video:'',from:1},
+                {msgId:'1105_4',fromId:1,toId:1,timestamp:36,message:'Did you hear that?',image:'',video:'',from:1},
+                {msgId:'1105_5',fromId:1,toId:1,timestamp:37,message:'How strange is it?',image:'',video:'',from:1},
+                {msgId:'1105_6',fromId:1,toId:1,timestamp:37,message:'That\'s coming from outside right now, as we speak.',image:'',video:'',from:1},
+                {msgId:'1105_7',fromId:1,toId:1,timestamp:37,message:'I\'m looking out the window, trying to look for the source.',image:'',video:'',from:1},
+                {msgId:'1105_8',fromId:1,toId:1,timestamp:38,message:'Fuck',image:'',video:'',from:1},
+            ],
+            day:1,
+            messageId:1105,
+            autoTarget:'choice',
+            autoId:'1104',
+            ttl:'50',
+            ttlTarget:'message',
+            ttlId:'1106'
+        },
+        1106:{
+            messages:[
+                {msgId:'1106_1',fromId:1,toId:1,timestamp:39,message:'I can\'t see what\'s making the noise but I did see something',image:'',video:'',from:1},
+                {msgId:'1106_2',fromId:1,toId:1,timestamp:39,message:'Marcel\'s out there',image:'',video:'',from:1},
+                {msgId:'1106_3',fromId:1,toId:1,timestamp:40,message:'Just standing in the street',image:'',video:'',from:1},
+                {msgId:'1106_4',fromId:1,toId:1,timestamp:40,message:'You know? Marcel, my friend who no-one has seen in awhile?',image:'',video:'',from:1},
+                {msgId:'1106_5',fromId:1,toId:1,timestamp:41,message:'I\'ll have to snapchat Ambrose. He\'ll be so happy.',image:'',video:'',from:1},
+                {msgId:'1106_6',fromId:1,toId:1,timestamp:41,message:'Oh. He\'s gone. Marcel isn\'t there anymore',image:'',video:'',from:1},
+                {msgId:'1106_7',fromId:1,toId:1,timestamp:42,message:'I just looked down to type this and he vanished. Something looked wrong though.',image:'',video:'',from:1}
+            ],
+            day:1,
+            messageId:1106,
+            autoTarget:'choice',
+            autoId:'1105',
+            ttl:'50',
+            ttlTarget:'message',
+            ttlId:'1107'
+        },
+        1107:{
+            messages:[
+                {msgId:'1107_1',fromId:1,toId:1,timestamp:43,message:'Marcel was looking directly at me, but something was off.',image:'',video:'',from:1},
+                {msgId:'1107_2',fromId:1,toId:1,timestamp:43,message:'I don\'t know how to explain it.',image:'',video:'',from:1},
+                {msgId:'1107_3',fromId:1,toId:1,timestamp:44,message:'Look, I\'m going to go look outside, maybe he\'s playing a joke.',image:'',video:'',from:1},
+                {type:'delay',time:'60000'},
+                {msgId:'1107_4',fromId:1,toId:1,timestamp:47,message:'Okay. I\'m back, there was no-one there',image:'',video:'',from:1},
+                {msgId:'1107_5',fromId:1,toId:1,timestamp:47,message:'It felt strange out there, like there was something just behind me. Could just be me though.',image:'',video:'',from:1},
+                {msgId:'1107_6',fromId:1,toId:1,timestamp:48,message:'I think I might just sleep, I feel too strange stay awake.',image:'',video:'',from:1},
+            ],
+            day:1,
+            messageId:1107,
+            /*autoTarget:'choice',
+            autoId:'1106',*/
+            ttl:'50',
+            ttlTarget:'message',
+            ttlId:'1108'
+        },
+        1108:{
+            messages:[
+                {msgId:'1108_1',fromId:1,toId:1,timestamp:49,message:'&lt; Congratulations, you unlocked the achievement "Slept through the story" &gt;',image:'',video:'',from:1},
+            ],
+            day:1,
+            messageId:1108,
         },
     },
     choiceObjects: {
@@ -1972,6 +2034,9 @@ module.exports = {
         
         1101: {choiceId:1101,choice1:'It\'s really late Robin.',choice2:'What is it?',choice3:'What are you doing up at this time?',resultType:'message',result1:1103,result2:1103,result3:1103,ttl:''},
         1102: {choiceId:1102,choice1:'Everywhere?',choice2:'What does it sound like?',choice3:'Describe the sound?',resultType:'message',result1:1104,result2:1104,result3:1104,ttl:''},
+        1103: {choiceId:1103,choice1:'Maybe you could record it?',choice2:'This isn\'t working',choice3:'That sounds terrible',resultType:'message',result1:1105,result2:1105,result3:1105,ttl:''},
+        1104: {choiceId:1104,choice1:'What is it?',choice2:'Is something wrong?',choice3:'Did you see the source?',resultType:'message',result1:1106,result2:1106,result3:1106,ttl:''},
+        1105: {choiceId:1105,choice1:'Wrong, how?',choice2:'Did Marcel see you?',choice3:'This whole thing seems weird',resultType:'message',result1:1107,result2:1107,result3:1107,ttl:''},
 
     },
     directionObject: {

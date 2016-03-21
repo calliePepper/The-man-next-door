@@ -206,6 +206,7 @@ iframe{width:100%;}
 @keyframes pulse { 50% { background-color: $majorColour }}
 .pulse {  animation: pulse .5s ease-out 3;}
 .typing{color:#999;padding-left:50px;padding-bottom:20px;}
+audio{margin:15px 10px 0;}
 
 .choiceBlock{border-top:1px solid #dfe0e4;padding:$paddingVal;background:#f6f7f8;display: table;border-spacing: 10px;width:100%; border-collapse: separate;max-height:0px;transition: 1s;}
 .btn{border:1px solid;background-color: $highlightColour;border-color: #8b4343 #883c3c #833333;border-radius:3px;padding:$paddingVal;}

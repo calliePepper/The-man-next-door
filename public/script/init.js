@@ -126,7 +126,7 @@ function processMessage(receivedMessages,nonote,day) {
             if (value.type != undefined && value.type == 'delay') {
                 var incomingMessage = value;
             } else {
-                var incomingMessage =  new message(value.fromId,value.toId,value.timestamp,value.message,value.image,value.video,deviceData['type'],value.msgId);
+                var incomingMessage =  new message(value.fromId,value.toId,value.timestamp,value.message,value.image,value.video,deviceData['type'],value.msgId,1);
             }
             messageGroup.push(incomingMessage);
         });

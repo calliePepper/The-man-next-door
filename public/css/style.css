@@ -800,6 +800,9 @@ iframe {
   padding-left: 50px;
   padding-bottom: 20px; }
 
+audio {
+  margin: 15px 10px 0; }
+
 .choiceBlock {
   border-top: 1px solid #dfe0e4;
   padding: 10px;

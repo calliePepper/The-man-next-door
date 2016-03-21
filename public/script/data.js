@@ -29,7 +29,7 @@
                 this.choiceMade = 0;
             }
 
-            function message(fromId,toId,time,content,image,video,from,msgId) {
+            function message(fromId,toId,time,content,image,video,from,msgId,unread) {
                 this.fromId = fromId;
                 this.toId = toId;
                 this.date = time;
@@ -38,6 +38,7 @@
                 this.video = video;
                 this.from = from;
                 this.msgId = msgId;
+                this.unread = unread;
             }
 
             function user(firstname,lastname,pronoun,created,avatar,hero,friended,typingSpeed,waitTime,trust,companionship) {

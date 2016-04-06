@@ -10,12 +10,34 @@
     </head>
     <body>
         <canvas id="canvasFront" width="400px" height="400px"></canvas>
-        <div id="overlayData" class="loadingSection">
-            <div class="twaddleLoad">
-                <div class="logoText">Twaddle</div>
+        <div id="overlay" class="md-overlay md-show">
+            <div id="overlayData" >
+               <div class="welcome md-content">
+                    <h3>Welcome to twaddle!</h3>
+                    <div class="overlayContent">
+                        <div id="firstInfo">
+                            <p>You have been sent an invite to Twaddle by Robin Creed. Don't worry, we have already added them to your friends list!</p>
+                            <div class="friendAvatar"><img id="friendPortrait" src="img/samAvatar.png" alt="Robin's avatar" /></div>
+                            <p>would like to be friends with you, click the button below to begin your journey of friendship!</p>
+                            <div class="btnCont">
+                                <button id="moreInfoBtn" class="btn">What is twadde?</button><button id="endWelcome" class="endWelcome btn">Thanks!</button>
+                            </div>
+                        </div>
+                        <div id="moreInfo">
+                            <p>Twaddle is a student project to create a small social media platform, please note this is just an experiment! This system is primarily for use in <span class="cityMarker">your local area</span></span></p>
+                            <div class="btnCont">
+                                <button id="endWelcome" class="endWelcome btn">Thanks!</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="md-overlay"></div><!-- the overlay element -->
+            <div id="underlayData" class="loadingSection">
+                 <div class="twaddleLoad">
+                    <div class="logoText">Twaddle</div>
+                </div>
+            </div>
+        </div><!-- the overlay element -->
         <div id="contentAim">
             <div class="mobileFix">
         	<header>
@@ -88,6 +110,20 @@
         <script type="text/javascript" src="script/glitch.js"></script>
         <script type="text/javascript" src="script/glitchText.js"></script>
         <script>
+            $.ajax({
+                type:"GET",
+                url:"http://ip-api.com/json",
+                dataType:"json",
+                crossDoman: true,
+                success:function(res) {
+                    console.log('LOCATION');
+                    console.log(res.city);
+                    $('.cityMarker').html(res.city);
+                },
+                error:function(res,text,error) {
+                    $('.cityMarker').html('your local area');
+                }
+            })
             var pageId = getQueryVariable('page');
             if (pageId == 'feed') {
               navigationControls.change('feed');

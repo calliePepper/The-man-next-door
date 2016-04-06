@@ -92,10 +92,13 @@ function hideLoad() {
     $('#leftLoad').css('left','-50%');
     $('#rightLoad').css('right','-50%');
     setTimeout(function() {
-        $('#overlayData').fadeOut("fast", function() {
-            $('#overlayData').removeClass();
-            $('#overlayData').html("");
-        });
+        if(!$('#overlayData').hasClass('md-modal')) {
+            $('#underlayData').fadeOut("fast", function() {
+                $('#overlay').hide();
+                $('#underlayData').removeClass();
+                $('#underlayData').html("");
+            });
+        }
     },1000);
 }
 

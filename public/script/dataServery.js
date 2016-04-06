@@ -1,161 +1,173 @@
 
-	var data = localStorage.getObject('dataCache');
+var data = localStorage.getObject('dataCache');
 
-    clientData = {};
-    var sendQueue = [];
+clientData = {};
+var sendQueue = [];
 
-    function triggerCheck(backlog) {
-        clearTimeout(retrieveTimer);
-        clearTimeout(emergencyStop);
-        emergencyStop = setInterval(
-        function() {
-            updateTheDateTime()
-        },60000);
-        var timerSet = 4000;
-        if (firstRun == 1) {
-            timerSet = 200;
-            introScreen();
-        }
-        retrieveTimer = setTimeout(function() {
-           console.log(timestampify()+arguments.callee.name+' Opening localStorage for writing');
-           var lastUpdate = localStorage.getObject('gameSettings').lastUpdate;
-           var firstLoadTime = 0
-            if (localStorage.getObject('gameSettings').firstLoad == 1) {
-                console.log(timestampify()+'omg first load');
-                lastUpdate = 1440;
-                var tempData = localStorage.getObject('gameSettings');
-                tempData.firstLoad = 0;
-                firstLoadTime = 1;
-                localStorage.setObject('gameSettings',tempData);
-                console.log(timestampify()+arguments.callee.name+' Closing localStorage');
-            }
-            console.log(timestampify()+'Retrieving data');
-            var page = {
-                page:$(document).find("title").text(),
-                playerName:playerName,
-                startTime:localStorage.getObject('gameSettings').startTime,
-                lastUpdate:lastUpdate,
-                currentTime:new Date(),
-                users:localStorage.getObject('gameData').users,
-                timezone:localStorage.getObject('gameSettings').timezone,
-                lastFeed:localStorage.getObject('gameSettings').lastFeed,
-                lastMessage:localStorage.getObject('gameSettings').lastMessage,
-                lastComment:localStorage.getObject('gameSettings').lastComment,
-                firstLoad:firstLoadTime,
-                firstRun:firstRun,
-                reg:deviceData['reg'],
-                mob: deviceData['type']
-            };
-            triggerStart(page);
-            firstRun = 0;
-        }, timerSet);
+function triggerCheck(backlog) {
+    clearTimeout(retrieveTimer);
+    clearTimeout(emergencyStop);
+    emergencyStop = setInterval(
+    function() {
+        updateTheDateTime()
+    },60000);
+    var timerSet = 4000;
+    if (firstRun == 1) {
+        timerSet = 200;
+        introScreen();
     }
+    retrieveTimer = setTimeout(function() {
+       console.log(timestampify()+arguments.callee.name+' Opening localStorage for writing');
+       var lastUpdate = localStorage.getObject('gameSettings').lastUpdate;
+       var firstLoadTime = 0
+        if (localStorage.getObject('gameSettings').firstLoad == 1) {
+            console.log(timestampify()+'omg first load');
+            lastUpdate = 1440;
+            var tempData = localStorage.getObject('gameSettings');
+            tempData.firstLoad = 0;
+            firstLoadTime = 1;
+            localStorage.setObject('gameSettings',tempData);
+            console.log(timestampify()+arguments.callee.name+' Closing localStorage');
+        }
+        console.log(timestampify()+'Retrieving data');
+        var page = {
+            page:$(document).find("title").text(),
+            playerName:playerName,
+            startTime:localStorage.getObject('gameSettings').startTime,
+            lastUpdate:lastUpdate,
+            currentTime:new Date(),
+            users:localStorage.getObject('gameData').users,
+            timezone:localStorage.getObject('gameSettings').timezone,
+            lastFeed:localStorage.getObject('gameSettings').lastFeed,
+            lastMessage:localStorage.getObject('gameSettings').lastMessage,
+            lastComment:localStorage.getObject('gameSettings').lastComment,
+            firstLoad:firstLoadTime,
+            firstRun:firstRun,
+            reg:deviceData['reg'],
+            mob: deviceData['type']
+        };
+        triggerStart(page);
+        firstRun = 0;
+    }, timerSet);
+}
 
-	function triggerStart(page) {
-	    console.log(page);
-		var compDate = getPoint(page.startTime,page.currentTime,page.timezone); 
-		var currentDay = compDate.day;
-		var timeThroughDay = Math.round(compDate.timeThrough);
-		if (page.lastUpdate != 1440) {
-		    var tempLastUpdate = new Date(page.lastUpdate);
-		    var tempCurrent = new Date(page.currentTime);
-	        var updatedLast = Math.abs(tempLastUpdate.getTime() - tempCurrent.getTime());
-	        updatedLast =  Math.ceil(updatedLast / (1000 * 3600 * 24));
-		} else {
-			var updatedLast = page.lastUpdate;
-		}
-		console.log('Last updated '+updatedLast+' mins ago');
-		clientData['name'] = page.playerName;
-		clientData['timezone'] = page.timezone;
-		clientData['lastUpdated'] = updatedLast;
-		clientData['friends'] = {};
-		for (user in page.users) {
-		    if (!page.users.hasOwnProperty(user)) {
-				continue;   	
-		    }
-		    clientData['friends'][user] = page.users[user].friended;
-		}
-		clientData['reg'] = page.reg;
-		clientData['device'] = page.mob;
-		console.log (clientData['reg'] + ' - ' + clientData['device'])
-		queueFunc.update(currentDay,timeThroughDay,updatedLast,page.firstRun)
-		if (page.firstLoad == 1) {
-			newMessage({messageItem:data.messageObjects[0],choices:data.choiceObjects[0],noNote:1,queueDay:0});
-		}
-		hideLoad();
-	};
-	
-	function choiceMade(replyData) {
-		console.log(timestampify()+replyData.playerName+' came across choice '+replyData.choiceId+' and took path '+replyData.choiceMade);	
-		if (data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade] != 0) {
-			if (data.choiceObjects[replyData.choiceId].resultType == 'comment') {
-				var resultTest = 'result'+replyData.choiceMade;
-				var commentResult = data.commentObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]];
-				var choiceResult = '';
-				if (data.commentObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].autoTarget == 'choice') {
-					var choiceResult = data.choiceObjects[data.commentObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].autoId]
-				}
-				//commentResult.feedId = replyData.additionalTarget;
-				var object2 = {
-					timeStamp:0,
-					type:'comment',
-					data:commentResult,
-					choice:choiceResult,
-					id: data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade],
-					queueDay:0,
-					userDay:5,
-					dayDifference: 0,
-					noNote:0,
-					ignoreTime:1,
-					fromChoice:replyData.choiceId
-				};
-			} else if (data.choiceObjects[replyData.choiceId].resultType == 'message') {
-				var messageResult = data.messageObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]];
-				var choiceResult = '';
-				if (data.messageObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].autoTarget == 'choice') {
-					var choiceResult = data.choiceObjects[data.messageObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].autoId]
-				}
-				choiceResult.additionalTarget = replyData.additionalTarget;
-				var object2 = {
-					timeStamp:0,
-					type:'message',
-					data:messageResult,
-					choice:choiceResult,
-					id: data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade],
-					queueDay:0,
-					userDay:5,
-					dayDifference: 0,
-					noNote:0,
-					fromChoice:replyData.choiceId
-				};
+function triggerStart(page) {
+    console.log(page);
+	var compDate = getPoint(page.startTime,page.currentTime,page.timezone); 
+	var currentDay = compDate.day;
+	var timeThroughDay = Math.round(compDate.timeThrough);
+	if (page.lastUpdate != 1440) {
+	    var tempLastUpdate = new Date(page.lastUpdate);
+	    var tempCurrent = new Date(page.currentTime);
+        var updatedLast = Math.abs(tempLastUpdate.getTime() - tempCurrent.getTime());
+        updatedLast =  Math.ceil(updatedLast / (1000 * 3600 * 24));
+	} else {
+		var updatedLast = page.lastUpdate;
+	}
+	console.log('Last updated '+updatedLast+' mins ago');
+	clientData['name'] = page.playerName;
+	clientData['timezone'] = page.timezone;
+	clientData['lastUpdated'] = updatedLast;
+	clientData['friends'] = {};
+	for (user in page.users) {
+	    if (!page.users.hasOwnProperty(user)) {
+			continue;   	
+	    }
+	    clientData['friends'][user] = page.users[user].friended;
+	}
+	clientData['reg'] = page.reg;
+	clientData['device'] = page.mob;
+	console.log (clientData['reg'] + ' - ' + clientData['device'])
+	queueFunc.update(currentDay,timeThroughDay,updatedLast,page.firstRun)
+	if (page.firstLoad == 1) {
+		newMessage({messageItem:data.messageObjects[0],choices:data.choiceObjects[0],noNote:1,queueDay:0});
+		$('#overlayData').show().addClass('md-modal').addClass('md-effect-11').addClass('md-show');
+		$('#overlay').show();
+		$('.endWelcome').on('click touch', function() {
+			$('.endWelcome').off();
+			$('#overlayData').hide();
+			$('#overlay').hide();
+		})
+		$('#moreInfoBtn').on('click touch', function() {
+			$('#moreInfoBtn').off();
+			$('#firstInfo').hide();
+			$('#moreInfo').show();
+		})
+	}
+	hideLoad();
+};
+
+function choiceMade(replyData) {
+	console.log(timestampify()+replyData.playerName+' came across choice '+replyData.choiceId+' and took path '+replyData.choiceMade);	
+	if (data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade] != 0) {
+		if (data.choiceObjects[replyData.choiceId].resultType == 'comment') {
+			var resultTest = 'result'+replyData.choiceMade;
+			var commentResult = data.commentObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]];
+			var choiceResult = '';
+			if (data.commentObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].autoTarget == 'choice') {
+				var choiceResult = data.choiceObjects[data.commentObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].autoId]
 			}
-			sendQueue.push(object2);
-			organiseQueue();
-			receivedChoice({choiceId:replyData.choiceId});
+			//commentResult.feedId = replyData.additionalTarget;
+			var object2 = {
+				timeStamp:0,
+				type:'comment',
+				data:commentResult,
+				choice:choiceResult,
+				id: data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade],
+				queueDay:0,
+				userDay:5,
+				dayDifference: 0,
+				noNote:0,
+				ignoreTime:1,
+				fromChoice:replyData.choiceId
+			};
+		} else if (data.choiceObjects[replyData.choiceId].resultType == 'message') {
+			var messageResult = data.messageObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]];
+			var choiceResult = '';
+			if (data.messageObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].autoTarget == 'choice') {
+				var choiceResult = data.choiceObjects[data.messageObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].autoId]
+			}
+			choiceResult.additionalTarget = replyData.additionalTarget;
+			var object2 = {
+				timeStamp:0,
+				type:'message',
+				data:messageResult,
+				choice:choiceResult,
+				id: data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade],
+				queueDay:0,
+				userDay:5,
+				dayDifference: 0,
+				noNote:0,
+				fromChoice:replyData.choiceId
+			};
 		}
-	};
-	
-	function anotherMessage(replyData) {
-		console.log(timestampify()+replyData.playerName+' asked for another message (Message: '+replyData.nextId+'). No note is '+replyData.noNote);	
-		var messageItem = data.messageObjects[replyData.nextId];
-		var choiceResult = '';
-		if (messageItem.autoTarget == 'choice') {
-			var choiceResult = data.choiceObjects[messageItem.autoId]
-		}
-		messageItem.noNote = replyData.noNote;
-		newMessage({messageItem:messageItem,choices:choiceResult,queueDay:messageItem.day,noNote:replyData.noNote});
-	};
+		sendQueue.push(object2);
+		organiseQueue();
+		receivedChoice({choiceId:replyData.choiceId});
+	}
+};
+
+function anotherMessage(replyData) {
+	console.log(timestampify()+replyData.playerName+' asked for another message (Message: '+replyData.nextId+'). No note is '+replyData.noNote);	
+	var messageItem = data.messageObjects[replyData.nextId];
+	var choiceResult = '';
+	if (messageItem.autoTarget == 'choice') {
+		var choiceResult = data.choiceObjects[messageItem.autoId]
+	}
+	messageItem.noNote = replyData.noNote;
+	newMessage({messageItem:messageItem,choices:choiceResult,queueDay:messageItem.day,noNote:replyData.noNote});
+};
 	
 
 function timestampify() {
 	var currentdate = new Date(); 
 	currentdate = new Date(currentdate.getTime() + 10*60*60000)
 	var datetime = "[" + currentdate.getDate() + "/"
-                + (currentdate.getMonth()+1)  + "/" 
-                + currentdate.getFullYear() + " @ "  
-                + currentdate.getHours() + ":"  
-                + currentdate.getMinutes() + ":" 
-                + currentdate.getSeconds()+'] ';
+            		   + (currentdate.getMonth()+1)  + "/" 
+            		   + currentdate.getFullYear() + " @ "  
+            		   + currentdate.getHours() + ":"  
+            		   + currentdate.getMinutes() + ":" 
+            		   + currentdate.getSeconds()+'] ';
     return datetime;
 }
 

@@ -112,8 +112,31 @@ function triggerSave() {
     }
 }
 
-function removeUnread() {
-    $('.totalNew').html($('.totalNew').html() - 1);
+function removeUnread(user,id,date) {
+    var tempData = localStorage.getObject('gameData');
+    var dayValue = 0;
+    var timeValue = 0;
+    id = id.split('-')[1];
+    console.log(user + ' - ' + id + ' - ' + date);
+    $.each(tempData.messages[user], function(dayIndex,day) {
+        $.each(day, function(index,msg) {    
+            if (msg.msgId == id) {
+                dayValue = dayIndex;
+                timeValue = index;
+                console.log('FOUND IT');
+            }
+        });
+    });
+    console.log(localStorage.getObject('gameData')['messages'][user][dayValue][timeValue]);
+    gameUpdate('markRead', 'data', user, dayValue, timeValue,'');
+}
+
+function updateUnread() {
+    if (localStorage.getObject('gameSettings').unread.messages == 0) {
+        $('#messagesLink').find('.totalNew').html('');
+    } else {
+        $('#messagesLink').find('.totalNew').html(localStorage.getObject('gameSettings').unread.messages);
+    }
 }
 
 function processSave() {
@@ -171,6 +194,17 @@ function processSave() {
                 break;
             case 'addFriend':
                 tempData.users[data].friended = 1;
+                break;
+            case 'markRead':
+                tempData['messages'][data][dataType][extraData].unread = 0;
+                var moreTemp = localStorage.getObject('gameSettings');
+                console.log('Removing unread, number was ' + localStorage.getObject('gameSettings').unread.messages);
+                if (localStorage.getObject('gameSettings').unread.messages > 0) {
+                    moreTemp.unread.messages = parseInt(localStorage.getObject('gameSettings').unread.messages) - 1;
+                }
+                localStorage.setObject('gameSettings',moreTemp);
+                console.log('Removing unread, number now ' + localStorage.getObject('gameSettings').unread.messages);
+                setTimeout(function() {updateUnread();},300);
                 break;
             case 'updateLocal':
                 //console.log('Updating local data save');
@@ -391,11 +425,13 @@ users.makeFriends = function(friend) {
     var userTarget = localStorage.getObject('gameData')['users'][friend];
     var friendData = '<div class="md-content"><h3>Friend request</h3><div><div class="friendAvatar"><img id="friendPortrait" src="'+userTarget['avatar']+'" alt="'+userTarget['firstname']+' avatar" /></div><p><span id="friendName" class="colouredText">'+userTarget['firstname']+' '+userTarget['lastname']+'</span> would like to be friends with you, click the button below to begin your journey of friendship!</p><button id="acceptFriend" class="md-close btn">Add to friend list</button></div></div></div>';
 	$('#overlayData').show().addClass('md-modal').addClass('md-effect-11').addClass('md-show').html(friendData);
+	$('#overlay').show();
     $('#acceptFriend').on('click touch', function() {
          userPage = 0;
-         $('#overlayData').hide();
+        $('#overlayData').hide();
         $('#overlayData').removeClass();
         $('#overlayData').html('');
+        //$('#overlay').hide();
         gameUpdate('addFriend','data',2);
         console.log(timestampify()+'friendCal!');
         feed.create('feedContent',localStorage.getObject('gameData').posts,1,0);
@@ -498,7 +534,7 @@ messages.load = function(id) {
                 var unread = '';
                 if (value['unread'] == 1) { unread = ' unread'}
                 if (value['from'] == 1){var fromText = '<i class="fa fa-mobile"></i><span class="sentFrom">Sent from mobile</span>';} else {var fromText = '<i class="fa fa-desktop"></i><span class="sentFrom">Sent from desktop</span>';}
-                $('#messagesCont').append('<div class="messageCont'+unread+'"><img class="messageAvatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /><div class="sentOn" data-date="'+value['date']+'">'+fromText+date+'</div><div class="messageName">'+usersFirstname+' '+usersLastname+'</div><div class="messageContents">'+value['text']+'</div>'+videoLink+imageLink+'</div>');
+                $('#messagesCont').append('<div class="messageCont'+unread+'" id="message-'+value.msgId+'"><img class="messageAvatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /><div class="sentOn" data-date="'+value['date']+'">'+fromText+date+'</div><div class="messageName">'+usersFirstname+' '+usersLastname+'</div><div class="messageContents">'+value['text']+'</div>'+videoLink+imageLink+'</div>');
                 var objDiv = document.getElementById("messagesCont");objDiv.scrollTop = objDiv.scrollHeight;
                 isChoice = 0;
             } else {
@@ -517,7 +553,7 @@ messages.load = function(id) {
     $('#messagesCont').prepend('<div class="messagesStart">Conversation started</div>');
     $('.messageTitle').html('&lt; '+thisUser);
     var objDiv = document.getElementById("messagesCont");objDiv.scrollTop = objDiv.scrollHeight;
-    setTimeout(function() {objDiv.scrollTop = objDiv.scrollHeight;},100);
+    setTimeout(function() {objDiv.scrollTop = objDiv.scrollHeight;unreadDebouncer();},100);
 }
 
 messages.create = function(userId,time,content,image,from) {
@@ -599,7 +635,7 @@ messages.new.currentMsg = function(messageFrom,messageTo,cameIn,text,ttw,fullMes
     setTimeout(function() {
         $('#typing').remove();
         if (currentlyViewing == messageFrom) {
-            $('#messagesCont').append('<div class="messageCont"><img class="messageAvatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /><div class="sentOn">'+fromText+date+'</div><div class="messageName">'+usersFirstname+' '+usersLastname+'</div><div class="messageContents">'+fullMessage['text']+'</div>'+videoLink+imageLink+'</div>');
+            $('#messagesCont').append('<div class="messageCont" id="message-'+fullMessage.msgId+'"><img class="messageAvatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /><div class="sentOn">'+fromText+date+'</div><div class="messageName">'+usersFirstname+' '+usersLastname+'</div><div class="messageContents">'+fullMessage['text']+'</div>'+videoLink+imageLink+'</div>');
             var objDiv = document.getElementById("messagesCont");objDiv.scrollTop = objDiv.scrollHeight; 
         } else {
             notificationNoise.play();
@@ -677,15 +713,18 @@ messages.packed = function(messageArray,choices,noNote,nextOne,difference,day,no
             //console.log(timestampify()+'Time for no notification!');
             messages.new.noNotification(messageArray[counter].fromId,messageArray[counter].toId,messageArray[counter].date,messageArray[counter].text,typingTime,messageArray[counter],difference,day);    
             typingTime = 100;
+            gameUpdate('markUnread', 'settings');
         } else {
             if ($(document).find("title").text() == 'Twaddle - Messages') {
                 if (currentlyViewing == userForMsg) {
                     messages.new.currentMsg(messageArray[counter].fromId,messageArray[counter].toId,messageArray[counter].date,messageArray[counter].text,typingTime,messageArray[counter],day);
                 } else {
                     messages.new.notCurrentMsg(messageArray[counter].fromId,messageArray[counter].toId,messageArray[counter].date,messageArray[counter].text,typingTime,messageArray[counter],day);         
+                    //gameUpdate('markUnread', 'settings');
                 }            
             } else {
                 messages.new.differentPage(messageArray[counter].fromId,messageArray[counter].toId,messageArray[counter].date,messageArray[counter].text,typingTime,messageArray[counter],day);
+                //gameUpdate('markUnread', 'settings');
             }
             if (messageArray[counter] == undefined) {
                 if (messageArray.result != undefined) {
@@ -1144,7 +1183,7 @@ navigationControls.change = function(page) {
             //console.log(timestampify()+'Building feed for messages');
             $('#feedContent').html('<div class="messagesBox" id="messagesBox"><div class="messageList" id="messageList"></div><div class="messages" id="messages"><div class="mobile messageTitle"></div><div class="messagesCont" id="messagesCont"></div></div></div>');
             $('body').attr('id','messagesPage');
-            gameUpdate('updateNotifications','settings','messages',1);
+            //gameUpdate('updateNotifications','settings','messages',1);
             messages.init();
             history.pushState('', 'Twaddle - Messages', 'messages');
             document.title = 'Twaddle - Messages';
@@ -1362,15 +1401,17 @@ function scrollDebouncer() {
 
 function unreadDebouncer() {
     if ($(document).find("title").text() == 'Twaddle - Messages') {
+        var windowTop = Math.max($('body').scrollTop(), $('html').scrollTop());
+        var windowBottom = $(window).height() + windowTop;
         $('.messageCont').each(function() {
-            if ($(this).is(':visible')){
-               if ($(this).hasClass('unread')) {
-                   $(this).removeClass('unread');
-                   removeUnread($(this).find('.sentOn').attr('data-date'));
-               }
+            if ($(this).position().top > windowTop && $(this).position().top < windowBottom ) {
+                if ($(this).hasClass('unread')) {
+                    $(this).removeClass('unread');
+                    var msgId = $(this).attr('id');
+                    removeUnread(currentlyViewing,msgId,$(this).find('.sentOn').attr('data-date'));
+                }
             }
         });
-        
     }
 }
 
@@ -1419,7 +1460,7 @@ function loadInfinite(direction) {
 | |(_)| |   | |   (_____  )| |      
 | |   | |   | |         ) || |      
 | )   ( |___) (___/\____) || (____/\
-|/     \|\_______/\_______)(_______/
+|/     \|\_______/\6_______)(_______/
                         
 
 */
@@ -1690,6 +1731,70 @@ function getQueryVariable(variable)
    return(false);
 }
 
+function vibrateTest() {
+    if (deviceData['type'] == 1) {
+        navigator.vibrate([1000, 1000, 3000, 1000, 5000]);
+    }
+}
+
+function beepTest() {
+    if (deviceData['type'] == 1) {
+        navigator.notification.beep(2);
+    }
+}
+
+function onSuccess(contacts) {
+    alert('Found ' + contacts.length + ' contacts.');
+    console.log(contacts);
+};
+
+function onError(contactError) {
+    alert('onError!');
+};
+
+function getContacts() {
+    if (deviceData['type'] == 1) {
+        // find all contacts with 'Bob' in any name field
+        var options      = new ContactFindOptions();
+        options.filter   = "*";
+        options.multiple = true;
+        options.desiredFields = [navigator.contacts.fieldType.id];
+        options.hasPhoneNumber = true;
+        var fields       = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.name];
+        navigator.contacts.find(fields, onSuccess, onError, options);
+    }
+}
+
+function handleOrientation(event) {
+    var absolute = event.absolute;
+    var alpha = event.alpha;
+    var beta = event.beta;
+    var gamma = event.gamma;
+
+
+    element.innerHTML = 'Orientation: ' + absolute
+
+
+    if (!alpha) {
+        compass.hidden = true;
+        element.innerHTML += '<br>Your device has no compass ';
+    } else {
+        compass.hidden = false;
+        element.innerHTML += '<br>alpha: ' + alpha
+    }
+
+    element.innerHTML += '<br>beta: ' + beta
+    element.innerHTML += '<br>gamma: ' + gamma + '<br>'
+        // Do stuff with the new orientation data
+    if (Math.abs(beta) + Math.abs(gamma) < 1.8) {
+        element.innerHTML += 'Your Device is probably laying on a Table';
+    } else {
+        element.innerHTML += 'Your Device is probably in your Hands';
+    }
+
+
+
+}
 
 if(canvas.getContext) {
     var ctx = canvas.getContext('2d');

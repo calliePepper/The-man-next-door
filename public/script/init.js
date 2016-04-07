@@ -32,7 +32,7 @@ if (localStorage.getObject('gameData').posts != undefined && localStorage.getObj
 function requestStatus(backlog) {
     if (backlog == undefined) {backlog = 0;}
     clearTimeout(rebootIfError);
-    if (mobNotifications == 1) {zs
+    if (mobNotifications == 1) {
         app.initialize();
     } else {
         triggerCheck(backlog);

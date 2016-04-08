@@ -1772,28 +1772,29 @@ function handleOrientation(event) {
     var gamma = event.gamma;
 
 
-    element.innerHTML = 'Orientation: ' + absolute
+    var text = 'Orientation: ' + absolute
 
 
     if (!alpha) {
-        compass.hidden = true;
-        element.innerHTML += '<br>Your device has no compass ';
+        text += '<br>Your device has no compass ';
     } else {
-        compass.hidden = false;
-        element.innerHTML += '<br>alpha: ' + alpha
+        text += '<br>alpha: ' + alpha
     }
 
-    element.innerHTML += '<br>beta: ' + beta
-    element.innerHTML += '<br>gamma: ' + gamma + '<br>'
+    text += '<br>beta: ' + beta
+    text += '<br>gamma: ' + gamma + '<br>'
         // Do stuff with the new orientation data
     if (Math.abs(beta) + Math.abs(gamma) < 1.8) {
-        element.innerHTML += 'Your Device is probably laying on a Table';
+        text += 'Your Device is probably laying on a Table';
     } else {
-        element.innerHTML += 'Your Device is probably in your Hands';
+        text += 'Your Device is probably in your Hands';
     }
+    console.log(text); 
+}
 
-
-
+if (window.DeviceOrientationEvent) {
+  // Listen for the event and handle DeviceOrientationEvent object
+  window.addEventListener('deviceorientation', handleOrientation, false);
 }
 
 if(canvas.getContext) {

@@ -1977,8 +1977,8 @@ module.exports = {
             ],
             day:1,
             messageId:1107,
-            /*autoTarget:'choice',
-            autoId:'1106',*/
+            autoTarget:'choice',
+            autoId:'1106',
             ttl:'50',
             ttlTarget:'message',
             ttlId:'1108'
@@ -1989,6 +1989,182 @@ module.exports = {
             ],
             day:1,
             messageId:1108,
+        },
+        1109:{
+            messages:[
+                {msgId:'1109_1',fromId:1,toId:1,timestamp:49,message:'Didn\'t you read what I said? I\'m pretty freaked out by this.',image:'',video:'',from:1},
+            ],
+            day:1,
+            messageId:1109,
+            autoTarget:'choice',
+            autoId:'1107',
+        },
+        
+        1110:{
+            messages:[
+                {msgId:'1110_1',fromId:1,toId:1,timestamp:49,message:'That\'s true. I mean, this is a real life mystery, just outside.',image:'',video:'',from:1},
+            ],
+            day:1,
+            messageId:1110,
+            autoTarget:'choice',
+            autoId:'1108',
+        },
+        
+        1111:{
+            messages:[
+                {msgId:'1111_1',fromId:1,toId:1,timestamp:49,message:'Yeah, I think so too.',image:'',video:'',from:1},
+                {msgId:'1111_2',fromId:1,toId:1,timestamp:49,message:'Thanks for listening to all of this. Chat to you later',image:'',video:'',from:1},
+            ],
+            day:1,
+            messageId:1111,
+        },
+        1112:{
+            messages:[
+                {msgId:'1112_1',fromId:1,toId:1,timestamp:49,message:'That\'s a really good point.',image:'',video:'',from:1},
+            ],
+            day:1,
+            messageId:1112,
+            autoTarget:'choice',
+            autoId:'1108',
+        },
+        1113:{
+            messages:[
+                {msgId:'1113_1',fromId:1,toId:1,timestamp:49,message:'Okay, I guess so.',image:'',video:'',from:1},
+                {msgId:'1113_2',fromId:1,toId:1,timestamp:49,message:'Give me a second, I\'m going to change into darker clothing, for lurking purposes',image:'',video:'',from:1},
+                {msgId:'1113_3',fromId:1,toId:1,timestamp:49,message:'I have to admit, I\'m still a little hesitant, but you convinced me. ',image:'',video:'',from:1},
+                {msgId:'1113_4',fromId:1,toId:1,timestamp:49,message:'I\'ll take my phone with me, so I can stay in contact.',image:'',video:'',from:1},
+            ],
+            day:1,
+            messageId:1113,
+            autoTarget:'choice',
+            autoId:'1109',
+        },
+        1114:{
+            messages:[
+                {msgId:'1111_1',fromId:1,toId:1,timestamp:49,message:'I\'d be lying if I didn\'t say I\'m a bit relieved you said that.',image:'',video:'',from:1},
+                {msgId:'1111_2',fromId:1,toId:1,timestamp:49,message:'Okay, I\'ll check it out in the morning or something.',image:'',video:'',from:1},
+                {msgId:'1111_3',fromId:1,toId:1,timestamp:49,message:'I\'ll chat to you later',image:'',video:'',from:1},
+                {msgId:'1111_4',fromId:1,toId:1,timestamp:49,message:'&lt; Congratulations, you argued against the interesting path &gt;',image:'',video:'',from:1},
+            ],
+            day:1,
+            messageId:1114
+        },
+        1115:{
+            messages:[
+                {msgId:'1115_1',fromId:1,toId:1,timestamp:49,message:'Okay partner, chat soon =)',image:'',video:'',from:1},
+                {type:'delay',time:'60000'},
+                {msgId:'1115_2',fromId:1,toId:1,timestamp:49,message:'Okay, I\'m at the spot. I. I found something.',image:'',video:'',from:1},
+                {msgId:'1115_3',fromId:1,toId:1,timestamp:49,message:'I\'ll take a picture of it, but to help you realise how weird this is, I have to show you another picture.',image:'',video:'',from:1},
+                {msgId:'1115_4',fromId:1,toId:1,timestamp:49,message:'Hold on. I can hear something again.',image:'',video:'',from:1},
+            ],
+            day:1,
+            messageId:1115,
+            autoTarget:'choice',
+            autoId:'1110',
+        },
+        1116:{
+            messages:[
+                {type:'delay',time:'20000'},
+            ],
+            day:1,
+            messageId:1116,
+            autoTarget:'choice',
+            autoId:'1111',
+        },
+        1117:{
+            messages:[
+                {type:'delay',time:'20000'},
+            ],
+            day:1,
+            messageId:1117,
+            autoTarget:'choice',
+            autoId:'1112',
+        },
+        1118:{
+            messages:[
+                {msgId:'1118_1',fromId:1,toId:1,timestamp:49,message:'Fuck. Fuck fuck fuck fuck fuck fuck fuck.',image:'',video:'',from:1},
+                {msgId:'1118_2',fromId:1,toId:1,timestamp:49,message:'I typed all of those individually, no copy paste.',image:'',video:'',from:1},
+                {msgId:'1118_3',fromId:1,toId:1,timestamp:49,message:'Fuck. ',image:'',video:'',from:1},
+            ],
+            day:1,
+            messageId:1118,
+            autoTarget:'choice',
+            autoId:'1113',
+        },
+        1119:{
+            messages:[
+                {msgId:'1119_1',fromId:1,toId:1,timestamp:49,message:'LEt me ge my breath back.',image:'',video:'',from:1},
+                {type:'delay',time:'10000'},
+                {msgId:'1119_2',fromId:1,toId:1,timestamp:49,message:'Okay. I\'m okay now. I didn\'t see what it was, I just got the impression of something.. wolf like. It was in the shadow, slinking around.',image:'',video:'',from:1},
+                {msgId:'1119_3',fromId:1,toId:1,timestamp:49,message:'I can\'t see it anymore. I\'m looking out the window again. There\'s nothing there, AGAIN',image:'',video:'',from:1},
+                {msgId:'1119_4',fromId:1,toId:1,timestamp:49,message:'Oh. ',image:'',video:'',from:1},
+            ],
+            day:1,
+            messageId:1119,
+            autoTarget:'choice',
+            autoId:'1114',
+        },
+        1120:{
+            messages:[
+                {msgId:'1120_1',fromId:1,toId:1,timestamp:49,message:'I just looked across. The man next door. He\'s at the window.',image:'',video:'',from:1},
+                {msgId:'1120_2',fromId:1,toId:1,timestamp:49,message:'He was looking outside as well. Looked like he was watching the same place. Then he looked at me, and the light behind him went out.',image:'',video:'',from:1},
+                {msgId:'1120_3',fromId:1,toId:1,timestamp:49,message:'I can\'t see or hear any movement now',image:'',video:'',from:1},
+                {msgId:'1120_4',fromId:1,toId:1,timestamp:49,message:'I almost forgot, I need to show you what I found.',image:'',video:'',from:1},
+            ],
+            day:1,
+            messageId:1120,
+            autoTarget:'choice',
+            autoId:'1115',
+        },
+        1121:{
+            messages:[
+                {msgId:'1121_1',fromId:1,toId:1,timestamp:49,message:'Everything about that guy is creepy. I\'ll send you the pictures now',image:'',video:'',from:1},
+            ],
+            day:1,
+            messageId:1121,
+            autoTarget:'message',
+            autoId:'1123',
+        },
+        1122:{
+            messages:[
+                {msgId:'1122_1',fromId:1,toId:1,timestamp:49,message:'I\'ll go to sleep after this',image:'',video:'',from:1},
+            ],
+            day:1,
+            messageId:1122,
+            autoTarget:'message',
+            autoId:'1123',
+        },
+        1123:{
+            messages:[
+                {msgId:'1123_1',fromId:1,toId:1,timestamp:49,message:'Okay, so about what I found outside',image:'',video:'',from:1},
+                {msgId:'1123_2',fromId:1,toId:1,timestamp:49,message:'That\'s Marcel',image:'marcelAvatar.jpg',video:'',from:1},
+                {msgId:'1123_3',fromId:1,toId:1,timestamp:49,message:'And this is what I found outside',image:'sunglasses.jpg',video:'',from:1},
+                {msgId:'1123_4',fromId:1,toId:1,timestamp:49,message:'Do you see why this is so screwed up?',image:'',video:'',from:1},
+            ],
+            day:1,
+            messageId:1123,
+            autoTarget:'choice',
+            autoId:'1116',
+        },
+        1124:{
+            messages:[
+                {msgId:'1124_1',fromId:1,toId:1,timestamp:49,message:'Those are Marcel\'s bloody glasses',image:'',video:'',from:1},
+            ],
+            day:1,
+            messageId:1124,
+            autoTarget:'message',
+            autoId:'1125',
+        },
+        1125:{
+            messages:[
+                {msgId:'1125_1',fromId:1,toId:1,timestamp:49,message:'Yeah, I found them where Marcel was standing before',image:'',video:'',from:1},
+                {msgId:'1125_2',fromId:1,toId:1,timestamp:49,message:'I think something has happened to Marcel.',image:'',video:'',from:1},
+                {msgId:'1125_3',fromId:1,toId:1,timestamp:49,message:'I\'m too tired to think about this tonight. Thanks for encouraging me, I wouldn\'t have found these otherwise.',image:'',video:'',from:1},
+                {msgId:'1125_4',fromId:1,toId:1,timestamp:49,message:'Good night',image:'',video:'',from:1},
+                {msgId:'1125_5',fromId:1,toId:1,timestamp:49,message:'&lt; You unlocked the Achievement "Oh god Marcel, Why?" &gt;',image:'',video:'',from:1},
+            ],
+            day:1,
+            messageId:1125,
         },
     },
     choiceObjects: {
@@ -2037,7 +2213,17 @@ module.exports = {
         1103: {choiceId:1103,choice1:'Maybe you could record it?',choice2:'This isn\'t working',choice3:'That sounds terrible',resultType:'message',result1:1105,result2:1105,result3:1105,ttl:''},
         1104: {choiceId:1104,choice1:'What is it?',choice2:'Is something wrong?',choice3:'Did you see the source?',resultType:'message',result1:1106,result2:1106,result3:1106,ttl:''},
         1105: {choiceId:1105,choice1:'Wrong, how?',choice2:'Did Marcel see you?',choice3:'This whole thing seems weird',resultType:'message',result1:1107,result2:1107,result3:1107,ttl:''},
-
+        1106: {choiceId:1106,choice1:'Okay, good night. Hope you\'re okay',choice2:'Wait, what?',choice3:'Aren\'t you going to look around a bit more?',resultType:'message',result1:1108,result2:1109,result3:1113,ttl:''},
+        1107: {choiceId:1107,choice1:'But what about the mystery?',choice2:'You\'re right, it might be a little dangerous out there.',choice3:'Hasn\'t Marcel been missing for awhile?',resultType:'message',result1:1110,result2:1111,result3:1112,ttl:''},
+        1108: {choiceId:1108,choice1:'So, maybe you should look for him a bit more.',choice2:'You might miss something',resultType:'message',result1:1113,result2:1113,ttl:''},
+        1109: {choiceId:1109,choice1:'Okay, I\'ll stand by.',choice2:'Just let me know when you find something',choice3:'It might be dangerous out there. Maybe you should go with your first choice.',resultType:'message',result1:1115,result2:1115,result3:1114,ttl:''},
+        1110: {choiceId:1110,choice1:'What is it Robin?',choice2:'What did you find?',choice3:'RUN ROBIN',resultType:'message',result1:1116,result2:1116,result3:1116,ttl:''},
+        1111: {choiceId:1111,choice1:'Robin?',resultType:'message',result1:1117,ttl:''},
+        1112: {choiceId:1112,choice1:'Are you there?',resultType:'message',result3:1118,ttl:''},
+        1113: {choiceId:1113,choice1:'What happened?',choice2:'Are you okay?',choice3:'Did you see whatever it was?',resultType:'message',result1:1119,result2:1119,result3:1119,ttl:''},
+        1114: {choiceId:1114,choice1:'Oh?',choice2:'Is there something new?',choice3:'What did you find out there?',resultType:'message',result1:1120,result2:1120,result3:1120,ttl:''},
+        1115: {choiceId:1115,choice1:'Show me',choice2:'That\'s super creepy',choice3:'You should got to sleep Robin',resultType:'message',result1:1123,result2:1121,result3:1122,ttl:''},
+        1116: {choiceId:1116,choice1:'Those are Marcel\'s glasses. Covered in blood',choice2:'So you found those outside?',choice3:'I don\'t see it',resultType:'message',result1:1125,result2:1125,result3:1124,ttl:''},
     },
     directionObject: {
         1: {directionId:1,attribute:'storyEvent1',operator:'=',value:'1',trueTarget:'message',trueId:'3',falseTarget:'message',falseId:'4'},

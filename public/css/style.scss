@@ -103,9 +103,8 @@ header:after{clear:both;display:block;height:1px;visibility:none;content:"";}
 .colouredText{color:$majorColour;}
 .avatar{max-width:100%;max-height:100%;}
 iframe{width:100%;}
-#moreInfo{display:none;}
-.btnCont{text-align:center;}
-.btnCont .btn{color:#FFF;display:inline-block;}
+#moreInfo{display:none;position: relative; top: 20px;}
+.btnCont{text-align:center;color:#fff;    position: relative;top: 20px;}
 
 /*
      Specific
@@ -215,7 +214,7 @@ iframe{width:100%;}
 audio{margin:15px 10px 0;}
 
 .choiceBlock{border-top:1px solid #dfe0e4;padding:$paddingVal;background:#f6f7f8;display: table;border-spacing: 10px;width:100%; border-collapse: separate;max-height:0px;transition: 1s;}
-.btn{border:1px solid;background-color: $highlightColour;border-color: #8b4343 #883c3c #833333;border-radius:3px;padding:$paddingVal;}
+.btn{border:1px solid;background-color: $highlightColour;border-color: #8b4343 #883c3c #833333;border-radius:3px;padding:$paddingVal;cursor:pointer;}
 .choice{display:inline-block;text-align:center;vertical-align:middle;color:#fff;font-size:0.8em;font-weight:bold;width:33%;display:inline-block;margin:0;padding:$paddingVal 5px $paddingVal 5px;cursor:pointer;display:table-cell;margin:$paddingVal;}
 
 .glitchCanvas{position:fixed;width:100%;height:100%;pointer-events:none;display:none;}
@@ -272,7 +271,7 @@ perspective effects (not including the modals and the overlay).
 .md-perspective,.md-perspective body {	height: 100%;	overflow: hidden;}
 .md-perspective body  {	background: #222;	-webkit-perspective: 600px;	-moz-perspective: 600px;	perspective: 600px;}
 .container {	background: #e74c3c;	min-height: 100%;}
-.md-modal {	position: fixed;	height:460px; 	width:460px;max-width:100%;	margin:auto;	top:0;	right:0;	bottom:0;	left:0;	z-index: 2000;	visibility: hidden;	-webkit-backface-visibility: hidden;	-moz-backface-visibility: hidden;	backface-visibility: hidden;	@include cardDeets;	border:0px;}
+.md-modal {	box-shadow: 0 0 3px rgba(0,0,0,0.2);  position: fixed;	height:570px; 	width:460px;max-width:100%;	margin:auto;	top:0;	right:0;	bottom:0;	left:0;	z-index: 2000;	visibility: hidden;	-webkit-backface-visibility: hidden;	-moz-backface-visibility: hidden;	backface-visibility: hidden;	@include cardDeets;	border:0px;}
 .md-show {	visibility: visible;}
 .md-overlay {	position: fixed;	width: 100%;	height: 100%;	visibility: hidden;	top: 0;	left: 0;	z-index: 1000;	opacity: 0;	background: rgba(0,0,0,0.7);	-webkit-transition: all 0.3s;	-moz-transition: all 0.3s;	transition: all 0.3s;}
 .md-show ~ .md-overlay {	opacity: 1;	visibility: visible;}
@@ -282,6 +281,7 @@ perspective effects (not including the modals and the overlay).
 .md-content > div {	padding: 15px 40px 30px;	margin: 0;	font-weight: 300;	font-size: 1.15em;}
 .md-content > div p {	margin: 0;	padding: 10px 0;}
 .md-content button {	display: block;	margin: 0 auto;	font-size: 0.8em;}
+.md-content .btn {display:inline-block;color:#fff;}
 /* Effect 11: Super scaled */
 .md-effect-11 .md-content {	-webkit-transform: scale(2);	-moz-transform: scale(2);	-ms-transform: scale(2);	transform: scale(2);	opacity: 0;	-webkit-transition: all 0.3s;	-moz-transition: all 0.3s;	transition: all 0.3s;}
 .friendAvatar {width:200px;height:200px;padding:$paddingVal;margin:0 auto;border:1px solid #ddd;}
@@ -292,6 +292,7 @@ perspective effects (not including the modals and the overlay).
 #overlayData{display:none;}
 .overlayContent{padding:$paddingVal;}
 #clickToClose{position:fixed;top:0;right:0;bottom:0;left:0;width:100%;height:100%;}
+#moreInfoBtn{ margin-right: 100px;}
 
 #canvasFront{pointer-events:none;position:fixed;z-index:4;width:100%;height:100%;background-position:center;background-repeat:no-repeat;background-position:fixed;-webkit-transform: translate3d(0px,0px,0px);}
 

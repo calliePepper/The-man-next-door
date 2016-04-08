@@ -1733,7 +1733,7 @@ function getQueryVariable(variable)
 
 function vibrateTest() {
     if (deviceData['type'] == 1) {
-        navigator.vibrate([1000, 1000, 3000, 1000, 5000]);
+        navigator.vibrate([100, 100, 100]);
     }
 }
 
@@ -1768,6 +1768,7 @@ function getContacts() {
 
 var rotTest;
 var rotTimeout;
+var rotBeen = 0;
 
 function handleOrientation(event) {
     var absolute = event.absolute;
@@ -1783,18 +1784,20 @@ function handleOrientation(event) {
         text += '<br>Your device has no compass ';
     } else {
         text += '<br>alpha: ' + alpha
-    }
-
-    text += '<br>beta: ' + beta
-    text += '<br>gamma: ' + gamma + '<br>'
-        // Do stuff with the new orientation data
-    if (Math.abs(beta) + Math.abs(gamma) < 4) {
-        clearTimeout(rotTimeout);
-        rotTimeout = setTimeout(function() {beepTest()},5000);
-        text += 'Your Device is probably laying on a Table';
-    } else {
-        clearTimeout(rotTimeout);
-        text += 'Your Device is probably in your Hands';
+        text += '<br>beta: ' + beta
+        text += '<br>gamma: ' + gamma + '<br>'
+            // Do stuff with the new orientation data
+        if (Math.abs(beta) + Math.abs(gamma) < 4) {
+            if (rotBeen == 0) {
+                rotTimeout = setTimeout(function() {glitchThis('marcel')},1000);
+                rotBeen = 1;
+            }
+            text += 'Your Device is probably laying on a Table';
+        } else {
+            clearTimeout(rotTimeout);
+            rotBeen = 0;
+            text += 'Your Device is probably in your Hands';
+        }
     }
     
     rotTest = text;

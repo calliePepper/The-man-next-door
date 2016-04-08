@@ -61,6 +61,26 @@
         <script>
         
             var socket = io('https://the-man-next-door-soldevifae.c9.io');
+            var isLoad = 0;
+            
+            var noLoad = setTimeout(function() {
+                 $('.startBtn').html('Load failed, using backup data');
+                 if (localStorage.setObject('dataCache') != undefined) {
+                    $('.startBtn').css('display','inline-block');
+                    $('.loadBtn').hide();
+                                
+                   var ua = navigator.userAgent.toLowerCase();
+                    var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
+                    var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
+                    
+                    if(isAndroid) {
+                        
+                    } else {
+        
+                    }
+                }
+            },20000);
+            
             
             socket.on('requestStatus', function(data) {
                 socket.emit('dataMeUp');    
@@ -68,7 +88,8 @@
             
             socket.on('systemUpdate', function(updateData) {
                 console.log(updateData.data);
-                
+                isLoad = 1;
+                clearTimeout(noLoad)
                 localStorage.setObject('dataCache',updateData.data);
                 
                 $('.startBtn').css('display','inline-block');

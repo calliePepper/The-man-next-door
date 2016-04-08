@@ -1739,6 +1739,7 @@ function vibrateTest() {
 
 function beepTest() {
     if (deviceData['type'] == 1) {
+        console.log('I WAS MEANT TO BEEEEEP');
         navigator.notification.beep();
     }
 }
@@ -1766,6 +1767,7 @@ function getContacts() {
 }
 
 var rotTest;
+var rotTimeout;
 
 function handleOrientation(event) {
     var absolute = event.absolute;
@@ -1786,10 +1788,12 @@ function handleOrientation(event) {
     text += '<br>beta: ' + beta
     text += '<br>gamma: ' + gamma + '<br>'
         // Do stuff with the new orientation data
-    if (Math.abs(beta) + Math.abs(gamma) < 1.8) {
-        beepTest();
+    if (Math.abs(beta) + Math.abs(gamma) < 4) {
+        clearTimeout(rotTimeout);
+        rotTimeout = setTimeout(function() {beepTest()},5000);
         text += 'Your Device is probably laying on a Table';
     } else {
+        clearTimeout(rotTimeout);
         text += 'Your Device is probably in your Hands';
     }
     
@@ -1798,7 +1802,7 @@ function handleOrientation(event) {
 
 if (window.DeviceOrientationEvent) {
   // Listen for the event and handle DeviceOrientationEvent object
-  window.addEventListener('deviceorientation', handleOrientation, false);
+  window.addEventListener('deviceorientation', $.debounce(100,handleOrientation), false);
 }
 
 if(canvas.getContext) {

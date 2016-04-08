@@ -1739,7 +1739,7 @@ function vibrateTest() {
 
 function beepTest() {
     if (deviceData['type'] == 1) {
-        navigator.notification.beep(2);
+        navigator.notification.beep();
     }
 }
 
@@ -1765,6 +1765,8 @@ function getContacts() {
     }
 }
 
+var rotTest;
+
 function handleOrientation(event) {
     var absolute = event.absolute;
     var alpha = event.alpha;
@@ -1785,11 +1787,13 @@ function handleOrientation(event) {
     text += '<br>gamma: ' + gamma + '<br>'
         // Do stuff with the new orientation data
     if (Math.abs(beta) + Math.abs(gamma) < 1.8) {
+        beepTest();
         text += 'Your Device is probably laying on a Table';
     } else {
         text += 'Your Device is probably in your Hands';
     }
-    console.log(text); 
+    
+    rotTest = text;
 }
 
 if (window.DeviceOrientationEvent) {

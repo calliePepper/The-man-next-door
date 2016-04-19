@@ -371,6 +371,7 @@ choiceControls.choose = function(id,choice,targetType) {
         
     } else if (targetType == 'message') {
         var date = time.date(Math.floor(Date.now() / 1000));
+        var dataDate = Math.floor(Date.now() / 1000);
         var usersAvatar = localStorage.getObject('gameData')['users'][0]['avatar'];
         var usersFirstname = localStorage.getObject('gameData')['users'][0]['firstname'];
         var usersLastname = localStorage.getObject('gameData')['users'][0]['lastname'];
@@ -385,7 +386,7 @@ choiceControls.choose = function(id,choice,targetType) {
         var objDiv = document.getElementById("messagesCont");objDiv.scrollTop = objDiv.scrollHeight;
         setTimeout(function() {objDiv.scrollTop = objDiv.scrollHeight;},100);
         $('#choiceBlock_'+id).remove();
-        gameUpdate('updateLocal','data',newMessage,'messages',[commentTarg,day,date]);
+        gameUpdate('updateLocal','data',newMessage,'messages',[commentTarg,day,dataDate]);
         gameUpdate('updateLocal','data',choiceMade,'choice','message_'+commentTarg,id);
     }
     gameUpdate('updateReturn','settings',id,choice.replace('choice',''),additionalTarget);

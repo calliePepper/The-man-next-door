@@ -2250,7 +2250,6 @@ module.exports = {
             1200:{object:'feedObjects',id:'5'},
         },
         1: {
-            2:{object:'messageObjects',id:'201'},
             3:{object:'feedObjects',id:'104'},
             21:{object:'feedObjects',id:'105'},
             501:{object:'commentObjects',id:'10401'},
@@ -2336,6 +2335,7 @@ module.exports = {
             686:{object:'commentObjects',id:'110508'},
             687:{object:'commentObjects',id:'110509'},
             688:{object:'commentObjects',id:'110510'},
+            752:{object:'messageObjects',id:'201'},
             803:{object:'feedObjects',id:'1106'},
             810:{object:'commentObjects',id:'110601'},
             822:{object:'commentObjects',id:'110602'},

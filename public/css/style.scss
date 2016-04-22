@@ -126,8 +126,8 @@ iframe{width:100%;}
 .usableControls{color:$majorColour;cursor:pointer;}
 .likedSection{border-top:1px solid #dfe0e4;font-size:0.8em;padding:$paddingVal;}
 .likedSection:empty{display:none;}
-.feedImageCont{border: 1px solid;border-color: #e5e6e9 #dfe0e4 #d0d1d5;}
-.feedImage{width:100%;position:relative;z-index:2;}
+.feedImageCont{border: 1px solid;border-color: #e5e6e9 #dfe0e4 #d0d1d5;position:relative;z-index:1;}
+.feedImage{width:100%;position:relative;z-index:1;}
 .captionCont{padding: 10px 15px;position: relative;top: -12px;margin: 0 2px;z-index: 1;font-size:0.8em;}
 .captionTitle{font-size:1.6em;padding:4px 0 8px;}
 .captionLink{padding:10px 0 0;color:#666;text-transform:uppercase;}
@@ -272,6 +272,8 @@ perspective effects (not including the modals and the overlay).
 .md-perspective body  {	background: #222;	-webkit-perspective: 600px;	-moz-perspective: 600px;	perspective: 600px;}
 .container {	background: #e74c3c;	min-height: 100%;}
 .md-modal {	box-shadow: 0 0 3px rgba(0,0,0,0.2);  position: fixed;	height:570px; 	width:460px;max-width:100%;	margin:auto;	top:0;	right:0;	bottom:0;	left:0;	z-index: 2000;	visibility: hidden;	-webkit-backface-visibility: hidden;	-moz-backface-visibility: hidden;	backface-visibility: hidden;	@include cardDeets;	border:0px;}
+.md-friend-modal { height:460px;}
+.md-friend-modal .btnCont {top:0px;}
 .md-show {	visibility: visible;}
 .md-overlay {	position: fixed;	width: 100%;	height: 100%;	visibility: hidden;	top: 0;	left: 0;	z-index: 1000;	opacity: 0;	background: rgba(0,0,0,0.7);	-webkit-transition: all 0.3s;	-moz-transition: all 0.3s;	transition: all 0.3s;}
 .md-show ~ .md-overlay {	opacity: 1;	visibility: visible;}

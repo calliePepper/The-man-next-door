@@ -21,7 +21,7 @@ module.exports = {
 	    113:{postId:113,fromId:1,date:923,day:0,text:'Weird. So, my brand new friend (read: strange neighbour) has started up some recreational painting. All over his house.',image:'',caption:'',video:'',likes:4,comments:0},
 	    114:{postId:114,fromId:1,date:940,day:0,text:'Does anyone know if Marcel has gone out of town?',image:'',caption:'',video:'',likes:3,comments:0},
 	    116:{postId:116,fromId:1,date:1140,day:0,text:'Marcel, last call if you want to travel to the party together.',image:'',caption:'',video:'',likes:3,comments:0},
-	    117:{postId:117,fromId:1,date:1212,day:0,text:'Nothing like some old good friends and some dear drinks to take the edge of a mystery',image:'',caption:'',video:'',likes:3,comments:0},
+	    117:{postId:117,fromId:1,date:1212,day:0,text:'Nothing like some old good friends and some dear drinks to take the edge off a mystery',image:'',caption:'',video:'',likes:3,comments:0},
 	    201:{postId:201,fromId:2,date:548,day:0,text:'I’ve already watched a few hours of David Attenborough, and as much as I love him, I need a change. Does anyone have any other enjoyable and stimulating suggestions?',image:'',caption:'',video:'',likes:2,comments:0},
 	    202:{postId:202,fromId:2,date:658,day:0,text:'As much as I hate to admit it, I have completely saturated my mind with documentaries. Who is free for some real world conversation? Ambrose? Robin?',image:'',caption:'',video:'',likes:2,comments:0},
 	    301:{postId:301,fromId:3,date:1072,day:0,text:'Robin. If you can read this, I hate to stomp all over what must be a seriously intense day of study, but could you please respond to my messages?',image:'',caption:'',video:'',likes:3,comments:0},

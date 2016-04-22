@@ -85,7 +85,8 @@ function triggerStart(page) {
 		$('#overlay').show();
 		$('.endWelcome').on('click touch', function() {
 			$('.endWelcome').off();
-			$('#overlayData').hide();
+            $('#underlayData').removeClass();
+            $('#underlayData').html("");
 			$('#overlay').hide();
 		})
 		$('#moreInfoBtn').on('click touch', function() {

@@ -323,7 +323,7 @@ queueFunc.check = function() {
 				if (shortData.length > 30) {
 					shortData = shortData.substr(0,30) + '...';
 				}
-				notifyUser('message',clientData[sendQueue[0]['user']]['reg'],data.users[sendQueue[0]['data']['messages'][0]['fromId']][0],data.users[sendQueue[0]['data']['messages'][0]['fromId']][4],shortData);
+				//notifyUser('message',clientData[sendQueue[0]['user']]['reg'],data.users[sendQueue[0]['data']['messages'][0]['fromId']][0],data.users[sendQueue[0]['data']['messages'][0]['fromId']][4],shortData);
 			}
 		} else if (sendQueue[0]['type'] == 'feed') {
 			if (sendQueue[0]['noNote'] == 0) {
@@ -332,7 +332,7 @@ queueFunc.check = function() {
 					if (shortData.length > 30) {
 						shortData = shortData.substr(0,30) + '...';
 					}
-					notifyUser('post',clientData[sendQueue[0]['user']]['reg'],data.users[sendQueue[0]['data']['fromId']][0],data.users[sendQueue[0]['data']['fromId']][4],shortData);
+					//notifyUser('post',clientData[sendQueue[0]['user']]['reg'],data.users[sendQueue[0]['data']['fromId']][0],data.users[sendQueue[0]['data']['fromId']][4],shortData);
 				}
 			}
 		}

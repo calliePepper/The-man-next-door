@@ -250,11 +250,11 @@ queueFunc.add = function(day,timeStampToHit,timeThroughDay,userDay,noNote) {
 		console.log(type);
 		if (type == 'messages' && deviceData['type'] == 1 || type == 'message' && deviceData['type'] == 1) {
     	    if (noNote == 0 && deviceData['type'] == 1 && dayDifTemp == 0 && timeStampToHit - timeThroughDay > 0) {
-    			/*var shortData = objectToSave.messages[0].message;
+    			var shortData = objectToSave.messages[0].message;
     			if (shortData.length > 30) {
     				shortData = shortData.substr(0,30) + '...';
     			}
-    			socket.emit('prepareNote', {
+    			/*socket.emit('prepareNote', {
                     type:'message',
                     objectId:data.events[day][timeStampToHit]['id'],
                     from:data.users[objectToSave['messages'][0]['fromId']][0],
@@ -265,6 +265,7 @@ queueFunc.add = function(day,timeStampToHit,timeThroughDay,userDay,noNote) {
                     sendTime: timeStampToHit - timeThroughDay
                 });
                 console.log('Emitting a request for a message poke in '+ (timeStampToHit - timeThroughDay) + ' minutes');*/
+                notificationTimers.add(data.users[objectToSave['messages'][0]['fromId']][0],data.events[day][timeStampToHit]['id'],shortData,(timeStampToHit - timeThroughDay) * 60,'message');
     		}
 		}
 		if (type == 'feed' && deviceData['type'] == 1) {
@@ -272,11 +273,11 @@ queueFunc.add = function(day,timeStampToHit,timeThroughDay,userDay,noNote) {
 		    console.log(localStorage.getObject('gameData').users);
 		    console.log(localStorage.getObject('gameData').users[objectToSave['fromId']].friended);
 		    if (localStorage.getObject('gameData').users[objectToSave['fromId']].friended == 1 && dayDifTemp == 0 && timeStampToHit - timeThroughDay > 0) {
-				/*var shortData = objectToSave.text;
+				var shortData = objectToSave.text;
 				if (shortData.length > 30) {
 					shortData = shortData.substr(0,30) + '...';
 				}
-				socket.emit('prepareNote', {
+				/*socket.emit('prepareNote', {
                     type:'post',
                     objectId:data.events[day][timeStampToHit]['id'],
                     from:data.users[objectToSave['fromId']][0],
@@ -287,6 +288,7 @@ queueFunc.add = function(day,timeStampToHit,timeThroughDay,userDay,noNote) {
                     sendTime: timeStampToHit - timeThroughDay
                 });
                 console.log('Emitting a request for a feed poke in '+ (timeStampToHit - timeThroughDay) + ' minutes');*/
+                notificationTimers.add(data.users[objectToSave['messages'][0]['fromId']][0],data.events[day][timeStampToHit]['id'],shortData,(timeStampToHit - timeThroughDay) * 60,'post');
 			}
 		}
 		organiseQueue();

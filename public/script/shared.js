@@ -493,6 +493,7 @@ messages.init = function() {
     $.each(firstMessages, function(index,value) {
          orderedUsers.push(value);
     });
+    
     function compare(a,b) {
       if (a.posted > b.posted)
         return -1;
@@ -500,6 +501,7 @@ messages.init = function() {
         return 1;
       return 0;
     }
+    
     orderedUsers.sort(compare);
     messages.users(orderedUsers);
     messages.load(orderedUsers[0].index);
@@ -1527,19 +1529,24 @@ function spawnNotification(theBody,theIcon,theTitle)
 
 var notificationTimers = [];
 
-notificationTimers.add = function(user,id,message,time) {
+notificationTimers.add = function(user,id,message,time,type) {
    var now = new Date().getTime();
    var soon = new Date(now + time * 1000);
    var shortData = message;
+	if (type == 'message') {
+		var title = 'New Messages';
+	} else if (type == 'post') {
+		var title = 'New Posts';
+	}
 	if (shortData.length > 30) {
 		shortData = shortData.substr(0,30) + '...';
 	}
    var body = localStorage.getObject('gameData')['users'][user]['firstname'] + ': ' + shortData;
    cordova.plugins.notification.local.schedule({
-        id:id,
+        id:type+id,
         text: body,
         at: soon,
-        title: 'New Messages',
+        title: title,
         icon: "file://"+ localStorage.getObject('gameData')['users'][user]['avatar'],
         smallIcon: "res://ic_stat_notif",
    });

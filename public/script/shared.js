@@ -1542,6 +1542,8 @@ notificationTimers.add = function(user,id,message,time,type) {
 		shortData = shortData.substr(0,30) + '...';
 	}
    var body = localStorage.getObject('gameData')['users'][user]['firstname'] + ': ' + shortData;
+   console.log('Before add');
+   cordova.plugins.notification.local.isPresent(type+id);
    cordova.plugins.notification.local.schedule({
         id:type+id,
         text: body,
@@ -1550,6 +1552,8 @@ notificationTimers.add = function(user,id,message,time,type) {
         icon: "file://"+ localStorage.getObject('gameData')['users'][user]['avatar'],
         smallIcon: "res://ic_stat_notif",
    });
+   console.log('After add');
+   cordova.plugins.notification.local.isPresent(type+id);
 }
 
 notificationTimers.remove = function(id) {

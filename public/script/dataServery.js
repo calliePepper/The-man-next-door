@@ -254,17 +254,7 @@ queueFunc.add = function(day,timeStampToHit,timeThroughDay,userDay,noNote) {
     			if (shortData.length > 30) {
     				shortData = shortData.substr(0,30) + '...';
     			}
-    			/*socket.emit('prepareNote', {
-                    type:'message',
-                    objectId:data.events[day][timeStampToHit]['id'],
-                    from:data.users[objectToSave['messages'][0]['fromId']][0],
-                    fromAvatar:data.users[objectToSave['messages'][0]['fromId']][4],
-                    reg:deviceData['reg'],
-                    mob: deviceData['type'],
-                    shortData:shortData,
-                    sendTime: timeStampToHit - timeThroughDay
-                });
-                console.log('Emitting a request for a message poke in '+ (timeStampToHit - timeThroughDay) + ' minutes');*/
+                console.log('Emitting a request for a message poke in '+ (timeStampToHit - timeThroughDay) + ' minutes');
                 notificationTimers.add(data.users[objectToSave['messages'][0]['fromId']][0],data.events[day][timeStampToHit]['id'],shortData,(timeStampToHit - timeThroughDay) * 60,'message');
     		}
 		}
@@ -277,17 +267,7 @@ queueFunc.add = function(day,timeStampToHit,timeThroughDay,userDay,noNote) {
 				if (shortData.length > 30) {
 					shortData = shortData.substr(0,30) + '...';
 				}
-				/*socket.emit('prepareNote', {
-                    type:'post',
-                    objectId:data.events[day][timeStampToHit]['id'],
-                    from:data.users[objectToSave['fromId']][0],
-                    fromAvatar:data.users[objectToSave['fromId']][4],
-                    reg:deviceData['reg'],
-                    mob: deviceData['type'],
-                    shortData:shortData,
-                    sendTime: timeStampToHit - timeThroughDay
-                });
-                console.log('Emitting a request for a feed poke in '+ (timeStampToHit - timeThroughDay) + ' minutes');*/
+                console.log('Emitting a request for a feed poke in '+ (timeStampToHit - timeThroughDay) + ' minutes');
                 notificationTimers.add(data.users[objectToSave['messages'][0]['fromId']][0],data.events[day][timeStampToHit]['id'],shortData,(timeStampToHit - timeThroughDay) * 60,'post');
 			}
 		}

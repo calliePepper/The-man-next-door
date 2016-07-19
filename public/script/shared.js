@@ -27,6 +27,8 @@ var actualInnerWidth = $("body").width();
 var $canvas      = $('#canvasFront');
 var canvas       = $canvas[0];
 
+var loading = '<div id="loadingWrapper" class="timeline-wrapper feedObject"><div class="innerFeed"><div class="timeline-item"><div class="animated-background"><div class="background-masker header-top"></div><div class="background-masker header-left"></div><div class="background-masker header-right"></div><div class="background-masker header-bottom"></div><div class="background-masker subheader-left"></div><div class="background-masker subheader-right"></div><div class="background-masker subheader-bottom"></div><div class="background-masker content-top"></div><div class="background-masker content-first-end"></div><div class="background-masker content-second-line"></div><div class="background-masker content-second-end"></div><div class="background-masker content-third-line"></div><div class="background-masker content-third-end"></div></div></div></div></div>';
+
 //canvas.width  = actualInnerWidth;
 //canvas.height = window.innerHeight;
 
@@ -457,7 +459,7 @@ users.makeFriends = function(friend) {
 
 var messages = {}
 
-messages.init = function() {
+messages.init = function(additional) {
     var firstMessages = {};
     var orderedUsers = [];
     var thisUser = '';
@@ -506,6 +508,8 @@ messages.init = function() {
     messages.users(orderedUsers);
     messages.load(orderedUsers[0].index);
     //console.log(orderedUsers);
+    
+    $('#messageLink_'+additional).click();
 }
 
 messages.load = function(id) {
@@ -894,6 +898,7 @@ feed.create = function(target,objects,processNormal) {
             });
         }
     });
+    $('#'+target).append(loading);
 }
 
 feed.individualPost = function(value,processNormal,target,direction) {
@@ -1159,7 +1164,7 @@ var navigationControls = {};
 
 var userPage = 0
 
-navigationControls.change = function(page) {
+navigationControls.change = function(page,additional) {
     $('#messagesCont').off();
     $('#userNav div').off();
     $('.aboutItem').off();
@@ -1188,7 +1193,7 @@ navigationControls.change = function(page) {
             $('#feedContent').html('<div class="messagesBox" id="messagesBox"><div class="messageList" id="messageList"></div><div class="messages" id="messages"><div class="mobile messageTitle"></div><div class="messagesCont" id="messagesCont"></div></div></div>');
             $('body').attr('id','messagesPage');
             //gameUpdate('updateNotifications','settings','messages',1);
-            messages.init();
+            messages.init(additional);
             history.pushState('', 'Twaddle - Messages', 'messages');
             document.title = 'Twaddle - Messages';
             $('#feedContent').fadeIn();
@@ -1427,29 +1432,33 @@ function loadInfinite(direction) {
             $(document).scrollTop($(document).height());
         }
         var total = 0;
-            $.each(localStorage.getObject('gameData').posts.reverse(), function(day,dayData) {
-                if (total < 5) {
-                    //console.log(dayData);
-                    var arr = [];
-                    for (var name in dayData) {
-                        if (feedCheck.indexOf(dayData[name]['postId']) < 0) {
-                            arr[name] = dayData[name];
-                        }
+        var loop = 0;
+        $.each(localStorage.getObject('gameData').posts.reverse(), function(day,dayData) {
+            if (total < 5) {
+                //console.log(dayData);
+                var arr = [];
+                for (var name in dayData) {
+                    if (feedCheck.indexOf(dayData[name]['postId']) < 0) {
+                        arr[name] = dayData[name];
                     }
-                    var len = arr.length;
-                    $.each(arr.reverse(), function(index,value) {
-                        if (total < 5) {
-                            if (value != undefined && localStorage.getObject('gameData')['users'][value['user']]['friended'] == 1) {
-                                feed.individualPost(value,1,'feedContent','append'); 
-                                total++;
-                            }
-                        }
-                    });
                 }
-            });
-            $('.loadingFeed').remove();
-            //canvasB.width  = $('body').width();
-            //canvasB.height = $('body').height();
+                var len = arr.length;
+                $.each(arr.reverse(), function(index,value) {
+                    if (total < 5) {
+                        if (value != undefined && localStorage.getObject('gameData')['users'][value['user']]['friended'] == 1) {
+                            feed.individualPost(value,1,'feedContent','append'); 
+                            total++;
+                        }
+                        loop++;
+                    }
+                });
+            }
+        });
+        $('#loadingWrapper').remove();
+        $('.loadingFeed').remove();
+        if (loop == 5) {
+            $('#feedContent').append(loading);
+        }
     } else {
         //Maybe put something in here later, do some tests
     }
@@ -1529,6 +1538,8 @@ function spawnNotification(theBody,theIcon,theTitle)
 
 var notificationTimers = [];
 
+var notificationEvents = [];
+
 notificationTimers.add = function(user,id,message,time,type,daydif) {
    var now = new Date().getTime();
    var soon = new Date(now + time * 1000);
@@ -1537,14 +1548,18 @@ notificationTimers.add = function(user,id,message,time,type,daydif) {
     if (type == 'message') {
         var typeId = 100;
         var title = 'New Messages';
+        var notId = typeId.toString()+id.toString();
+        notificationEvents[notId] = 'message_'+user;
     } else if (type == 'post') {
         var typeId = 200;
+        var notId = typeId.toString()+id.toString();
         var title = 'New Posts';
+        notificationEvents[notId] = 'feed_'+user;
     }
     if (shortData.length > 30) {
         shortData = shortData.substr(0,30) + '...';
     }
-    var notId = typeId.toString()+id.toString();
+    
     console.log('Adding notification '+notId+' ('+typeId+' '+id+') for '+user+' with message '+message+' to be done at '+soon+ ' ('+time+','+daydif+')');
    var body = localStorage.getObject('gameData')['users'][user]['firstname'] + ': ' + shortData;
    cordova.plugins.notification.local.isPresent(notId, function (present) {
@@ -1572,6 +1587,15 @@ notificationTimers.remove = function(id) {
         alert("Message "+id+" cancellend");
     });
 }
+
+cordova.plugins.notification.local.on("click", function (notification, state) {
+    var notificationData = notificationEvents[notification.id].split('_');
+    if (notificationData[0] == 'feed') {
+        navigationControls.change('feed');
+    } else {
+        navigationControls.change('messages',notificationData[1]);
+    }
+}, this)
 
 // Page visibility
 

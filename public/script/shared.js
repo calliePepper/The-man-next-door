@@ -1545,25 +1545,24 @@ notificationTimers.add = function(user,id,message,time,type) {
         shortData = shortData.substr(0,30) + '...';
     }
    var body = localStorage.getObject('gameData')['users'][user]['firstname'] + ': ' + shortData;
-   console.log('Before add');
-   cordova.plugins.notification.local.isScheduled(typeId+id, function (present) {
-        console.log(present ? "present" : "not found");
+   cordova.plugins.notification.local.isPresent(typeId+id, function (present) {
+        if (present) {
+            console.log('Duplicate '+typeId+id,+'!');
+            cordova.plugins.notification.local.getAll(function (notifications) {
+                console.log(notifications);
+            });
+        } else {
+            cordova.plugins.notification.local.schedule({
+                id:typeId+id,
+                text: body,
+                at: soon,
+                title: title,
+                icon: "file://"+ localStorage.getObject('gameData')['users'][user]['avatar'],
+                smallIcon: "res://ic_stat_notif",
+           });
+        }
     });
-   cordova.plugins.notification.local.schedule({
-        id:typeId+id,
-        text: body,
-        at: soon,
-        title: title,
-        icon: "file://"+ localStorage.getObject('gameData')['users'][user]['avatar'],
-        smallIcon: "res://ic_stat_notif",
-   });
-   console.log('After add');
-   cordova.plugins.notification.local.isScheduled(typeId+id, function (present) {
-        console.log(present ? "present" : "not found");
-    });
-   cordova.plugins.notification.local.getAll(function (notifications) {
-        console.log(notifications);
-    });
+
 }
 
 notificationTimers.remove = function(id) {

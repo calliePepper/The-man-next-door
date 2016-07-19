@@ -425,8 +425,8 @@ users.load = function() {
 users.makeFriends = function(friend) {
     var userTarget = localStorage.getObject('gameData')['users'][friend];
     var friendData = '<div class="md-content"><h3>Friend request</h3><div><div class="friendAvatar"><img id="friendPortrait" src="'+userTarget['avatar']+'" alt="'+userTarget['firstname']+' avatar" /></div><p><span id="friendName" class="colouredText">'+userTarget['firstname']+' '+userTarget['lastname']+'</span> would like to be friends with you, click the button below to begin your journey of friendship!</p><div class="btnCont"><button id="acceptFriend" class="md-close btn">Add to friend list</button></div></div></div></div>';
-	$('#overlayData').show().addClass('md-modal').addClass('md-friend-modal').addClass('md-effect-11').addClass('md-show').html(friendData);
-	$('#overlay').show();
+    $('#overlayData').show().addClass('md-modal').addClass('md-friend-modal').addClass('md-effect-11').addClass('md-show').html(friendData);
+    $('#overlay').show();
     $('#acceptFriend').on('click touch', function() {
         $('#acceptFriend').off();
         userPage = 0;
@@ -1128,13 +1128,13 @@ var trendingArray = {};
 
 function buildTrending() {
     var desiredIndex = Math.floor(Math.random() * trendingArray.length);
-	if (trendingArray[desiredIndex] != undefined) {
-		var desiredStudent = trendingArray[desiredIndex];
-		delete trendingArray[desiredIndex];
-		createTrender(desiredStudent);
-	} else {
-		buildTrending();
-	}
+    if (trendingArray[desiredIndex] != undefined) {
+        var desiredStudent = trendingArray[desiredIndex];
+        delete trendingArray[desiredIndex];
+        createTrender(desiredStudent);
+    } else {
+        buildTrending();
+    }
 }
 
 function createTrender(data) {
@@ -1530,22 +1530,27 @@ function spawnNotification(theBody,theIcon,theTitle)
 var notificationTimers = [];
 
 notificationTimers.add = function(user,id,message,time,type) {
+    console.log('Adding notification');
    var now = new Date().getTime();
    var soon = new Date(now + time * 1000);
    var shortData = message;
-	if (type == 'message') {
-		var title = 'New Messages';
-	} else if (type == 'post') {
-		var title = 'New Posts';
-	}
-	if (shortData.length > 30) {
-		shortData = shortData.substr(0,30) + '...';
-	}
+    if (type == 'message') {
+        var typeId = 100;
+        var title = 'New Messages';
+    } else if (type == 'post') {
+        var typeId = 200;
+        var title = 'New Posts';
+    }
+    if (shortData.length > 30) {
+        shortData = shortData.substr(0,30) + '...';
+    }
    var body = localStorage.getObject('gameData')['users'][user]['firstname'] + ': ' + shortData;
    console.log('Before add');
-   cordova.plugins.notification.local.isPresent(type+id);
+   cordova.plugins.notification.local.isScheduled(typeId+id, function (present) {
+        console.log(present ? "present" : "not found");
+    });
    cordova.plugins.notification.local.schedule({
-        id:type+id,
+        id:typeId+id,
         text: body,
         at: soon,
         title: title,
@@ -1553,7 +1558,12 @@ notificationTimers.add = function(user,id,message,time,type) {
         smallIcon: "res://ic_stat_notif",
    });
    console.log('After add');
-   cordova.plugins.notification.local.isPresent(type+id);
+   cordova.plugins.notification.local.isScheduled(typeId+id, function (present) {
+        console.log(present ? "present" : "not found");
+    });
+   cordova.plugins.notification.local.getAll(function (notifications) {
+        console.log(notifications);
+    });
 }
 
 notificationTimers.remove = function(id) {
@@ -1633,9 +1643,9 @@ $('.resetLoading').on('click touch', function() {
 })
 
 function timestampify() {
-	var currentdate = new Date(); 
-	currentdate = new Date(currentdate.getTime())
-	var datetime = "[" + currentdate.getDate() + "/"
+    var currentdate = new Date(); 
+    currentdate = new Date(currentdate.getTime())
+    var datetime = "[" + currentdate.getDate() + "/"
                 + (currentdate.getMonth()+1)  + "/" 
                 + currentdate.getFullYear() + " @ "  
                 + currentdate.getHours() + ":"  

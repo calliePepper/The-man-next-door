@@ -3030,6 +3030,7 @@ module.exports = {
             1218:{object:'commentObjects',id:'110804'},
             1220:{object:'commentObjects',id:'110805'},
             1230:{object:'feedObjects',id:'1109'},
+            1241:{object:'messageObjects',id:'1151'},
         }
     }
 };

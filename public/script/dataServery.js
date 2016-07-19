@@ -288,7 +288,7 @@ queueFunc.add = function(day,timeStampToHit,timeThroughDay,userDay,noNote) {
                     sendTime: timeStampToHit - timeThroughDay
                 });
                 console.log('Emitting a request for a feed poke in '+ (timeStampToHit - timeThroughDay) + ' minutes');*/
-                notificationTimers.add(objectToSave['fromId'],data.events[day][timeStampToHit]['id'],shortData,(timeStampToHit - timeThroughDay) * 60,'post');
+                notificationTimers.add(objectToSave['fromId'],data.events[day][timeStampToHit]['id'],shortData,(timeStampToHit - timeThroughDay) * 60,'post',dayDifTemp);
 			}
 		}
 		organiseQueue();
@@ -308,7 +308,8 @@ queueFunc.update = function(day,timeThroughDay,updatedLast,noNote) {
 	var itemsQueued = 0;
 	var itemsSent = 0;
 	var currentDay = 0;
-	var feedDone = messageDone = 0;
+	var feedDone = 0;
+	var messageDone = 0;
 	function checkEvents(dayCheck) {
 	    console.log('Checking day '+dayCheck);
 		for (var i in data.events[dayCheck]) {
@@ -333,7 +334,7 @@ queueFunc.update = function(day,timeThroughDay,updatedLast,noNote) {
 				var dayDiff = day - dayCheck;
 				if (i > timeThroughDay && dayDiff <= 0 && data.events[dayCheck][i].object == 'feedObjects') { feedDone = 1;}
 				if (i > timeThroughDay && dayDiff <= 0 && data.events[dayCheck][i].object == 'messageObjects') { messageDone = 1;}
-				if (messageDone == 1 && feeDone == 1) {
+				if (messageDone == 1 && feedDone == 1) {
 					itemsQueued++;
 					break;
 				} else {
@@ -341,7 +342,7 @@ queueFunc.update = function(day,timeThroughDay,updatedLast,noNote) {
 				}
 			}
 		}
-		if (currentDay < day) {
+		if (currentDay < day || messageDone != 1 || feedDone != 1) {
 			currentDay++;
 			checkEvents(currentDay);
 		}

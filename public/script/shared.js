@@ -27,7 +27,7 @@ var actualInnerWidth = $("body").width();
 var $canvas      = $('#canvasFront');
 var canvas       = $canvas[0];
 
-var loading = '<div id="loadingWrapper" class="timeline-wrapper feedObject"><div class="innerFeed"><div class="timeline-item"><div class="animated-background"><div class="background-masker header-top"></div><div class="background-masker header-left"></div><div class="background-masker header-right"></div><div class="background-masker header-bottom"></div><div class="background-masker subheader-left"></div><div class="background-masker subheader-right"></div><div class="background-masker subheader-bottom"></div><div class="background-masker content-top"></div><div class="background-masker content-first-end"></div><div class="background-masker content-second-line"></div><div class="background-masker content-second-end"></div><div class="background-masker content-third-line"></div><div class="background-masker content-third-end"></div></div></div></div></div>';
+var loading = '<div id="loadingWrapper" class="timeline-wrapper feedObject"><div class="innerFeed"><div class="timeline-item"><div class="animated-background"><div class="background-masker header-top"></div><div class="background-masker header-left"></div><div class="background-masker header-right"></div><div class="background-masker header-bottom"></div><div class="background-masker subheader-left"></div><div class="background-masker subheader-right"></div><div class="background-masker subheader-bottom"></div><div class="background-masker content-top"></div><div class="background-masker content-first-end"></div><div class="background-masker content-second-line"></div><div class="background-masker content-second-end"></div><div class="background-masker content-third-line"></div><div class="background-masker content-third-end"></div></div></div></div><div class="feedControls"><span class="feedControl"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_1102" class="feedControl"><i class="fa fa-comment"></i>Comment</span></div></div>';
 
 //canvas.width  = actualInnerWidth;
 //canvas.height = window.innerHeight;
@@ -459,7 +459,7 @@ users.makeFriends = function(friend) {
 
 var messages = {}
 
-messages.init = function(additional) {
+messages.init = function() {
     var firstMessages = {};
     var orderedUsers = [];
     var thisUser = '';
@@ -508,8 +508,6 @@ messages.init = function(additional) {
     messages.users(orderedUsers);
     messages.load(orderedUsers[0].index);
     //console.log(orderedUsers);
-    
-    $('#messageLink_'+additional).click();
 }
 
 messages.load = function(id) {
@@ -1164,7 +1162,7 @@ var navigationControls = {};
 
 var userPage = 0
 
-navigationControls.change = function(page,additional) {
+navigationControls.change = function(page) {
     $('#messagesCont').off();
     $('#userNav div').off();
     $('.aboutItem').off();
@@ -1193,7 +1191,7 @@ navigationControls.change = function(page,additional) {
             $('#feedContent').html('<div class="messagesBox" id="messagesBox"><div class="messageList" id="messageList"></div><div class="messages" id="messages"><div class="mobile messageTitle"></div><div class="messagesCont" id="messagesCont"></div></div></div>');
             $('body').attr('id','messagesPage');
             //gameUpdate('updateNotifications','settings','messages',1);
-            messages.init(additional);
+            messages.init();
             history.pushState('', 'Twaddle - Messages', 'messages');
             document.title = 'Twaddle - Messages';
             $('#feedContent').fadeIn();
@@ -1590,10 +1588,10 @@ notificationTimers.remove = function(id) {
 
 cordova.plugins.notification.local.on("click", function (notification, state) {
     var notificationData = notificationEvents[notification.id].split('_');
-    if (notificationData[0] == 'feed') {
+    if (notificationData[1] == 'feed') {
         navigationControls.change('feed');
     } else {
-        navigationControls.change('messages',notificationData[1]);
+        
     }
 }, this)
 

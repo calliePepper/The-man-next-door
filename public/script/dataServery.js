@@ -249,22 +249,11 @@ queueFunc.add = function(day,timeStampToHit,timeThroughDay,userDay,noNote) {
 		sendQueue.push(queueObject);
 		console.log(type);
 		if (type == 'messages' && deviceData['type'] == 1 || type == 'message' && deviceData['type'] == 1) {
-    	    if (noNote == 0 && deviceData['type'] == 1 && dayDifTemp == 0 && timeStampToHit - timeThroughDay > 0) {
+    	    if (noNote == 0 && deviceData['type'] == 1 && dayDifTemp < 0 || noNote == 0 && deviceData['type'] == 1 && dayDifTemp == 0 && timeStampToHit - timeThroughDay > 0) {
     			var shortData = objectToSave.messages[0].message;
     			if (shortData.length > 30) {
     				shortData = shortData.substr(0,30) + '...';
     			}
-    			/*socket.emit('prepareNote', {
-                    type:'message',
-                    objectId:data.events[day][timeStampToHit]['id'],
-                    from:data.users[objectToSave['messages'][0]['fromId']][0],
-                    fromAvatar:data.users[objectToSave['messages'][0]['fromId']][4],
-                    reg:deviceData['reg'],
-                    mob: deviceData['type'],
-                    shortData:shortData,
-                    sendTime: timeStampToHit - timeThroughDay
-                });
-                console.log('Emitting a request for a message poke in '+ (timeStampToHit - timeThroughDay) + ' minutes');*/
                 notificationTimers.add(objectToSave['messages'][0]['fromId'],data.events[day][timeStampToHit]['id'],shortData,(timeStampToHit - timeThroughDay) * 60,'message');
     		}
 		}
@@ -272,22 +261,11 @@ queueFunc.add = function(day,timeStampToHit,timeThroughDay,userDay,noNote) {
 		    console.log(objectToSave['fromId']);
 		    console.log(localStorage.getObject('gameData').users);
 		    console.log(localStorage.getObject('gameData').users[objectToSave['fromId']].friended);
-		    if (localStorage.getObject('gameData').users[objectToSave['fromId']].friended == 1 && dayDifTemp == 0 && timeStampToHit - timeThroughDay > 0) {
+		    if (localStorage.getObject('gameData').users[objectToSave['fromId']].friended == 1 && dayDifTemp < 0 || localStorage.getObject('gameData').users[objectToSave['fromId']].friended == 1 && dayDifTemp == 0 && timeStampToHit - timeThroughDay > 0) {
 				var shortData = objectToSave.text;
 				if (shortData.length > 30) {
 					shortData = shortData.substr(0,30) + '...';
 				}
-				/*socket.emit('prepareNote', {
-                    type:'post',
-                    objectId:data.events[day][timeStampToHit]['id'],
-                    from:data.users[objectToSave['fromId']][0],
-                    fromAvatar:data.users[objectToSave['fromId']][4],
-                    reg:deviceData['reg'],
-                    mob: deviceData['type'],
-                    shortData:shortData,
-                    sendTime: timeStampToHit - timeThroughDay
-                });
-                console.log('Emitting a request for a feed poke in '+ (timeStampToHit - timeThroughDay) + ' minutes');*/
                 notificationTimers.add(objectToSave['fromId'],data.events[day][timeStampToHit]['id'],shortData,(timeStampToHit - timeThroughDay) * 60,'post',dayDifTemp);
 			}
 		}
@@ -412,7 +390,7 @@ queueFunc.check = function() {
 			askForNotes();	
 		},20000);
 	}
-	while (sendQueue[0] != undefined && sendQueue[0]['timeStamp'] <= current || sendQueue[0] != undefined && sendQueue[0].queueDay < sendQueue[0].userDay ) {
+	while (sendQueue[0] != undefined && sendQueue[0]['timeStamp'] <= current && sendQueue[0].queueDay == sendQueue[0].userDay || sendQueue[0] != undefined && sendQueue[0].queueDay < sendQueue[0].userDay ) {
 		didSend = 1;
 		console.log(timestampify()+'Sending '+sendQueue[0]['type'] + '|'+sendQueue[0]['id']);
 		if (sendQueue[0]['type'] == 'messages' || sendQueue[0]['type'] == 'message') {

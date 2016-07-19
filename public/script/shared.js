@@ -1530,7 +1530,6 @@ function spawnNotification(theBody,theIcon,theTitle)
 var notificationTimers = [];
 
 notificationTimers.add = function(user,id,message,time,type,daydif) {
-    console.log('Adding notification');
    var now = new Date().getTime();
    var soon = new Date(now + time * 1000);
    soon.setDate(soon.getDate() + daydif);
@@ -1545,16 +1544,18 @@ notificationTimers.add = function(user,id,message,time,type,daydif) {
     if (shortData.length > 30) {
         shortData = shortData.substr(0,30) + '...';
     }
+    var notId = typeId.toString()+id.toString();
+    console.log('Adding notification '+notId+' ('+typeId+' '+id+') for '+user+' with message '+message+' to be done at '+soon+ ' ('+time+','+daydif+')');
    var body = localStorage.getObject('gameData')['users'][user]['firstname'] + ': ' + shortData;
-   cordova.plugins.notification.local.isPresent(parseInt(typeId)+parseInt(id), function (present) {
+   cordova.plugins.notification.local.isPresent(notId, function (present) {
         if (present) {
-            console.log('Duplicate '+parseInt(typeId)+parseInt(id),+'!');
+            console.log('Duplicate '+notId+'!');
             cordova.plugins.notification.local.getAll(function (notifications) {
                 console.log(notifications);
             });
         } else {
             cordova.plugins.notification.local.schedule({
-                id:parseInt(typeId)+parseInt(id),
+                id:notId,
                 text: body,
                 at: soon,
                 title: title,

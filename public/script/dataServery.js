@@ -332,19 +332,27 @@ queueFunc.update = function(day,timeThroughDay,updatedLast,noNote) {
 			if (notDone == 1) {
 				queueFunc.add(dayCheck,i,timeThroughDay,day,noNote);
 				var dayDiff = day - dayCheck;
-				if (i > timeThroughDay && dayDiff <= 0 && data.events[dayCheck][i].object == 'feedObjects') { feedDone = 1;}
-				if (i > timeThroughDay && dayDiff <= 0 && data.events[dayCheck][i].object == 'messageObjects') { messageDone = 1;}
-				if (messageDone == 1 && feedDone == 1) {
+				var past = 1;
+				if (i > timeThroughDay && dayDiff == 0 || dayDiff < 0) {
+					past = 0;
+				}
+				if (past == 0 && data.events[dayCheck][i].object == 'feedObjects' || past == 0 && data.events[dayCheck][i].object == 'messageObjects') {
 					itemsQueued++;
-					break;
+					if (data.events[dayCheck][i].object == 'feedObjects') { feedDone = 1;console.log('Feed found');}
+					if (data.events[dayCheck][i].object == 'messageObjects') { messageDone = 1;console.log('Message found');}
+					if (messageDone == 1 && feedDone == 1) {
+						break;
+					}
 				} else {
 					itemsSent++;
 				}
 			}
 		}
 		if (currentDay < day || messageDone != 1 || feedDone != 1) {
-			currentDay++;
-			checkEvents(currentDay);
+			if (currentDay < 7) {
+				currentDay++;
+				checkEvents(currentDay);
+			}
 		}
 	}
 	checkEvents(currentDay);

@@ -255,9 +255,10 @@ function processFeed(receivedFeed,nonote,day) {
             if (nonote == 1) {
                 feed.backlog(currentFeed);
             } else {
-                var tempFeed = [];
-                tempFeed.push(currentFeed);
-                feed.create('feedContent',tempFeed,0);
+                var tempFeed = {};
+                tempFeed[day] = [];
+                tempFeed[day].push(currentFeed);
+                feed.create('feedContent',tempFeed,0,0);
             }
         }
     }

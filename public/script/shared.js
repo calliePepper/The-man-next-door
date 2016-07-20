@@ -438,7 +438,7 @@ users.makeFriends = function(friend) {
         //$('#overlay').hide();
         gameUpdate('addFriend','data',2);
         console.log(timestampify()+'friendCal!');
-        feed.create('feedContent',localStorage.getObject('gameData').posts,1,0);
+        feed.create('feedContent',localStorage.getObject('gameData').posts,1,1);
         users.load(); 
     });
 }
@@ -872,10 +872,12 @@ var feed = {};
 var feedCheck = [];
 var feedRebuilder;
 
-feed.create = function(target,objects,processNormal) {
+feed.create = function(target,objects,processNormal,rebuild) {
     feedCheck = [];
     //console.log(objects);
-    $('#'+target).html('');
+    if (rebuild == 1) {
+        $('#'+target).html('');
+    }
     var total = 0;
     $.each(objects.reverse(), function(day,dayData) {
         if (total < 5) {
@@ -1023,7 +1025,7 @@ feed.backlog = function(value) {
         }
     }
     clearTimeout(feedRebuilder);
-    feedRebuilder = setTimeout(function() {feed.create('feedContent',localStorage.getObject('gameData').posts,1,0)},300);
+    feedRebuilder = setTimeout(function() {feed.create('feedContent',localStorage.getObject('gameData').posts,1,1)},300);
 }
 
 feed.commentPoster = function(comments,postId) {
@@ -1203,7 +1205,7 @@ navigationControls.change = function(page) {
             gameUpdate('updateNotifications','settings','posts',1);
             history.pushState('', 'Twaddle - A social media for the everyman', 'feed');
             document.title = 'Twaddle - A social media for the everyman';
-            feed.create('feedContent',localStorage.getObject('gameData').posts,1,0);
+            feed.create('feedContent',localStorage.getObject('gameData').posts,1,1);
             //setTimeout(function() {spawnNotification('This notification system will be used to let you know about new updates','img/samAvatar.png','Welcome to the man next door!');},3000);
             
             /*setTimeout(function() {
@@ -1354,7 +1356,7 @@ $(document).on('click touch', '#userNav div', function() {
         $('#userHeader').addClass('noHero');
         $('#userNav div').removeClass('current');
         $('#posts').addClass('current');
-        feed.create('userBody',localStorage.getObject('gameData').posts,1,userPage);
+        feed.create('userBody',localStorage.getObject('gameData').posts,1);
     } else{
         $('#userBody').html('');
         $('#userHeader').removeClass('noHero');

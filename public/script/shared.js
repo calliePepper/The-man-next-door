@@ -1216,7 +1216,7 @@ navigationControls.change = function(page) {
                  history.pushState('', 'Twaddle - Calliope Ransom', 'cal');
                  document.title = 'Twaddle - Calliope Ransom';
                    $('#aboutUsername').html('Calliope Ransom');
-                   $("#aboutAvatar").attr('src','img/calAvatar.png');
+                   $("#aboutAvatar").attr('src','img/calAvatar.jpg');
                    $('.userHero').addClass('calHero');
                    $('#generalTable').html('<tr><td class="labelTd">Date of Birth</td><td>1 April</td></tr><tr><td class="labelTd">Gender</td><td class="hiddenInfo">Not shared</td></tr>');
                    $('#userQuote').html('And now I see with eye serene,<br>The very pulse of the machine.<br>-Wordsworth)');

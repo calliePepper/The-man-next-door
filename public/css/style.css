@@ -917,7 +917,7 @@ audio {
 
 .loadBtn {
   margin-top: 10px;
-  display: inline-block;
+  float: left;
   padding: 0px;
   background: #2a2826;
   border-color: #2a2826; }
@@ -931,8 +931,14 @@ audio {
   display: inline-block;
   cursor: pointer;
   font-size: 1.2em;
-  padding: 14px 30px;
+  padding: 14px 30px; }
+
+#startBtn {
+  float: left;
   display: none; }
+
+#retryBtn {
+  float: right; }
 
 input[type="text"] {
   padding: 8px;
@@ -1344,6 +1350,9 @@ perspective effects (not including the modals and the overlay).
 .background-masker.content-third-end {
   left: 300px;
   top: 88px; }
+
+.hiddenObjectData {
+  display: none; }
 
 @media screen and (max-width: 900px) {
   header {

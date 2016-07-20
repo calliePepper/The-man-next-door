@@ -39,6 +39,7 @@
             <div class="startBlock">
                 <div id="loadBtn" class="btn loadBtn"><img src="img/loading.gif" class="loadingImage" /></div>
                 <div id="startBtn" class="btn startBtn">Click here to start</div>   
+                <div id="retryBtn" class="btn startBtn">Retry Load</div>   
             </div>
     	    
         </div>
@@ -63,10 +64,12 @@
             var socket = io('https://the-man-next-door-soldevifae.c9.io');
             var isLoad = 0;
             
+            $('#retryBtn').show();
+            
             var noLoad = setTimeout(function() {
-                 $('.startBtn').html('Load failed, using backup data');
+                 $('#startBtn').html('Load failed, using backup data');
                  if (localStorage.setObject('dataCache') != undefined) {
-                    $('.startBtn').css('display','inline-block');
+                    $('#startBtn').css('display','inline-block');
                     $('.loadBtn').hide();
                                 
                    var ua = navigator.userAgent.toLowerCase();
@@ -79,11 +82,18 @@
         
                     }
                 }
-            },20000);
+            },6000);
             
+            function triggerLoad() {
+                socket.emit('dataMeUp');  
+            }
+            
+            $('#retryBtn').on('click touch', function() {
+               triggerLoad(); 
+            });
             
             socket.on('requestStatus', function(data) {
-                socket.emit('dataMeUp');    
+                triggerLoad() 
             });
             
             socket.on('systemUpdate', function(updateData) {
@@ -93,6 +103,7 @@
                 localStorage.setObject('dataCache',updateData.data);
                 
                 $('.startBtn').css('display','inline-block');
+                $('#retryBtn').hide();
                 $('.loadBtn').hide();
                             
                var ua = navigator.userAgent.toLowerCase();

@@ -62,7 +62,7 @@ function triggerStart(page) {
 	} else {
 		var updatedLast = page.lastUpdate;
 	}
-	console.log('Last updated '+updatedLast+' mins ago');
+	console.log(timestampify()+'Last updated '+updatedLast+' mins ago');
 	clientData['name'] = page.playerName;
 	clientData['timezone'] = page.timezone;
 	clientData['lastUpdated'] = updatedLast;
@@ -157,18 +157,6 @@ function anotherMessage(replyData) {
 };
 	
 
-function timestampify() {
-	var currentdate = new Date(); 
-	currentdate = new Date(currentdate.getTime() + 10*60*60000)
-	var datetime = "[" + currentdate.getDate() + "/"
-            		   + (currentdate.getMonth()+1)  + "/" 
-            		   + currentdate.getFullYear() + " @ "  
-            		   + currentdate.getHours() + ":"  
-            		   + currentdate.getMinutes() + ":" 
-            		   + currentdate.getSeconds()+'] ';
-    return datetime;
-}
-
 function getPoint(start,currentTime,timezone) {
     start = new Date(start);
     currentTime = new Date(currentTime);
@@ -227,7 +215,7 @@ queueFunc.add = function(day,timeStampToHit,timeThroughDay,userDay,noNote) {
 			var queueChoice = '';
 		}
 		var dayDifTemp = userDay - day;
-		console.log(timestampify()+'Update found, Type: '+type+', id: '+data.events[day][timeStampToHit]['id']+'.User day is '+userDay+'. Object is at '+day+'. Therefore difference is '+dayDifTemp);
+		console.log(timestampify()+'Update found, Type: '+type+', id: '+data.events[day][timeStampToHit]['id']+'. It is in '+parseInt(dayDifTemp)*-1+' day(s).');
 		var tempStamp = new Date().getTime() / 1000;
 		var objectToSave = data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']];
 		var queueObject = {
@@ -281,7 +269,7 @@ queueFunc.update = function(day,timeThroughDay,updatedLast,noNote) {
 	var feedDone = 0;
 	var messageDone = 0;
 	function checkEvents(dayCheck) {
-	    console.log('Checking day '+dayCheck);
+	    console.log(timestampify()+'Checking day '+dayCheck);
 		for (var i in data.events[dayCheck]) {
 			var notDone = 1;
 			if (data.events[dayCheck][i].object == 'feedObjects') {
@@ -308,8 +296,8 @@ queueFunc.update = function(day,timeThroughDay,updatedLast,noNote) {
 				}
 				if (past == 0 && data.events[dayCheck][i].object == 'feedObjects' || past == 0 && data.events[dayCheck][i].object == 'messageObjects') {
 					itemsQueued++;
-					if (data.events[dayCheck][i].object == 'feedObjects') { feedDone = 1;console.log('Feed found');}
-					if (data.events[dayCheck][i].object == 'messageObjects') { messageDone = 1;console.log('Message found');}
+					if (data.events[dayCheck][i].object == 'feedObjects') { feedDone = 1;}
+					if (data.events[dayCheck][i].object == 'messageObjects') { messageDone = 1;}
 					if (messageDone == 1 && feedDone == 1) {
 						break;
 					}
@@ -382,7 +370,7 @@ queueFunc.check = function() {
 	}
 	while (sendQueue[0] != undefined && sendQueue[0]['timeStamp'] <= current && sendQueue[0].queueDay == sendQueue[0].userDay || sendQueue[0] != undefined && sendQueue[0].queueDay < sendQueue[0].userDay ) {
 		didSend = 1;
-		console.log(timestampify()+'Sending '+sendQueue[0]['type'] + '|'+sendQueue[0]['id']);
+		//console.log(timestampify()+'Sending '+sendQueue[0]['type'] + '|'+sendQueue[0]['id']);
 		if (sendQueue[0]['type'] == 'messages' || sendQueue[0]['type'] == 'message') {
 			if (sendQueue[0]['fromChoice'] == undefined) {
 				var choiceID = 'NA';

@@ -37,7 +37,7 @@ var canvasB      = $canvasB[0];
 
 canvasB.width  = actualInnerWidth;
 canvasB.height = $('body').height();*/
-/*
+
 
 console.log = function() {
     baseLogFunction.apply(console,arguments);
@@ -46,7 +46,7 @@ console.log = function() {
     for (var i=0;i<args.length;i++) {
         var node = createLogNode(args[i]);
         consoleData.unshift(node);
-        if (consoleData.length > 30) {
+        if (consoleData.length > 50) {
             consoleData.pop();
         }
     }
@@ -54,16 +54,14 @@ console.log = function() {
 
 function createLogNode(message) {
     if (typeof message === 'object') {
-        var textNode = "<div class='errorLine'>"+JSON.stringify(message).replace(RegExp("\\n","g"), "\n")+"</div>";
+        var textNode = "<div class='errorLine objectError'>"+timestampify()+"Object detected [ CLICK FOR MORE DATA ]";
+        textNode += "<div class='hiddenObjectData'>"+JSON.stringify(message).replace(RegExp("\\n","g"), "\n").replace(/'/g, "\\'").replace(/"/g, "\\'")+"</div>";
+        textNode += "</div>";
     } else {
         var textNode = "<div class='errorLine'>"+message+"</div>";   
     }
     return textNode;
 }
-
-window.onerror = function(message,url,linenumber) {
-    console.log("Javascript error: " + message + " on line " + linenumber + " for " + url);
-}*/
 
 Storage.prototype.setObject = function(key, value) {
     this.setItem(key, JSON.stringify(value));
@@ -875,8 +873,7 @@ feed.create = function(target,objects,processNormal,rebuild) {
 }
 
 feed.individualPost = function(value,processNormal,target,direction) {
-    console.log(timestampify()+'Triggering individual post')
-    console.log(value);
+    console.log(timestampify()+'Triggering individual post. Id: '+value['postId']+', shortText: "'+value['text'].substring(0,40)+'"');
     var videoLink = '';
     if (value['video'] != '' && value['video'] != undefined) {
         videoLink = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+value['video']+'" frameborder="0" allowfullscreen></iframe>';
@@ -1309,6 +1306,10 @@ $(document).on('touch tap click', '.commentControl.usableControls:not(.choiceBei
     choiceControls.create($(this).attr('data-id'),'feed_'+postId,'comment','comment_'+postId,$(this).attr('data-choice1'),$(this).attr('data-choice2'),$(this).attr('data-choice3'));                
 });
 
+$(document).on('touch tap click', '.objectError', function(){
+    $(this).find('.hiddenObjectData').toggle();
+});
+
 $(document).on('click touch', '#userNav div', function() {
     if ($(this).attr('id') != 'about') {
         $('#aboutBody').hide();
@@ -1616,14 +1617,14 @@ $('.resetLoading').on('click touch', function() {
 })
 
 function timestampify() {
-    var currentdate = new Date(); 
-    currentdate = new Date(currentdate.getTime())
-    var datetime = "[" + currentdate.getDate() + "/"
-                + (currentdate.getMonth()+1)  + "/" 
-                + currentdate.getFullYear() + " @ "  
-                + currentdate.getHours() + ":"  
-                + currentdate.getMinutes() + ":" 
-                + currentdate.getSeconds()+'] ';
+	var currentdate = new Date(); 
+	currentdate = new Date(currentdate.getTime())
+	var datetime = "[" + currentdate.getDate() + "/"
+            		   + (currentdate.getMonth()+1) +' @ '
+            		   + currentdate.getHours() + ":"  
+            		   + currentdate.getMinutes() + ":" 
+            		   + currentdate.getSeconds() + "] ";  
+            		   
     return datetime;
 }
 /*!

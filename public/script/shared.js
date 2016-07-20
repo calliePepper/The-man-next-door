@@ -39,7 +39,7 @@ canvasB.width  = actualInnerWidth;
 canvasB.height = $('body').height();*/
 
 
-console.log = function() {
+/*console.log = function() {
     baseLogFunction.apply(console,arguments);
     
     var args = Array.prototype.slice.call(arguments);
@@ -61,7 +61,7 @@ function createLogNode(message) {
         var textNode = "<div class='errorLine'>"+message+"</div>";   
     }
     return textNode;
-}
+}*/
 
 Storage.prototype.setObject = function(key, value) {
     this.setItem(key, JSON.stringify(value));

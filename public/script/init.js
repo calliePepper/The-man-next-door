@@ -44,7 +44,6 @@ function requestStatus(backlog) {
         }
     }
     if (firstRun == 1 && waitCount > 0) {
-        console.log(timestampify()+'Uh oh, there is a messageWait');
         messageWait({messageWait:localStorage.getObject('gameSettings').messageWait});
     }
 };
@@ -117,15 +116,11 @@ function processMessage(receivedMessages,nonote,day) {
     if (receivedMessages.fromChoice  != undefined && receivedMessages.fromChoice != 'NA') {
         gameUpdate('removeReturn','settings',receivedMessages.fromChoice);
     }
-    console.log(timestampify()+'New message with a nonote value of '+nonote);
-    console.log(receivedMessages);
     var messageGroup = [];
     var updatePause;
     function process() {
         gameUpdate('updateTime','settings',300);
         $.each(receivedMessages.messageItem.messages, function(index,value) {
-            console.log(timestampify()+'Reading through');
-            console.log(value);
             if (value.type != undefined && value.type == 'delay') {
                 var incomingMessage = value;
             } else {
@@ -143,15 +138,9 @@ function processMessage(receivedMessages,nonote,day) {
 	    var noFighting = 0;
 	   
         if (receivedMessages.messageItem.ttl != undefined && receivedMessages.messageItem.ttl != '' && receivedMessages.messageItem.ttl != 0) {
-            console.log(receivedMessages.messageItem.ttl);
-            console.log(Math.floor(Date.now() / 1000) + ' vs ' + createTimestamp(receivedMessages.messageItem.ttl,difference));
             if (Math.floor(Date.now() / 1000) > createTimestamp(receivedMessages.messageItem.ttl,difference)) {
                 var data = localStorage.getObject('dataCache');
-                console.log(difference);
-                console.log('SGUITSAGHASF');
-                console.log(receivedMessages);
                 var messageAim = data.messageObjects[receivedMessages.messageItem.ttlId];
-                console.log(messageAim);
     			if (messageAim.autoTarget == 'choice') {
     				var choice = data.choiceObjects[messageAim.autoId];
     			}
@@ -290,7 +279,6 @@ function processComment(receivedComment,nonote) {
     if (receivedComment.fromChoice != undefined && receivedComment.fromChoice != 'NA') {
         gameUpdate('removeReturn','settings',receivedComment.fromChoice);
     }
-    console.log(receivedComment);
     gameUpdate('updateComment','settings',receivedComment.comment.commentId);
     if (nonote == 1) {
         var now = createTimestamp(receivedComment.comment.comments[0].date,receivedComment.queueDay)

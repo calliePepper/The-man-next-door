@@ -17,7 +17,6 @@ function triggerCheck(backlog) {
         introScreen();
     }
     retrieveTimer = setTimeout(function() {
-       console.log(timestampify()+arguments.callee.name+' Opening localStorage for writing');
        var lastUpdate = localStorage.getObject('gameSettings').lastUpdate;
        var firstLoadTime = 0
         if (localStorage.getObject('gameSettings').firstLoad == 1) {
@@ -27,7 +26,6 @@ function triggerCheck(backlog) {
             tempData.firstLoad = 0;
             firstLoadTime = 1;
             localStorage.setObject('gameSettings',tempData);
-            console.log(timestampify()+arguments.callee.name+' Closing localStorage');
         }
         console.log(timestampify()+'Retrieving data');
         var page = {
@@ -77,7 +75,6 @@ function triggerStart(page) {
 	}
 	clientData['reg'] = page.reg;
 	clientData['device'] = page.mob;
-	console.log (clientData['reg'] + ' - ' + clientData['device'])
 	queueFunc.update(currentDay,timeThroughDay,updatedLast,page.firstRun)
 	if (page.firstLoad == 1) {
 		newMessage({messageItem:data.messageObjects[0],choices:data.choiceObjects[0],noNote:1,queueDay:0});
@@ -229,9 +226,8 @@ queueFunc.add = function(day,timeStampToHit,timeThroughDay,userDay,noNote) {
 		} else {
 			var queueChoice = '';
 		}
-		console.log(timestampify()+'Update found, Type: '+type+', id: '+data.events[day][timeStampToHit]['id']);
 		var dayDifTemp = userDay - day;
-		console.log(timestampify()+'User day is '+userDay+'. Object is at '+day+'. Therefore difference is '+dayDifTemp);
+		console.log(timestampify()+'Update found, Type: '+type+', id: '+data.events[day][timeStampToHit]['id']+'.User day is '+userDay+'. Object is at '+day+'. Therefore difference is '+dayDifTemp);
 		var tempStamp = new Date().getTime() / 1000;
 		var objectToSave = data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']];
 		var queueObject = {
@@ -247,7 +243,6 @@ queueFunc.add = function(day,timeStampToHit,timeThroughDay,userDay,noNote) {
 			noNote:noNote
 		};
 		sendQueue.push(queueObject);
-		console.log(type);
 		if (type == 'messages' && deviceData['type'] == 1 || type == 'message' && deviceData['type'] == 1) {
     	    if (noNote == 0 && deviceData['type'] == 1 && dayDifTemp < 0 || noNote == 0 && deviceData['type'] == 1 && dayDifTemp == 0 && timeStampToHit - timeThroughDay > 0) {
     			var shortData = objectToSave.messages[0].message;
@@ -258,9 +253,6 @@ queueFunc.add = function(day,timeStampToHit,timeThroughDay,userDay,noNote) {
     		}
 		}
 		if (type == 'feed' && deviceData['type'] == 1) {
-		    console.log(objectToSave['fromId']);
-		    console.log(localStorage.getObject('gameData').users);
-		    console.log(localStorage.getObject('gameData').users[objectToSave['fromId']].friended);
 		    if (localStorage.getObject('gameData').users[objectToSave['fromId']].friended == 1 && dayDifTemp < 0 || localStorage.getObject('gameData').users[objectToSave['fromId']].friended == 1 && dayDifTemp == 0 && timeStampToHit - timeThroughDay > 0) {
 				var shortData = objectToSave.text;
 				if (shortData.length > 30) {
@@ -338,7 +330,6 @@ queueFunc.update = function(day,timeThroughDay,updatedLast,noNote) {
 	for (var i in localStorage.getObject('gameData').timers) {
 		console.log(timestampify()+'Checking timer '+i);
 		var now = Math.floor(Date.now() / 1000);
-		console.log(now + ' vs ' +localStorage.getObject('gameData').timers[i].time);
 		if (now >= localStorage.getObject('gameData').timers[i].time) {
 			var messageAim = data.messageObjects[localStorage.getObject('gameData').timers[i].id];
 			if (messageAim.autoTarget == 'choice') {
@@ -376,7 +367,6 @@ queueFunc.report = function(limit) {
 			}
 		}
 		console.log(timestampify()+'Queue update, total in queue is '+sendQueue.length+', next update in '+Math.floor((sendQueue[0]['timeStamp'] - current) / 60)+' minutes');
-		console.log(timestampify()+replyString.substr(0,replyString.length-1));
 	}
 }
 
@@ -419,8 +409,6 @@ queueFunc.check = function() {
 			} else {
 				var commentSend = '';
 			}
-			console.log('Sending feed, it has a comment value '+sendQueue[0]['data'].comments);
-			console.log(commentSend);
 			newFeed({feedItem:sendQueue[0]['data'],choices:sendQueue[0]['choice'],comments:commentSend,noNote:sendQueue[0].noNote,queueDay:sendQueue[0].dayDifference},sendQueue[0].queueDay);
 			gameUpdate('updateFeed','settings',sendQueue[0]['id']);
 		}

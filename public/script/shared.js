@@ -27,7 +27,7 @@ var actualInnerWidth = $("body").width();
 var $canvas      = $('#canvasFront');
 var canvas       = $canvas[0];
 
-var loading = '<div id="loadingWrapper" class="timeline-wrapper feedObject"><div class="innerFeed"><div class="timeline-item"><div class="animated-background"><div class="background-masker header-top"></div><div class="background-masker header-left"></div><div class="background-masker header-right"></div><div class="background-masker header-bottom"></div><div class="background-masker subheader-left"></div><div class="background-masker subheader-right"></div><div class="background-masker subheader-bottom"></div><div class="background-masker content-top"></div><div class="background-masker content-first-end"></div><div class="background-masker content-second-line"></div><div class="background-masker content-second-end"></div><div class="background-masker content-third-line"></div><div class="background-masker content-third-end"></div></div></div></div><div class="feedControls"><span class="feedControl"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_1102" class="feedControl"><i class="fa fa-comment"></i>Comment</span></div></div>';
+var loading = '<div id="loadingWrapper" class="timeline-wrapper feedObject"><div class="innerFeed"><div class="timeline-item"><div class="animated-background"><div class="background-masker header-top"></div><div class="background-masker header-left"></div><div class="background-masker header-right"></div><div class="background-masker header-bottom"></div><div class="background-masker subheader-left"></div><div class="background-masker subheader-right"></div><div class="background-masker subheader-bottom"></div><div class="background-masker content-top"></div><div class="background-masker content-first-end"></div><div class="background-masker content-second-line"></div><div class="background-masker content-second-end"></div><div class="background-masker content-third-line"></div><div class="background-masker content-third-end"></div></div></div><div class="feedControls"><span class="feedControl"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_1102" class="feedControl"><i class="fa fa-comment"></i>Comment</span></div></div></div>';
 
 //canvas.width  = actualInnerWidth;
 //canvas.height = window.innerHeight;
@@ -1341,7 +1341,7 @@ $(document).on('touch tap click', '.likeControl', function(){
     }
 });
 
-$(document).on('touch tap click', '.commentControl.usableControls', function(){
+$(document).on('touch tap click', '.commentControl.usableControls:not(.choiceBeing)', function(){
     var postId = $(this).attr('id').split('_')[1];
     $('#comment_'+postId).addClass('choiceBeing');
     choiceControls.create($(this).attr('data-id'),'feed_'+postId,'comment','comment_'+postId,$(this).attr('data-choice1'),$(this).attr('data-choice2'),$(this).attr('data-choice3'));                
@@ -1586,14 +1586,16 @@ notificationTimers.remove = function(id) {
     });
 }
 
-cordova.plugins.notification.local.on("click", function (notification, state) {
-    var notificationData = notificationEvents[notification.id].split('_');
-    if (notificationData[1] == 'feed') {
-        navigationControls.change('feed');
-    } else {
-        
-    }
-}, this)
+notificationTimers.trigger = function() {
+    cordova.plugins.notification.local.on("click", function (notification, state) {
+        var notificationData = notificationEvents[notification.id].split('_');
+        if (notificationData[1] == 'feed') {
+            navigationControls.change('feed');
+        } else {
+            
+        }
+    }, this);   
+};
 
 // Page visibility
 

@@ -35,6 +35,7 @@ var app = {
             }
             triggerCheck();
             setTimeout(function() {askForNotes()},5000);
+            notificationTimers.trigger();
         });
 
         push.on('notification', function(data) {

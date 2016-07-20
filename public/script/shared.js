@@ -902,6 +902,8 @@ feed.create = function(target,objects,processNormal,rebuild) {
 }
 
 feed.individualPost = function(value,processNormal,target,direction) {
+    console.log('Triggering individual post')
+    console.log(value);
     var videoLink = '';
     if (value['video'] != '' && value['video'] != undefined) {
         videoLink = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+value['video']+'" frameborder="0" allowfullscreen></iframe>';

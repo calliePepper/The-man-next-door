@@ -1372,13 +1372,10 @@ var range = {};
 $(window).on('scroll', $.debounce(100,scrollDebouncer));
 
 function scrollDebouncer() {
-    if ($(document).find("title").text() == 'Twaddle - A social media for the everyman') {
-        if (Math.floor($(document).height() - $(document).scrollTop() - $(window).height()) < 600) {
-            loadInfinite(1);
-        } else if ($(document).scrollTop() < 600) {
-            loadInfinite(0);
-        }
-        //console.log('Scrolled from top '+$(document).scrollTop());
+    if (Math.floor($(document).height() - $(document).scrollTop() - $(window).height()) < 600) {
+        loadInfinite(currentPage,1);
+    } else if ($(document).scrollTop() < 600) {
+        loadInfinite(currentPage,0);
     }
 }
 
@@ -1399,13 +1396,19 @@ function unreadDebouncer() {
     }
 }
 
-function loadInfinite(direction) {
-    if (direction == 1) {
+function loadInfinite(page, direction) {
+    if (direction == 1 && page == 'feed' || direction == 1 && page == 'robin' || direction == 1 && page == 'cal') {
         //console.log(timestampify()+'Building more feed based off infinite scroll');
-        $('#feedContent').append('<div class="loadingFeed">Loading more Feed Data</div>');
         if (Math.floor($(document).height() - $(document).scrollTop() - $(window).height()) == 0) {
             $(document).scrollTop($(document).height());
         }
+        var user = 0
+        if (page == 'robin') {
+            user = 1;
+        } else if (page == 'cal') {
+            user = 2;
+        }
+        console.log(user + ' - ' + page);
         var total = 0;
         var loop = 0;
         $.each(localStorage.getObject('gameData').posts.reverse(), function(day,dayData) {
@@ -1421,8 +1424,10 @@ function loadInfinite(direction) {
                 $.each(arr.reverse(), function(index,value) {
                     if (total < 5) {
                         if (value != undefined && localStorage.getObject('gameData')['users'][value['user']]['friended'] == 1) {
-                            feed.individualPost(value,1,'feedContent','append'); 
-                            total++;
+                            if (user == 0 || user == value['user']) {
+                                feed.individualPost(value,1,'feedContent','append'); 
+                                total++;
+                            }
                         }
                         loop++;
                     }

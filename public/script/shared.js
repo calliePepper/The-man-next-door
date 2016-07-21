@@ -18,7 +18,7 @@ var updating = 0;
 var deviceData = {};
 deviceData['type'] = 0;
 var emergencyStop;
-
+var currentPage = 'feed';
 
 var consoleData = [];
 
@@ -1148,6 +1148,7 @@ navigationControls.change = function(page) {
     $('#feedContent').fadeOut('fast', function() {
         $('body').attr('id','');
         if (page == 'messages') {
+            currentPage = 'messages';
             $('#feedContent').html('<div class="messagesBox" id="messagesBox"><div class="messageList" id="messageList"></div><div class="messages" id="messages"><div class="mobile messageTitle"></div><div class="messagesCont" id="messagesCont"></div></div></div>');
             $('body').attr('id','messagesPage');
             //gameUpdate('updateNotifications','settings','messages',1);
@@ -1157,6 +1158,7 @@ navigationControls.change = function(page) {
             $('#feedContent').fadeIn();
             $('#messagesCont').on('scroll', $.debounce(100,unreadDebouncer));
         } else if (page == 'feed') {
+            currentPage = 'feed';
              userPage = 0;
             $('.sponsored').html('<div class="trending"><div class="sideHeader">Trending</div><div id="trendingSection"></div><div class="games"><div class="sideHeader">New games</div><div class="gameBlock"><div class="gameImg"></div></div><div class="gameBlock"><div class="gameImg"></div></div></div></div>')       
             $('#feedContent').removeClass('noSponsored');
@@ -1193,6 +1195,7 @@ navigationControls.change = function(page) {
         } else {
             $('#feedContent').html('<div id="userHeader" class="userHeader noHero"><div class="userHero"></div><div class="userAvatar"><img class="avatar" id="aboutAvatar" src="" alt="User\'s Avatar" /></div><div class="userName" id="aboutUsername"></div><div class="userNav" id="userNav"><div id="posts">Wall</div><div id="about">About</div></div></div><div id="userBody"></div><div id="aboutBody" class="aboutBody"><div class="cardTitle">About</div><div class="aboutNav"><div class="aboutItem current" id="overview">Overview</div><div class="aboutItem" id="family">Family and Relationships</div><div class="aboutItem" id="events">Life Events</div></div><div class="outerAbout"><div id="aboutContent" class="aboutContent"><div class="aboutContents overview"><div class="aboutSection"><div class="miniHeader">General Information</div><table class="infoTable" id="generalTable"></table></div><div class="aboutSection"><div class="miniHeader">Favourite Quote</div><p id="userQuote"></p></div></div><div class="aboutContents family">                <div class="aboutSection"><div class="miniHeader">Relationship</div><div id="relationshipData"></div></div><div class="aboutSection"><div class="miniHeader">Family</div><table class="infoTable" id="familyData"></table></div></div><div class="aboutContents events"><div class="miniHeader">Life events</div><table class="infoTable" id="lifeEvents"></table></div></div></div></div></div>');
              if (page == 'robin') {
+                currentPage = 'robin'
                  userPage = 1;
                   history.pushState('', 'Twaddle - Robin Creed', 'robin');
                   document.title = 'Twaddle - Robin Creed';
@@ -1209,6 +1212,7 @@ navigationControls.change = function(page) {
                     
             } else if (page == 'cal') {
                  userPage = 2;
+                 currentPage = 'cal';
                  history.pushState('', 'Twaddle - Calliope Ransom', 'cal');
                  document.title = 'Twaddle - Calliope Ransom';
                    $('#aboutUsername').html('Calliope Ransom');
@@ -1551,9 +1555,9 @@ notificationTimers.trigger = function() {
     cordova.plugins.notification.local.on("click", function (notification, state) {
         var notificationData = notificationEvents[notification.id].split('_');
         if (notificationData[1] == 'feed') {
-            navigationControls.change('feed');
+            window.location.href('index.html?page=feed');
         } else {
-            
+            window.location.href('index.html?page=messages?id='+notificationData[2]);
         }
     }, this);   
 };

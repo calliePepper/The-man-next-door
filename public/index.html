@@ -128,7 +128,12 @@
             if (pageId == 'feed') {
               navigationControls.change('feed');
             } else if (pageId == 'messages') {
-                navigationControls.change('messages');
+                if (getQueryVariable('id') != undefined) {
+                    var messageId = getQueryVariable('id');
+                } else {
+                    var messageId = 0;
+                }
+                navigationControls.change('messages',id);
             } else if (pageId == 'robin') {
                 navigationControls.change('robin');
             } else if (pageId == 'cal') {

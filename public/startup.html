@@ -68,7 +68,7 @@
             
             var noLoad = setTimeout(function() {
                  $('#startBtn').html('Load failed, using backup data');
-                 if (localStorage.setObject('dataCache') != undefined) {
+                 if (localStorage.getObject('dataCache') != undefined) {
                     $('#startBtn').css('display','inline-block');
                     $('.loadBtn').hide();
                                 

@@ -237,7 +237,8 @@ queueFunc.add = function(day,timeStampToHit,timeThroughDay,userDay,noNote) {
     			if (shortData.length > 30) {
     				shortData = shortData.substr(0,30) + '...';
     			}
-                notificationTimers.add(objectToSave['messages'][0]['fromId'],data.events[day][timeStampToHit]['id'],shortData,(timeStampToHit - timeThroughDay) * 60,'message');
+    			var timeDifferent = (dayDifTemp*-1) + 1 * 24 * 60 * 60 + parseInt((timeStampToHit - timeThroughDay) * 60);
+                notificationTimers.add(objectToSave['messages'][0]['fromId'],data.events[day][timeStampToHit]['id'],shortData,timeDifferent,'message');
     		}
 		}
 		if (type == 'feed' && deviceData['type'] == 1) {
@@ -246,7 +247,8 @@ queueFunc.add = function(day,timeStampToHit,timeThroughDay,userDay,noNote) {
 				if (shortData.length > 30) {
 					shortData = shortData.substr(0,30) + '...';
 				}
-                notificationTimers.add(objectToSave['fromId'],data.events[day][timeStampToHit]['id'],shortData,(timeStampToHit - timeThroughDay) * 60,'post',dayDifTemp);
+				var timeDifferent = (dayDifTemp*-1) + 1 * 24 * 60 * 60 + parseInt((timeStampToHit - timeThroughDay) * 60);
+                notificationTimers.add(objectToSave['fromId'],data.events[day][timeStampToHit]['id'],shortData,timeDifferent,'post',dayDifTemp);
 			}
 		}
 		organiseQueue();

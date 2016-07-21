@@ -19,6 +19,7 @@ var deviceData = {};
 deviceData['type'] = 0;
 var emergencyStop;
 
+
 var consoleData = [];
 
 var baseLogFunction = console.log;
@@ -74,6 +75,9 @@ Storage.prototype.getObject = function(key) {
 
 if (localStorage.getObject('dataCache') == undefined || localStorage.getObject('gameSettings') == undefined || localStorage.getObject('gameSettings').name == undefined || localStorage.getObject('gameSettings').startTime == undefined || localStorage.getObject('gameSettings').lastUpdate == undefined || localStorage.getObject('gameSettings').timezone == undefined) {
     window.location.replace('startup.html');
+    cordova.plugins.notification.local.clearAll(function() {
+        alert("done");
+    }, this);
 } 
 
 var playerName = localStorage.getObject('gameSettings').name;
@@ -317,18 +321,11 @@ choiceControls.create = function(choiceId,target,targetType,remove,choice1,choic
     if (choice1!=0) {choiceString += '<div id="choice1" class="choice btn">'+choice1+'</div>';}
     if (choice2!=0) {choiceString += '<div id="choice2" class="choice btn">'+choice2+'</div>';}
     if (choice3!=0&&choice3!=undefined) {choiceString += '<div id="choice3" class="choice btn">'+choice3+'</div>';}
-    $('#'+target).append('<div id="choiceBlock_'+choiceId+'" class="choiceBlock">'+choiceString+'</div>');
+    $('#'+target).append('<div id="choiceBlock_'+choiceId+'" data-remove="'+remove+'" data-choiceId="'+choiceId+'" data-targetType="'+targetType+'" class="choiceBlock">'+choiceString+'</div>');
     $('#choiceBlock').css('max-height','300px');
     if ($('#messagesCont').length > 0) {
         var objDiv = document.getElementById("messagesCont");objDiv.scrollTop = objDiv.scrollHeight;
     }
-    $('.choice').on('click touch', function() {
-        $('.choice').unbind();
-        if (remove != '') {
-            $('#'+remove).removeClass('choiceBeing').addClass('commented');
-        }
-        choiceControls.choose(choiceId,$(this).attr('id'),targetType);
-    });
 }
 
 choiceControls.choose = function(id,choice,targetType) {
@@ -1142,8 +1139,10 @@ navigationControls.change = function(page) {
     window.scrollTo(0,0);
     $('body').removeClass('navFlip');
     if (page == 'restart') {
-            window.localStorage.clear();
-            window.location.replace("startup.html");
+        var tempData = localStorage.getObject('dataCache');
+        window.localStorage.clear();
+        localStorage.setObject('dataCache',tempData)
+        window.location.replace("startup.html");
     }
     //$('#contentAim').html('<object data="content/'+page+'.html">');
     $('#feedContent').fadeOut('fast', function() {
@@ -1335,7 +1334,7 @@ $(document).on('click touch', '.aboutItem', function() {
     $('.'+$(this).attr('id')).show();
 });
 
- $(document).on('touch tap click', '.userLink', function(e) {
+$(document).on('touch tap click', '.userLink', function(e) {
     var classList = $(this).attr('class').split(/\s+/);
     $.each(classList, function(index, item) {
         if (item.indexOf("username_") >= 0) {
@@ -1352,6 +1351,27 @@ $(document).on('click touch', '.aboutItem', function() {
     });
 });
 
+$(document).on('touch tap click', '.choice:not(.choiceProcessing)', function(e) {
+    var parentNode = $(this).parent();
+    console.log(timestampify() + ' - CHOICE CLICKED - ' + parentNode.data("choiceid") + ' - ' + parentNode.attr('id') + ' - ' + parentNode.data("targettype"));
+    parentNode.children().each(function() {
+        $(this).addClass('choiceProcessing');  
+    })
+    if (parentNode.data("remove") != '') {
+        $('#'+parentNode.data("remove")).removeClass('choiceBeing').addClass('commented');
+    }
+    choiceControls.choose(parentNode.data("choiceid"),$(this).attr('id'),parentNode.data("targettype"));
+});
+
+
+/*$('.choice').on('click touch', function() {
+        $('.choice').unbind();
+        if (remove != '') {
+            $('#'+remove).removeClass('choiceBeing').addClass('commented');
+        }
+        choiceControls.choose(choiceId,$(this).attr('id'),targetType);
+    })*/;
+    
 var range = {};
 
 $(window).on('scroll', $.debounce(100,scrollDebouncer));

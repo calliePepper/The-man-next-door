@@ -1362,15 +1362,6 @@ $(document).on('touch tap click', '.choice:not(.choiceProcessing)', function(e) 
     }
     choiceControls.choose(parentNode.data("choiceid"),$(this).attr('id'),parentNode.data("targettype"));
 });
-
-
-/*$('.choice').on('click touch', function() {
-        $('.choice').unbind();
-        if (remove != '') {
-            $('#'+remove).removeClass('choiceBeing').addClass('commented');
-        }
-        choiceControls.choose(choiceId,$(this).attr('id'),targetType);
-    })*/;
     
 var range = {};
 

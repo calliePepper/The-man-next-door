@@ -231,24 +231,27 @@ queueFunc.add = function(day,timeStampToHit,timeThroughDay,userDay,noNote) {
 			noNote:noNote
 		};
 		sendQueue.push(queueObject);
-		if (type == 'messages' && deviceData['type'] == 1 || type == 'message' && deviceData['type'] == 1) {
-    	    if (noNote == 0 && deviceData['type'] == 1 && dayDifTemp < 0 || noNote == 0 && deviceData['type'] == 1 && dayDifTemp == 0 && timeStampToHit - timeThroughDay > 0) {
+		if (type == 'messages' || type == 'message') {
+			console.log('Bleepel' + dayDifTemp);
+			console.log(noNote);
+    	    if (dayDifTemp < 0 || dayDifTemp == 0 && timeStampToHit - timeThroughDay > 0) {
     			var shortData = objectToSave.messages[0].message;
     			if (shortData.length > 30) {
     				shortData = shortData.substr(0,30) + '...';
     			}
-    			var timeDifferent = (dayDifTemp*-1) + 1 * 24 * 60 * 60 + parseInt((timeStampToHit - timeThroughDay) * 60);
+    			var timeDifferent = (dayDifTemp*-1) * 24 * 60 * 60 + parseInt((timeStampToHit - timeThroughDay) * 60);
+    			console.log('Bloop');
                 notificationTimers.add(objectToSave['messages'][0]['fromId'],data.events[day][timeStampToHit]['id'],shortData,timeDifferent,'message');
     		}
 		}
-		if (type == 'feed' && deviceData['type'] == 1) {
+		if (type == 'feed') {
 		    if (localStorage.getObject('gameData').users[objectToSave['fromId']].friended == 1 && dayDifTemp < 0 || localStorage.getObject('gameData').users[objectToSave['fromId']].friended == 1 && dayDifTemp == 0 && timeStampToHit - timeThroughDay > 0) {
 				var shortData = objectToSave.text;
 				if (shortData.length > 30) {
 					shortData = shortData.substr(0,30) + '...';
 				}
-				var timeDifferent = (dayDifTemp*-1) + 1 * 24 * 60 * 60 + parseInt((timeStampToHit - timeThroughDay) * 60);
-                notificationTimers.add(objectToSave['fromId'],data.events[day][timeStampToHit]['id'],shortData,timeDifferent,'post',dayDifTemp);
+				var timeDifferent = (dayDifTemp*-1) * 24 * 60 * 60 + parseInt((timeStampToHit - timeThroughDay) * 60);
+                notificationTimers.add(objectToSave['fromId'],data.events[day][timeStampToHit]['id'],shortData,timeDifferent,'post');
 			}
 		}
 		organiseQueue();

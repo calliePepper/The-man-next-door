@@ -289,7 +289,10 @@ function processSave() {
                 tempData.timers[data] = ttlData;
                 break;
             default:
-                console.log(timestampify()+'Something went wrong with the save, datatype: '+dataType);
+                console.log(timestampify()+' >>>>>>ERROR<<<<<< Something went wrong with the save, datatype: '+dataType+' >>>>>>ERROR<<<<<<');
+                console.log(type + ' - ' + saveType  + ' - ' + data + ' - ' + dataType + ' - ' + extraData + ' - ' + choiceId);
+        //console.log(timestampify()+'Processing a save tick --------- '+saveType+ ' ' +type);
+        var tempData = localStorage.getObject('gameData');
         }
         if (saveType == 'settings') {tempData = localStorage.setObject('gameSettings',tempData);}
         else {localStorage.setObject('gameData',tempData);}
@@ -693,7 +696,7 @@ messages.packed = function(messageArray,choices,noNote,nextOne,difference,day,no
             //console.log(timestampify()+'Time for no notification!');
             messages.new.noNotification(messageArray[counter].fromId,messageArray[counter].toId,messageArray[counter].date,messageArray[counter].text,typingTime,messageArray[counter],difference,day);    
             typingTime = 100;
-            gameUpdate('markUnread', 'settings');
+            //gameUpdate('markUnread', 'settings');
         } else {
             if ($(document).find("title").text() == 'Twaddle - Messages') {
                 if (currentlyViewing == userForMsg) {
@@ -1508,10 +1511,9 @@ var notificationTimers = [];
 
 var notificationEvents = [];
 
-notificationTimers.add = function(user,id,message,time,type,daydif) {
+notificationTimers.add = function(user,id,message,time,type) {
    var now = new Date().getTime();
    var soon = new Date(now + time * 1000);
-   soon.setDate(soon.getDate() + daydif);
    var shortData = message;
     if (type == 'message') {
         var typeId = 100;
@@ -1527,26 +1529,29 @@ notificationTimers.add = function(user,id,message,time,type,daydif) {
     if (shortData.length > 30) {
         shortData = shortData.substr(0,30) + '...';
     }
-    
-    console.log(timestampify()+'Adding notification '+notId+' ('+typeId+' '+id+') for '+user+' with message '+message+' to be done at '+soon+ ' ('+time+','+daydif+')');
+    console.log(timestampify()+'Adding notification '+notId+' ('+typeId+' '+id+') for '+user+' with '+type+' '+message+' to be done at '+soon+ ' ('+time+')');
     var body = localStorage.getObject('gameData')['users'][user]['firstname'] + ': ' + shortData;
-    cordova.plugins.notification.local.isPresent(notId, function (present) {
-        if (present) {
-            console.log('Duplicate '+notId+'! Listing notifications');
-            cordova.plugins.notification.local.getAll(function (notifications) {
-                console.log(notifications);
-            });
-        } else {
-            cordova.plugins.notification.local.schedule({
-                id:notId,
-                text: body,
-                at: soon,
-                title: title,
-                icon: "file://"+ localStorage.getObject('gameData')['users'][user]['avatar'],
-                smallIcon: "res://ic_stat_notif",
-           });
-        }
-    });
+    if (deviceData['type'] == 1) {
+        cordova.plugins.notification.local.isPresent(notId, function (present) {
+            if (present) {
+                console.log('Duplicate '+notId+'! Listing notifications');
+                cordova.plugins.notification.local.getAll(function (notifications) {
+                    console.log(notifications);
+                });
+            } else {
+                cordova.plugins.notification.local.schedule({
+                    id:notId,
+                    text: body,
+                    at: soon,
+                    title: title,
+                    icon: "file://"+ localStorage.getObject('gameData')['users'][user]['avatar'],
+                    smallIcon: "res://ic_stat_notif",
+               });
+            }
+        });
+    } else {
+        console.log(timestampify()+'Blocking notification because Desktop');
+    }
 
 }
 
@@ -1560,9 +1565,9 @@ notificationTimers.trigger = function() {
     cordova.plugins.notification.local.on("click", function (notification, state) {
         var notificationData = notificationEvents[notification.id].split('_');
         if (notificationData[1] == 'feed') {
-            window.location.href('index.html?page=feed');
+            window.location.href = 'index.html?page=feed';
         } else {
-            window.location.href('index.html?page=messages?id='+notificationData[2]);
+            window.location.href = 'index.html?page=messages?id='+notificationData[2];
         }
     }, this);   
 };

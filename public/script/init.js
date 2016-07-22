@@ -344,7 +344,7 @@ if (mobNotifications == 1) {
     
     function onResume() {
         console.log('Resuming');
-        window.location.href('index.html?page='+currentPage+'&id='+currentlyViewing);
+        window.location.href = 'index.html?page='+currentPage+'&id='+currentlyViewing;
     }
     
     function onPause() {

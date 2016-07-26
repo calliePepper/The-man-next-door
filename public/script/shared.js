@@ -87,6 +87,18 @@ var currentSave = [];
 var saving = 0;
 var saveTimeout;
 
+var debugData = [];
+debugData[0] = {};
+debugData[1] = {};
+debugData[2] = {};
+var debugCounter = 0;
+
+function debugNotice(data,type) {
+    debugData[type][debugCounter] = data;
+    debugCounter++;
+    console.log(data);
+}
+
 function gameUpdate(type, saveType, data, dataType, extraData,choiceId) {
     var savePocket = {
         type: type,
@@ -111,7 +123,7 @@ function triggerSave() {
         setTimeout(function() {
            triggerSave(); 
         },10);
-        //console.log(timestampify()+'PAUSING TICK ----------');
+        //debugNotice(timestampify()+'PAUSING TICK ----------');
     }
 }
 
@@ -128,7 +140,7 @@ function removeUnread(user,id,date) {
             }
         });
     });
-    console.log(timestampify()+localStorage.getObject('gameData')['messages'][user][dayValue][timeValue]);
+    debugNotice(timestampify()+localStorage.getObject('gameData')['messages'][user][dayValue][timeValue],0);
     gameUpdate('markRead', 'data', user, dayValue, timeValue,'');
 }
 
@@ -148,7 +160,7 @@ function processSave() {
         var dataType = value['dataType'];
         var extraData = value['extraData'];
         var choiceId = value['choiceId'];
-        //console.log(timestampify()+'Processing a save tick --------- '+saveType+ ' ' +type);
+        //debugNotice(timestampify()+'Processing a save tick --------- '+saveType+ ' ' +type);
         var tempData = localStorage.getObject('gameData');
         if (saveType == 'settings') {tempData = localStorage.getObject('gameSettings');}
         switch(type) {
@@ -206,7 +218,7 @@ function processSave() {
                 setTimeout(function() {updateUnread();},300);
                 break;
             case 'updateLocal':
-                //console.log('Updating local data save');
+                //debugNotice('Updating local data save');
                 if (dataType == 'comment') {
                     $.each(tempData['posts'],function(day,value) {
                         $.each(value,function(time,value) {
@@ -276,7 +288,7 @@ function processSave() {
                 } else if (dataType == 'posts') {
                     tempData['messages'][extraData[0]][extraData[1]][extraData[2]].unread = 0;
                 } else {
-                    console.log(timestampify()+'Local update error. Type '+data+' not found');
+                    debugNotice(timestampify()+'Local update error. Type '+data+' not found',0);
                 }
                 break;
             case 'updateTimer':
@@ -289,9 +301,9 @@ function processSave() {
                 tempData.timers[data] = ttlData;
                 break;
             default:
-                console.log(timestampify()+' >>>>>>ERROR<<<<<< Something went wrong with the save, datatype: '+dataType+' >>>>>>ERROR<<<<<<');
-                console.log(type + ' - ' + saveType  + ' - ' + data + ' - ' + dataType + ' - ' + extraData + ' - ' + choiceId);
-        //console.log(timestampify()+'Processing a save tick --------- '+saveType+ ' ' +type);
+                debugNotice(timestampify()+' >>>>>>ERROR<<<<<< Something went wrong with the save, datatype: '+dataType+' >>>>>>ERROR<<<<<<',0);
+                debugNotice(type + ' - ' + saveType  + ' - ' + data + ' - ' + dataType + ' - ' + extraData + ' - ' + choiceId,0);
+        //debugNotice(timestampify()+'Processing a save tick --------- '+saveType+ ' ' +type);
         var tempData = localStorage.getObject('gameData');
         }
         if (saveType == 'settings') {tempData = localStorage.setObject('gameSettings',tempData);}
@@ -318,8 +330,8 @@ var choiceControls = {};
 
 choiceControls.create = function(choiceId,target,targetType,remove,choice1,choice2,choice3) {
     $('.choice').unbind();
-    console.log(timestampify()+'CREATING THE CHOICE CONTROLS');
-    console.log(choiceId + ' - ' + target + ' - ' + targetType + ' - ' + remove + ' - ' + choice1 + ' - ' + choice2 + ' - ' + choice3)
+    debugNotice(timestampify()+'CREATING THE CHOICE CONTROLS',0);
+    debugNotice(choiceId + ' - ' + target + ' - ' + targetType + ' - ' + remove + ' - ' + choice1 + ' - ' + choice2 + ' - ' + choice3,0)
     var choiceString = '';
     if (choice1!=0) {choiceString += '<div id="choice1" class="choice btn">'+choice1+'</div>';}
     if (choice2!=0) {choiceString += '<div id="choice2" class="choice btn">'+choice2+'</div>';}
@@ -395,7 +407,7 @@ choiceControls.choose = function(id,choice,targetType) {
 var users = {}
 
 users.load = function() {
-    console.log(timestampify()+'loading users');
+    debugNotice(timestampify()+'loading users',1);
     $('#friendContainer').html('');
     $.each(localStorage.getObject('gameData')['users'], function(index, value) {
         if (index != 0 && value['friended'] == 1) {
@@ -490,7 +502,7 @@ messages.init = function() {
     orderedUsers.sort(compare);
     messages.users(orderedUsers);
     messages.load(orderedUsers[0].index);
-    //console.log(orderedUsers);
+    //debugNotice(orderedUsers);
 }
 
 messages.load = function(id) {
@@ -535,7 +547,7 @@ messages.load = function(id) {
         });
     });
     if (isChoice == 1) {
-        console.log(timestampify()+'Building a choice');
+        debugNotice(timestampify()+'Building a choice',1);
         choiceControls.create(choiceId,'messagesCont','message','',choice1,choice2,choice3);                
     }
     $('#messagesCont').prepend('<div class="messagesStart">Conversation started</div>');
@@ -679,13 +691,14 @@ messages.new.noNotification = function(messageFrom,messageTo,cameIn,text,ttw,ful
 messages.packed = function(messageArray,choices,noNote,nextOne,difference,day,noFighting) {
     var counter = 0;
     var userForMsg = 0;
-    console.log(timestampify()+'Message pack');
-    console.log(messageArray);
+    debugNotice(timestampify()+'Message pack',1);
+    debugNotice(messageArray,1);
     var lastMessage = 0;
     function loopMessages() {
         var typingTime = messageArray[counter].text.length * localStorage.getObject('gameData')['users'][messageArray[counter].fromId]['typingSpeed'];
         var waitTime = localStorage.getObject('gameData')['users'][messageArray[counter].fromId]['waitTime'];
-        console.log(timestampify()+'Looping through message of length '+messageArray[counter].text.length+' next message should send in '+typingTime+' with a noNote value of '+noNote);
+        debugNotice(timestampify()+'Looping through message of length '+messageArray[counter].text.length+' next message should send in '+typingTime+' with a noNote value of '+noNote+' for day '+day,1);
+        debugNotice(messageArray[counter],1);
         userForMsg = messageArray[counter].toId;
         var thisMessage = messageArray[counter].msgId;
         gameUpdate('messageWait','settings',thisMessage);
@@ -693,7 +706,7 @@ messages.packed = function(messageArray,choices,noNote,nextOne,difference,day,no
             gameUpdate('removeMessages','settings',lastMessage);
         }
         if (noNote != undefined && noNote == 1) {
-            //console.log(timestampify()+'Time for no notification!');
+            //debugNotice(timestampify()+'Time for no notification!');
             messages.new.noNotification(messageArray[counter].fromId,messageArray[counter].toId,messageArray[counter].date,messageArray[counter].text,typingTime,messageArray[counter],difference,day);    
             typingTime = 100;
             //gameUpdate('markUnread', 'settings');
@@ -716,7 +729,7 @@ messages.packed = function(messageArray,choices,noNote,nextOne,difference,day,no
                             users.makeFriends(messageArray[counter].fromId)
                             break;
                         default:
-                            console.log("Something went really fucking wrong");
+                            debugNotice("Something went really fucking wrong",1);
                             break;
                     }
                 }
@@ -741,8 +754,8 @@ messages.packed = function(messageArray,choices,noNote,nextOne,difference,day,no
                 loopMessages();
            },timer);
         } else if (choices != undefined && choices != '') {
-            console.log(timestampify()+'Yay a choice found');
-            console.log(choices);
+            debugNotice(timestampify()+'Yay a choice found',1);
+            debugNotice(choices,1);
             gameUpdate('removeMessages','settings',lastMessage);
             var newChoice = new choice(choices.choiceId,choices.choice1,choices.choice2,choices.choice3)
             //new choice(3,'Deal with the problem yourself','Ignore it, it will go away','Skin the cat. It\'s the only solution. Skin. The. Cat')
@@ -848,8 +861,8 @@ feed.create = function(target,objects,processNormal,rebuild) {
         $('#'+target).html('');
     }
     var total = 0;
-    console.log(timestampify()+'Feed.create was called. ' +target+ ', '+processNormal+ ', '+rebuild+ ', ');
-    console.log(objects); 
+    debugNotice(timestampify()+'Feed.create was called. ' +target+ ', '+processNormal+ ', '+rebuild+ ', ',2);
+    debugNotice(objects,2); 
     $.each(objects.reverse(), function(day,dayData) {
         if (total < 5) {
             var arr = [];
@@ -873,7 +886,7 @@ feed.create = function(target,objects,processNormal,rebuild) {
 }
 
 feed.individualPost = function(value,processNormal,target,direction) {
-    console.log(timestampify()+'Triggering individual post. Id: '+value['postId']+', shortText: "'+value['text'].substring(0,40)+'"');
+    debugNotice(timestampify()+'Triggering individual post. Id: '+value['postId']+', shortText: "'+value['text'].substring(0,40)+'"',2);
     var videoLink = '';
     if (value['video'] != '' && value['video'] != undefined) {
         videoLink = '<iframe width="560" height="315" src="https://www.youtube.com/embed/'+value['video']+'" frameborder="0" allowfullscreen></iframe>';
@@ -1131,7 +1144,7 @@ navigationControls.change = function(page) {
     $('.aboutItem').off();
     $('.sponsored').html('');
     if (page != 'friendCal') {
-        console.log(timestampify()+'Clearing feed, navigation click');
+        debugNotice(timestampify()+'Clearing feed, navigation click',0);
         $('#feedContent').html('');
     }
     $('#feedContent').addClass('noSponsored');
@@ -1360,7 +1373,7 @@ $(document).on('touch tap click', '.userLink', function(e) {
 
 $(document).on('touch tap click', '.choice:not(.choiceProcessing)', function(e) {
     var parentNode = $(this).parent();
-    console.log(timestampify() + ' - CHOICE CLICKED - ' + parentNode.data("choiceid") + ' - ' + parentNode.attr('id') + ' - ' + parentNode.data("targettype"));
+    debugNotice(timestampify() + ' - CHOICE CLICKED - ' + parentNode.data("choiceid") + ' - ' + parentNode.attr('id') + ' - ' + parentNode.data("targettype"),0);
     parentNode.children().each(function() {
         $(this).addClass('choiceProcessing');  
     })
@@ -1401,7 +1414,7 @@ function unreadDebouncer() {
 
 function loadInfinite(page, direction) {
     if (direction == 1 && page == 'feed' || direction == 1 && page == 'robin' || direction == 1 && page == 'cal') {
-        //console.log(timestampify()+'Building more feed based off infinite scroll');
+        debugNotice(timestampify()+'Building more feed based off infinite scroll',0);
         if (Math.floor($(document).height() - $(document).scrollTop() - $(window).height()) == 0) {
             $(document).scrollTop($(document).height());
         }
@@ -1411,12 +1424,12 @@ function loadInfinite(page, direction) {
         } else if (page == 'cal') {
             user = 2;
         }
-        console.log(user + ' - ' + page);
+        debugNotice(user + ' - ' + page,0);
         var total = 0;
         var loop = 0;
         $.each(localStorage.getObject('gameData').posts.reverse(), function(day,dayData) {
             if (total < 5) {
-                //console.log(dayData);
+                //debugNotice(dayData);
                 var arr = [];
                 for (var name in dayData) {
                     if (feedCheck.indexOf(dayData[name]['postId']) < 0) {
@@ -1439,7 +1452,8 @@ function loadInfinite(page, direction) {
         });
         $('#loadingWrapper').remove();
         $('.loadingFeed').remove();
-        if (loop == 5) {
+        if (total == 5) {
+            debugNotice('Adding loading',0);
             $('#feedContent').append(loading);
         }
     } else {
@@ -1529,14 +1543,14 @@ notificationTimers.add = function(user,id,message,time,type) {
     if (shortData.length > 30) {
         shortData = shortData.substr(0,30) + '...';
     }
-    console.log(timestampify()+'Adding notification '+notId+' ('+typeId+' '+id+') for '+user+' with '+type+' '+message+' to be done at '+soon+ ' ('+time+')');
+    debugNotice(timestampify()+'Adding notification '+notId+' ('+typeId+' '+id+') for '+user+' with '+type+' '+message+' to be done at '+soon+ ' ('+time+')',0);
     var body = localStorage.getObject('gameData')['users'][user]['firstname'] + ': ' + shortData;
     if (deviceData['type'] == 1) {
         cordova.plugins.notification.local.isPresent(notId, function (present) {
             if (present) {
-                console.log('Duplicate '+notId+'! Listing notifications');
+                debugNotice('Duplicate '+notId+'! Listing notifications',0);
                 cordova.plugins.notification.local.getAll(function (notifications) {
-                    console.log(notifications);
+                    debugNotice(notifications,0);
                 });
             } else {
                 cordova.plugins.notification.local.schedule({
@@ -1550,7 +1564,7 @@ notificationTimers.add = function(user,id,message,time,type) {
             }
         });
     } else {
-        console.log(timestampify()+'Blocking notification because Desktop');
+        debugNotice(timestampify()+'Blocking notification because Desktop',0);
     }
 
 }
@@ -1761,14 +1775,14 @@ function vibrateTest() {
 
 function beepTest() {
     if (deviceData['type'] == 1) {
-        console.log(timestampify()+'I WAS MEANT TO BEEEEEP');
+        debugNotice(timestampify()+'I WAS MEANT TO BEEEEEP',0);
         navigator.notification.beep();
     }
 }
 
 function onSuccess(contacts) {
     alert('Found ' + contacts.length + ' contacts.');
-    console.log(timestampify()+contacts);
+    debugNotice(timestampify()+contacts,0);
 };
 
 function onError(contactError) {

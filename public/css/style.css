@@ -1282,7 +1282,8 @@ perspective effects (not including the modals and the overlay).
   background: linear-gradient(to right, #eeeeee 8%, #dddddd 18%, #eeeeee 33%);
   background-size: 800px 104px;
   height: 96px;
-  position: relative; }
+  position: relative;
+  margin-bottom: 10px; }
 
 .background-masker {
   background: #fff;

@@ -60,14 +60,14 @@ function introScreen() {
 }
 
 function receivedChoice(data) {
-    console.log(timestampify()+'Received a choice');
-    console.log(data);
+    debugNotice(timestampify()+'Received a choice',0);
+    debugNotice(data,0);
     gameUpdate('removeReturn','settings',data.choiceId);
 };
 
 function updateData(updateData) {
-    console.log(timestampify()+'Backlog received');
-    console.log(updateData);
+    debugNotice(timestampify()+'Backlog received',0);
+    debugNotice(updateData,0);
     if (updateData['message'].length > 0) {
         $.each(updateData['message'], function(index,value) {
             processMessage(value,1);
@@ -102,8 +102,8 @@ function hideLoad() {
 }
 
 function newMessage(receivedMessages) {
-    console.log(timestampify()+'PING - New message');
-    console.log(receivedMessages);
+    debugNotice(timestampify()+'PING - New message',1);
+    debugNotice(receivedMessages,1);
     processMessage(receivedMessages,receivedMessages.noNote,receivedMessages.queueDay);
     gameUpdate('updateTime','settings',80);
     setTimeout(function(){
@@ -133,8 +133,8 @@ function processMessage(receivedMessages,nonote,day) {
             nextMsg = receivedMessages.messageItem.autoId;
         }
         var compDate = getPoint(localStorage.getObject('gameSettings').startTime,new Date(),localStorage.getObject('gameSettings').timezone); 
-	    var currentDay = compDate.day - 1;
-	    var difference = currentDay - receivedMessages.messageItem.day;
+	    var currentDay = compDate.day;
+	    var difference = currentDay - day;
 	    var noFighting = 0;
 	   
         if (receivedMessages.messageItem.ttl != undefined && receivedMessages.messageItem.ttl != '' && receivedMessages.messageItem.ttl != 0) {
@@ -149,14 +149,14 @@ function processMessage(receivedMessages,nonote,day) {
                     	$('.choiceBlock').hide();
                     }
     			}
-    			newMessage({messageItem:data.messageObjects[receivedMessages.messageItem.ttlId],choices:choice,noNote:1});
+    			newMessage({messageItem:data.messageObjects[receivedMessages.messageItem.ttlId],choices:choice,noNote:1,queueDay:day});
     			noFighting = 1;
             } else {
-                console.log(timestampify()+'TIME TILL LIFE');
+                debugNotice(timestampify()+'TIME TILL LIFE',1);
                 gameUpdate('updateTimer','data',receivedMessages.messageItem.messages[0].toId,receivedMessages.messageItem.ttl,receivedMessages.messageItem.ttlTarget,receivedMessages.messageItem.ttlId);
             }
         }
-        messages.packed(messageGroup,receivedMessages.choices,nonote,nextMsg,difference,receivedMessages.messageItem.day,noFighting);
+        messages.packed(messageGroup,receivedMessages.choices,nonote,nextMsg,difference,day,noFighting);
         gameUpdate('updateMessages','settings',receivedMessages.messageItem.messageId);
     }
     if (updating == 1) {
@@ -173,14 +173,14 @@ function processMessage(receivedMessages,nonote,day) {
 
 function askForNotes() {
     firstLoadTime = 0;
-    console.log(timestampify()+'Notes please server!');
+    debugNotice(timestampify()+'Notes please server!',0);
     var lastUpdate = localStorage.getObject('gameSettings').lastUpdate;
      if (localStorage.getObject('gameSettings').firstLoad == 1) {
-        console.log(timestampify()+'omg first load');
+        debugNotice(timestampify()+'omg first load',0);
         lastUpdate = 1440;
         gameUpdate('firstLoad','settings');
     }
-    console.log(timestampify()+'Retrieving data');
+    debugNotice(timestampify()+'Retrieving data',0);
     socket.emit('pageLoad', {
         page:$(document).find("title").text(),
         playerName:playerName,
@@ -210,8 +210,8 @@ function newFeed(receivedFeed,day) {
 
 function processFeed(receivedFeed,nonote,day) {
     gameUpdate('updateFeed','settings',receivedFeed.feedItem.postId);
-    console.log(timestampify()+'new feed item retrieved');
-    console.log(receivedFeed);
+    debugNotice(timestampify()+'new feed item retrieved',0);
+    debugNotice(receivedFeed,0);
     function process() {
         var commentBuilder = [];
         gameUpdate('updateTime','settings',300);
@@ -265,8 +265,8 @@ function processFeed(receivedFeed,nonote,day) {
 }
 
 function newComment(receivedFeed) {
-    console.log(timestampify()+'New comment');
-    console.log(receivedFeed);
+    debugNotice(timestampify()+'New comment',0);
+    debugNotice(receivedFeed,0);
     processComment(receivedFeed,receivedFeed.noNote);
     gameUpdate('updateTime','settings',80);
     setTimeout(function(){
@@ -318,7 +318,7 @@ function emitChoice(choiceId,choiceMadeData) {
 var afaTimeout = [];
 
 function askForAnother(nextOne,noNote) {
-    console.log('Next one please! ('+noNote+')');
+    debugNotice('Next one please! ('+noNote+')',0);
     if (afaTimeout != undefined && afaTimeout[nextOne] != undefined) {
         clearTimeout(afaTimeout[nextOne]);
     }
@@ -332,22 +332,22 @@ function emitReg() {
     if (connected == 1) {
         deviceReg({playerName:playerName,currentTime:new Date(),device:deviceData});   
     } else {
-        console.log(timestampify()+'Not connected during emit function');
+        debugNotice(timestampify()+'Not connected during emit function',0);
         emitTimeout = setTimeout(function() {emitReg;},500);
     }
 }
 
 if (mobNotifications == 1) {
-    console.log('Binding resume event');
+    debugNotice('Binding resume event',0);
     document.addEventListener('resume',onResume, false);
     document.addEventListener('pause',onPause, false);
     
     function onResume() {
-        console.log('Resuming');
+        debugNotice('Resuming',0);
         window.location.href = 'index.html?page='+currentPage+'&id='+currentlyViewing;
     }
     
     function onPause() {
-        console.log('Application paused');
+        debugNotice('Application paused',0);
     }
 }

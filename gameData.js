@@ -953,7 +953,7 @@ module.exports = {
     messageObjects: {
         0:{
             messages:[
-                {msgId:'0_1',fromId:1,toId:1,timestamp:600,message:'Hey, are you there?',image:'',video:'',from:1}  
+                {msgId:'0_1',fromId:1,toId:1,timestamp:2,message:'Hey, are you there?',image:'',video:'',from:1}  
             ],
             day:1,
             messageId:0,

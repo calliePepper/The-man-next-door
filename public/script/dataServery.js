@@ -77,7 +77,7 @@ function triggerStart(page) {
 	clientData['device'] = page.mob;
 	queueFunc.update(currentDay,timeThroughDay,updatedLast,page.firstLoad);
 	if (page.firstLoad == 1) {
-		newMessage({messageItem:data.messageObjects[0],choices:data.choiceObjects[0],noNote:1,queueDay:1});
+		newMessage({messageItem:data.messageObjects[0],choices:data.choiceObjects[0],noNote:0,queueDay:1});
 		$('#overlayData').show().addClass('md-modal').addClass('md-effect-11').addClass('md-show');
 		$('#overlay').show();
 		$('.endWelcome').on('click touch', function() {

@@ -384,7 +384,7 @@ choiceControls.choose = function(id,choice,targetType) {
         var objDiv = document.getElementById("messagesCont");objDiv.scrollTop = objDiv.scrollHeight;
         setTimeout(function() {objDiv.scrollTop = objDiv.scrollHeight;},100);
         $('#choiceBlock_'+id).remove();
-        gameUpdate('updateLocal','data',newMessage,'messages',[commentTarg,day,dataDate]);
+        gameUpdate('updateLocal','data',newMessage,'messages',[commentTarg,getPoint(localStorage.getObject('gameSettings').startTime,new Date(),localStorage.getObject('gameSettings').timezone).day,dataDate]);
         gameUpdate('updateLocal','data',choiceMade,'choice','message_'+commentTarg,id);
     }
     gameUpdate('updateReturn','settings',id,choice.replace('choice',''),additionalTarget);
@@ -1584,6 +1584,15 @@ notificationTimers.trigger = function() {
             window.location.href = 'index.html?page=messages?id='+notificationData[2];
         }
     }, this);   
+    
+    cordova.plugins.notification.local.on("schedule", function(notification) {
+        debugNotice(timestampify()+'Scheduled '+notification.id,0);
+        debugNotice(notification);
+    });
+    cordova.plugins.notification.local.on("trigger", function(notification) {
+        debugNotice(timestampify()+'Triggered '+notification.id,0);
+        debugNotice(notification);
+    });
 };
 
 // Page visibility

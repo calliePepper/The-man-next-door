@@ -1155,6 +1155,11 @@ navigationControls.change = function(page) {
     window.scrollTo(0,0);
     $('body').removeClass('navFlip');
     if (page == 'restart') {
+        if (deviceData['type'] == 1) {
+            cordova.plugins.notification.local.cancelAll(function() {
+                debugNotice('Cleared all notes',0);
+            }, this);
+        }
         var tempData = localStorage.getObject('dataCache');
         window.localStorage.clear();
         localStorage.setObject('dataCache',tempData)
@@ -1587,11 +1592,11 @@ notificationTimers.trigger = function() {
     
     cordova.plugins.notification.local.on("schedule", function(notification) {
         debugNotice(timestampify()+'Scheduled '+notification.id,0);
-        debugNotice(notification);
+        debugNotice(notification,0);
     });
     cordova.plugins.notification.local.on("trigger", function(notification) {
         debugNotice(timestampify()+'Triggered '+notification.id,0);
-        debugNotice(notification);
+        debugNotice(notification,0);
     });
 };
 

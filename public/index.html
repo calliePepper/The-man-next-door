@@ -63,10 +63,10 @@
                             
                         </div>
                         <div class="sideHeader">Admin</div>
-                        <!--<a id="debugLink" class="feed sideLink">
+                        <a id="debugLink" class="feed sideLink">
                             <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-bug fa-stack-1x fa-inverse"></i></span>
-                            <i id="feedIcon" class="desktop fa fa-bug"></i>Show debug info
-                        </a>-->
+                            <i id="feedIcon" class="desktop fa fa-bug"></i>Report Break
+                        </a>
                         <a id="restartLink" class="feed sideLink">
                             <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-fire fa-stack-1x fa-inverse"></i></span>
                             <i id="feedIcon" class="desktop fa fa-fire"></i>Restart Game
@@ -98,6 +98,17 @@
                 </div>
             </div>
         </div>
+        <script>
+          window.onerror = function (message, file, line, col, error) {
+               console.log("Error occured: " + error.message);
+               return false;
+            };
+            window.addEventListener("error", function (e) {
+               console.log("Error occured: " + e.error.message);
+               return false;
+            })
+
+        </script>
         <script type="text/javascript" src="script/jquery.min.js"></script>
         <script type="text/javascript" src="script/debounce.js"></script>
         <script type="text/javascript" src="script/socket.io.js"></script>

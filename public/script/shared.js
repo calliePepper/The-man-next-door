@@ -40,14 +40,14 @@ canvasB.width  = actualInnerWidth;
 canvasB.height = $('body').height();*/
 
 
-/*console.log = function() {
+console.log = function() {
     baseLogFunction.apply(console,arguments);
     
     var args = Array.prototype.slice.call(arguments);
     for (var i=0;i<args.length;i++) {
         var node = createLogNode(args[i]);
         consoleData.unshift(node);
-        if (consoleData.length > 50) {
+        if (consoleData.length > 200) {
             consoleData.pop();
         }
     }
@@ -55,14 +55,13 @@ canvasB.height = $('body').height();*/
 
 function createLogNode(message) {
     if (typeof message === 'object') {
-        var textNode = "<div class='errorLine objectError'>"+timestampify()+"Object detected [ CLICK FOR MORE DATA ]";
-        textNode += "<div class='hiddenObjectData'>"+JSON.stringify(message).replace(RegExp("\\n","g"), "\n").replace(/'/g, "\\'").replace(/"/g, "\\'")+"</div>";
-        textNode += "</div>";
+        var textNode = timestampify()+"Object detected";
+        textNode += JSON.stringify(message).replace(RegExp("\\n","g"), "\n").replace(/'/g, "\\'").replace(/"/g, "\\'");
     } else {
-        var textNode = "<div class='errorLine'>"+message+"</div>";   
+        var textNode = message;   
     }
     return textNode;
-}*/
+}
 
 Storage.prototype.setObject = function(key, value) {
     this.setItem(key, JSON.stringify(value));
@@ -92,11 +91,47 @@ debugData[0] = {};
 debugData[1] = {};
 debugData[2] = {};
 var debugCounter = 0;
+var debugTotal = [];
 
 function debugNotice(data,type) {
     debugData[type][debugCounter] = data;
     debugCounter++;
     console.log(data);
+}
+
+
+function sendDebug(errorDesc) {
+    var errorData = '';
+    var errorCounter = 0;
+    $.each(debugTotal.reverse(), function(revIndex,revVal) {
+        if (errorCounter < 200) {
+            if (typeof message === 'object') {
+                errorData += JSON.stringify(revVal) + '\n\n';
+            } else {
+                errorData += revVal + '\n\n';  
+            }
+            errorData += revVal + '\n\n';
+        }
+        errorCounter++;
+    })
+    console.log(errorData);
+    window.location.href = 'mailto:faedaunt@gmail.com?subject=Error report for TMND - '+errorDesc.substr(30)+'&body=There has been an error report from TMND.\n\n'+errorDesc+'\n\n'+errorData;
+    if (pageId == 'feed') {
+      navigationControls.change('feed');
+    } else if (pageId == 'messages') {
+        if (getQueryVariable('id') != undefined) {
+            var messageId = getQueryVariable('id');
+        } else {
+            var messageId = 0;
+        }
+        navigationControls.change('messages',messageId);
+    } else if (pageId == 'robin') {
+        navigationControls.change('robin');
+    } else if (pageId == 'cal') {
+        navigationControls.change('cal');
+    } else {
+        navigationControls.change('feed');
+    }
 }
 
 function gameUpdate(type, saveType, data, dataType, extraData,choiceId) {
@@ -1143,7 +1178,7 @@ navigationControls.change = function(page) {
     $('#userNav div').off();
     $('.aboutItem').off();
     $('.sponsored').html('');
-    if (page != 'friendCal') {
+    if (page != 'friendCal' && page != 'debug') {
         debugNotice(timestampify()+'Clearing feed, navigation click',0);
         $('#feedContent').html('');
     }
@@ -1206,13 +1241,17 @@ navigationControls.change = function(page) {
             $('#feedContent').fadeIn();
             users.makeFriends(2);
         } else if (page == 'debug') {
-            $('#feedContent').html('<div class="feedObject"><div class="innerFeed" id="debugCont" ></div></div>');
-            history.pushState('', 'Twaddle - SOMETHING IS BORKED', 'borkborkbork');
-            document.title = 'Twaddle - SOMETHING IS BORKED';
-            for (var i=0;i<consoleData.length && i<20;i++) {
-                $('#debugCont').append(consoleData[i]);
-            }
-            $('#feedContent').fadeIn();
+            var debugOverlay = '<div class="md-content"><h3>Send Debug Data</h3><div><p>Please describe what issues you are having</p><textarea id="debugText"></textarea><div class="btnCont"><button id="sendDebug" class="md-close btn">Send report</button></div></div></div></div>';
+            $('#overlayData').show().addClass('md-modal').addClass('md-friend-modal').addClass('md-effect-11').addClass('md-show').html(debugOverlay);
+            $('#overlay').show();
+            $('#sendDebug').on('click touch', function() {
+                $('#sendDebug').off();
+                sendDebug($('#debugText').val());
+                $('#overlayData').removeClass();
+                $('#overlayData').html('');
+                $('#overlay').hide();
+                
+            });
         } else {
             $('#feedContent').html('<div id="userHeader" class="userHeader noHero"><div class="userHero"></div><div class="userAvatar"><img class="avatar" id="aboutAvatar" src="" alt="User\'s Avatar" /></div><div class="userName" id="aboutUsername"></div><div class="userNav" id="userNav"><div id="posts">Wall</div><div id="about">About</div></div></div><div id="userBody"></div><div id="aboutBody" class="aboutBody"><div class="cardTitle">About</div><div class="aboutNav"><div class="aboutItem current" id="overview">Overview</div><div class="aboutItem" id="family">Family and Relationships</div><div class="aboutItem" id="events">Life Events</div></div><div class="outerAbout"><div id="aboutContent" class="aboutContent"><div class="aboutContents overview"><div class="aboutSection"><div class="miniHeader">General Information</div><table class="infoTable" id="generalTable"></table></div><div class="aboutSection"><div class="miniHeader">Favourite Quote</div><p id="userQuote"></p></div></div><div class="aboutContents family">                <div class="aboutSection"><div class="miniHeader">Relationship</div><div id="relationshipData"></div></div><div class="aboutSection"><div class="miniHeader">Family</div><table class="infoTable" id="familyData"></table></div></div><div class="aboutContents events"><div class="miniHeader">Life events</div><table class="infoTable" id="lifeEvents"></table></div></div></div></div></div>');
              if (page == 'robin') {
@@ -1670,14 +1709,14 @@ $('.resetLoading').on('click touch', function() {
 })
 
 function timestampify() {
-	var currentdate = new Date(); 
-	currentdate = new Date(currentdate.getTime())
-	var datetime = "[" + currentdate.getDate() + "/"
-            		   + (currentdate.getMonth()+1) +' @ '
-            		   + currentdate.getHours() + ":"  
-            		   + currentdate.getMinutes() + ":" 
-            		   + currentdate.getSeconds() + "] ";  
-            		   
+    var currentdate = new Date(); 
+    currentdate = new Date(currentdate.getTime())
+    var datetime = "[" + currentdate.getDate() + "/"
+                       + (currentdate.getMonth()+1) +' @ '
+                       + currentdate.getHours() + ":"  
+                       + currentdate.getMinutes() + ":" 
+                       + currentdate.getSeconds() + "] ";  
+                       
     return datetime;
 }
 /*!

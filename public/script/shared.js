@@ -56,7 +56,7 @@ console.log = function() {
 function createLogNode(message) {
     if (typeof message === 'object') {
         var textNode = timestampify()+"Object detected";
-        textNode += JSON.stringify(message).replace(RegExp("\\n","g"), "\n").replace(/'/g, "\\'").replace(/"/g, "\\'");
+        //textNode += JSON.stringify(message).replace(RegExp("\\n","g"), "\n").replace(/'/g, "\\'").replace(/"/g, "\\'");
     } else {
         var textNode = message;   
     }
@@ -103,19 +103,14 @@ function debugNotice(data,type) {
 function sendDebug(errorDesc) {
     var errorData = '';
     var errorCounter = 0;
-    $.each(debugTotal.reverse(), function(revIndex,revVal) {
+    $.each(consoleData, function(revIndex,revVal) {
         if (errorCounter < 200) {
-            if (typeof message === 'object') {
-                errorData += JSON.stringify(revVal) + '\n\n';
-            } else {
-                errorData += revVal + '\n\n';  
-            }
-            errorData += revVal + '\n\n';
+            errorData += revVal + '\n';
         }
         errorCounter++;
     })
-    console.log(errorData);
-    window.location.href = 'mailto:faedaunt@gmail.com?subject=Error report for TMND - '+errorDesc.substr(30)+'&body=There has been an error report from TMND.\n\n'+errorDesc+'\n\n'+errorData;
+    console.log('mailto:faedaunt@gmail.com?subject=Error report for TMND - '+errorDesc.substr(30)+'&body=There has been an error report from TMND.\n'+errorDesc+'\n'+errorData);
+    window.location.href = 'mailto:faedaunt@gmail.com?subject=Error report for TMND - '+errorDesc.substr(30)+'&body=There has been an error report from TMND.\n'+errorDesc+'\n'+errorData;
     if (pageId == 'feed') {
       navigationControls.change('feed');
     } else if (pageId == 'messages') {

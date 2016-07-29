@@ -103,14 +103,14 @@ function debugNotice(data,type) {
 function sendDebug(errorDesc) {
     var errorData = '';
     var errorCounter = 0;
-    $.each(consoleData, function(revIndex,revVal) {
+    $.each(consoleData.reverse(), function(revIndex,revVal) {
         if (errorCounter < 200) {
-            errorData += revVal + '\n';
+            errorData += revVal + escape('\r\n');
         }
         errorCounter++;
     })
-    console.log('mailto:faedaunt@gmail.com?subject=Error report for TMND - '+errorDesc.substr(30)+'&body=There has been an error report from TMND.\n'+errorDesc+'\n'+errorData);
-    window.location.href = 'mailto:faedaunt@gmail.com?subject=Error report for TMND - '+errorDesc.substr(30)+'&body=There has been an error report from TMND.\n'+errorDesc+'\n'+errorData;
+    console.log('mailto:faedaunt@gmail.com?subject=Error report for TMND - '+errorDesc.substr(30)+'&body=There has been an error report from TMND.'+escape('\r\n')+errorDesc+escape('\r\n')+errorData);
+    window.location.href = 'mailto:faedaunt@gmail.com?subject=Error report for TMND - '+errorDesc.substr(30)+'&body=There has been an error report from TMND.'+escape('\r\n')+errorDesc+escape('\r\n')+errorData;
     if (pageId == 'feed') {
       navigationControls.change('feed');
     } else if (pageId == 'messages') {

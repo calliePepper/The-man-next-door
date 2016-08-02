@@ -2814,7 +2814,7 @@ module.exports = {
         3: {choiceId:3,choice1:'That could help',choice2:'Why do you think I\'d know any better?',choice3:'Sounds good, what information do you have',resultType:'message',result1:6,result2:7,result3:6,ttl:''},
         4: {choiceId:4,choice1:'That\'s okay, I\'m interested.',choice2:'Just relax and tell me.',choice3:'I\'m not that interested',resultType:'message',result1:10,result2:9,result3:8,ttl:''},
         //5: {choiceId:5,choice1:'Try calling him',choice2:'Don\'t worry, he\'ll show up',choice3:'We already have enough mysteries',resultType:'',result1:0,result2:0,result3:0,ttl:''},
-        6: {choiceId:6,choice1:'That\'s okay, I\'m interested.',choice2:'I am, but lay it out straight',choice3:'Just relax and tell me.',resultType:'',result1:10,result2:9,result3:9,ttl:''},
+        6: {choiceId:6,choice1:'That\'s okay, I\'m interested.',choice2:'I am, but lay it out straight',choice3:'Just relax and tell me.',resultType:'message',result1:10,result2:9,result3:9,ttl:''},
         7: {choiceId:7,choice1:'What were the symbols?',choice2:'So, he was painting in the rain. You\'re right, that\'s pretty weird',choice3:'This isn\'t sounding that strange so far',resultType:'message',result1:16,result2:15,result3:11,ttl:''},
         8: {choiceId:8,choice1:'What\'s he doing?',choice2:'Other things?',choice3:'Are you sure you\'re not overreacting?',resultType:'message',result1:12,result2:13,result3:11,ttl:''},
         9: {choiceId:9,choice1:'Who\'s Marcel?',choice2:'Who vanished?',choice3:'You could have led with someone vanishing',resultType:'message',result1:17,result2:18,result3:19,ttl:''},

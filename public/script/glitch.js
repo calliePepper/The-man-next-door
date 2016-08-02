@@ -1,4 +1,5 @@
 function glitchThis(targetImage) {
+    $('.staticOverlay').addClass('showStatic');
     console.log(' SON OF A GLITCH ');
     $('body').prepend('<audio id="whispers" src="sounds/whispers.mp3" volume="0.2"></audio>');
     $('#whispers').prop('volume',0.06);
@@ -110,7 +111,11 @@ function glitchThis(targetImage) {
             ctx.clearRect(0, 0, 400,400);
             $('#canvasFront').remove();
             $('body').prepend('<canvas id="canvasFront" width="400px" height="400px"></canvas>');
+            $('.staticOverlay').removeClass('quickStatic');
         } else {
+            if (glitchCounter == 6) {
+                $('.staticOverlay').addClass('quickStatic');
+            }
             glitchCounter++;
             glitchCopy = imgDataArr.slice();
             for (var i = 0; i < 3; i++) {
@@ -137,6 +142,7 @@ function glitchThis(targetImage) {
     var initialImage2 = new Image();
     var imgDataArr;
     initialImage.onload = function() {
+        $('.staticOverlay').removeClass('showStatic');
         var w = window.innerWidth;
         var h = window.innerHeight;
         var cw = 400, ch = 400, th = 0, tw = 0;
@@ -167,13 +173,15 @@ function glitchThis(targetImage) {
         var pathMachine = '../www/img/';
     }
     
-    if (targetImage == "marcel") {
-        initialImage.src = pathMachine + "marcelAvatarGlitch.jpg";
-    } else if (targetImage == "backyard") {
-        //initialImage.src = pathMachine + "backyard.jpg";
-        //initialImage2.src = pathMachine + "backyard_w_hound.jpg";
-        initialImage.src = pathMachine + "backyard_w_hound.jpg";
-    } else {
-        initialImage.src = pathMachine + "code.jpg";
-    }
+    setTimeout(function() {
+        if (targetImage == "marcel") {
+            initialImage.src = pathMachine + "marcelAvatarGlitch.jpg";
+        } else if (targetImage == "backyard") {
+            //initialImage.src = pathMachine + "backyard.jpg";
+            //initialImage2.src = pathMachine + "backyard_w_hound.jpg";
+            initialImage.src = pathMachine + "backyard_w_hound.jpg";
+        } else {
+            initialImage.src = pathMachine + "code.jpg";
+        }
+    },1500);
 }

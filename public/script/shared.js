@@ -718,6 +718,8 @@ messages.new.noNotification = function(messageFrom,messageTo,cameIn,text,ttw,ful
     $('#messagesLink').find('.totalNew').html(localStorage.getObject('gameSettings').unread.messages);
 }
 
+var effectTimers;
+
 messages.packed = function(messageArray,choices,noNote,nextOne,difference,day,noFighting) {
     var counter = 0;
     var userForMsg = 0;
@@ -778,6 +780,21 @@ messages.packed = function(messageArray,choices,noNote,nextOne,difference,day,no
                 timer = timer + parseInt(messageArray[counter].time);
                 counter++;
             } else if (messageArray[counter].type != undefined && messageArray[counter].type == 'delay') {
+                counter++;
+            }  else if (messageArray[counter].type != undefined && messageArray[counter].type == 'effect') {
+                if (messageArray[counter].effect != undefined && messageArray[counter].effect == 'static') {
+                    $('.staticOverlay').addClass('showStatic');
+                    clearTimeout(effectTimers['static'])
+                    effectTimers['static'] = setTimeout(function() {
+                        $('.staticOverlay').removeClass('showStatic');
+                    },(messageArray[counter].value * 800));
+                } else  if (messageArray[counter].effect != undefined && messageArray[counter].effect == 'lines') {
+                    $('#scratchCover .ng-scope').addClass('showEffect');
+                    clearTimeout(staticTimer['lines'])
+                    staticTimer['lines'] = setTimeout(function() {
+                        $('#scratchCover .ng-scope').removeClass('showEffect');
+                    },(messageArray[counter].value * 800));
+                }
                 counter++;
             }
            setTimeout(function() {

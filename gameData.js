@@ -2192,7 +2192,7 @@ module.exports = {
         },
         1153:{
             messages:[
-                {msgId:'1153_1',fromId:1,toId:1,timestamp:1242,message:'That\'s funny. We\'ve never actually discussed where either of lives.',image:'',video:'',from:1},
+                {msgId:'1153_1',fromId:1,toId:1,timestamp:1242,message:'That\'s funny. We\'ve never actually discussed where either of us lives.',image:'',video:'',from:1},
                 {msgId:'1153_2',fromId:1,toId:1,timestamp:1242,message:'In any case, I don\'t think we have time to assemble an invasion team.',image:'',video:'',from:1},
             ],
             day:2,
@@ -2334,7 +2334,7 @@ module.exports = {
             ],
             day:2,
             messageId:1164,
-            autoTarget:'choice',
+            autoTarget:'message',
             autoId:'1165',
             /*ttl:'50',
             ttlTarget:'message',
@@ -2530,7 +2530,7 @@ module.exports = {
         },
         1178:{
             messages:[
-                {msgId:'1178_1',fromId:1,toId:1,timestamp:23,message:'That\'s a good point. I don\'t think it\'s the fridge',image:'',video:'',from:1},
+                {msgId:'1178_1',fromId:1,toId:1,timestamp:23,message:'Umm... I don\'t think it\'s the fridge that\'s humming',image:'',video:'',from:1},
                 {msgId:'1178_2',fromId:1,toId:1,timestamp:23,message:'Uh. Yeah it\'s definitely not the fridge',image:'',video:'',from:1},
                 {msgId:'1178_3',fromId:1,toId:1,timestamp:23,message:'It\'s coming from below. Wait it\'s coming from everywhere',image:'',video:'',from:1},
                 {msgId:'1178_4',fromId:1,toId:1,timestamp:23,message:'I really don\'t like this',image:'',video:'',from:1},
@@ -2548,9 +2548,9 @@ module.exports = {
                 {msgId:'1180_1',fromId:1,toId:1,timestamp:23,message:'I\'ve come so far, I can always escape from here',image:'',video:'',from:1},
             ],
             day:1,
-            messageId:1180,
+            messageId:1179,
             autoTarget:'message',
-            autoId:'1181',
+            autoId:'1180',
             /*ttl:'50',
             ttlTarget:'message',
             ttlId:'1154'*/
@@ -2880,9 +2880,9 @@ module.exports = {
         1155: {choiceId:1155,choice1:'So you want me to be your guide?',choice2:'Are you sure this is a good idea?',choice3:'I\'m in',resultType:'message',result1:1157,result2:1156,result3:1158,ttl:''},
         1156: {choiceId:1156,choice1:'If there\'s no talking you out of it, I guess I have to help',choice2:'Well, I might as well help',choice3:'I guess. So you need me to be your advisor?',resultType:'message',result1:1158,result2:1158,result3:1157,ttl:''},
         1158: {choiceId:1158,choice1:'So, what\'s your plan?',choice2:'Where are you going to enter from?',choice3:'This could be dangerous',resultType:'message',result1:1159,result2:1159,result3:1160,ttl:''},
-        1160: {choiceId:1160,choice1:'You have a point',choice2:'You have a point',choice3:'You have a point',resultType:'message',result1:1161,result2:1161,result3:1161,ttl:''},
+        1160: {choiceId:1160,choice1:'You have a point',choice2:'Let\'s do this',choice3:'Saving the world is pretty good',resultType:'message',result1:1161,result2:1161,result3:1161,ttl:''},
         1161: {choiceId:1161,choice1:'It\'s not too late to back out. You could call Ambrose or Cal to back you up',choice2:'So, tell me what you see',choice3:'Just storm in, you probably don\'t have much time',resultType:'message',result1:1162,result2:1165,result3:1164,ttl:''},
-        1165: {choiceId:1165,choice1:'The front door sounds the pretty straightforward',choice2:'The window seems like the easiest option',choice3:'Sneaking in through the back would be the most covert',resultType:'message',result1:1166,result2:1172,result3:1174,ttl:''},
+        1165: {choiceId:1165,choice1:'The front door sounds pretty straightforward',choice2:'The window seems like the easiest option',choice3:'Sneaking in through the back would be the most covert',resultType:'message',result1:1166,result2:1172,result3:1174,ttl:''},
         1166: {choiceId:1166,choice1:'Peer inside, see if you can see anything suspicious',choice2:'You could try the back door',choice3:'You\'re right, going through the window is much cooler anyway',resultType:'message',result1:1167,result2:1175,result3:1173,ttl:''},
         1167: {choiceId:1167,choice1:'Just keep going',choice2:'Look into another room in the house',choice3:'You\'re already inside, don\'t back out now',resultType:'message',result1:1168,result2:1168,result3:1168,ttl:''},
         1168: {choiceId:1168,choice1:'Okay, next room',choice2:'Are you okay?',choice3:'Hang on, this is where he sleeps, look around',resultType:'message',result1:1169,result2:1169,result3:1170,ttl:''},
@@ -2927,6 +2927,7 @@ module.exports = {
             1200:{object:'feedObjects',id:'5'},
         },
         1: {
+            2:{object:'messageObjects',id:'1151'},
             3:{object:'feedObjects',id:'104'},
             21:{object:'feedObjects',id:'105'},
             501:{object:'commentObjects',id:'10401'},

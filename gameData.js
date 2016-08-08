@@ -1864,6 +1864,21 @@ module.exports = {
             ttlTarget:'message',
             ttlId:''
         },
+        1007:{
+            messages:[
+                {type:'effect',effect:'lowStatic',value:1},
+                {msgId:'1186_6',fromId:1,toId:1,timestamp:23,message:'Around the floor in front of me are pieces of paper, weighed down in some places, with symbols drawn across them to connect. There\'s some kind of light source, I think a candle, which is casting flickering orange light around the outskirts. Oh fuck.',image:'',video:'',from:1},
+                {type:'effect',effect:'static',value:1},
+                {msgId:'1186_7',fromId:1,toId:1,timestamp:23,message:'He\'s here. That strange hum just picked up a pitch he\'s in the middle of it',image:'',video:'',from:1},
+            ],
+            day:1,
+            messageId:1186,
+            autoTarget:'choice',
+            autoId:'1186',
+            /*ttl:'50',
+            ttlTarget:'message',
+            ttlId:'1154'*/
+        },
         1101:{
             messages:[
                 {msgId:'1101_1',fromId:1,toId:1,timestamp:23,message:'Hey!',image:'',video:'',from:1},
@@ -2646,6 +2661,7 @@ module.exports = {
                 {msgId:'1186_2',fromId:1,toId:1,timestamp:23,message:'Yeah okay so I wasn\'t expecting this',image:'',video:'',from:1},
                 {msgId:'1186_3',fromId:1,toId:1,timestamp:23,message:'I\'m in the corner of this forlackofabetterword cave',image:'',video:'',from:1},
                 {msgId:'1186_4',fromId:1,toId:1,timestamp:23,message:'It feels like I went down further than I actually did. I mean, that must be it, otherwise this makes no sense, this is a proper cave there\'s stalagmites... stalagtites? Whatever they are, there\'s both of them and in some places they meet, making columns of white pitted rock.',image:'',video:'',from:1},
+                {type:'effect',effect:'lowStatic',value:2},
                 {msgId:'1186_5',fromId:1,toId:1,timestamp:23,message:'There\'s a larger piece of the same stuff in the middle, which looks kind of like a spiral. It doesn\'t look like it\'s been cut out of the rock, more like it grew',image:'',video:'',from:1},
                 {msgId:'1186_6',fromId:1,toId:1,timestamp:23,message:'Around the floor in front of me are pieces of paper, weighed down in some places, with symbols drawn across them to connect. There\'s some kind of light source, I think a candle, which is casting flickering orange light around the outskirts. Oh fuck.',image:'',video:'',from:1},
                 {type:'effect',effect:'static',value:1},
@@ -2703,6 +2719,7 @@ module.exports = {
                 {msgId:'1190_1',fromId:1,toId:1,timestamp:23,message:'So, I\'ve moved a bit closer. There\'s a perch of the same rock that is high enough for me to crouch behind. I\'ve got a good lookout here',image:'',video:'',from:1},
                 {msgId:'1190_2',fromId:1,toId:1,timestamp:23,message:'There\'s candles placed around the centre of the cave, I can see the man next door standing close to the middle. I\'m definitely sure he\'s the source of that hum now I can see him muttering something. I think this could be a ritual in fact I think ritualistic is the best way to describe this how situation.',image:'',video:'',from:1},
                 {msgId:'1190_3',fromId:1,toId:1,timestamp:23,message:'There\'s a darkness forming in the middle of the cave, radiating outwards and stopping at the barrier formed by the symbols which are starting to glow',image:'',video:'',from:1},
+                {type:'effect',effect:'lowStatic',value:3},
                 {msgId:'1190_4',fromId:1,toId:1,timestamp:23,message:'I\'m trying to hear what he\'s saying. The noise is loud enough that I should be able to hear it but I can\'t make out the words. I can understand them though? or at least, what they\'re supposed to say. It sounds like he\'s calling',image:'',video:'',from:1},
                 {type:'effect',effect:'static',value:2},
                 {msgId:'1190_5',fromId:1,toId:1,timestamp:23,message:'Um. Hey? The darkness is getting deeper and there\'s something forming in the middle',image:'',video:'',from:1},
@@ -2742,6 +2759,7 @@ module.exports = {
         1193:{
             messages:[
                 {msgId:'1193_1',fromId:1,toId:1,timestamp:23,message:'Okay okay, you\'re right. Thanks I think I needed that',image:'',video:'',from:1},
+                {type:'effect',effect:'lowStatic',value:4},
                 {msgId:'1193_2',fromId:1,toId:1,timestamp:23,message:'I\'m going to make a getaway, a slow quiet getaway',image:'',video:'',from:1},
                 {type:'effect',effect:'static',value:1},
                 {type:'delay',time:'40000'},
@@ -2749,12 +2767,14 @@ module.exports = {
                 {msgId:'1193_4',fromId:1,toId:1,timestamp:23,message:'I think I\'m going to start running again, that ripping sound is coming closer',image:'',video:'',from:1},
                 {type:'effect',effect:'static',value:1},
                 {msgId:'1193_5',fromId:1,toId:1,timestamp:23,message:'FCK',image:'',video:'',from:1},
+                {type:'effect',effect:'lowStatic',value:5},
                 {type:'delay',time:'300000'},
+                {type:'effect',effect:'lowStatic',value:0},
                 {msgId:'1193_6',fromId:1,toId:1,timestamp:23,message:'Sorry, I couldn\'t message I was more concerned with the act of running for my life.',image:'',video:'',from:1},
                 {msgId:'1193_7',fromId:1,toId:1,timestamp:23,message:'I\'m back at my house now. There was all these shapes with bat-like wings appearing from nowhere, and there were rips appearing in the air. I couldn\'t see what was in the rips, my memory of what was through there is a blank. But yeah, I thought winged things, the air ripping to pieces. Yeah, I just ran.',image:'',video:'',from:1},
                 {msgId:'1193_8',fromId:1,toId:1,timestamp:23,message:'Fuck, I\'m exhausted. Once I got outside the bounds of the house, all that stuff seemed to stop. I guess it\'s somehow caught within the house. Look, I\'m going to just sleep for like, a day.',image:'',video:'',from:1},
                 {msgId:'1193_9',fromId:1,toId:1,timestamp:23,message:'We\'ll talk about all of this tomorrow, k?',image:'',video:'',from:1},
-                {msgId:'1193_10',fromId:1,toId:1,timestamp:23,message:'<ENDING 2, ROBIN SURVIVED, BUT COULD OF SEEN MORE. ROBIN SHOULD HAVE SEEN MORE>',image:'',video:'',from:1},
+                {msgId:'1193_10',fromId:1,toId:1,timestamp:23,message:'&lt; ENDING 2, ROBIN SURVIVED, BUT COULD OF SEEN MORE. ROBIN SHOULD HAVE SEEN MORE &gt;',image:'',video:'',from:1},
             ],
             day:1,
             messageId:1193,
@@ -2764,6 +2784,7 @@ module.exports = {
         },
         1194:{
             messages:[
+                {type:'effect',effect:'lowStatic',value:5},
                 {msgId:'1194_1',fromId:1,toId:1,timestamp:23,message:'That was my plan',image:'',video:'',from:1},
                 {type:'effect',effect:'static',value:3},
                 {msgId:'1194_2',fromId:1,toId:1,timestamp:23,message:'Okay, something is forming in the middle. It looks.. like a woman? I\'m saying that very tentatively, because there\'s something off. Her body isn\'t right. The joints in her legs and arms seem to be facing the wrong way and the knobs in her back are a little too prominent.',image:'',video:'',from:1},
@@ -2781,6 +2802,7 @@ module.exports = {
                 {msgId:'1195_1',fromId:1,toId:1,timestamp:23,message:'Yeah, I thought the same. I mean this is the first time I\'ve had proof, with my very own eyes, of something otherwordly',image:'',video:'',from:1},
                 {type:'effect',effect:'static',value:3},
                 {msgId:'1195_2',fromId:1,toId:1,timestamp:23,message:'I wish you could see this. She emerged from a patch of darkness and it\'s insane how inhuman she is',image:'',video:'',from:1},
+                {type:'effect',effect:'lowStatic',value:6},
                 {msgId:'1195_3',fromId:1,toId:1,timestamp:23,message:'I mean, if you think about it, it\'s almost beautiful',image:'',video:'',from:1},
                 {msgId:'1195_4',fromId:1,toId:1,timestamp:23,message:'She\'s beautiful',image:'',video:'',from:1},
                 {type:'effect',effect:'static',value:3},
@@ -2789,9 +2811,11 @@ module.exports = {
                 {type:'effect',effect:'static',value:3},
                 {msgId:'1195_7',fromId:1,toId:1,timestamp:23,message:'Do you want to see too?',image:'',video:'',from:1},
                 {msgId:'1195_8',fromId:1,toId:1,timestamp:23,message:'We can show you',image:'',video:'',from:1},
+                {type:'effect',effect:'lowStatic',value:8},
                 {msgId:'1195_9',fromId:1,toId:1,timestamp:23,message:'We\'ll be seeing you very soon.',image:'',video:'',from:1},
                 {type:'effect',effect:'static',value:3},
                 {msgId:'1195_10',fromId:1,toId:1,timestamp:23,message:'<ROBIN IS A SLAVE TO AN OTHERWORDLY CREATURE. GOOD WORK, IDIOT>',image:'',video:'',from:1},
+                {type:'effect',effect:'lowStatic',value:0},
             ],
             day:1,
             messageId:1195,
@@ -2802,12 +2826,14 @@ module.exports = {
         1196:{
             messages:[
                 {msgId:'1196_1',fromId:1,toId:1,timestamp:23,message:'I know you\'re right, but I wish I could see more. Time to make my escape.',image:'',video:'',from:1},
+                {type:'effect',effect:'lowStatic',value:5},
                 {msgId:'1196_2',fromId:1,toId:1,timestamp:23,message:'I think the time for a careful departure is passed, I\'m going to run. Especially because that humming noise has grown into a ripping niose',image:'',video:'',from:1},
                 {type:'effect',effect:'static',value:2},
                 {msgId:'1196_3',fromId:1,toId:1,timestamp:23,message:'It\'s getting louder. I\'m through to the basement stairs and I can hear something coming through the gap leading to the cave.',image:'',video:'',from:1},
                 {msgId:'1196_4',fromId:1,toId:1,timestamp:23,message:'Goung to ryn now',image:'',video:'',from:1},
-                {type:'effect',effect:'static',value:2},
+                {type:'effect',effect:'lowStatic',value:6},
                 {type:'delay',time:'300000'},
+                {type:'effect',effect:'lowStatic',value:0},
                 {msgId:'1196_5',fromId:1,toId:1,timestamp:23,message:'Okay, I\'m home now. Sorry about that, I thought running for my life took priority over messaging. Still, things got really bad towards the end there. I started running and there were ripping noises around me. They\'d nearly caught up to me just as I left the house, and then it just seemed to stop. Look, thank you for helping me out there.',image:'',video:'',from:1},
                 {msgId:'1196_6',fromId:1,toId:1,timestamp:23,message:'Well, I\'m going to sleep for a full 24 hours, I think we\'ll need to talk about this when I wake up. I don\'t think the human mind is equipped to see what I just saw',image:'',video:'',from:1},
                 {msgId:'1196_7',fromId:1,toId:1,timestamp:23,message:'Chat later',image:'',video:'',from:1},
@@ -2927,7 +2953,6 @@ module.exports = {
             1200:{object:'feedObjects',id:'5'},
         },
         1: {
-            2:{object:'messageObjects',id:'1151'},
             3:{object:'feedObjects',id:'104'},
             21:{object:'feedObjects',id:'105'},
             501:{object:'commentObjects',id:'10401'},
@@ -2947,6 +2972,7 @@ module.exports = {
             625:{object:'commentObjects',id:'10903'},
             628:{object:'commentObjects',id:'10802'},
             632:{object:'commentObjects',id:'10904'},
+            //652:{object:'messageObjects',id:'1007'},
             658:{object:'feedObjects',id:'202'},
             665:{object:'commentObjects',id:"20201"},
             667:{object:'commentObjects',id:"20202"},

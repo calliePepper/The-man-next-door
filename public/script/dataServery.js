@@ -234,13 +234,22 @@ queueFunc.add = function(day,timeStampToHit,timeThroughDay,userDay,noNote) {
 		sendQueue.push(queueObject);
 		if (type == 'messages' || type == 'message') {
     	    if (dayDifTemp < 0 && noNote == 0 || dayDifTemp == 0 && timeStampToHit - timeThroughDay > 0 && noNote == 0) {
-    			var shortData = objectToSave.messages[0].message;
+    	    	var found = 0;
+    	    	var counter = 0;
+    	    	while (found == 0) {
+    	    		if (objectToSave.messages[counter].message != undefined) {
+	    				var shortData = objectToSave.messages[counter].message;
+	    				var from = objectToSave.messages[counter].fromId;
+	    				found = 1;
+    	    		}
+    	    		counter++;
+    	    	}
     			if (shortData.length > 30) {
     				shortData = shortData.substr(0,30) + '...';
     			}
     			var timeDifferent = (dayDifTemp*-1) * 24 * 60 * 60 + parseInt((timeStampToHit - timeThroughDay) * 60);
     			debugNotice('Bloop',0);
-                notificationTimers.add(objectToSave['messages'][0]['fromId'],data.events[day][timeStampToHit]['id'],shortData,timeDifferent,'message');
+                notificationTimers.add(from,data.events[day][timeStampToHit]['id'],shortData,timeDifferent,'message');
     		}
 		}
 		if (type == 'feed') {

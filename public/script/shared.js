@@ -358,7 +358,24 @@ function processSave() {
 
 var choiceControls = {};
 
+choiceControls.remove = function() {
+    var counter = 0;
+    $('.choiceBlock').each(function() {
+        if ($(this).data("targettype") == 'comment') {
+            if ($(this).data("remove") != '') {
+                if ($('#'+$(this).data("remove")).hasClass('choiceBeing')) {
+                    $('#'+$(this).data("remove")).removeClass('choiceBeing');
+                }
+            }
+        }
+        counter++
+        $(this).remove();
+    });
+    console.log(timestampify() + counter + ' choice options removed');
+}
+
 choiceControls.create = function(choiceId,target,targetType,remove,choice1,choice2,choice3) {
+    choiceControls.remove();
     $('.choice').unbind();
     debugNotice(timestampify()+'CREATING THE CHOICE CONTROLS',0);
     debugNotice(choiceId + ' - ' + target + ' - ' + targetType + ' - ' + remove + ' - ' + choice1 + ' - ' + choice2 + ' - ' + choice3,0)
@@ -374,7 +391,7 @@ choiceControls.create = function(choiceId,target,targetType,remove,choice1,choic
 }
 
 choiceControls.choose = function(id,choice,targetType) {
-    var theChoice = $('#'+choice).html();
+    var theChoice = $('#choiceBlock_'+id).find('#'+choice).html();
     var additionalTarget = '';
     if (targetType == 'comment') {
         commentsString = '';
@@ -391,7 +408,6 @@ choiceControls.choose = function(id,choice,targetType) {
         var choiceMade = choice.replace('choice','');
         var commentTarg = $('#choiceBlock_'+id).parent().find('.comments').attr('id').split('_')[1];
         $('#choiceBlock_'+id).parent().find('.comments').append(commentsString);
-        $('#choiceBlock_'+id).remove();
         additionalTarget = id;
         var newComment = new comment('',0,now,theChoice,'','',0);
         gameUpdate('updateLocal','data',newComment,'comment',commentTarg);
@@ -413,10 +429,10 @@ choiceControls.choose = function(id,choice,targetType) {
         $('#messagesCont').append('<div class="messageCont"><img class="messageAvatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /><div class="sentOn">'+fromText+date+'</div><div class="messageName">'+usersFirstname+'</div><div class="messageContents">'+theChoice+'</div></div>');
         var objDiv = document.getElementById("messagesCont");objDiv.scrollTop = objDiv.scrollHeight;
         setTimeout(function() {objDiv.scrollTop = objDiv.scrollHeight;},100);
-        $('#choiceBlock_'+id).remove();
         gameUpdate('updateLocal','data',newMessage,'messages',[commentTarg,getPoint(localStorage.getObject('gameSettings').startTime,new Date(),localStorage.getObject('gameSettings').timezone).day,dataDate]);
         gameUpdate('updateLocal','data',choiceMade,'choice','message_'+commentTarg,id);
     }
+    choiceControls.remove();
     gameUpdate('updateReturn','settings',id,choice.replace('choice',''),additionalTarget);
 }
 
@@ -640,6 +656,7 @@ var messageQueue = [];
 messages.new = [];
 
 messages.new.currentMsg = function(messageFrom,messageTo,cameIn,text,ttw,fullMessage,day) {
+    choiceControls.remove();
     $('#messagesCont').append('<div id="typing" class="typing">'+localStorage.getObject('gameData').users[messageFrom].firstname+' is typing...</div>');
     var objDiv = document.getElementById("messagesCont");objDiv.scrollTop = objDiv.scrollHeight;
     var notificationNoise = new Audio("sounds/tapNote.mp3");
@@ -718,7 +735,7 @@ messages.new.noNotification = function(messageFrom,messageTo,cameIn,text,ttw,ful
     $('#messagesLink').find('.totalNew').html(localStorage.getObject('gameSettings').unread.messages);
 }
 
-var effectTimers;
+var effectTimers = {};
 
 messages.packed = function(messageArray,choices,noNote,nextOne,difference,day,noFighting) {
     var counter = 0;
@@ -727,76 +744,102 @@ messages.packed = function(messageArray,choices,noNote,nextOne,difference,day,no
     debugNotice(messageArray,1);
     var lastMessage = 0;
     function loopMessages() {
-        var typingTime = messageArray[counter].text.length * localStorage.getObject('gameData')['users'][messageArray[counter].fromId]['typingSpeed'];
-        var waitTime = localStorage.getObject('gameData')['users'][messageArray[counter].fromId]['waitTime'];
-        debugNotice(timestampify()+'Looping through message of length '+messageArray[counter].text.length+' next message should send in '+typingTime+' with a noNote value of '+noNote+' for day '+day,1);
-        debugNotice(messageArray[counter],1);
-        userForMsg = messageArray[counter].toId;
-        var thisMessage = messageArray[counter].msgId;
-        gameUpdate('messageWait','settings',thisMessage);
-        if (lastMessage != 0) {
-            gameUpdate('removeMessages','settings',lastMessage);
-        }
-        if (noNote != undefined && noNote == 1) {
-            //debugNotice(timestampify()+'Time for no notification!');
-            messages.new.noNotification(messageArray[counter].fromId,messageArray[counter].toId,messageArray[counter].date,messageArray[counter].text,typingTime,messageArray[counter],difference,day);    
-            typingTime = 100;
-            //gameUpdate('markUnread', 'settings');
-        } else {
-            if ($(document).find("title").text() == 'Twaddle - Messages') {
-                if (currentlyViewing == userForMsg) {
-                    messages.new.currentMsg(messageArray[counter].fromId,messageArray[counter].toId,messageArray[counter].date,messageArray[counter].text,typingTime,messageArray[counter],day);
-                } else {
-                    messages.new.notCurrentMsg(messageArray[counter].fromId,messageArray[counter].toId,messageArray[counter].date,messageArray[counter].text,typingTime,messageArray[counter],day);         
-                    //gameUpdate('markUnread', 'settings');
-                }            
-            } else {
-                messages.new.differentPage(messageArray[counter].fromId,messageArray[counter].toId,messageArray[counter].date,messageArray[counter].text,typingTime,messageArray[counter],day);
-                //gameUpdate('markUnread', 'settings');
+        if (messageArray[counter].type != undefined && messageArray[counter].type == 'delay' && noNote != 1) {
+            console.log(timestampify+'Delay being run, but nonote suppressing');
+            timer = timer + parseInt(messageArray[counter].time);
+            counter++;
+            var timer = 0;
+        } else if (messageArray[counter].type != undefined && messageArray[counter].type == 'delay') {
+            console.log(timestampify+'Delay being run');
+            counter++;
+            var timer = 0;
+        }  else if (messageArray[counter].type != undefined && messageArray[counter].type == 'effect') {
+            console.log(timestampify+'Effect being run');
+            var effectToRun = messageArray[counter].effect;
+            var effectTimer = messageArray[counter].value;
+            counter++;
+            var duration = (messageArray[counter].text.length * localStorage.getObject('gameData')['users'][messageArray[counter].fromId]['typingSpeed'] + localStorage.getObject('gameData')['users'][messageArray[counter].fromId]['waitTime']) / 2;
+            if (effectToRun != undefined && effectToRun== 'static') {
+                clearTimeout(effectTimers['staticStart']);
+                clearTimeout(effectTimers['staticEnd']);
+                effectTimers['staticStart'] = setTimeout(function() {
+                    $('.staticOverlay').addClass('showStatic');
+                    effectTimers['staticEnd'] = setTimeout(function() {
+                        $('.staticOverlay').removeClass('showStatic');
+                    },(effectTimer * 800));
+                },duration);
+            } else  if (effectToRun != undefined && effectToRun == 'lines') {
+                clearTimeout(staticTimer['linesStart'])
+                clearTimeout(staticTimer['linesEnd'])
+                effectTimers['linesStart'] = setTimeout(function() {
+                    $('#scratchCover .ng-scope').addClass('showEffect');
+                    clearTimeout(staticTimer['lines'])
+                    staticTimer['linesEnd'] = setTimeout(function() {
+                        $('#scratchCover .ng-scope').removeClass('showEffect');
+                    },(effectTimer * 800));
+                },duration);
+            } else  if (effectToRun != undefined && effectToRun == 'lowStatic') {
+                $('.staticOverlay').removeClass('lowStatic_1').removeClass('lowStatic_2').removeClass('lowStatic_3').removeClass('lowStatic_4').removeClass('lowStatic_5').removeClass('lowStatic_6').removeClass('lowStatic_7');
+                if (effectTimer != 0)    {
+                    $('.staticOverlay').addClass('lowStatic_'+effectTimer);    
+                } 
             }
-            if (messageArray[counter] == undefined) {
-                if (messageArray.result != undefined) {
-                    switch(messageArray.result) {
-                        case "friend":
-                            users.makeFriends(messageArray[counter].fromId)
-                            break;
-                        default:
-                            debugNotice("Something went really fucking wrong",1);
-                            break;
+            var timer = 0;
+        } else {
+            if (messageArray[counter].text == undefined) {
+                console.log(timestampify()+'Something fucked up');
+                console.log(messageArray[counter]);
+            }
+            var typingTime = messageArray[counter].text.length * localStorage.getObject('gameData')['users'][messageArray[counter].fromId]['typingSpeed'];
+            var waitTime = localStorage.getObject('gameData')['users'][messageArray[counter].fromId]['waitTime'];
+            debugNotice(timestampify()+'Looping through message of length '+messageArray[counter].text.length+' next message should send in '+typingTime+' with a noNote value of '+noNote+' for day '+day,1);
+            debugNotice(messageArray[counter],1);
+            userForMsg = messageArray[counter].toId;
+            var thisMessage = messageArray[counter].msgId;
+            gameUpdate('messageWait','settings',thisMessage);
+            if (lastMessage != 0) {
+                gameUpdate('removeMessages','settings',lastMessage);
+            }
+            if (noNote != undefined && noNote == 1) {
+                //debugNotice(timestampify()+'Time for no notification!');
+                messages.new.noNotification(messageArray[counter].fromId,messageArray[counter].toId,messageArray[counter].date,messageArray[counter].text,typingTime,messageArray[counter],difference,day);    
+                typingTime = 100;
+                //gameUpdate('markUnread', 'settings');
+            } else {
+                if ($(document).find("title").text() == 'Twaddle - Messages') {
+                    if (currentlyViewing == userForMsg) {
+                        messages.new.currentMsg(messageArray[counter].fromId,messageArray[counter].toId,messageArray[counter].date,messageArray[counter].text,typingTime,messageArray[counter],day);
+                    } else {
+                        messages.new.notCurrentMsg(messageArray[counter].fromId,messageArray[counter].toId,messageArray[counter].date,messageArray[counter].text,typingTime,messageArray[counter],day);         
+                        //gameUpdate('markUnread', 'settings');
+                    }            
+                } else {
+                    messages.new.differentPage(messageArray[counter].fromId,messageArray[counter].toId,messageArray[counter].date,messageArray[counter].text,typingTime,messageArray[counter],day);
+                    //gameUpdate('markUnread', 'settings');
+                }
+                if (messageArray[counter] == undefined) {
+                    if (messageArray.result != undefined) {
+                        switch(messageArray.result) {
+                            case "friend":
+                                users.makeFriends(messageArray[counter].fromId)
+                                break;
+                            default:
+                                debugNotice("Something went really fucking wrong",1);
+                                break;
+                        }
                     }
                 }
             }
-        }
-        var choiceTime = messageArray[counter].date;
-        counter++;
-        if (noNote == 1) {
-            var timer = 0;
-        } else {
-            var timer = typingTime + waitTime;
-        }
-        lastMessage = thisMessage;
-        if (messageArray[counter] != undefined) {
-            if (messageArray[counter].type != undefined && messageArray[counter].type == 'delay' && noNote != 1) {
-                timer = timer + parseInt(messageArray[counter].time);
-                counter++;
-            } else if (messageArray[counter].type != undefined && messageArray[counter].type == 'delay') {
-                counter++;
-            }  else if (messageArray[counter].type != undefined && messageArray[counter].type == 'effect') {
-                if (messageArray[counter].effect != undefined && messageArray[counter].effect == 'static') {
-                    $('.staticOverlay').addClass('showStatic');
-                    clearTimeout(effectTimers['static'])
-                    effectTimers['static'] = setTimeout(function() {
-                        $('.staticOverlay').removeClass('showStatic');
-                    },(messageArray[counter].value * 800));
-                } else  if (messageArray[counter].effect != undefined && messageArray[counter].effect == 'lines') {
-                    $('#scratchCover .ng-scope').addClass('showEffect');
-                    clearTimeout(staticTimer['lines'])
-                    staticTimer['lines'] = setTimeout(function() {
-                        $('#scratchCover .ng-scope').removeClass('showEffect');
-                    },(messageArray[counter].value * 800));
-                }
-                counter++;
+            var choiceTime = messageArray[counter].date;
+            counter++;
+            if (noNote == 1) {
+                var timer = 0;
+            } else {
+                var timer = typingTime + waitTime;
             }
+            lastMessage = thisMessage;
+        }
+        if (messageArray[counter] != undefined) {
            setTimeout(function() {
                 loopMessages();
            },timer);

@@ -121,7 +121,7 @@ function processMessage(receivedMessages,nonote,day) {
     function process() {
         gameUpdate('updateTime','settings',300);
         $.each(receivedMessages.messageItem.messages, function(index,value) {
-            if (value.type != undefined && value.type == 'delay') {
+            if (value.type != undefined && value.type == 'delay' || value.type != undefined && value.type == 'effect') {
                 var incomingMessage = value;
             } else {
                 var incomingMessage =  new message(value.fromId,value.toId,value.timestamp,value.message,value.image,value.video,deviceData['type'],value.msgId,1);

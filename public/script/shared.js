@@ -745,20 +745,23 @@ messages.packed = function(messageArray,choices,noNote,nextOne,difference,day,no
     var lastMessage = 0;
     function loopMessages() {
         if (messageArray[counter].type != undefined && messageArray[counter].type == 'delay' && noNote != 1) {
-            console.log(timestampify+'Delay being run, but nonote suppressing');
-            timer = timer + parseInt(messageArray[counter].time);
+            timer = parseInt(messageArray[counter].time);
+            console.log(timestampify+'Delay being run for '+timer);
             counter++;
-            var timer = 0;
         } else if (messageArray[counter].type != undefined && messageArray[counter].type == 'delay') {
-            console.log(timestampify+'Delay being run');
+            console.log(timestampify+'Delay being run, but nonote suppressing');
+            var timer = 10;
             counter++;
-            var timer = 0;
         }  else if (messageArray[counter].type != undefined && messageArray[counter].type == 'effect') {
             console.log(timestampify+'Effect being run');
             var effectToRun = messageArray[counter].effect;
             var effectTimer = messageArray[counter].value;
             counter++;
-            var duration = (messageArray[counter].text.length * localStorage.getObject('gameData')['users'][messageArray[counter].fromId]['typingSpeed'] + localStorage.getObject('gameData')['users'][messageArray[counter].fromId]['waitTime']) / 2;
+            if (messageArray[counter].text != undefined) {
+                var duration = (messageArray[counter].text.length * localStorage.getObject('gameData')['users'][messageArray[counter].fromId]['typingSpeed'] + localStorage.getObject('gameData')['users'][messageArray[counter].fromId]['waitTime']) / 2;
+            } else {
+                var duration = 1000;
+            }
             if (effectToRun != undefined && effectToRun== 'static') {
                 clearTimeout(effectTimers['staticStart']);
                 clearTimeout(effectTimers['staticEnd']);
@@ -836,6 +839,17 @@ messages.packed = function(messageArray,choices,noNote,nextOne,difference,day,no
                 var timer = 0;
             } else {
                 var timer = typingTime + waitTime;
+            }
+            if (timer > 10000) {
+                timer = timer * 0.9;
+            } else if (timer > 15000) {
+                timer = timer * 0.8;
+            } else if (timer > 20000) {
+                timer = timer * 0.7;
+            } else if (timer > 25000) {
+                timer = timer * 0.6;
+            } else if (timer > 30000) {
+                timer = timer * 0.5;
             }
             lastMessage = thisMessage;
         }
@@ -1912,6 +1926,7 @@ function getContacts() {
 
 var rotTest;
 var rotTimeout;
+var rotReset = Date.now() + 400000;
 var rotBeen = 0;
 
 function handleOrientation(event) {
@@ -1932,8 +1947,8 @@ function handleOrientation(event) {
         text += '<br>gamma: ' + gamma + '<br>'
             // Do stuff with the new orientation data
         if (Math.abs(beta) + Math.abs(gamma) < 4) {
-            if (rotBeen == 0) {
-                rotTimeout = setTimeout(function() {glitchThis('marcel')},1000);
+            if (rotBeen == 0 && Date.now() > rotReset) {
+                rotTimeout = setTimeout(function() {glitchThis('marcel');rotReset = Date.now() + 400000;},1000);
                 rotBeen = 1;
             }
             text += 'Your Device is probably laying on a Table';

@@ -2357,7 +2357,7 @@ module.exports = {
         },
         1165:{
             messages:[
-                {msgId:'1165_1',fromId:1,toId:1,timestamp:1249,message:'There\'s the front door sits, it looks pretty solid. a large, oak framed monolith. ',image:'',video:'',from:1},
+                {msgId:'1165_1',fromId:1,toId:1,timestamp:1249,message:'There\'s the front door, it looks pretty solid. a large, oak framed monolith. ',image:'',video:'',from:1},
                 {msgId:'1165_2',fromId:1,toId:1,timestamp:1249,message:'Around the door frame, there are symbols painted. I guess it\'s still left over from his painting storm the other day',image:'',video:'',from:1},
                 {msgId:'1165_3',fromId:1,toId:1,timestamp:1249,message:'I checked down the side of the house, there\'s also a window which I could probably climb through. It\'s propped open so that seems easy.',image:'',video:'',from:1},
                 {msgId:'1165_4',fromId:1,toId:1,timestamp:1249,message:'I imagine there\'d probably be a back door as well',image:'',video:'',from:1},
@@ -2389,7 +2389,9 @@ module.exports = {
                 {type:'delay',time:'10000'},
                 {msgId:'1167_2',fromId:1,toId:1,timestamp:23,message:'I\'ve got the door open, it took a bit of pushing.',image:'',video:'',from:1},
                 {msgId:'1167_3',fromId:1,toId:1,timestamp:23,message:'It\'s kind of weird in here. There\'s leaves strewn all through the front passage. Doesn\'t look like my neighbour likes to sweep up. I\'m going to have to step carefully, they look crunchy',image:'',video:'',from:1},
+                {type:'delay',time:'4000'},
                 {msgId:'1167_4',fromId:1,toId:1,timestamp:23,message:'And man, this guy does not check his mail. There\'s a massive pile of ripped up mail to the left of the door. It looks like bills, just a ton of bill. ',image:'',video:'',from:1},
+                {type:'delay',time:'4000'},
                 {msgId:'1167_5',fromId:1,toId:1,timestamp:23,message:'I wanted to check if his name was on them, might be valuable',image:'',video:'',from:1},
                 {msgId:'1167_6',fromId:1,toId:1,timestamp:23,message:'The part of the letters which would hold his name is missing',image:'',video:'',from:1},
                 {msgId:'1167_7',fromId:1,toId:1,timestamp:23,message:'I\'m starting to feel a bit of doubt about this plan',image:'',video:'',from:1},
@@ -2406,6 +2408,7 @@ module.exports = {
             messages:[
                 {msgId:'1168_1',fromId:1,toId:1,timestamp:23,message:'Okay, okay, I\'ll keep looking.',image:'',video:'',from:1},
                 {msgId:'1168_2',fromId:1,toId:1,timestamp:23,message:'Not that happy about this',image:'',video:'',from:1},
+                {type:'delay',time:'3000'},
                 {msgId:'1168_3',fromId:1,toId:1,timestamp:23,message:'Okay, coming to the next room.',image:'',video:'',from:1},
                 {msgId:'1168_4',fromId:1,toId:1,timestamp:23,message:'It\'s a bedroom. The walls are bare and there\'s just stuff strewn around. It... isn\'t pretty in here',image:'',video:'',from:1},
                 {msgId:'1168_5',fromId:1,toId:1,timestamp:23,message:'I think the less said about this room the better. It doesn\'t even look like a place where someone would sleep. Next room, I\'m feeling even worse about this.',image:'',video:'',from:1},
@@ -2421,6 +2424,7 @@ module.exports = {
         1169:{
             messages:[
                 {msgId:'1169_1',fromId:1,toId:1,timestamp:23,message:'Yeah, I\'m going down the hallway, deeper into the house. There\'s a doorway at the end',image:'',video:'',from:1},
+                {type:'delay',time:'4000'},
             ],
             day:1,
             messageId:1169,
@@ -2518,6 +2522,7 @@ module.exports = {
         1176:{
             messages:[
                 {msgId:'1176_1',fromId:1,toId:1,timestamp:23,message:'Okay, I\'m in front of the fridge. The door seems stuck, one sec I\'ll have to force it',image:'',video:'',from:1},
+                {type:'delay',time:'4000'},
                 {msgId:'1176_2',fromId:1,toId:1,timestamp:23,message:'Oh fuck, oh god, why the, hey there\'s a heart in the fridge',image:'',video:'',from:1},
                 {msgId:'1176_3',fromId:1,toId:1,timestamp:23,message:'Holy shit, I kew there was something going on here',image:'',video:'',from:1},
                 {msgId:'1176_4',fromId:1,toId:1,timestamp:23,message:'Fuck',image:'',video:'',from:1},
@@ -2590,9 +2595,9 @@ module.exports = {
                 {msgId:'1181_1',fromId:1,toId:1,timestamp:23,message:'Yeah, I\'ve found enough, I\'m going to leave',image:'',video:'',from:1},
                 {msgId:'1181_2',fromId:1,toId:1,timestamp:23,message:'Going back out the front will be too dangerous, I\'m taking the back',image:'',video:'',from:1},
                 {msgId:'1181_3',fromId:1,toId:1,timestamp:23,message:'Uh. that\'s weird, it was daytime when I came in, but it\'s pretty dark outside',image:'',video:'',from:1},
-                {msgId:'1181_4',fromId:1,toId:1,timestamp:23,message:'There\'s a growling noise, but I can\'t see where it\'s coming from. I\'m going to go back inside',image:'',video:'',from:1},
-                {msgId:'1181_5',fromId:1,toId:1,timestamp:23,message:'The front door locked behind me. Something is coming out of the darkness. ',image:'',video:'',from:1},
-                {msgId:'1181_6',fromId:1,toId:1,timestamp:23,message:'I\'m scared',image:'',video:'',from:1},
+                {msgId:'1181_4',fromId:1,toId:1,timestamp:23,message:'There\'s a growling noise, but I can\'t see where it\'s coming from. I really want to go back inside',image:'',video:'',from:1},
+                {msgId:'1181_5',fromId:1,toId:1,timestamp:23,message:'Something is out there, in the the darkness. I\'m too scared to move in case it chases',image:'',video:'',from:1},
+                {msgId:'1181_6',fromId:1,toId:1,timestamp:23,message:'... what do I do?',image:'',video:'',from:1},
             ],
             day:1,
             messageId:1181,
@@ -2631,6 +2636,7 @@ module.exports = {
         1184:{
             messages:[
                 {msgId:'1184_1',fromId:1,toId:1,timestamp:23,message:'Okay, I\'m going through the door. Still not happy about this.',image:'',video:'',from:1},
+                {type:'delay',time:'6000'},
                 {msgId:'1184_2',fromId:1,toId:1,timestamp:23,message:'Okay, I\'ve gone downstairs. It\'s pretty normal down here apart from the scattered papers. There are some books as well. I\'ll grab one of the books to take and take pictures later',image:'',video:'',from:1},
                 {msgId:'1184_3',fromId:1,toId:1,timestamp:23,message:'Okay, not so normal, there\'s a dug out tunnel in the corner. There\'s a faint light emanating from it',image:'',video:'',from:1},
                 {msgId:'1184_4',fromId:1,toId:1,timestamp:23,message:'I think I\'ve seen enough',image:'',video:'',from:1},
@@ -2658,6 +2664,7 @@ module.exports = {
         1186:{
             messages:[
                 {msgId:'1186_1',fromId:1,toId:1,timestamp:23,message:'I\'m going to make my way through the dug out section',image:'',video:'',from:1},
+                {type:'delay',time:'5000'},
                 {msgId:'1186_2',fromId:1,toId:1,timestamp:23,message:'Yeah okay so I wasn\'t expecting this',image:'',video:'',from:1},
                 {msgId:'1186_3',fromId:1,toId:1,timestamp:23,message:'I\'m in the corner of this forlackofabetterword cave',image:'',video:'',from:1},
                 {msgId:'1186_4',fromId:1,toId:1,timestamp:23,message:'It feels like I went down further than I actually did. I mean, that must be it, otherwise this makes no sense, this is a proper cave there\'s stalagmites... stalagtites? Whatever they are, there\'s both of them and in some places they meet, making columns of white pitted rock.',image:'',video:'',from:1},
@@ -2716,8 +2723,9 @@ module.exports = {
         },
         1190:{
             messages:[
+                {type:'delay',time:'7000'},
                 {msgId:'1190_1',fromId:1,toId:1,timestamp:23,message:'So, I\'ve moved a bit closer. There\'s a perch of the same rock that is high enough for me to crouch behind. I\'ve got a good lookout here',image:'',video:'',from:1},
-                {msgId:'1190_2',fromId:1,toId:1,timestamp:23,message:'There\'s candles placed around the centre of the cave, I can see the man next door standing close to the middle. I\'m definitely sure he\'s the source of that hum now I can see him muttering something. I think this could be a ritual in fact I think ritualistic is the best way to describe this how situation.',image:'',video:'',from:1},
+                {msgId:'1190_2',fromId:1,toId:1,timestamp:23,message:'There\'s candles placed around the centre of the cave, I can see the man next door standing close to the middle. I\'m definitely sure he\'s the source of that hum now I can see him muttering something. I think this could be a ritual in fact I think ritualistic is the best way to describe this situation.',image:'',video:'',from:1},
                 {msgId:'1190_3',fromId:1,toId:1,timestamp:23,message:'There\'s a darkness forming in the middle of the cave, radiating outwards and stopping at the barrier formed by the symbols which are starting to glow',image:'',video:'',from:1},
                 {type:'effect',effect:'lowStatic',value:3},
                 {msgId:'1190_4',fromId:1,toId:1,timestamp:23,message:'I\'m trying to hear what he\'s saying. The noise is loud enough that I should be able to hear it but I can\'t make out the words. I can understand them though? or at least, what they\'re supposed to say. It sounds like he\'s calling',image:'',video:'',from:1},
@@ -2811,11 +2819,11 @@ module.exports = {
                 {type:'effect',effect:'static',value:3},
                 {msgId:'1195_7',fromId:1,toId:1,timestamp:23,message:'Do you want to see too?',image:'',video:'',from:1},
                 {msgId:'1195_8',fromId:1,toId:1,timestamp:23,message:'We can show you',image:'',video:'',from:1},
-                {type:'effect',effect:'lowStatic',value:8},
+                {type:'effect',effect:'lowStatic',value:0},
                 {msgId:'1195_9',fromId:1,toId:1,timestamp:23,message:'We\'ll be seeing you very soon.',image:'',video:'',from:1},
                 {type:'effect',effect:'static',value:3},
                 {msgId:'1195_10',fromId:1,toId:1,timestamp:23,message:'<ROBIN IS A SLAVE TO AN OTHERWORDLY CREATURE. GOOD WORK, IDIOT>',image:'',video:'',from:1},
-                {type:'effect',effect:'lowStatic',value:0},
+                
             ],
             day:1,
             messageId:1195,
@@ -2841,8 +2849,53 @@ module.exports = {
             day:1,
             messageId:1196,
         },
-
-
+        1197:{
+            messages:[
+                {msgId:'1197_1',fromId:1,toId:1,timestamp:23,message:'Okay, I\'m in the kitchen. Hey, this is kind of normal.. I expected a bit more weirdness. There are even some dishes sitting in the sink. \'to soak\'.',image:'',video:'',from:1},
+                {msgId:'1197_2',fromId:1,toId:1,timestamp:23,message:'There\'s a faintly humming fridge in the corner. I saw another doorway down the hall, I might go have a look at that next.',image:'',video:'',from:1},
+            ],
+            day:1,
+            messageId:1197,
+            autoTarget:'choice',
+            autoId:'1175',
+            /*ttl:'50',
+            ttlTarget:'message',
+            ttlId:'1154'*/
+        },
+        1198:{
+            messages:[
+                {type:'delay',time:'10000'},
+                {msgId:'1198_1',fromId:1,toId:1,timestamp:23,message:'Oh my god, it\'s always behind me. I\'m crouched behind a pile of garbage, but I can hear it sniffing for me.',image:'',video:'',from:1},
+                {msgId:'1198_2',fromId:1,toId:1,timestamp:23,message:'I don\'t think I can outpace it, but I don\'t want to go back in there.',image:'',video:'',from:1},
+                {msgId:'1198_3',fromId:1,toId:1,timestamp:23,message:'Looks like there is a small window above this trash I\'m hiding behind. I could find a rock and break back into the house?',image:'',video:'',from:1},
+                {msgId:'1198_4',fromId:1,toId:1,timestamp:23,message:'Whatever it is out there it sounds like it\'s too big to follow',image:'',video:'',from:1}
+            ],
+            day:1,
+            messageId:1198,
+            autoTarget:'choice',
+            autoId:'1198',
+            /*ttl:'50',
+            ttlTarget:'message',
+            ttlId:'1154'*/
+        },
+        
+        1199:{
+            messages:[
+                {type:'delay',time:'7000'},
+                {msgId:'1199_1',fromId:1,toId:1,timestamp:23,message:'Jesus, I think I hurt myself there and I don\'t know how much, I totally was not prepared for how high the window is on this side.',image:'',video:'',from:1},
+                {msgId:'1199_2',fromId:1,toId:1,timestamp:23,message:'I\'m bleeding a bit and I\'m worried about my ankle. I mean I can still walk on it, but running is going to hurt.',image:'',video:'',from:1},
+                {type:'delay',time:'4000'},
+                {msgId:'1199_3',fromId:1,toId:1,timestamp:23,message:'The front door is shut tight and I can\'t get back out the way I just came in.',image:'',video:'',from:1},
+                {msgId:'1199_4',fromId:1,toId:1,timestamp:23,message:'Guess there\'s no choice',image:'',video:'',from:1}
+            ],
+            day:1,
+            messageId:1199,
+            autoTarget:'message',
+            autoId:'1184',
+            /*ttl:'50',
+            ttlTarget:'message',
+            ttlId:'1154'*/
+        },
     },
     choiceObjects: {
         0: {choiceId:0,choice1:'I\'m here',choice2:'Hello?',choice3:'Yeah',resultType:'message',result1:1,result2:1,result3:1,ttl:360},
@@ -2915,18 +2968,19 @@ module.exports = {
         1170: {choiceId:1170,choice1:'Okay, next room',choice2:'Keep going down the hall',choice3:'yeah, that paper was weird',resultType:'message',result1:1169,result2:1175,result3:1171,ttl:''},
         1172: {choiceId:1172,choice1:'You don\'t know the inside of the house anyway',choice2:'Just go through the front door',choice3:'Maybe try sneaking in the back',resultType:'message',result1:1173,result2:1167,result3:1175,ttl:''},
         1173: {choiceId:1173,choice1:'Okay, next room',choice2:'Hang on, this is where he sleeps, look around',choice3:'Are you okay?',resultType:'message',result1:1169,result2:1170,result3:1169,ttl:''},
-        1174: {choiceId:1174,choice1:'It\'d be the last thing your neighbour would expect',choice2:'Stick with the evil you know, Try the front',choice3:'You\'re right, going through the window is much cooler anyway',resultType:'message',result1:1175,result2:1167,result3:1173,ttl:''},
+        1174: {choiceId:1174,choice1:'It\'d be the last thing your neighbour would expect',choice2:'Stick with the evil you know, Try the front',choice3:'You\'re right, going through the window is much cooler anyway',resultType:'message',result1:1197,result2:1167,result3:1173,ttl:''},
         1175: {choiceId:1175,choice1:'Wait, check the fridge',choice2:'Are fridges supposed to hum?',choice3:'Check out the rest of the room first',resultType:'message',result1:1176,result2:1178,result3:1177,ttl:''},
         1178: {choiceId:1178,choice1:'I think you should check it out',choice2:'This doesn\'t sound safe, maybe you should go',choice3:'Well, you\'ve come this far',resultType:'message',result1:1179,result2:1180,result3:1179,ttl:''},
         1180: {choiceId:1180,choice1:'Go through the door',choice2:'This is your chance to find out the truth',choice3:'Maybe you should go',resultType:'message',result1:1184,result2:1184,result3:1181,ttl:''},
-        1181: {choiceId:1181,choice1:'Run around the right side of the house',choice2:'Run around the left side of the house',choice3:'Run back inside',resultType:'message',result1:1182,result2:1182,result3:1183,ttl:''},
+        
+        1181: {choiceId:1181,choice1:'Run around the right side of the house',choice2:'Run around the left side of the house',choice3:'Run back inside',resultType:'message',result1:1198,result2:1198,result3:1183,ttl:''},
+        
         1184: {choiceId:1184,choice1:'Go through, you\'ll never get another chance like this',choice2:'Take some pictures of the papers',choice3:'Time to leave, if you\'re sure',resultType:'message',result1:1186,result2:1185,result3:1187,ttl:''},
         1186: {choiceId:1186,choice1:'Get a bit closer',choice2:'Walk in there',choice3:'That\'s sounding bad',resultType:'message',result1:1190,result2:1189,result3:1188,ttl:''},
-        1190: {choiceId:1190,choice1:'Just keep watching',choice2:'It might be time to think about leaving',choice3:'Take a picture',resultType:'message',result1:1194,result2:1192,result3:1193,ttl:''},
+        1190: {choiceId:1190,choice1:'Just keep watching',choice2:'It might be time to think about leaving',choice3:'Take a picture',resultType:'message',result1:1194,result2:1192,result3:1191,ttl:''},
         1192: {choiceId:1192,choice1:'Okay, just keep watching',choice2:'Well, it\'s your choice',choice3:'I really think you should go',resultType:'message',result1:1194,result2:1194,result3:1193,ttl:''},
         1194: {choiceId:1194,choice1:'Okay Robin, I really think it\'s time to go now',choice2:'Maybe stay just a little bit longer',choice3:'You\'ve gotten all that you need, I think you should leave',resultType:'message',result1:1196,result2:1195,result3:1196,ttl:''},
-
-
+        1198: {choiceId:1198,choice1:'Keep running',choice2:'Get through that window!',resultType:'message',result1:1182,result2:1199,ttl:''},
     },
     directionObject: {
         1: {directionId:1,attribute:'storyEvent1',operator:'=',value:'1',trueTarget:'message',trueId:'3',falseTarget:'message',falseId:'4'},
@@ -2970,9 +3024,10 @@ module.exports = {
             605:{object:'commentObjects',id:'10901'},
             615:{object:'commentObjects',id:'10902'},
             625:{object:'commentObjects',id:'10903'},
+            
             628:{object:'commentObjects',id:'10802'},
             632:{object:'commentObjects',id:'10904'},
-            //652:{object:'messageObjects',id:'1007'},
+            634:{object:'messageObjects',id:'1007'},
             658:{object:'feedObjects',id:'202'},
             665:{object:'commentObjects',id:"20201"},
             667:{object:'commentObjects',id:"20202"},

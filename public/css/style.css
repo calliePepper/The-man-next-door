@@ -1407,25 +1407,25 @@ input[type="text"] {
   transition: 0.5s opacity; }
 
 .lowStatic_1 {
-  opacity: 0.1; }
+  animation: lowStatic1 10s infinite; }
 
 .lowStatic_2 {
-  opacity: 0.2; }
+  animation: lowStatic2 10s infinite; }
 
 .lowStatic_3 {
-  opacity: 0.3; }
+  animation: lowStatic3 10s infinite; }
 
 .lowStatic_4 {
-  opacity: 0.4; }
+  animation: lowStatic4 10s infinite; }
 
 .lowStatic_5 {
-  opacity: 0.5; }
+  animation: lowStatic5 10s infinite; }
 
 .lowStatic_6 {
-  opacity: 0.6; }
+  animation: lowStatic6 10s infinite; }
 
 .lowStatic_7 {
-  opacity: 0.7; }
+  animation: lowStatic7 10s infinite; }
 
 .showStatic {
   opacity: 1;
@@ -1508,6 +1508,103 @@ input[type="text"] {
     transform: translate(3%, 35%); }
   90% {
     transform: translate(-10%, 10%); } }
+@keyframes lowStatic1 {
+  0% {
+    opacity: 0.05; }
+  20% {
+    opacity: 0.07; }
+  50% {
+    opacity: 0.02; }
+  60% {
+    opacity: 0.08; }
+  100% {
+    opacity: 0.05; } }
+@keyframes lowStatic2 {
+  0% {
+    opacity: 0.02; }
+  20% {
+    opacity: 0.1; }
+  30% {
+    opacity: 0.03; }
+  50% {
+    opacity: 0.1; }
+  60% {
+    opacity: 0.08; }
+  100% {
+    opacity: 0.02; } }
+@keyframes lowStatic3 {
+  0% {
+    opacity: 0.15; }
+  20% {
+    opacity: 0.08; }
+  30% {
+    opacity: 0.11; }
+  50% {
+    opacity: 0.13; }
+  60% {
+    opacity: 0.09; }
+  80% {
+    opacity: 0.11; }
+  100% {
+    opacity: 0.15; } }
+@keyframes lowStatic4 {
+  0% {
+    opacity: 0.13; }
+  20% {
+    opacity: 0.17; }
+  30% {
+    opacity: 0.12; }
+  50% {
+    opacity: 0.18; }
+  60% {
+    opacity: 0.14; }
+  80% {
+    opacity: 0.19; }
+  100% {
+    opacity: 0.13; } }
+@keyframes lowStatic5 {
+  0% {
+    opacity: 0.17; }
+  20% {
+    opacity: 0.21; }
+  50% {
+    opacity: 0.19; }
+  60% {
+    opacity: 0.25; }
+  80% {
+    opacity: 0.23; }
+  100% {
+    opacity: 0.17; } }
+@keyframes lowStatic6 {
+  0% {
+    opacity: 0.2; }
+  20% {
+    opacity: 0.23; }
+  40% {
+    opacity: 0.28; }
+  50% {
+    opacity: 0.25; }
+  60% {
+    opacity: 0.29; }
+  80% {
+    opacity: 0.23; }
+  100% {
+    opacity: 0.2; } }
+@keyframes lowStatic7 {
+  0% {
+    opacity: 0.25; }
+  20% {
+    opacity: 0.29; }
+  40% {
+    opacity: 0.31; }
+  50% {
+    opacity: 0,27; }
+  60% {
+    opacity: 0.3; }
+  80% {
+    opacity: 0.18; }
+  100% {
+    opacity: 0.25; } }
 @media screen and (max-width: 900px) {
   header {
     position: fixed; }

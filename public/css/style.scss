@@ -327,13 +327,13 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#C20002', end
 .hard-scratch:after {    right: 30%;    opacity: 0;    animation: scratch 5s infinite}
 
 .staticOverlay {	position:absolute;	width:100%;	height:100%;	top:0;	left:0;	z-index:3;	pointer-events:none;	opacity:0;	transition:0.5s opacity;}
-.lowStatic_1 { opacity:0.1;}
-.lowStatic_2 { opacity:0.2;}
-.lowStatic_3 { opacity:0.3;}
-.lowStatic_4 { opacity:0.4;}
-.lowStatic_5 { opacity:0.5;}
-.lowStatic_6 { opacity:0.6;}
-.lowStatic_7 { opacity:0.7;}
+.lowStatic_1 { animation:  lowStatic1 10s infinite;}
+.lowStatic_2 { animation:  lowStatic2 10s infinite;}
+.lowStatic_3 { animation:  lowStatic3 10s infinite;}
+.lowStatic_4 { animation:  lowStatic4 10s infinite;}
+.lowStatic_5 { animation:  lowStatic5 10s infinite;}
+.lowStatic_6 { animation:  lowStatic6 10s infinite;}
+.lowStatic_7 { animation:  lowStatic7 10s infinite;}
 .showStatic {	opacity:1;	transition:1.5s opacity;}
 .quickStatic {	opacity:1;	transition:0.5s opacity;}
 .staticOverlay > * {  z-index: 2;  pointer-events:none;}
@@ -421,6 +421,72 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#C20002', end
   90% {
     transform: translate(-10%, 10%);
   }
+}
+
+@keyframes lowStatic1 {
+  0%   { opacity: 0.05; }
+  20% { opacity: 0.07; }
+  50% { opacity: 0.02; }
+  60% { opacity: 0.08; }
+  100% { opacity: 0.05; }
+}
+
+@keyframes lowStatic2 {
+  0%   { opacity: 0.02; }
+  20% { opacity: 0.1; }
+  30% { opacity: 0.03; }
+  50% { opacity: 0.1; }
+  60% { opacity: 0.08; }
+  100% { opacity: 0.02; }
+}
+
+@keyframes lowStatic3 {
+  0%   { opacity: 0.15; }
+  20% { opacity: 0.08; }
+  30% { opacity: 0.11; }
+  50% { opacity: 0.13; }
+  60% { opacity: 0.09; }
+  80% { opacity: 0.11; }
+  100% { opacity: 0.15; }
+}
+
+@keyframes lowStatic4 {
+  0%   { opacity: 0.13; }
+  20% { opacity: 0.17; }
+  30% { opacity: 0.12; }
+  50% { opacity: 0.18; }
+  60% { opacity: 0.14; }
+  80% { opacity: 0.19; }
+  100% { opacity: 0.13; }
+}
+
+@keyframes lowStatic5 {
+  0%   { opacity: 0.17; }
+  20% { opacity: 0.21; }
+  50% { opacity: 0.19; }
+  60% { opacity: 0.25; }
+  80% { opacity: 0.23; }
+  100% { opacity: 0.17; }
+}
+
+@keyframes lowStatic6 {
+  0%   { opacity: 0.2; }
+  20% { opacity: 0.23; }
+  40% { opacity: 0.28; }
+  50% { opacity: 0.25; }
+  60% { opacity: 0.29; }
+  80% { opacity: 0.23; }
+  100% { opacity: 0.2; }
+}
+
+@keyframes lowStatic7 {
+  0%   { opacity: 0.25; }
+  20% { opacity: 0.29; }
+  40% { opacity: 0.31; }
+  50% { opacity: 0,27; }
+  60% { opacity: 0.3; }
+  80% { opacity: 0.28; }
+  100% { opacity: 0.25; }
 }
 
 @media screen and (max-width:900px) {

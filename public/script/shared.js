@@ -657,6 +657,7 @@ messages.new = [];
 
 messages.new.currentMsg = function(messageFrom,messageTo,cameIn,text,ttw,fullMessage,day) {
     choiceControls.remove();
+    $('.typing').remove();
     $('#messagesCont').append('<div id="typing" class="typing">'+localStorage.getObject('gameData').users[messageFrom].firstname+' is typing...</div>');
     var objDiv = document.getElementById("messagesCont");objDiv.scrollTop = objDiv.scrollHeight;
     var notificationNoise = new Audio("sounds/tapNote.mp3");
@@ -679,7 +680,7 @@ messages.new.currentMsg = function(messageFrom,messageTo,cameIn,text,ttw,fullMes
     fullMessage.date = Math.floor(Date.now() / 1000);
     gameUpdate('updateLocal','data',fullMessage,'messages',[messageTo,day,unixDate]);
     setTimeout(function() {
-        $('#typing').remove();
+        $('.typing').remove();
         if (currentlyViewing == messageFrom) {
             $('#messagesCont').append('<div class="messageCont" id="message-'+fullMessage.msgId+'"><img class="messageAvatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /><div class="sentOn">'+fromText+date+'</div><div class="messageName">'+usersFirstname+' '+usersLastname+'</div><div class="messageContents">'+fullMessage['text']+'</div>'+videoLink+imageLink+'</div>');
             var objDiv = document.getElementById("messagesCont");objDiv.scrollTop = objDiv.scrollHeight; 
@@ -748,6 +749,7 @@ messages.packed = function(messageArray,choices,noNote,nextOne,difference,day,no
             timer = parseInt(messageArray[counter].time);
             console.log(timestampify+'Delay being run for '+timer);
             counter++;
+            $('.typing').remove();
         } else if (messageArray[counter].type != undefined && messageArray[counter].type == 'delay') {
             console.log(timestampify+'Delay being run, but nonote suppressing');
             var timer = 10;

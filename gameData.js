@@ -2970,7 +2970,7 @@ module.exports = {
         1173: {choiceId:1173,choice1:'Okay, next room',choice2:'Hang on, this is where he sleeps, look around',choice3:'Are you okay?',resultType:'message',result1:1169,result2:1170,result3:1169,ttl:''},
         1174: {choiceId:1174,choice1:'It\'d be the last thing your neighbour would expect',choice2:'Stick with the evil you know, Try the front',choice3:'You\'re right, going through the window is much cooler anyway',resultType:'message',result1:1197,result2:1167,result3:1173,ttl:''},
         1175: {choiceId:1175,choice1:'Wait, check the fridge',choice2:'Are fridges supposed to hum?',choice3:'Check out the rest of the room first',resultType:'message',result1:1176,result2:1178,result3:1177,ttl:''},
-        1178: {choiceId:1178,choice1:'I think you should check it out',choice2:'This doesn\'t sound safe, maybe you should go',choice3:'Well, you\'ve come this far',resultType:'message',result1:1179,result2:1180,result3:1179,ttl:''},
+        1178: {choiceId:1178,choice1:'I think you should check it out',choice2:'This doesn\'t sound safe, maybe you should go',choice3:'Well, you\'ve come this far',resultType:'message',result1:1180,result2:1179,result3:1180,ttl:''},
         1180: {choiceId:1180,choice1:'Go through the door',choice2:'This is your chance to find out the truth',choice3:'Maybe you should go',resultType:'message',result1:1184,result2:1184,result3:1181,ttl:''},
         
         1181: {choiceId:1181,choice1:'Run around the right side of the house',choice2:'Run around the left side of the house',choice3:'Run back inside',resultType:'message',result1:1198,result2:1198,result3:1183,ttl:''},
@@ -3027,7 +3027,6 @@ module.exports = {
             
             628:{object:'commentObjects',id:'10802'},
             632:{object:'commentObjects',id:'10904'},
-            634:{object:'messageObjects',id:'1007'},
             658:{object:'feedObjects',id:'202'},
             665:{object:'commentObjects',id:"20201"},
             667:{object:'commentObjects',id:"20202"},
@@ -3035,6 +3034,7 @@ module.exports = {
             671:{object:'commentObjects',id:"20204"},
             675:{object:'commentObjects',id:"20205"},
             690:{object:'feedObjects',id:'110'},
+            744:{object:'messageObjects',id:'1175'},
             824:{object:'feedObjects',id:'111'},
             862:{object:'feedObjects',id:'112'},
             923:{object:'feedObjects',id:'113'},

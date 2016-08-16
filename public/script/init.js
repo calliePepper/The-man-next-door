@@ -223,7 +223,7 @@ function processFeed(receivedFeed,nonote,day) {
                 if ((now - later) > 960) {
                     now = later;
                 }
-                var currentComment = new comment(value['order'],value['user'],now,value['text'],value['image'],value['video'],value['likes']);
+                var currentComment = new comment(value['order'],value['user'],now,value['text'],value['image'],value['video'],value['likes'],receivedFeed.comments.commentId);
                 commentBuilder.push(currentComment);
                 dac += 4;
             });
@@ -291,12 +291,12 @@ function processComment(receivedComment,nonote) {
     }
     var tempComments = [];
     $.each(receivedComment.comment.comments, function(index, value) {
-        var currentComment = new comment(value['order'],value['user'],now,value['text'],value['image'],value['video'],value['likes']);
+        var currentComment = new comment(value['order'],value['user'],now,value['text'],value['image'],value['video'],value['likes'],receivedComment.comment.commentId);
         tempComments.push(currentComment);
     });
     if (receivedComment.choices && receivedComment.choices != '') {
         var newChoice = new choice(receivedComment.choices.choiceId,receivedComment.choices.choice1,receivedComment.choices.choice2,receivedComment.choices.choice3);
-        var currentComment = new comment(0,0,'CHOICE',newChoice,'','',0);
+        var currentComment = new comment(0,0,'CHOICE',newChoice,'','',0,receivedComment.commentId);
         tempComments.push(currentComment);
     }
     gameUpdate('updateLocal','data',tempComments,'comments',receivedComment);

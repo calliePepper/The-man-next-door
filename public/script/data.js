@@ -11,7 +11,7 @@
                 this.caption = caption;
             }
 
-            function comment(order,userId,date,text,image,video,liked) {
+            function comment(order,userId,date,text,image,video,liked,commentId) {
                 this.order = order;
                 this.user = userId;
                 this.date = date;
@@ -19,6 +19,7 @@
                 this.image = image;
                 this.video = video;
                 this.likes = liked;
+                this.commentId = commentId;
             }
             
             function choice(choiceId,choice1,choice2,choice3,choiceMade) {

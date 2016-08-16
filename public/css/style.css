@@ -1806,6 +1806,7 @@ input[type="text"] {
     border: 3px solid #312828; }
 
   .messageList {
+    border: 0px;
     width: 100%;
     transition: 0.4s;
     -webkit-transform: translate3d(0, 0, 0);
@@ -1877,7 +1878,8 @@ input[type="text"] {
     overflow-y: scroll; }
 
   .messagesBox {
-    background: #312828; }
+    background: #312828;
+    border: 0px; }
 
   .messageUserList {
     background: #fff; } }

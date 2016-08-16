@@ -405,13 +405,13 @@ choiceControls.choose = function(id,choice,targetType) {
         var usersLastname = localStorage.getObject('gameData')['users'][0]['lastname'];
         var imageComments = '';
         var likedComments = '';
-        commentsString += '<div class="comment"><div class="commentAvatar"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><span class="commentBy userLink">'+usersFirstname+'</span><span class="commentContent">'+theChoice+'</span>'+imageComments+'<div class="commentFooter dateUpdate" data-date="'+now+'">'+commentSince+'</div></div>';
+        commentsString += '<div class="comment commentId_'+id+'"><div class="commentAvatar"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><span class="commentBy userLink">'+usersFirstname+'</span><span class="commentContent">'+theChoice+'</span>'+imageComments+'<div class="commentFooter dateUpdate" data-date="'+now+'">'+commentSince+'</div></div>';
         //commentsString += '</div>';
         var choiceMade = choice.replace('choice','');
         var commentTarg = $('#choiceBlock_'+id).parent().find('.comments').attr('id').split('_')[1];
         $('#choiceBlock_'+id).parent().find('.comments').append(commentsString);
         additionalTarget = id;
-        var newComment = new comment('',0,now,theChoice,'','',0);
+        var newComment = new comment('',0,now,theChoice,'','',0,0);
         gameUpdate('updateLocal','data',newComment,'comment',commentTarg);
         gameUpdate('updateLocal','data',choiceMade,'choice','comment_'+commentTarg,id);
         
@@ -1133,7 +1133,7 @@ feed.commentPoster = function(comments,postId) {
             if (value['likes'] != '') {
                 likedComments = '<span class="colouredText commentLikes"><i class="fa fa-thumbs-up"></i>'+value['likes']+'</span>';
             }
-            commentsString += '<div class="comment"><div class="commentAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><span class="commentBy username_'+value['user']+' userLink">'+usersFirstname+' '+usersLastname+'</span><span class="commentContent" data-date="'+value['date']+'">'+value['text']+'</span>'+imageComments+'<div class="commentFooter dateUpdate" data-date="'+currentStamp+'">'+commentSince+'</div></div>';
+            commentsString += '<div class="comment commentId_'+value['commentId']+'"><div class="commentAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><span class="commentBy username_'+value['user']+' userLink">'+usersFirstname+' '+usersLastname+'</span><span class="commentContent" data-date="'+value['date']+'">'+value['text']+'</span>'+imageComments+'<div class="commentFooter dateUpdate" data-date="'+currentStamp+'">'+commentSince+'</div></div>';
             $('#comments_'+postId).append(commentsString);
             counter++;
         }
@@ -1180,7 +1180,7 @@ feed.commentBuilder = function(comments,postId,noNote) {
                 if (value['likes'] != '') {
                     likedComments = '<span class="colouredText commentLikes"><i class="fa fa-thumbs-up"></i>'+value['likes']+'</span>';
                 }
-                commentsString += '<div class="comment"><div class="commentAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><span class="commentBy username_'+value['user']+' userLink">'+usersFirstname+' '+usersLastname+'</span><span class="commentContent">'+value['text']+'</span>'+imageComments+'<div class="commentFooter dateUpdate" data-date="'+value['date']+'">'+commentSince+'</div></div>';
+                commentsString += '<div class="comment commentId_'+value['commentId']+'"><div class="commentAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><span class="commentBy username_'+value['user']+' userLink">'+usersFirstname+' '+usersLastname+'</span><span class="commentContent">'+value['text']+'</span>'+imageComments+'<div class="commentFooter dateUpdate" data-date="'+value['date']+'">'+commentSince+'</div></div>';
             }
         });
     }
@@ -1711,6 +1711,29 @@ notificationTimers.trigger = function() {
         debugNotice(notification,0);
     });
 };
+
+function triggerEffect(effectType,target) {
+    debugNotice(timestampify()+'Effect Triggered '+target+', '+effectType,0);
+    switch(effectType) {
+        case 1:
+            debugNotice(timestampify()+'Effect 1 triggered',0);
+            clearTimeout(effectTimers['staticStart']);
+            clearTimeout(effectTimers['staticEnd']);
+            effectTimers['staticStart'] = setTimeout(function() {
+                $('.staticOverlay').addClass('showStatic');
+                setTimeout(function() {
+                    $('.commentId_'+target).fadeOut();
+                },900);
+                effectTimers['staticEnd'] = setTimeout(function() {
+                    debugNotice(timestampify()+'Effect 1 ending',0);
+                    $('.staticOverlay').removeClass('showStatic');
+                },1800);
+            },1000);
+            break;
+        default:
+            break;
+    }
+}
 
 // Page visibility
 

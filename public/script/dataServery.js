@@ -97,6 +97,7 @@ function triggerStart(page) {
 
 function choiceMade(replyData) {
 	debugNotice(timestampify()+replyData.playerName+' came across choice '+replyData.choiceId+' and took path '+replyData.choiceMade,0);	
+	console.log(replyData);
 	if (data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade] != 0) {
 		if (data.choiceObjects[replyData.choiceId].resultType == 'comment') {
 			var resultTest = 'result'+replyData.choiceMade;
@@ -147,9 +148,9 @@ function choiceMade(replyData) {
 				organiseQueue();
 			}
 		} else if (data.choiceObjects[replyData.choiceId].resultType == 'effect') {
-			
+			var choiceResult = data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]
+			triggerEffect(choiceResult,replyData.choiceId);
 		}
-	
 		receivedChoice({choiceId:replyData.choiceId});
 	}
 };

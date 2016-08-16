@@ -199,7 +199,7 @@ a {
   padding-left: 60px; }
 
 body {
-  background: #e9eaed;
+  background: #eee;
   font-family: -apple-system, helvetica, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", arial, san-serif; }
 
 body.navFlip {
@@ -207,9 +207,9 @@ body.navFlip {
 
 header {
   position: relative;
-  z-index: 2;
+  z-index: 3;
   width: 100%;
-  padding: 4px 12px;
+  padding: 12px 14px;
   background: #910101;
   background-image: url(../img/topBar.png);
   background-repeat: repeat;
@@ -234,7 +234,8 @@ header:after {
   float: right;
   color: #fff;
   text-shadow: 0 -1px 0 #888;
-  display: none; }
+  display: none;
+  z-index: 2; }
 
 .mobileNav i {
   margin: 0 10px;
@@ -284,7 +285,7 @@ header:after {
   left: 0px;
   top: 0px;
   padding: 10px 10px 0 0;
-  z-index: 3; }
+  z-index: 2; }
 
 .sponsored {
   width: 250px;
@@ -296,14 +297,14 @@ header:after {
 .trending {
   border: 1px solid;
   border-color: #e5e6e9 #dfe0e4 #d0d1d5;
-  border-radius: 3px;
+  border-radius: 1px;
   background: #fff;
   padding: 10px; }
 
 .loadingFeed {
   border: 1px solid;
   border-color: #e5e6e9 #dfe0e4 #d0d1d5;
-  border-radius: 3px;
+  border-radius: 1px;
   background: #fff;
   padding: 10px;
   text-align: center; }
@@ -321,7 +322,7 @@ header:after {
   margin-bottom: 10px;
   border: 1px solid;
   border-color: #e5e6e9 #dfe0e4 #d0d1d5;
-  border-radius: 3px;
+  border-radius: 1px;
   background: #fff;
   padding: 0; }
 
@@ -406,28 +407,35 @@ iframe {
 
 .feedControls {
   border-top: 1px solid #dfe0e4;
-  padding: 10px 4px 0 8px; }
+  margin: 0 -1px; }
 
 .feedControl {
-  display: inline;
-  color: #dfe0e4;
-  padding: 8px 10px 0 0;
-  margin-right: 20px;
-  font-weight: bold; }
+  display: inline-block;
+  color: #ccc;
+  font-weight: bold;
+  padding: 12px 8px;
+  width: 50%;
+  text-align: center;
+  background: #fff;
+  border: 3px solid #eee;
+  border-width: 3px 1px; }
 
-.usableControls:hover, .feedControl.choiceBeinsg {
-  color: #000; }
+.usableControls:hover, .feedControl.choiceBeing {
+  color: #fff;
+  background: #600000 !important; }
 
 .feedControl i {
   margin-right: 10px; }
 
 .liked, .commented {
-  color: #dfe0e4 !important;
-  cursor: default !important; }
+  color: #000 !important;
+  cursor: default !important;
+  background: #fff !important; }
 
 .usableControls {
-  color: #910101;
-  cursor: pointer; }
+  color: #dfe0e4;
+  cursor: pointer;
+  background: #B50404; }
 
 .likedSection {
   border-top: 1px solid #dfe0e4;
@@ -447,6 +455,15 @@ iframe {
   width: 100%;
   position: relative;
   z-index: 1; }
+
+.comment .feedImage {
+  border: 1px solid;
+  border-color: #e5e6e9 #dfe0e4 #d0d1d5;
+  max-width: 100%;
+  max-height: 200px;
+  width: auto;
+  display: block;
+  margin: 8px 0; }
 
 .captionCont {
   padding: 10px 15px;
@@ -532,7 +549,7 @@ iframe {
   margin-bottom: 10px;
   border: 1px solid;
   border-color: #e5e6e9 #dfe0e4 #d0d1d5;
-  border-radius: 3px;
+  border-radius: 1px;
   background: #fff;
   padding: 0;
   border-top: 0px; }
@@ -559,7 +576,7 @@ iframe {
   height: 120px;
   border: 1px solid;
   border-color: #e5e6e9 #dfe0e4 #d0d1d5;
-  border-radius: 3px;
+  border-radius: 1px;
   background: #fff;
   padding: 4px;
   position: absolute;
@@ -603,7 +620,7 @@ iframe {
   display: none;
   border: 1px solid;
   border-color: #e5e6e9 #dfe0e4 #d0d1d5;
-  border-radius: 3px;
+  border-radius: 1px;
   background: #fff;
   padding: 0; }
 
@@ -708,7 +725,7 @@ iframe {
   max-height: 1000px;
   border: 1px solid;
   border-color: #e5e6e9 #dfe0e4 #d0d1d5;
-  border-radius: 3px;
+  border-radius: 1px;
   background: #fff;
   border-top: 0px; }
 
@@ -760,7 +777,7 @@ iframe {
 .sentOn {
   float: right;
   font-size: 0.8em;
-  color: #aaa; }
+  color: #222; }
 
 .sentFrom {
   margin: 0 10px; }
@@ -780,7 +797,7 @@ iframe {
   left: 10px; }
 
 .messageUserList .messageContents {
-  color: #777; }
+  color: #222; }
 
 .messageTitle {
   color: #910101;
@@ -790,6 +807,13 @@ iframe {
   padding: 10px;
   margin-bottom: -45px;
   display: none; }
+
+.chooseUser {
+  position: absolute;
+  right: 10px;
+  bottom: 7px;
+  font-size: 1.5em;
+  color: #910101; }
 
 .messageUserList.current {
   background: #910101;
@@ -864,10 +888,13 @@ audio {
   width: 33%;
   display: inline-block;
   margin: 0;
-  padding: 10px 5px 10px 5px;
+  padding: 15px 5px 15px 5px;
   cursor: pointer;
   display: table-cell;
   margin: 10px; }
+
+.choice:hover, .choice:active {
+  background: #600000; }
 
 .glitchCanvas {
   position: fixed;
@@ -916,6 +943,13 @@ audio {
   padding: 10px;
   width: 100%;
   text-align: center; }
+
+.startBlock:after {
+  clear: both;
+  display: block;
+  height: 1px;
+  visibility: none;
+  content: ""; }
 
 .loadBtn {
   margin-top: 10px;
@@ -1118,7 +1152,7 @@ input[type="text"] {
   backface-visibility: hidden;
   border: 1px solid;
   border-color: #e5e6e9 #dfe0e4 #d0d1d5;
-  border-radius: 3px;
+  border-radius: 1px;
   background: #fff;
   border: 0px; }
 
@@ -1347,6 +1381,12 @@ input[type="text"] {
 .background-masker.content-third-end {
   left: 300px;
   top: 88px; }
+
+#loadingWrapper .feedControls {
+  margin: 0 -1px -1px; }
+
+#loadingWrapper .feedControl {
+  color: #fff; }
 
 .hiddenObjectData {
   display: none; }
@@ -1602,7 +1642,7 @@ input[type="text"] {
   60% {
     opacity: 0.3; }
   80% {
-    opacity: 0.18; }
+    opacity: 0.28; }
   100% {
     opacity: 0.25; } }
 @media screen and (max-width: 900px) {
@@ -1610,7 +1650,7 @@ input[type="text"] {
     position: fixed; }
 
   .mainWrapper {
-    padding-top: 42px; }
+    padding: 66px 8px 8px; }
 
   .halfer {
     width: 100%; }
@@ -1620,7 +1660,8 @@ input[type="text"] {
 
   body {
     max-width: 100%;
-    overflow-x: hidden; }
+    overflow-x: hidden;
+    background: #312828; }
 
   .mobileFix {
     overflow-x: hidden; }
@@ -1633,8 +1674,9 @@ input[type="text"] {
     background: #fff;
     min-height: 100%;
     overflow: hidden;
-    z-index: 1;
-    padding-top: 42px;
+    z-index: 2;
+    border-left: 1px solid #dfe0e4;
+    padding-top: 58px;
     -webkit-transform: translate3d(100%, 0, 0);
     -moz-transform: translate3d(100%, 0, 0);
     -ms-transform: translate3d(100%, 0, 0);
@@ -1749,7 +1791,7 @@ input[type="text"] {
 
   #messagesPage .mainWrapper {
     top: 0px;
-    padding-top: 42px; }
+    padding: 58px 0 0; }
 
   #messagesPage .mobileFix {
     overflow-y: hidden; }
@@ -1759,6 +1801,9 @@ input[type="text"] {
 
   #messagesPage .sideBar {
     top: 0; }
+
+  .feedControl {
+    border: 3px solid #312828; }
 
   .messageList {
     width: 100%;
@@ -1800,13 +1845,13 @@ input[type="text"] {
     border-bottom: 1px solid #dfe0e4; }
 
   .messageUserList.current .sentOn {
-    color: #aaa; }
+    color: #000; }
 
   .messageUserList.current .messageName {
     color: #910101; }
 
   .messageUserList.current .messageContents {
-    color: #777; }
+    color: #000; }
 
   .messageTitle {
     display: block;
@@ -1829,7 +1874,13 @@ input[type="text"] {
     transform: translate3d(0, 0, 0); }
 
   .messages.flipped .messagesCont {
-    overflow-y: scroll; } }
+    overflow-y: scroll; }
+
+  .messagesBox {
+    background: #312828; }
+
+  .messageUserList {
+    background: #fff; } }
 @media screen and (max-width: 600px) {
   .sentFrom {
     display: none; }

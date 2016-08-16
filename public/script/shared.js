@@ -28,7 +28,7 @@ var actualInnerWidth = $("body").width();
 var $canvas      = $('#canvasFront');
 var canvas       = $canvas[0];
 
-var loading = '<div id="loadingWrapper" class="timeline-wrapper feedObject"><div class="innerFeed"><div class="timeline-item"><div class="animated-background"><div class="background-masker header-top"></div><div class="background-masker header-left"></div><div class="background-masker header-right"></div><div class="background-masker header-bottom"></div><div class="background-masker subheader-left"></div><div class="background-masker subheader-right"></div><div class="background-masker subheader-bottom"></div><div class="background-masker content-top"></div><div class="background-masker content-first-end"></div><div class="background-masker content-second-line"></div><div class="background-masker content-second-end"></div><div class="background-masker content-third-line"></div><div class="background-masker content-third-end"></div></div></div><div class="feedControls"><span class="feedControl"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_1102" class="feedControl"><i class="fa fa-comment"></i>Comment</span></div></div></div>';
+var loading = '<div id="loadingWrapper" class="timeline-wrapper feedObject"><div class="innerFeed"><div class="timeline-item"><div class="animated-background"><div class="background-masker header-top"></div><div class="background-masker header-left"></div><div class="background-masker header-right"></div><div class="background-masker header-bottom"></div><div class="background-masker subheader-left"></div><div class="background-masker subheader-right"></div><div class="background-masker subheader-bottom"></div><div class="background-masker content-top"></div><div class="background-masker content-first-end"></div><div class="background-masker content-second-line"></div><div class="background-masker content-second-end"></div><div class="background-masker content-third-line"></div><div class="background-masker content-third-end"></div></div></div></div><div class="feedControls"><span class="feedControl"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_1102" class="feedControl"><i class="fa fa-comment"></i>Comment</span></div></div>';
 
 //canvas.width  = actualInnerWidth;
 //canvas.height = window.innerHeight;
@@ -302,11 +302,10 @@ function processSave() {
                         tempData['messages'][extraData[0]][extraData[1]] = {};
                     }
                     var targetTime = extraData[2];
-                    var HOLYSHITEVERYTHINGISFUCKED = 0;
+                    var breakCounter = targetTime;
                     while (tempData['messages'][extraData[0]][extraData[1]][targetTime] != undefined) {
                         targetTime++;
-                        HOLYSHITEVERYTHINGISFUCKED++
-                        if (HOLYSHITEVERYTHINGISFUCKED > 300) {
+                        if (breakCounter + 300 < targetTime) {
                             break;
                         }
                     }
@@ -388,6 +387,9 @@ choiceControls.create = function(choiceId,target,targetType,remove,choice1,choic
     if ($('#messagesCont').length > 0) {
         var objDiv = document.getElementById("messagesCont");objDiv.scrollTop = objDiv.scrollHeight;
     }
+    $('html, body').animate({
+        scrollTop: $("#choiceBlock_"+choiceId).offset().top - 300
+    }, 1000);
 }
 
 choiceControls.choose = function(id,choice,targetType) {
@@ -614,7 +616,7 @@ messages.users = function(firstMessages) {
         var usersFirstname = localStorage.getObject('gameData')['users'][value['index']]['firstname'];
         var usersLastname = localStorage.getObject('gameData')['users'][value['index']]['lastname'];
         if(value['text'].length > 15) value['text'] = value['text'].substring(0,15) + '...';
-        $('#messageList').append('<div class="messageUserList" id="messageLink_'+value['index']+'"><img class="messageAvatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /><div class="sentOn">'+value['dateTime']+'</div><div class="messageName">'+usersFirstname+' '+usersLastname+'</div><div class="messageContents">'+value['text']+'</div></div>');
+        $('#messageList').append('<div class="messageUserList" id="messageLink_'+value['index']+'"><div class="chooseUser">&gt;</div><img class="messageAvatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /><div class="sentOn">'+value['dateTime']+'</div><div class="messageName">'+usersFirstname+' '+usersLastname+'</div><div class="messageContents">'+value['text']+'</div></div>');
         if (counter == 1) {
             $('#messageLink_'+value['index']).addClass('current');
             counter++;
@@ -1018,10 +1020,10 @@ feed.individualPost = function(value,processNormal,target,direction) {
     var usersAvatar = localStorage.getObject('gameData')['users'][value['user']]['avatar'];
     var usersFirstname = localStorage.getObject('gameData')['users'][value['user']]['firstname'];
     var usersLastname = localStorage.getObject('gameData')['users'][value['user']]['lastname'];
-    var commentCondition = '';var likedCondition = '';var canComment = '';
+    var commentCondition = '';var likedCondition = 'usableControls';var canComment = '';
     if (value['choices'] != undefined && value['commented'] == 1) {commentCondition = 'commented';}
     if (value['liked'] != undefined && value['liked'] == 1) {likedCondition = 'liked';}
-    if (value['choices'] != undefined && value['choices'] != '' && value['commented'] == 0) {canComment = 'usableControls';}
+    if (value['choices'] != undefined && value['choices'] != '' && value['commented'] == 0 && value['commented'] != 1) {canComment = 'usableControls';}
     var commentsString = '<div class="comments" id="comments_'+value['postId']+'"></div>';
     if (processNormal == 1) {
         var commentsString = feed.commentBuilder(value['comments'],value['postId'],0);
@@ -1029,15 +1031,15 @@ feed.individualPost = function(value,processNormal,target,direction) {
     var possibleChoice = value['comments'][value['comments'].length-1];
     if (direction == 'append') {
         if (possibleChoice && possibleChoice.date == 'CHOICE') {
-            $('#'+target).append('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy userLink username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'<div class="feedControls"><span class="feedControl likeControl usableControls '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'" data-id="'+possibleChoice.text.choiceId+'" data-choice1="'+possibleChoice.text.choice1+'" data-choice2="'+possibleChoice.text.choice2+'" data-choice3="'+possibleChoice.text.choice3+'"><i class="fa fa-comment"></i>Comment</span></div></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
+            $('#'+target).append('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy userLink username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'</div><div class="feedControls"><span class="feedControl likeControl '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'" data-id="'+possibleChoice.text.choiceId+'" data-choice1="'+possibleChoice.text.choice1+'" data-choice2="'+possibleChoice.text.choice2+'" data-choice3="'+possibleChoice.text.choice3+'"><i class="fa fa-comment"></i>Comment</span></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
         } else {
-            $('#'+target).append('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy userLink username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'<div class="feedControls"><span class="feedControl likeControl usableControls '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'"><i class="fa fa-comment"></i>Comment</span></div></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
+            $('#'+target).append('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy userLink username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'</div><div class="feedControls"><span class="feedControl likeControl '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'"><i class="fa fa-comment"></i>Comment</span></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
         }
     } else {
         if (possibleChoice && possibleChoice.date == 'CHOICE') {
-            $('#'+target).prepend('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy userLink username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'<div class="feedControls"><span class="feedControl likeControl usableControls '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'" data-id="'+possibleChoice.text.choiceId+'" data-choice1="'+possibleChoice.text.choice1+'" data-choice2="'+possibleChoice.text.choice2+'" data-choice3="'+possibleChoice.text.choice3+'"><i class="fa fa-comment"></i>Comment</span></div></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
+            $('#'+target).prepend('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy userLink username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'</div><div class="feedControls"><span class="feedControl likeControl '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'" data-id="'+possibleChoice.text.choiceId+'" data-choice1="'+possibleChoice.text.choice1+'" data-choice2="'+possibleChoice.text.choice2+'" data-choice3="'+possibleChoice.text.choice3+'"><i class="fa fa-comment"></i>Comment</span></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
         } else {
-            $('#'+target).prepend('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy userLink username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'<div class="feedControls"><span class="feedControl likeControl usableControls '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'"><i class="fa fa-comment"></i>Comment</span></div></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
+            $('#'+target).prepend('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy userLink username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'</div><div class="feedControls"><span class="feedControl likeControl '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'"><i class="fa fa-comment"></i>Comment</span></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
         }
     }
     feedCheck.push(value['postId']);
@@ -1089,16 +1091,16 @@ feed.backlog = function(value) {
         var usersAvatar = localStorage.getObject('gameData')['users'][value['user']]['avatar'];
         var usersFirstname = localStorage.getObject('gameData')['users'][value['user']]['firstname'];
         var usersLastname = localStorage.getObject('gameData')['users'][value['user']]['lastname'];
-        var commentCondition = '';var likedCondition = '';var canComment = '';
+        var commentCondition = '';var likedCondition = 'usableControls';var canComment = '';
         if (value['choices'] != undefined && value['commented'] == 1) {commentCondition = 'commented';}
         if (value['liked'] != undefined && value['liked'] == 1) {likedCondition = 'liked';}
-        if (value['choices'] != undefined && value['choices'] != '' && value['commented'] == 0) {canComment = 'usableControls';}
+        if (value['choices'] != undefined && value['choices'] != '' && value['commented'] == 0 && value['commented'] != 1) {canComment = 'usableControls';}
         var commentsString = feed.commentBuilder(value['comments'],value['postId']);
         var possibleChoice = value['comments'][value['comments'].length-1];
         if (possibleChoice && possibleChoice.date == 'CHOICE') {
-            $('#'+target).prepend('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy userLink username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'<div class="feedControls"><span class="feedControl likeControl usableControls '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'" data-id="'+possibleChoice.text.choiceId+'" data-choice1="'+possibleChoice.text.choice1+'" data-choice2="'+possibleChoice.text.choice2+'" data-choice3="'+possibleChoice.text.choice3+'"><i class="fa fa-comment"></i>Comment</span></div></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
+            $('#'+target).prepend('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy userLink username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'<div class="feedControls"><span class="feedControl likeControl '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'" data-id="'+possibleChoice.text.choiceId+'" data-choice1="'+possibleChoice.text.choice1+'" data-choice2="'+possibleChoice.text.choice2+'" data-choice3="'+possibleChoice.text.choice3+'"><i class="fa fa-comment"></i>Comment</span></div></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
         } else {
-            $('#'+target).prepend('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy userLink username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'<div class="feedControls"><span class="feedControl likeControl usableControls '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'"><i class="fa fa-comment"></i>Comment</span></div></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
+            $('#'+target).prepend('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy userLink username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'<div class="feedControls"><span class="feedControl likeControl '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'"><i class="fa fa-comment"></i>Comment</span></div></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
         }
         if (commentsString != '') {
             var possibleChoice = value['comments'][value['comments'].length-1];
@@ -1423,7 +1425,7 @@ $(document).on('click touch', '.sideLink', function(ev) {
 $(document).on('touch tap click', '.likeControl', function(){
     if (!$(this).hasClass('liked')) {
         var postId = $(this).attr('id').split('_')[1];
-        $('#like_'+postId).addClass('liked');
+        $('#like_'+postId).removeClass('usableControls').addClass('liked');
         if ($('#feed_'+postId+' .likedSection').html() == '') {
             $('#feed_'+postId+' .likedSection').html('<span class="colouredText">1</span> person likes this');
         } else {
@@ -1493,7 +1495,7 @@ $(document).on('touch tap click', '.choice:not(.choiceProcessing)', function(e) 
         $(this).addClass('choiceProcessing');  
     })
     if (parentNode.data("remove") != '') {
-        $('#'+parentNode.data("remove")).removeClass('choiceBeing').addClass('commented');
+        $('#'+parentNode.data("remove")).removeClass('choiceBeing').removeClass('usableControls').addClass('commented');
     }
     choiceControls.choose(parentNode.data("choiceid"),$(this).attr('id'),parentNode.data("targettype"));
 });

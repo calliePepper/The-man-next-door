@@ -101,46 +101,55 @@ function choiceMade(replyData) {
 		if (data.choiceObjects[replyData.choiceId].resultType == 'comment') {
 			var resultTest = 'result'+replyData.choiceMade;
 			var commentResult = data.commentObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]];
-			var choiceResult = '';
-			if (data.commentObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].autoTarget == 'choice') {
-				var choiceResult = data.choiceObjects[data.commentObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].autoId]
+			if (commentResult != 0) {
+				var choiceResult = '';
+				if (data.commentObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].autoTarget == 'choice') {
+					var choiceResult = data.choiceObjects[data.commentObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].autoId]
+				}
+				//commentResult.feedId = replyData.additionalTarget;
+				var object2 = {
+					timeStamp:0,
+					type:'comment',
+					data:commentResult,
+					choice:choiceResult,
+					id: data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade],
+					queueDay:0,
+					userDay:5,
+					dayDifference: 0,
+					noNote:0,
+					ignoreTime:1,
+					fromChoice:replyData.choiceId
+				};
+				sendQueue.push(object2);
+				organiseQueue();
 			}
-			//commentResult.feedId = replyData.additionalTarget;
-			var object2 = {
-				timeStamp:0,
-				type:'comment',
-				data:commentResult,
-				choice:choiceResult,
-				id: data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade],
-				queueDay:0,
-				userDay:5,
-				dayDifference: 0,
-				noNote:0,
-				ignoreTime:1,
-				fromChoice:replyData.choiceId
-			};
 		} else if (data.choiceObjects[replyData.choiceId].resultType == 'message') {
 			var messageResult = data.messageObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]];
 			var choiceResult = '';
 			if (data.messageObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].autoTarget == 'choice') {
 				var choiceResult = data.choiceObjects[data.messageObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].autoId]
 			}
-			choiceResult.additionalTarget = replyData.additionalTarget;
-			var object2 = {
-				timeStamp:0,
-				type:'message',
-				data:messageResult,
-				choice:choiceResult,
-				id: data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade],
-				queueDay:getPoint(localStorage.getObject('gameSettings').startTime,new Date(),localStorage.getObject('gameSettings').timezone).day,
-				userDay:5,
-				dayDifference: 0,
-				noNote:0,
-				fromChoice:replyData.choiceId
-			};
+			if (choiceResult != 0) {
+				choiceResult.additionalTarget = replyData.additionalTarget;
+				var object2 = {
+					timeStamp:0,
+					type:'message',
+					data:messageResult,
+					choice:choiceResult,
+					id: data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade],
+					queueDay:getPoint(localStorage.getObject('gameSettings').startTime,new Date(),localStorage.getObject('gameSettings').timezone).day,
+					userDay:5,
+					dayDifference: 0,
+					noNote:0,
+					fromChoice:replyData.choiceId
+				};
+				sendQueue.push(object2);
+				organiseQueue();
+			}
+		} else if (data.choiceObjects[replyData.choiceId].resultType == 'effect') {
+			
 		}
-		sendQueue.push(object2);
-		organiseQueue();
+	
 		receivedChoice({choiceId:replyData.choiceId});
 	}
 };
@@ -207,9 +216,9 @@ queueFunc.add = function(day,timeStampToHit,timeThroughDay,userDay,noNote) {
 		if (data.events[day][timeStampToHit]['object'] == 'feedObjects') { var type = 'feed'; 
 		} else if (data.events[day][timeStampToHit]['object'] == 'commentObjects') { var type = 'comment'; 
 		} else if (data.events[day][timeStampToHit]['object'] == 'messageObjects') { var type = 'messages'; }
-		//debugNotice(day);
-		//debugNotice(timeStampToHit);
-		//debugNotice(data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']]);
+		debugNotice(data.events[day][timeStampToHit]['object'],0);
+		debugNotice(data.events[day][timeStampToHit]['id'],0);
+		debugNotice(data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']],0);
 		if (data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']].autoTarget && data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']].autoTarget == 'choice') {
 			var queueChoice = data.choiceObjects[data[data.events[day][timeStampToHit]['object']][data.events[day][timeStampToHit]['id']].autoId];
 		} else {
@@ -405,8 +414,8 @@ queueFunc.check = function() {
 		    newComment({comment:sendQueue[0]['data'],choices:sendQueue[0]['choice'],noNote:sendQueue[0].noNote,queueDay:sendQueue[0].dayDifference,fromChoice:choiceId,ignoreTime:ignoreTime},sendQueue[0].queueDay);
 			gameUpdate('updateComment','settings',sendQueue[0]['id']);
 		} else if (sendQueue[0]['type'] == 'feed') {
-			if (sendQueue[0]['data'].comments != 0) {
-				var commentSend = data.commentObjects[sendQueue[0]['data'].comments];
+			if (sendQueue[0]['data'].autoTarget == 'comment') {
+				var commentSend = data.commentObjects[sendQueue[0]['data'].autoId];
 			} else {
 				var commentSend = '';
 			}

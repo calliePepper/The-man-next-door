@@ -22,12 +22,13 @@
                 this.commentId = commentId;
             }
             
-            function choice(choiceId,choice1,choice2,choice3,choiceMade) {
+            function choice(choiceId,choice1,choice2,choice3,choiceMade,choiceTarget) {
                 this.choiceId = choiceId;
                 this.choice1 = choice1;
                 this.choice2 = choice2;
                 this.choice3 = choice3;
                 this.choiceMade = 0;
+                this.choiceTarget = choiceTarget;
             }
 
             function message(fromId,toId,time,content,image,video,from,msgId,unread) {

@@ -95,11 +95,13 @@ function triggerStart(page) {
 	hideLoad();
 };
 
-function choiceMade(replyData) {
+function choiceMade(replyData,forceType) {
 	debugNotice(timestampify()+replyData.playerName+' came across choice '+replyData.choiceId+' and took path '+replyData.choiceMade,0);	
-	console.log(replyData);
+	debugNotice(replyData,0);
 	if (data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade] != 0) {
-		if (data.choiceObjects[replyData.choiceId].resultType == 'comment') {
+		debugNotice(data.choiceObjects[replyData.choiceId].resultType + ' - ' + forceType,0);
+		if (data.choiceObjects[replyData.choiceId].resultType == 'comment' || forceType == 'comment') {
+			debugNotice('It is a comment, prepare the comment cannon',0);
 			var resultTest = 'result'+replyData.choiceMade;
 			var commentResult = data.commentObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]];
 			if (commentResult != 0) {
@@ -124,7 +126,8 @@ function choiceMade(replyData) {
 				sendQueue.push(object2);
 				organiseQueue();
 			}
-		} else if (data.choiceObjects[replyData.choiceId].resultType == 'message') {
+		} else if (data.choiceObjects[replyData.choiceId].resultType == 'message' || forceType == 'message') {
+			debugNotice('Ahh a message, it is to be expected',0);
 			var messageResult = data.messageObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]];
 			var choiceResult = '';
 			if (data.messageObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].autoTarget == 'choice') {
@@ -147,11 +150,24 @@ function choiceMade(replyData) {
 				sendQueue.push(object2);
 				organiseQueue();
 			}
-		} else if (data.choiceObjects[replyData.choiceId].resultType == 'effect') {
-			var choiceResult = data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]
-			triggerEffect(choiceResult,replyData.choiceId);
+		} else {
+			var effectBreak = data.choiceObjects[replyData.choiceId].resultType.split('_');
+			debugNotice('It is an outlanter! Remove him at once',0);
+			gameUpdate('removeReturn','settings',replyData.choiceId);
+			if (effectBreak[0] == 'effect') {
+				triggerEffect(effectBreak[1],replyData.choiceId);
+				setTimeout(function() {
+					if (effectBreak[2] != undefined) {
+						choiceMade(replyData,effectBreak[2]);
+					}
+				},2500);
+			}
 		}
 		receivedChoice({choiceId:replyData.choiceId});
+	} else {
+		debugNotice('Nothing to trigger',0);
+		debugNotice(data.choiceObjects[replyData.choiceId],0)
+		gameUpdate('removeReturn','settings',replyData.choiceId);
 	}
 };
 

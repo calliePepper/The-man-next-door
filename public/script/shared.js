@@ -64,6 +64,7 @@ function createLogNode(message) {
 }
 
 Storage.prototype.setObject = function(key, value) {
+    //debugNotice('Saving to '+key);
     this.setItem(key, JSON.stringify(value));
 }
 
@@ -94,6 +95,7 @@ var debugCounter = 0;
 var debugTotal = [];
 
 function debugNotice(data,type) {
+    if (type == undefined) {type = 0;}
     debugData[type][debugCounter] = data;
     debugCounter++;
     console.log(data);
@@ -206,6 +208,17 @@ function processSave() {
             case 'updateFeed':
                 tempData.lastFeed[data.toString()] = 1;
                 break;
+            case 'removeLastComment':
+                console.log(tempData.posts);
+                var thisDay = 0;
+                $.each(tempData['posts'],function(day,value)  {
+                    $.each(value,function(time,value) {
+                        if (data == value.postId) {
+                            value.comments.pop();        
+                        }
+                    });
+                });
+                break;
             case 'updateMessages':
                 tempData.lastMessage[data] = 1;
                 break;
@@ -230,9 +243,12 @@ function processSave() {
                 tempData.unread[data] = newNumber;
                 break;
             case 'updateReturn':
+                debugNotice(timestampify()+'Updating return - '+data+' - '+dataType+' - '+extraData,0);
                 tempData.sendQueue[data] = [dataType,extraData];
+                debugNotice(tempData.sendQueue,0);
                 break;
             case 'removeReturn':
+                debugNotice(timestampify()+'Removing return - '+data+' - '+dataType+' - '+extraData,0);
                 tempData.sendQueue[data] = undefined;
                 break;
             case 'addFriend':
@@ -240,12 +256,13 @@ function processSave() {
                 break;
             case 'markRead':
                 tempData['messages'][data][dataType][extraData].unread = 0;
-                var moreTemp = localStorage.getObject('gameSettings');
-                if (localStorage.getObject('gameSettings').unread.messages > 0) {
-                    moreTemp.unread.messages = parseInt(localStorage.getObject('gameSettings').unread.messages) - 1;
-                }
-                localStorage.setObject('gameSettings',moreTemp);
+                gameUpdate('markRead2','settings','','','','');
                 setTimeout(function() {updateUnread();},300);
+                break;
+            case 'markRead2':
+                if (tempData.unread.messages > 0) {
+                    tempData.unread.messages = parseInt(tempData.unread.messages) - 1;
+                }
                 break;
             case 'updateLocal':
                 //debugNotice('Updating local data save');
@@ -332,11 +349,18 @@ function processSave() {
             default:
                 debugNotice(timestampify()+' >>>>>>ERROR<<<<<< Something went wrong with the save, datatype: '+dataType+' >>>>>>ERROR<<<<<<',0);
                 debugNotice(type + ' - ' + saveType  + ' - ' + data + ' - ' + dataType + ' - ' + extraData + ' - ' + choiceId,0);
-        //debugNotice(timestampify()+'Processing a save tick --------- '+saveType+ ' ' +type);
-        var tempData = localStorage.getObject('gameData');
+                break;
+            //var tempData = localStorage.getObject('gameData');
         }
-        if (saveType == 'settings') {tempData = localStorage.setObject('gameSettings',tempData);}
-        else {localStorage.setObject('gameData',tempData);}
+        debugNotice(timestampify()+'Processing a save tick --------- '+saveType+ ' ' +type,0);
+        if (saveType == 'settings') {
+            //debugNotice('Updating Settings!',0);
+            //debugNotice(tempData.sendQueue,0);
+            tempData = localStorage.setObject('gameSettings',tempData);
+            //debugNotice(localStorage.getObject('gameSettings').sendQueue,0);
+        }else {
+            localStorage.setObject('gameData',tempData);
+        }
     });
     saving = 0;
 }
@@ -373,7 +397,7 @@ choiceControls.remove = function() {
     console.log(timestampify() + counter + ' choice options removed');
 }
 
-choiceControls.create = function(choiceId,target,targetType,remove,choice1,choice2,choice3) {
+choiceControls.create = function(choiceId,target,targetType,remove,choice1,choice2,choice3,autoTarget) {
     choiceControls.remove();
     $('.choice').unbind();
     debugNotice(timestampify()+'CREATING THE CHOICE CONTROLS',0);
@@ -382,7 +406,7 @@ choiceControls.create = function(choiceId,target,targetType,remove,choice1,choic
     if (choice1!=0) {choiceString += '<div id="choice1" class="choice btn">'+choice1+'</div>';}
     if (choice2!=0) {choiceString += '<div id="choice2" class="choice btn">'+choice2+'</div>';}
     if (choice3!=0&&choice3!=undefined) {choiceString += '<div id="choice3" class="choice btn">'+choice3+'</div>';}
-    $('#'+target).append('<div id="choiceBlock_'+choiceId+'" data-remove="'+remove+'" data-choiceId="'+choiceId+'" data-targetType="'+targetType+'" class="choiceBlock">'+choiceString+'</div>');
+    $('#'+target).append('<div id="choiceBlock_'+choiceId+'" data-remove="'+remove+'" data-choiceId="'+choiceId+'" data-targettype="'+targetType+'" data-autoTarget="'+autoTarget+'" class="choiceBlock">'+choiceString+'</div>');
     $('#choiceBlock').css('max-height','300px');
     if ($('#messagesCont').length > 0) {
         var objDiv = document.getElementById("messagesCont");objDiv.scrollTop = objDiv.scrollHeight;
@@ -412,9 +436,18 @@ choiceControls.choose = function(id,choice,targetType) {
         $('#choiceBlock_'+id).parent().find('.comments').append(commentsString);
         additionalTarget = id;
         var newComment = new comment('',0,now,theChoice,'','',0,0);
-        gameUpdate('updateLocal','data',newComment,'comment',commentTarg);
+        var checkForEffect = $('#choiceBlock_'+id).data('autotarget');
+        var postId = $('#choiceBlock_'+id).data('remove').split('_')[1];
+        checkForEffect = checkForEffect.split('_');
+        debugNotice(checkForEffect,0);
+        if (checkForEffect[0] != 'effect') {
+            gameUpdate('updateLocal','data',newComment,'comment',commentTarg);
+            debugNotice('Not effect');
+        } else {
+            debugNotice('It was an effect all along');
+            gameUpdate('removeLastComment', 'data', postId);
+        }
         gameUpdate('updateLocal','data',choiceMade,'choice','comment_'+commentTarg,id);
-        
     } else if (targetType == 'message') {
         var date = time.date(Math.floor(Date.now() / 1000));
         var dataDate = Math.floor(Date.now() / 1000);
@@ -594,9 +627,10 @@ messages.load = function(id) {
             }
         });
     });
+    autoTarget = 'message';
     if (isChoice == 1) {
         debugNotice(timestampify()+'Building a choice',1);
-        choiceControls.create(choiceId,'messagesCont','message','',choice1,choice2,choice3);                
+        choiceControls.create(choiceId,'messagesCont','message','',choice1,choice2,choice3,autoTarget);                
     }
     $('#messagesCont').prepend('<div class="messagesStart">Conversation started</div>');
     $('.messageTitle').html('&lt; '+thisUser);
@@ -871,7 +905,8 @@ messages.packed = function(messageArray,choices,noNote,nextOne,difference,day,no
             gameUpdate('updateLocal','data',newMessage,'messages',[userForMsg,day,choiceTime])
             setTimeout(function() {
                 if (currentlyViewing == userForMsg) {
-                    choiceControls.create(choices.choiceId,'messagesCont','message','',choices.choice1,choices.choice2,choices.choice3);
+                    var autoTarget = 'message';
+                    choiceControls.create(choices.choiceId,'messagesCont','message','',choices.choice1,choices.choice2,choices.choice3,autoTarget);
                 }  
             },timer);
         } else if (nextOne != 0) {
@@ -1020,9 +1055,9 @@ feed.individualPost = function(value,processNormal,target,direction) {
     var usersAvatar = localStorage.getObject('gameData')['users'][value['user']]['avatar'];
     var usersFirstname = localStorage.getObject('gameData')['users'][value['user']]['firstname'];
     var usersLastname = localStorage.getObject('gameData')['users'][value['user']]['lastname'];
-    var commentCondition = '';var likedCondition = 'usableControls';var canComment = '';
-    if (value['choices'] != undefined && value['commented'] == 1) {commentCondition = 'commented';}
-    if (value['liked'] != undefined && value['liked'] == 1) {likedCondition = 'liked';}
+    var commentCondition = '';var likedCondition = 'usableControls';var canComment = '';var commentText = '<i class="fa fa-comment"></i>Comment';var likeText = '<i class="fa fa-thumbs-up"></i>Like'
+    if (value['choices'] != undefined && value['commented'] == 1) {commentCondition = 'commented';var commentText = '<i class="fa fa-check"></i>Commented';}
+    if (value['liked'] != undefined && value['liked'] == 1) {likedCondition = 'liked';var likeText = '<i class="fa fa-check"></i>Liked';}
     if (value['choices'] != undefined && value['choices'] != '' && value['commented'] == 0 && value['commented'] != 1) {canComment = 'usableControls';}
     var commentsString = '<div class="comments" id="comments_'+value['postId']+'"></div>';
     if (processNormal == 1) {
@@ -1031,15 +1066,19 @@ feed.individualPost = function(value,processNormal,target,direction) {
     var possibleChoice = value['comments'][value['comments'].length-1];
     if (direction == 'append') {
         if (possibleChoice && possibleChoice.date == 'CHOICE') {
-            $('#'+target).append('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy userLink username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'</div><div class="feedControls"><span class="feedControl likeControl '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'" data-id="'+possibleChoice.text.choiceId+'" data-choice1="'+possibleChoice.text.choice1+'" data-choice2="'+possibleChoice.text.choice2+'" data-choice3="'+possibleChoice.text.choice3+'"><i class="fa fa-comment"></i>Comment</span></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
+            console.log('CHOICE!');
+            console.log(possibleChoice);
+            $('#'+target).append('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy userLink username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'</div><div class="feedControls"><span class="feedControl likeControl '+likedCondition+'" id="like_'+value['postId']+'">'+likeText+'</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'" data-id="'+possibleChoice.text.choiceId+'" data-choice1="'+possibleChoice.text.choice1+'" data-choice2="'+possibleChoice.text.choice2+'" data-choice3="'+possibleChoice.text.choice3+'" data-autotarget="'+possibleChoice.text.choiceTarget+'">'+commentText+'</span></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
         } else {
-            $('#'+target).append('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy userLink username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'</div><div class="feedControls"><span class="feedControl likeControl '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'"><i class="fa fa-comment"></i>Comment</span></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
+            $('#'+target).append('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy userLink username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'</div><div class="feedControls"><span class="feedControl likeControl '+likedCondition+'" id="like_'+value['postId']+'">'+likeText+'</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'">'+commentText+'</span></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
         }
     } else {
         if (possibleChoice && possibleChoice.date == 'CHOICE') {
-            $('#'+target).prepend('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy userLink username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'</div><div class="feedControls"><span class="feedControl likeControl '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'" data-id="'+possibleChoice.text.choiceId+'" data-choice1="'+possibleChoice.text.choice1+'" data-choice2="'+possibleChoice.text.choice2+'" data-choice3="'+possibleChoice.text.choice3+'"><i class="fa fa-comment"></i>Comment</span></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
+            console.log('CHOICE!');
+            console.log(possibleChoice);
+            $('#'+target).prepend('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy userLink username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'</div><div class="feedControls"><span class="feedControl likeControl '+likedCondition+'" id="like_'+value['postId']+'">'+likeText+'</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'" data-id="'+possibleChoice.text.choiceId+'" data-choice1="'+possibleChoice.text.choice1+'" data-choice2="'+possibleChoice.text.choice2+'" data-choice3="'+possibleChoice.text.choice3+'" data-autotarget="'+possibleChoice.text.choiceTarget+'">'+commentText+'</span></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
         } else {
-            $('#'+target).prepend('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy userLink username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'</div><div class="feedControls"><span class="feedControl likeControl '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'"><i class="fa fa-comment"></i>Comment</span></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
+            $('#'+target).prepend('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy userLink username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'</div><div class="feedControls"><span class="feedControl likeControl '+likedCondition+'" id="like_'+value['postId']+'">'+likeText+'</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'">'+commentText+'</span></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
         }
     }
     feedCheck.push(value['postId']);
@@ -1091,21 +1130,23 @@ feed.backlog = function(value) {
         var usersAvatar = localStorage.getObject('gameData')['users'][value['user']]['avatar'];
         var usersFirstname = localStorage.getObject('gameData')['users'][value['user']]['firstname'];
         var usersLastname = localStorage.getObject('gameData')['users'][value['user']]['lastname'];
-        var commentCondition = '';var likedCondition = 'usableControls';var canComment = '';
-        if (value['choices'] != undefined && value['commented'] == 1) {commentCondition = 'commented';}
-        if (value['liked'] != undefined && value['liked'] == 1) {likedCondition = 'liked';}
+        var commentCondition = '';var likedCondition = 'usableControls';var canComment = '';var commentText = '<i class="fa fa-comment"></i>Comment';var likeText = '<i class="fa fa-thumbs-up"></i>Like'
+        if (value['choices'] != undefined && value['commented'] == 1) {commentCondition = 'commented';var commentText = '<i class="fa fa-check"></i>Commented';}
+        if (value['liked'] != undefined && value['liked'] == 1) {likedCondition = 'liked';var likeText = '<i class="fa fa-check"></i>Liked';}
         if (value['choices'] != undefined && value['choices'] != '' && value['commented'] == 0 && value['commented'] != 1) {canComment = 'usableControls';}
         var commentsString = feed.commentBuilder(value['comments'],value['postId']);
         var possibleChoice = value['comments'][value['comments'].length-1];
         if (possibleChoice && possibleChoice.date == 'CHOICE') {
-            $('#'+target).prepend('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy userLink username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'<div class="feedControls"><span class="feedControl likeControl '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'" data-id="'+possibleChoice.text.choiceId+'" data-choice1="'+possibleChoice.text.choice1+'" data-choice2="'+possibleChoice.text.choice2+'" data-choice3="'+possibleChoice.text.choice3+'"><i class="fa fa-comment"></i>Comment</span></div></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
+            console.log('CHOICE!');
+            console.log(possibleChoice);
+            $('#'+target).prepend('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy userLink username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'<div class="feedControls"><span class="feedControl likeControl '+likedCondition+'" id="like_'+value['postId']+'">'+likeText+'</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'" data-id="'+possibleChoice.text.choiceId+'" data-choice1="'+possibleChoice.text.choice1+'" data-choice2="'+possibleChoice.text.choice2+'" data-choice3="'+possibleChoice.text.choice3+'" data-autotarget="'+possibleChoice.text.choiceTarget+'">'+commentText+'</span></div></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
         } else {
-            $('#'+target).prepend('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy userLink username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'<div class="feedControls"><span class="feedControl likeControl '+likedCondition+'" id="like_'+value['postId']+'"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'"><i class="fa fa-comment"></i>Comment</span></div></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
+            $('#'+target).prepend('<div id="feed_'+value['postId']+'" class="feedObject" ><div class="innerFeed"><div class="feedHeader"><div class="feedAvatar avatar_'+value['user']+'"><img class="avatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /></div><div class="postedBy userLink username_'+value['user']+'">'+usersFirstname+' '+usersLastname+'</div><div class="date dateUpdate" data-date="'+value['date']+'">'+sinceText+'</div></div><p>'+value['text']+'</p>'+videoLink+imageLink+'<div class="feedControls"><span class="feedControl likeControl '+likedCondition+'" id="like_'+value['postId']+'">'+likeText+'</span><span id="comment_'+value['postId']+'" class="feedControl commentControl '+commentCondition+' '+canComment+'">'+commentText+'</span></div></div><div class="likedSection">'+likedText+'</div>'+commentsString+'</div>');
         }
         if (commentsString != '') {
             var possibleChoice = value['comments'][value['comments'].length-1];
             if (possibleChoice && possibleChoice.date == 'CHOICE') {
-                $('#comment_'+value['postId']).addClass('usableControls');
+                $('#comment_'+value['postId']).addClass('usableControls').html('<i class="fa fa-comment"></i>Comment');
             }
         }
     }
@@ -1144,7 +1185,7 @@ feed.commentPoster = function(comments,postId) {
         } else if (comments[counter] != undefined && comments[counter].date == 'CHOICE') {
             var possibleChoice = comments[comments.length-1];
             if (possibleChoice.date == 'CHOICE') {
-                $('#comment_'+postId).addClass('usableControls');
+                $('#comment_'+postId).addClass('usableControls').html('<i class="fa fa-comment"></i>Comment');
                 $('#comment_'+postId).removeClass('commented');
                 $('#comment_'+postId).attr('data-id',possibleChoice.text.choiceId);
                 $('#comment_'+postId).attr('data-choice1',possibleChoice.text.choice1);
@@ -1425,7 +1466,7 @@ $(document).on('click touch', '.sideLink', function(ev) {
 $(document).on('touch tap click', '.likeControl', function(){
     if (!$(this).hasClass('liked')) {
         var postId = $(this).attr('id').split('_')[1];
-        $('#like_'+postId).removeClass('usableControls').addClass('liked');
+        $('#like_'+postId).removeClass('usableControls').addClass('liked').html('<i class="fa fa-check"></i>Liked');
         if ($('#feed_'+postId+' .likedSection').html() == '') {
             $('#feed_'+postId+' .likedSection').html('<span class="colouredText">1</span> person likes this');
         } else {
@@ -1439,7 +1480,7 @@ $(document).on('touch tap click', '.likeControl', function(){
 $(document).on('touch tap click', '.commentControl.usableControls:not(.choiceBeing)', function(){
     var postId = $(this).attr('id').split('_')[1];
     $('#comment_'+postId).addClass('choiceBeing');
-    choiceControls.create($(this).attr('data-id'),'feed_'+postId,'comment','comment_'+postId,$(this).attr('data-choice1'),$(this).attr('data-choice2'),$(this).attr('data-choice3'));                
+    choiceControls.create($(this).attr('data-id'),'feed_'+postId,'comment','comment_'+postId,$(this).attr('data-choice1'),$(this).attr('data-choice2'),$(this).attr('data-choice3'),$(this).data('autotarget'));                
 });
 
 $(document).on('touch tap click', '.objectError', function(){
@@ -1495,7 +1536,7 @@ $(document).on('touch tap click', '.choice:not(.choiceProcessing)', function(e) 
         $(this).addClass('choiceProcessing');  
     })
     if (parentNode.data("remove") != '') {
-        $('#'+parentNode.data("remove")).removeClass('choiceBeing').removeClass('usableControls').addClass('commented');
+        $('#'+parentNode.data("remove")).removeClass('choiceBeing').removeClass('usableControls').addClass('commented').html('<i class="fa fa-check"></i>Commented');
     }
     choiceControls.choose(parentNode.data("choiceid"),$(this).attr('id'),parentNode.data("targettype"));
 });
@@ -1716,7 +1757,16 @@ function triggerEffect(effectType,target) {
     debugNotice(timestampify()+'Effect Triggered '+target+', '+effectType,0);
     switch(effectType) {
         case 1:
+        case '1':
+            errorPopup();
             debugNotice(timestampify()+'Effect 1 triggered',0);
+            effectTimers['staticStart'] = setTimeout(function() {
+                $('.commentId_'+target).hide();
+            },1000);
+            break;
+        case 2:
+        case '2':
+            debugNotice(timestampify()+'Effect 2 triggered',0);
             clearTimeout(effectTimers['staticStart']);
             clearTimeout(effectTimers['staticEnd']);
             effectTimers['staticStart'] = setTimeout(function() {
@@ -1731,8 +1781,37 @@ function triggerEffect(effectType,target) {
             },1000);
             break;
         default:
+        
+            debugNotice(timestampify()+'Non valid effect asked for '+effectType,0);
             break;
     }
+}
+
+var errorMsg = [
+    'Something has interupted your connection, please try again later',
+    'The server is currently experiencing issues',
+    'Comment does not exist',
+    'Abort, Retry, Fail?',
+    'Error: An error has occurred.',
+    'Error: No error.',
+    'Error: The operation completed successfully.',
+    'An error occurred because an error occurred',
+    'Your relationships are fraught with circularity',
+    'Unknown Error',
+    'Does Not Compute'
+];
+
+function errorPopup() {
+    var debugOverlay = '<div class="md-content"><h3>ERROR</h3><div><p class="errorp">'+errorMsg[Math.floor(Math.random()*errorMsg.length)]+'</p><div class="btnCont"><button id="sendDebug" class="md-close btn">Send report</button></div></div></div></div>';
+    $('#overlayData').show().addClass('md-modal').addClass('md-friend-modal').addClass('md-effect-11').addClass('md-show').addClass('errorPop').html(debugOverlay);
+    $('#overlay').show();
+    $('#sendDebug').on('click touch', function() {
+        $('#sendDebug').off();
+        $('#overlayData').removeClass();
+        $('#overlayData').html('');
+        $('#overlay').hide();
+        
+    });
 }
 
 // Page visibility
@@ -1795,6 +1874,7 @@ sendQueue = setInterval(
 
 function updateQueue() {
     $.each(localStorage.getObject('gameSettings').sendQueue, function(index,value) {
+        debugNotice('Update Queue fired for '+index,0);
         emitChoice(index,value[0],value[1]); 
     });
 }

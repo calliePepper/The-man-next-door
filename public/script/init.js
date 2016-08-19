@@ -229,7 +229,7 @@ function processFeed(receivedFeed,nonote,day) {
             });
         }
         if (receivedFeed.choices && receivedFeed.choices != '') {
-            var newChoice = new choice(receivedFeed.choices.choiceId,receivedFeed.choices.choice1,receivedFeed.choices.choice2,receivedFeed.choices.choice3);
+            var newChoice = new choice(receivedFeed.choices.choiceId,receivedFeed.choices.choice1,receivedFeed.choices.choice2,receivedFeed.choices.choice3,'',receivedFeed.choices.resultType);
             var currentComment = new comment(0,0,'CHOICE',newChoice,'','',0);
             commentBuilder.push(currentComment);
         }
@@ -280,22 +280,25 @@ function processComment(receivedComment,nonote) {
         gameUpdate('removeReturn','settings',receivedComment.fromChoice);
     }
     gameUpdate('updateComment','settings',receivedComment.comment.commentId);
-    if (nonote == 1) {
-        var now = createTimestamp(receivedComment.comment.comments[0].date,receivedComment.queueDay)
-    } else {
-        var later = createTimestamp(receivedComment.comment.comments[0].date,receivedComment.queueDay);
-        var now = Math.floor(Date.now() / 1000);
-        if ((now - later) > 960 && receivedComment.ignoreTime == 0) {
-            now = later;
-        }
-    }
     var tempComments = [];
-    $.each(receivedComment.comment.comments, function(index, value) {
-        var currentComment = new comment(value['order'],value['user'],now,value['text'],value['image'],value['video'],value['likes'],receivedComment.comment.commentId);
-        tempComments.push(currentComment);
-    });
+    if (receivedComment.comment.comments[0] != undefined) {
+        if (nonote == 1) {
+            var now = createTimestamp(receivedComment.comment.comments[0].date,receivedComment.queueDay)
+        } else {
+            var later = createTimestamp(receivedComment.comment.comments[0].date,receivedComment.queueDay);
+            var now = Math.floor(Date.now() / 1000);
+            if ((now - later) > 960 && receivedComment.ignoreTime == 0) {
+                now = later;
+            }
+        }
+        
+        $.each(receivedComment.comment.comments, function(index, value) {
+            var currentComment = new comment(value['order'],value['user'],now,value['text'],value['image'],value['video'],value['likes'],receivedComment.comment.commentId);
+            tempComments.push(currentComment);
+        });
+    }
     if (receivedComment.choices && receivedComment.choices != '') {
-        var newChoice = new choice(receivedComment.choices.choiceId,receivedComment.choices.choice1,receivedComment.choices.choice2,receivedComment.choices.choice3);
+        var newChoice = new choice(receivedComment.choices.choiceId,receivedComment.choices.choice1,receivedComment.choices.choice2,receivedComment.choices.choice3,'',receivedComment.choices.resultType);
         var currentComment = new comment(0,0,'CHOICE',newChoice,'','',0,receivedComment.commentId);
         tempComments.push(currentComment);
     }
@@ -312,6 +315,7 @@ function processComment(receivedComment,nonote) {
 }
 
 function emitChoice(choiceId,choiceMadeData) {
+    debugNotice(timestampify() + 'Choice has hit the init',0);
     choiceMade({currentTime:new Date(),timezone:localStorage.getObject('gameSettings').timezone,choiceId:choiceId,choiceMade:choiceMadeData});
 }
 

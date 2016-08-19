@@ -1063,6 +1063,14 @@ module.exports = {
             autoId:'110712',
             feedId:'1107'
         },
+        110713: {
+            comments:[
+            ],
+            commentId:110713,
+            autoTarget:'choice',
+            autoId:'110714',
+            feedId:'1107'
+        },
         110801: {
             comments:[
                 {order:1,user:2,date:1127,text:'What are you talking about? There’s nothing forecast, and it doesn’t look grim outside at all.',image:'clearSky.jpg',video:'',like:''},
@@ -3120,8 +3128,9 @@ module.exports = {
         
         110106: {choiceId:110106,choice1:'Sounds like it was a good night',choice2:'I don’t envy any of you right now.',choice3:'So Robin, is research out for the day?', resultType:'comment',result1:110107,result2:110108,result3:110109,ttl:''},
         110305: {choiceId:110305,choice1:'I like the sleuths',choice2:'I like Robin’s Crusaders',choice3:'Yeah, I think there’s some room for improvement there.', resultType:'comment',result1:110306,result2:110307,result3:110308,ttl:''},
-        110511: {choiceId:110511,choice1:'I’m sure it will be fine',choice2:'He’s actually been messaging me today',choice3:'I don’t know how you’ll take this, and he told me not to say anything, but he’s been talking to me', resultType:'effect',result1:0,result2:1,result3:1,ttl:''},
-        110712: {choiceId:110712,choice1:'Hey guys, does Marcel ever do covert, behind-the-scenes stuff?',choice2:'I think Marcel may be in more trouble than you think, he’s been Secretly messaging me',choice3:'I’m just going to come out and say it, Marcel has been hiding. I know because he’s been messaging me', resultType:'effect',result1:1,result2:1,result3:1,ttl:''},
+        110511: {choiceId:110511,choice1:'I’m sure it will be fine',choice2:'He’s actually been messaging me today',choice3:'I don’t know how you’ll take this, and he told me not to say anything, but he’s been talking to me', resultType:'effect_1',result1:1,result2:1,result3:1,ttl:''},
+        110712: {choiceId:110712,choice1:'Hey guys, does Marcel ever do covert, behind-the-scenes stuff?',choice2:'I think Marcel may be in more trouble than you think, he’s been Secretly messaging me',choice3:'I’m just going to come out and say it, Marcel has been hiding. I know because he’s been messaging me', resultType:'effect_1_comment',result1:110713,result2:110713,result3:110713,ttl:''},
+        110714: {choiceId:110714,choice1:'Ummm..',choice2:'Cal, I think my Twaddle is crashing',choice3:'Can anyone read my messages? I keep getting errors', resultType:'effect_2',result1:1,result2:1,result3:1,ttl:''},
         110901: {choiceId:110901,choice1:'Here’s hoping nothing else happens',choice2:'Are you sure that’s not still the hangover?',choice3:'Maybe just watch yourself', resultType:'comment',result1:110902,result2:110903,result3:110904,ttl:''},
 
 

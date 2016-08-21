@@ -863,7 +863,8 @@ audio {
   border-top: 1px solid #dfe0e4;
   display: table;
   transition: 1s;
-  margin: 0 -1px -1px; }
+  margin: 0 -1px -1px;
+  width: 100%; }
 
 .messagesCont .choiceBlock {
   margin: 0; }
@@ -1291,7 +1292,7 @@ input[type="text"] {
   height: 240px; }
 
 .errorp {
-  padding: 30px; }
+  padding: 30px !important; }
 
 #canvasFront {
   pointer-events: none;
@@ -1905,5 +1906,123 @@ input[type="text"] {
   .md-modal {
     width: 100%;
     height: 100%; } }
+.glitching {
+  color: #910101;
+  position: relative;
+  width: 400px;
+  margin: 0 auto; }
+
+@keyframes noise-anim {
+  0% {
+    clip: rect(23px, 9999px, 7px, 0); }
+  5% {
+    clip: rect(7px, 9999px, 20px, 0); }
+  10% {
+    clip: rect(26px, 9999px, 3px, 0); }
+  15.0% {
+    clip: rect(6px, 9999px, 7px, 0); }
+  20% {
+    clip: rect(13px, 9999px, 12px, 0); }
+  25% {
+    clip: rect(2px, 9999px, 8px, 0); }
+  30.0% {
+    clip: rect(6px, 9999px, 20px, 0); }
+  35% {
+    clip: rect(13px, 9999px, 25px, 0); }
+  40% {
+    clip: rect(22px, 9999px, 26px, 0); }
+  45% {
+    clip: rect(29px, 9999px, 5px, 0); }
+  50% {
+    clip: rect(23px, 9999px, 23px, 0); }
+  55.0% {
+    clip: rect(1px, 9999px, 13px, 0); }
+  60.0% {
+    clip: rect(16px, 9999px, 25px, 0); }
+  65% {
+    clip: rect(25px, 9999px, 25px, 0); }
+  70% {
+    clip: rect(26px, 9999px, 1px, 0); }
+  75% {
+    clip: rect(25px, 9999px, 15px, 0); }
+  80% {
+    clip: rect(15px, 9999px, 11px, 0); }
+  85.0% {
+    clip: rect(14px, 9999px, 5px, 0); }
+  90% {
+    clip: rect(2px, 9999px, 1px, 0); }
+  95% {
+    clip: rect(6px, 9999px, 21px, 0); }
+  100% {
+    clip: rect(27px, 9999px, 25px, 0); } }
+.glitching:after {
+  content: attr(data-text);
+  position: absolute;
+  left: 2px;
+  text-shadow: -1px 0 red;
+  top: 0;
+  color: #910101;
+  background: white;
+  overflow: hidden;
+  clip: rect(0, 900px, 0, 0);
+  animation: noise-anim 2s infinite linear alternate-reverse; }
+
+@keyframes noise-anim-2 {
+  0% {
+    clip: rect(23px, 9999px, 4px, 0); }
+  5% {
+    clip: rect(9px, 9999px, 5px, 0); }
+  10% {
+    clip: rect(19px, 9999px, 4px, 0); }
+  15.0% {
+    clip: rect(19px, 9999px, 12px, 0); }
+  20% {
+    clip: rect(27px, 9999px, 26px, 0); }
+  25% {
+    clip: rect(14px, 9999px, 21px, 0); }
+  30.0% {
+    clip: rect(28px, 9999px, 19px, 0); }
+  35% {
+    clip: rect(10px, 9999px, 18px, 0); }
+  40% {
+    clip: rect(14px, 9999px, 26px, 0); }
+  45% {
+    clip: rect(9px, 9999px, 6px, 0); }
+  50% {
+    clip: rect(20px, 9999px, 13px, 0); }
+  55.0% {
+    clip: rect(26px, 9999px, 17px, 0); }
+  60.0% {
+    clip: rect(28px, 9999px, 17px, 0); }
+  65% {
+    clip: rect(18px, 9999px, 12px, 0); }
+  70% {
+    clip: rect(5px, 9999px, 14px, 0); }
+  75% {
+    clip: rect(7px, 9999px, 25px, 0); }
+  80% {
+    clip: rect(4px, 9999px, 22px, 0); }
+  85.0% {
+    clip: rect(12px, 9999px, 13px, 0); }
+  90% {
+    clip: rect(2px, 9999px, 19px, 0); }
+  95% {
+    clip: rect(18px, 9999px, 13px, 0); }
+  100% {
+    clip: rect(21px, 9999px, 4px, 0); } }
+.glitching:before {
+  content: attr(data-text);
+  position: absolute;
+  left: -2px;
+  text-shadow: 1px 0 blue;
+  top: 0;
+  color: #910101;
+  background: white;
+  overflow: hidden;
+  clip: rect(0, 900px, 0, 0);
+  animation: noise-anim-2 3s infinite linear alternate-reverse; }
+
+.glitching.logo, .glitching.logo:after, .glitching.logo:before {
+  color: #fff; }
 
 /*# sourceMappingURL=style.css.map */

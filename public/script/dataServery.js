@@ -149,6 +149,25 @@ function choiceMade(replyData,forceType) {
 				};
 				sendQueue.push(object2);
 				organiseQueue();
+			} else {
+				var object2 = {
+					timeStamp:0,
+					type:'message',
+					data:messageResult,
+					choice:'',
+					id: data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade],
+					queueDay:getPoint(localStorage.getObject('gameSettings').startTime,new Date(),localStorage.getObject('gameSettings').timezone).day,
+					userDay:5,
+					dayDifference: 0,
+					noNote:0,
+					fromChoice:replyData.choiceId
+				};
+				sendQueue.push(object2);
+				organiseQueue();
+				debugNotice('Something fucked up...');
+				debugNotice(data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]);
+				debugNotice(data.messageObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].autoId)
+				debugNotice(data.choiceObjects[data.messageObjects[data.choiceObjects[replyData.choiceId]['result'+replyData.choiceMade]].autoId])
 			}
 		} else {
 			var effectBreak = data.choiceObjects[replyData.choiceId].resultType.split('_');

@@ -3318,7 +3318,7 @@ module.exports = {
         502: {choiceId:502,choice1:'I heard you vanished, yet you seem to be right here',choice2:'Your friends are worried about you',choice3:'I haven\'t heard much about you, to be honest',resultType:'message',result1:506,result2:508,result3:505,ttl:''},
         503: {choiceId:503,choice1:'You\'re the Marcel who vanished',choice2:'Robin seems lke an interesting person',choice3:'I don\'t know why you\'re messaging me',resultType:'message',result1:506,result2:507,result3:504,ttl:''},
         506: {choiceId:506,choice1:'Sure',choice2:'I\'m a bit uneasy about this, but if it helps',choice3:'I think you\'re a bit of an asshole for \'staying hidden\'',resultType:'message',result1:509,result2:509,result3:510,ttl:''},
-        507: {choiceId:508,choice1:'Okay',choice2:'I guess I could do that, but I\'m a little unsure about this',choice3:'I don\'t think I can do this, and I think you\'re a bit of an asshole for letting them worry about you',resultType:'message',result1:509,result2:509,result3:510,ttl:''},
+        507: {choiceId:507,choice1:'Okay',choice2:'I guess I could do that, but I\'m a little unsure about this',choice3:'I don\'t think I can do this, and I think you\'re a bit of an asshole for letting them worry about you',resultType:'message',result1:509,result2:509,result3:510,ttl:''},
         508: {choiceId:508,choice1:'Why would I keep this secret? You\'re a dick',choice2:'I guess I can do that',choice3:'I\'ll do it, but at least tell me why?',resultType:'message',result1:510,result2:509,result3:509,ttl:''},
 
         1101: {choiceId:1101,choice1:'It\'s really late Robin.',choice2:'What is it?',choice3:'What are you doing up at this time?',resultType:'message',result1:1103,result2:1103,result3:1103,ttl:''},
@@ -3374,7 +3374,7 @@ module.exports = {
         2:['Cal','Ransom','she',1423413,'img/calAvatar.jpg','calBg.jpg',0,70,1500,0,0],
         3:['Ambrose','Mitchell','he',1423413,'img/ambroseAvatar.jpg','amBg.jpg',0,120,2400,0,0],
         4:['Steve','Steve','he',1423412,'img/steveAvatar.jpg','stBg.jpg',0,140,3000,0,0],
-        5:['Marcel','Artur','he',1423412,'img/marcelAvatar.jpg','maBg.jpg',0,1,1,0,0]
+        5:['Marcel','Artur','he',1423412,'img/marcelAvatar.jpg','maBg.jpg',0,60,1,0,0]
     },
     pages: {
         'Twaddle - A social media for the everyman': 'Feed page',

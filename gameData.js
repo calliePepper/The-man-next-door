@@ -2085,6 +2085,147 @@ module.exports = {
             ttlTarget:'message',
             ttlId:''
         },
+        501:{
+            messages:[
+                {msgId:'501_01',fromId:5,toId:5,timestamp:23,message:'Hey there, you must be Robin\'s new friend!',image:'',video:'',from:1},
+            ],
+            day:1,
+            messageId:501,
+            autoTarget:'choice',
+            autoId:'501',
+            /*ttl:'50',
+            ttlTarget:'message',
+            ttlId:'1154'*/
+        },      
+        502:{
+            messages:[
+                {msgId:'502_01',fromId:5,toId:5,timestamp:23,message:'Ahh, my reputation procedes me.',image:'',video:'',from:1},
+                {msgId:'502_02',fromId:5,toId:5,timestamp:23,message:'So, tell me all the good things you\'ve heard.',image:'',video:'',from:1},
+            ],
+            day:2,
+            messageId:502,
+            autoTarget:'choice',
+            autoId:'502',
+            /*ttl:'50',
+            ttlTarget:'message',
+            ttlId:'1154'*/
+        },
+        503:{
+            messages:[
+                {msgId:'503_01',fromId:5,toId:5,timestamp:23,message:'I\'m Marcel, a friend of Robin, Ambrose and Cal.',image:'',video:'',from:1},
+                {msgId:'503_02',fromId:5,toId:5,timestamp:23,message:'I see Robin has been quite busy with the usual research. I take it you\'ve been brought in as some kind of consult. ',image:'',video:'',from:1},
+                {msgId:'503_03',fromId:5,toId:5,timestamp:23,message:'Robin sure is a curious one, right?',image:'',video:'',from:1},
+            ],
+            day:2,
+            messageId:503,
+            autoTarget:'choice',
+            autoId:'503',
+            /*ttl:'50',
+            ttlTarget:'message',
+            ttlId:'1154'*/
+        },
+        504:{
+            messages:[
+                {msgId:'504_01',fromId:5,toId:5,timestamp:23,message:'Well, it\'s just to let you know that I\'m keeping an eye on what\'s going on',image:'',video:'',from:1},
+                {msgId:'504_02',fromId:5,toId:5,timestamp:23,message:'Someone needs to look out for Robin',image:'',video:'',from:1},
+                {msgId:'504_03',fromId:5,toId:5,timestamp:23,message:'I figure we could give each other a hand in that respect',image:'',video:'',from:1},
+            ],
+            day:2,
+            messageId:504,
+            autoTarget:'message',
+            autoId:'507',
+            /*ttl:'50',
+            ttlTarget:'message',
+            ttlId:'1154'*/
+        },
+        505:{
+            messages:[
+                {msgId:'505_01',fromId:5,toId:5,timestamp:23,message:'Well, that\'s dissappointing.',image:'',video:'',from:1},
+            ],
+            day:2,
+            messageId:505,
+            autoTarget:'message',
+            autoId:'503',
+            /*ttl:'50',
+            ttlTarget:'message',
+            ttlId:'1154'*/
+        },
+        506:{
+            messages:[
+                {msgId:'506_01',fromId:5,toId:5,timestamp:23,message:'So, you know that much',image:'',video:'',from:1},
+                {msgId:'506_02',fromId:5,toId:5,timestamp:23,message:'It\'s not so much vanished as an impromptu and much required absence.',image:'',video:'',from:1},
+                {msgId:'506_03',fromId:5,toId:5,timestamp:23,message:'I can\'t be there to help out directly right now. You could say I\'m otherwise predisposed, but I need something from you',image:'',video:'',from:1},
+                {msgId:'506_03',fromId:5,toId:5,timestamp:23,message:'I\'m in a far better position if I stay hidden. Could you not tell any of the others that I\'ve been talking to you?',image:'',video:'',from:1},
+            ],
+            day:2,
+            messageId:506,
+            autoTarget:'choice',
+            autoId:'506',
+            /*ttl:'50',
+            ttlTarget:'message',
+            ttlId:'1154'*/
+        },
+        507:{
+            messages:[
+                {msgId:'507_01',fromId:5,toId:5,timestamp:23,message:'Robin is an old friend, and I\'d love to directly help out',image:'',video:'',from:1},
+                {msgId:'507_02',fromId:5,toId:5,timestamp:23,message:'But things have taken a strange turn, and I can\'t get involved at the moment.',image:'',video:'',from:1},
+                {msgId:'507_03',fromId:5,toId:5,timestamp:23,message:'On that note, do me a favour. Don\'t let anyone of them know I\'ve talked to you. It could ruin everything.',image:'',video:'',from:1},
+            ],
+            day:2,
+            messageId:507,
+            autoTarget:'choice',
+            autoId:'507',
+            /*ttl:'50',
+            ttlTarget:'message',
+            ttlId:'1154'*/
+        },
+        508:{
+            messages:[
+                {msgId:'508_01',fromId:5,toId:5,timestamp:23,message:'Well, they\'ll have to worry a bit longer',image:'',video:'',from:1},
+                {msgId:'508_02',fromId:5,toId:5,timestamp:23,message:'On that note, there is something I need you to do. I messaged you because I needed to keep a closer eye on the situation. Trust me, it\'s better this way.',image:'',video:'',from:1},
+                {msgId:'508_03',fromId:5,toId:5,timestamp:23,message:'I need you to keep this a secret. Me, talking to you? That needs to stay between us. What do you say?',image:'',video:'',from:1},
+            ],
+            day:2,
+            messageId:508,
+            autoTarget:'choice',
+            autoId:'508',
+            /*ttl:'50',
+            ttlTarget:'message',
+            ttlId:'1154'*/
+        },
+        509:{
+            messages:[
+                {msgId:'509_01',fromId:5,toId:5,timestamp:23,message:'Great! I knew I could count on you.',image:'',video:'',from:1},
+                {msgId:'509_02',fromId:5,toId:5,timestamp:23,message:'So, remember, our little secret, don\'t go ruining the fun now',image:'',video:'',from:1},
+                {msgId:'509_03',fromId:5,toId:5,timestamp:23,message:'I can see why Robin asked for your help',image:'',video:'',from:1},
+                {msgId:'509_03',fromId:5,toId:5,timestamp:23,message:'Later!',image:'',video:'',from:1},
+            ],
+            day:2,
+            messageId:509,
+            autoTarget:'',
+            autoId:'',
+            /*ttl:'50',
+            ttlTarget:'message',
+            ttlId:'1154'*/
+            result:'friend',
+            resultTarget:'5'
+        },
+        510:{
+            messages:[
+                {msgId:'510_01',fromId:5,toId:5,timestamp:23,message:'Oh, Fiesty! Fair enough, fair enough',image:'',video:'',from:1},
+                {msgId:'510_02',fromId:5,toId:5,timestamp:23,message:'Can\'t blame me for trying',image:'',video:'',from:1},
+                {msgId:'510_03',fromId:5,toId:5,timestamp:23,message:'I\'ll be seeing you around anyway',image:'',video:'',from:1},
+            ],
+            day:2,
+            messageId:510,
+            autoTarget:'',
+            autoId:'',
+            /*ttl:'50',
+            ttlTarget:'message',
+            ttlId:'1154'*/
+            result:'friend',
+            resultTarget:'5'
+        },
         1007:{
             messages:[
                 {type:'effect',effect:'lowStatic',value:1},
@@ -3099,7 +3240,6 @@ module.exports = {
             ttlTarget:'message',
             ttlId:'1154'*/
         },
-        
         1199:{
             messages:[
                 {type:'delay',time:'7000'},
@@ -3173,8 +3313,14 @@ module.exports = {
         216: {choiceId:216,choice1:'Sure, I can do that',choice2:'I\'m not sure',choice3:'I\'m not comfortable with that',resultType:'message',result1:234,result2:235,result3:226,ttl:''},
         217: {choiceId:217,choice1:'So, you don\'t believe in any of this stuff?',choice2:'So you don\'t think there\'s any chance it\'s true?',choice3:'Should you really be talking to me about this',resultType:'message',result1:216,result2:232,result3:214,ttl:''},
         218: {choiceId:218,choice1:'Sure, I\'ll tell you if Robin says anything extra strange',choice2:'I think I can do that',choice3:'I don\'t think I\'m the right person for this',resultType:'message',result1:233,result2:236,result3:229,ttl:''},
-        219: {choiceId:219,choice1:'What do you need?',choice2:'You want me to spy on Robin?',choice3:'Do you need someone to take care of the lizard man?',resultType:'message',result1:228,result2:227,result3:218,ttl:''},
         
+        501: {choiceId:501,choice1:'And you are?',choice2:'Wait, is this Marcel?',choice3:'Hey there?',resultType:'message',result1:503,result2:502,result3:503,ttl:''},
+        502: {choiceId:502,choice1:'I heard you vanished, yet you seem to be right here',choice2:'Your friends are worried about you',choice3:'I haven\'t heard much about you, to be honest',resultType:'message',result1:506,result2:508,result3:505,ttl:''},
+        503: {choiceId:503,choice1:'You\'re the Marcel who vanished',choice2:'Robin seems lke an interesting person',choice3:'I don\'t know why you\'re messaging me',resultType:'message',result1:506,result2:507,result3:504,ttl:''},
+        506: {choiceId:506,choice1:'Sure',choice2:'I\'m a bit uneasy about this, but if it helps',choice3:'I think you\'re a bit of an asshole for \'staying hidden\'',resultType:'message',result1:509,result2:509,result3:510,ttl:''},
+        507: {choiceId:508,choice1:'Okay',choice2:'I guess I could do that, but I\'m a little unsure about this',choice3:'I don\'t think I can do this, and I think you\'re a bit of an asshole for letting them worry about you',resultType:'message',result1:509,result2:509,result3:510,ttl:''},
+        508: {choiceId:508,choice1:'Why would I keep this secret? You\'re a dick',choice2:'I guess I can do that',choice3:'I\'ll do it, but at least tell me why?',resultType:'message',result1:510,result2:509,result3:509,ttl:''},
+
         1101: {choiceId:1101,choice1:'It\'s really late Robin.',choice2:'What is it?',choice3:'What are you doing up at this time?',resultType:'message',result1:1103,result2:1103,result3:1103,ttl:''},
         1102: {choiceId:1102,choice1:'Everywhere?',choice2:'What does it sound like?',choice3:'Describe the sound?',resultType:'message',result1:1104,result2:1104,result3:1104,ttl:''},
         1103: {choiceId:1103,choice1:'Maybe you could record it?',choice2:'This isn\'t working',choice3:'That sounds terrible',resultType:'message',result1:1105,result2:1105,result3:1105,ttl:''},
@@ -3331,7 +3477,7 @@ module.exports = {
             686:{object:'commentObjects',id:'110508'},
             687:{object:'commentObjects',id:'110509'},
             688:{object:'commentObjects',id:'110510'},
-            752:{object:'messageObjects',id:'201'},
+            752:{object:'messageObjects',id:'501'},
             803:{object:'feedObjects',id:'1106'},
             810:{object:'commentObjects',id:'110601'},
             822:{object:'commentObjects',id:'110602'},
@@ -3346,6 +3492,7 @@ module.exports = {
             982:{object:'commentObjects',id:'110706'},
             991:{object:'commentObjects',id:'110707'},
             998:{object:'commentObjects',id:'110708'},
+            1002:{object:'messageObjects',id:'201'},
             1006:{object:'commentObjects',id:'110709'},
             1009:{object:'commentObjects',id:'110710'},
             1010:{object:'commentObjects',id:'110711'},

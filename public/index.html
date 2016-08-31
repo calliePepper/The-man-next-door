@@ -11,6 +11,7 @@
     <body>
         <canvas id="canvasFront" width="400px" height="400px"></canvas>
         <div id="overlay" class="md-overlay md-show">
+            <div id="clickToClose"></div>
             <div id="overlayData" >
                <div class="welcome md-content">
                     <h3>Welcome to twaddle!</h3>
@@ -38,48 +39,48 @@
                 </div>
             </div>
         </div><!-- the overlay element -->
+        <div class="sideBar" id="sideBar">
+            <a id="newsFeedLink" class="feed sideLink current">
+                <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-rss fa-stack-1x fa-inverse"></i></span>
+                <i id="feedIcon" class="desktop fa fa-rss"></i>News Feed<span class="totalNew"></span>
+            </a>
+            <a id="messagesLink" class="feed sideLink">
+                <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i></span>
+                <i id="feedIcon" class="desktop fa fa-envelope-o"></i>Messaging<span class="totalNew"></span>
+            </a>
+            <div class="sideHeader">Friends</div>
+            <div id="friendContainer">
+                
+            </div>
+            <div class="sideHeader">Admin</div>
+            <a id="debugLink" class="feed sideLink">
+                <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-bug fa-stack-1x fa-inverse"></i></span>
+                <i id="feedIcon" class="desktop fa fa-bug"></i>Report Break
+            </a>
+            <a id="restartLink" class="feed sideLink">
+                <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-fire fa-stack-1x fa-inverse"></i></span>
+                <i id="feedIcon" class="desktop fa fa-fire"></i>Restart Game
+            </a>
+            <a id="addCal" class="feed sideLink">
+                <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-child fa-stack-1x fa-inverse"></i></span>
+                <i id="feedIcon" class="desktop fa fa-child"></i>Friend Cal
+            </a>
+            <a id="crackLink" class="feed sideLink">
+                <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-heart fa-stack-1x fa-inverse"></i></span>
+                <i id="feedIcon" class="desktop fa fa-heart"></i>Toggle effects
+            </a>
+        </div>
         <div id="contentAim">
             <div class="mobileFix">
-        	<header>
-                <div class="wrapper">
-                    <div id="logo" class="logo glitchable">Twaddle</div>
-                    <div class="mobileNav">
-                        <i id="mobileNav" class="fa fa-bars fa-2x"></i>
-                    </div>
-                </div>
-            </header>
-                <div class="wrapper mainWrapper">
-                    <div class="sideBar" id="sideBar">
-                        <a id="newsFeedLink" class="feed sideLink current">
-                            <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-rss fa-stack-1x fa-inverse"></i></span>
-                            <i id="feedIcon" class="desktop fa fa-rss"></i>News Feed<span class="totalNew"></span>
-                        </a>
-                        <a id="messagesLink" class="feed sideLink">
-                            <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i></span>
-                            <i id="feedIcon" class="desktop fa fa-envelope-o"></i>Messaging<span class="totalNew"></span>
-                        </a>
-                        <div class="sideHeader">Friends</div>
-                        <div id="friendContainer">
-                            
+            	<header>
+                    <div class="wrapper">
+                        <div id="logo" class="logo glitchable">Twaddle</div>
+                        <div class="mobileNav">
+                            <i id="mobileNav" class="fa fa-bars fa-2x"></i>
                         </div>
-                        <div class="sideHeader">Admin</div>
-                        <a id="debugLink" class="feed sideLink">
-                            <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-bug fa-stack-1x fa-inverse"></i></span>
-                            <i id="feedIcon" class="desktop fa fa-bug"></i>Report Break
-                        </a>
-                        <a id="restartLink" class="feed sideLink">
-                            <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-fire fa-stack-1x fa-inverse"></i></span>
-                            <i id="feedIcon" class="desktop fa fa-fire"></i>Restart Game
-                        </a>
-                        <a id="addCal" class="feed sideLink">
-                            <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-child fa-stack-1x fa-inverse"></i></span>
-                            <i id="feedIcon" class="desktop fa fa-child"></i>Friend Cal
-                        </a>
-                        <a id="crackLink" class="feed sideLink">
-                            <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-heart fa-stack-1x fa-inverse"></i></span>
-                            <i id="feedIcon" class="desktop fa fa-heart"></i>Toggle effects
-                        </a>
                     </div>
+                </header>
+                <div class="wrapper mainWrapper">
                     <div id="feedContent" class="mainContent">
                     </div>
                     <div class="sponsored">

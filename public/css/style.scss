@@ -183,7 +183,7 @@ iframe{width:100%;}
 #messagesPage, #messagesPage .mobileFix, #messagesPage .wrapper, #messagesPage #contentAim{height:100%;}
 #messagesPage .wrapper{height:100%;top:-61px;padding-top:61px;}
 #messagesPage header .wrapper{height:auto;top:auto;padding:0;}
-#messagesPage .sideBar{padding-top:61px;}
+#messagesPage .sideBar{padding-top:10px;}
 #messagesPage .mainContent{padding-top:0px;height:100%;}
 .messageList{width:270px;height:100%;float:left;border-right:1px solid #dfe0e4;position:relative;}
 .messagesBox{min-height:200px;height:100%;max-height:1000px;@include cardDeets;border-top:0px;}
@@ -203,6 +203,8 @@ iframe{width:100%;}
 .messageUserList .messageContents{color:#222;}
 .messageTitle{color:$majorColour;background:#fff;font-size:1.2em;border-bottom:1px solid #000;padding:$paddingVal;margin-bottom:-45px;display:none;}
 .chooseUser{    position: absolute;right: 10px;bottom: 7px;font-size: 1.5em;color: #910101;}
+.messageLoad{height:100%;width:100%;background:rgba(255,255,255,0.7);display:none;position:absolute;z-index:3;}
+.messageLoad img{width:100px;height:100px;position:absolute;top:0;left:0;right:0;bottom:0;margin:auto;}
 
 .messageUserList.current{background:$majorColour;border-bottom: 1px solid $majorColour;}
 .messageUserList.current .sentOn{color:#fff;}
@@ -212,7 +214,8 @@ iframe{width:100%;}
 .unread .messageName:after{opacity:1;}
 @keyframes pulse { 50% { background-color: $majorColour }}
 .pulse {  animation: pulse .5s ease-out 3;}
-.typing{color:#999;padding-left:50px;padding-bottom:20px;}
+.typing{color:#999;padding-left:50px;padding-bottom:20px;margin-top:-12px;}
+.isTyping{position:relative;top:8px;margin-right:6px;}
 audio{margin:15px 10px 0;}
 .archived{width:100%;text-align:center;padding:10px;margin-bottom:10px;}
 
@@ -508,7 +511,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#C20002', end
 	.mobileNav{display:block;}
 	body{max-width:100%;overflow-x:hidden;background:#312828}
 	.mobileFix{overflow-x:hidden;}
-	.sideBar{position:fixed;opacity:0.8;transition:all 300ms ease-in;will-change:transform;width: 70%;padding: 10px; top: 0px;background: #fff; min-height: 100%; overflow: hidden;z-index: 2;border-left: 1px solid #dfe0e4;padding-top: 58px;transform: translateX(150%);margin-left:0;left:auto;}
+	.sideBar{position:fixed;opacity:0.8;transition:all 300ms ease-in;will-change:transform;width: 70%;padding: 10px; top: 0px;background: #fff; min-height: 100%; overflow: hidden;z-index: 2;border-left: 1px solid #dfe0e4;padding-top: 58px;transform: translateX(150%);margin-left:0;left:auto;padding-top:61px !important;}
 	#feedContent{transition:all 300ms ease-in;will-change:transform;transform: none;}
 	.sideBar.navFlip{transform: translateX(45%);opacity:1;}
 	.sideLink{padding:10px 0;font-size:1em;min-height:55px;display:block;cursor:pointer;}
@@ -531,7 +534,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#C20002', end
 	.logoText{font-size:3em;}
 	#messagesPage .mainWrapper{top:0px;padding:58px 0 0;}
 	#messagesPage .mobileFix{overflow-y:hidden;}
-	#messagesPage .sideBar{top:0;}
 	.feedControl{border:3px solid #312828;}
 	
 	.messageList{will-change:transform;border:0px;width:100%;transition:0.4s;transform: none;}

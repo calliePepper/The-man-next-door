@@ -3374,7 +3374,7 @@ module.exports = {
         2:['Cal','Ransom','she',1423413,'img/calAvatar.jpg','calBg.jpg',0,70,1500,0,0],
         3:['Ambrose','Mitchell','he',1423413,'img/ambroseAvatar.jpg','amBg.jpg',0,120,2400,0,0],
         4:['Steve','Steve','he',1423412,'img/steveAvatar.jpg','stBg.jpg',0,140,3000,0,0],
-        5:['Marcel','Artur','he',1423412,'img/marcelAvatar.jpg','maBg.jpg',0,60,1,0,0]
+        5:['Marcel','Artur','he',1423412,'img/marcelAvatar.jpg','maBg.jpg',0,30,400,0,0]
     },
     pages: {
         'Twaddle - A social media for the everyman': 'Feed page',

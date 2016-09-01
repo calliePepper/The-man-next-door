@@ -503,7 +503,7 @@ users.load = function() {
 
 users.makeFriends = function(friend) {
     var userTarget = localStorage.getObject('gameData')['users'][friend];
-    var friendData = '<div class="md-content"><h3>Friend request</h3><div><div class="friendAvatar"><img id="friendPortrait" src="'+userTarget['avatar']+'" alt="'+userTarget['firstname']+' avatar" /></div><p><span id="friendName" class="colouredText">'+userTarget['firstname']+' '+userTarget['lastname']+'</span> would like to be friends with you, click the button below to begin your journey of friendship!</p><div class="btnCont"><button id="acceptFriend" class="md-close btn">Add to friend list</button></div></div></div></div>';
+    var friendData = '<div class="md-content"><h3>New Friend</h3><div><div class="friendAvatar"><img id="friendPortrait" src="'+userTarget['avatar']+'" alt="'+userTarget['firstname']+' avatar" /></div><p><span id="friendName" class="colouredText">'+userTarget['firstname']+' '+userTarget['lastname']+'</span> has added you to their friend list, you will now see their posts on your feed!</p><div class="btnCont"><button id="acceptFriend" class="md-close btn">Thanks</button></div></div></div></div>';
     $('#overlayData').show().addClass('md-modal').addClass('md-friend-modal').addClass('md-effect-11').addClass('md-show').html(friendData);
     $('#overlay').show();
     $('#acceptFriend').on('click touch', function() {
@@ -586,7 +586,7 @@ messages.init = function() {
     //debugNotice(orderedUsers);
 }
 
-messages.load = function(id) {
+messages.load = function(id,callback) {
     $('#messagesCont').html('');
     var firstMessages = {};
     var thisUser = '';
@@ -640,6 +640,9 @@ messages.load = function(id) {
     }
     
     $('.messageTitle').html('&lt; '+thisUser);
+    if (callback != undefined) {
+        callback();
+    }
     var objDiv = document.getElementById("messagesCont");objDiv.scrollTop = objDiv.scrollHeight;
     setTimeout(function() {objDiv.scrollTop = objDiv.scrollHeight;unreadDebouncer();},100);
 }
@@ -649,28 +652,35 @@ messages.create = function(userId,time,content,image,from) {
 }
 
 messages.users = function(firstMessages) {
-     $('#messageList').html('');
-     var counter = 1;
+     $('#messageList').html('<div class="messageLoad"><img src="img/gears_large.gif" alt="gearLoading" /></div>');
+     var counter = 0;
      $.each(firstMessages, function(index,value) {
         var usersAvatar = localStorage.getObject('gameData')['users'][value['index']]['avatar'];
         var usersFirstname = localStorage.getObject('gameData')['users'][value['index']]['firstname'];
         var usersLastname = localStorage.getObject('gameData')['users'][value['index']]['lastname'];
         if(value['text'].length > 15) value['text'] = value['text'].substring(0,15) + '...';
         $('#messageList').append('<div class="messageUserList" id="messageLink_'+value['index']+'"><div class="chooseUser">&gt;</div><img class="messageAvatar" src="'+usersAvatar+'" alt="'+usersFirstname+'\'s Avatar" /><div class="sentOn">'+value['dateTime']+'</div><div class="messageName">'+usersFirstname+' '+usersLastname+'</div><div class="messageContents">'+value['text']+'</div></div>');
-        if (counter == 1) {
+        if (counter == 0) {
             $('#messageLink_'+value['index']).addClass('current');
-            counter++;
         }
+        counter++;
     });
+    $('.messageLoad').height(counter*65);
+    if (counter == 1) { $('.messageLoad').html('<img src="img/gears_small.gif" alt="gearLoading" style="height:30px;width:30px;" />');
+    } else if (counter == 2) { $('.messageLoad').html('<img src="img/gears_medium.gif" alt="gearLoading" style="height:60px;width:60px;" />'); }
     var mq = window.matchMedia('screen and (max-width:900px)');
         if(mq.matches) {
             $('.messageUserList').off();
             $('.messageUserList').on('click touch', function() {
                 var userId = $(this).attr('id').split('_')[1];
-                messages.load(userId);
-                $('.messageList').toggleClass('flipped');
-                $('.messages').toggleClass('flipped');
-                var objDiv = document.getElementById("messagesCont");objDiv.scrollTop = objDiv.scrollHeight;
+                $('.messageLoad').fadeIn( "fast", function() {
+                    messages.load(userId,function() {
+                        $('.messageLoad').hide();
+                        $('.messageList').toggleClass('flipped');
+                        $('.messages').toggleClass('flipped');
+                        var objDiv = document.getElementById("messagesCont");objDiv.scrollTop = objDiv.scrollHeight;
+                    });
+                 });
             });
             $('.messageTitle').off();
             $('.messageTitle').on('click touch', function() {
@@ -700,7 +710,7 @@ messages.new = [];
 messages.new.currentMsg = function(messageFrom,messageTo,cameIn,text,ttw,fullMessage,day) {
     choiceControls.remove();
     $('.typing').remove();
-    $('#messagesCont').append('<div id="typing" class="typing">'+localStorage.getObject('gameData').users[messageFrom].firstname+' is typing...</div>');
+    $('#messagesCont').append('<div id="typing" class="typing"><img src="img/isTyping.gif" class="isTyping" />'+localStorage.getObject('gameData').users[messageFrom].firstname+' is typing...</div>');
     var objDiv = document.getElementById("messagesCont");objDiv.scrollTop = objDiv.scrollHeight;
     var notificationNoise = new Audio("sounds/tapNote.mp3");
     var usersAvatar = localStorage.getObject('gameData')['users'][fullMessage['fromId']]['avatar'];
@@ -780,7 +790,7 @@ messages.new.noNotification = function(messageFrom,messageTo,cameIn,text,ttw,ful
 
 var effectTimers = {};
 
-messages.packed = function(messageArray,choices,noNote,nextOne,difference,day,noFighting) {
+messages.packed = function(messageArray,choices,noNote,nextOne,difference,day,noFighting, result) {
     var counter = 0;
     var userForMsg = 0;
     debugNotice(timestampify()+'Message pack',1);
@@ -864,18 +874,6 @@ messages.packed = function(messageArray,choices,noNote,nextOne,difference,day,no
                     messages.new.differentPage(messageArray[counter].fromId,messageArray[counter].toId,messageArray[counter].date,messageArray[counter].text,typingTime,messageArray[counter],day);
                     //gameUpdate('markUnread', 'settings');
                 }
-                if (messageArray[counter] == undefined) {
-                    if (messageArray.result != undefined) {
-                        switch(messageArray.result) {
-                            case "friend":
-                                users.makeFriends(messageArray[counter].fromId)
-                                break;
-                            default:
-                                debugNotice("Something went really fucking wrong",1);
-                                break;
-                        }
-                    }
-                }
             }
             var choiceTime = messageArray[counter].date;
             counter++;
@@ -897,31 +895,48 @@ messages.packed = function(messageArray,choices,noNote,nextOne,difference,day,no
             }
             lastMessage = thisMessage;
         }
+        
         if (messageArray[counter] != undefined) {
            setTimeout(function() {
                 loopMessages();
            },timer);
-        } else if (choices != undefined && choices != '') {
-            debugNotice(timestampify()+'Yay a choice found',1);
-            debugNotice(choices,1);
-            gameUpdate('removeMessages','settings',lastMessage);
-            var newChoice = new choice(choices.choiceId,choices.choice1,choices.choice2,choices.choice3)
-            //new choice(3,'Deal with the problem yourself','Ignore it, it will go away','Skin the cat. It\'s the only solution. Skin. The. Cat')
-            var newMessage = new message(0,userForMsg,'CHOICE',newChoice,'CHOICE','',1,0,0);
-            gameUpdate('updateLocal','data',newMessage,'messages',[userForMsg,day,choiceTime])
-            setTimeout(function() {
-                if (currentlyViewing == userForMsg) {
-                    var autoTarget = 'message';
-                    choiceControls.create(choices.choiceId,'messagesCont','message','',choices.choice1,choices.choice2,choices.choice3,autoTarget);
-                }  
-            },timer);
-        } else if (nextOne != 0) {
-            gameUpdate('removeMessages','settings',lastMessage);
-            if (noFighting != 1) {
-                setTimeout(function() {askForAnother(nextOne,noNote);},timer);
-            }
         } else {
-            gameUpdate('removeMessages','settings',lastMessage);
+            if (result != '') {
+                debugNotice("Result received");
+                switch(result) {
+                    case "friend":
+                        users.makeFriends(messageArray[counter-1].fromId)
+                        debugNotice("Friend time!");
+                        break;
+                    default:
+                        debugNotice("Something went really fucking wrong",1);
+                        break;
+                }
+            } else {
+                debugNotice('No end of message stuff');
+            }
+            if (choices != undefined && choices != '') {
+                debugNotice(timestampify()+'Yay a choice found',1);
+                debugNotice(choices,1);
+                gameUpdate('removeMessages','settings',lastMessage);
+                var newChoice = new choice(choices.choiceId,choices.choice1,choices.choice2,choices.choice3)
+                //new choice(3,'Deal with the problem yourself','Ignore it, it will go away','Skin the cat. It\'s the only solution. Skin. The. Cat')
+                var newMessage = new message(0,userForMsg,'CHOICE',newChoice,'CHOICE','',1,0,0);
+                gameUpdate('updateLocal','data',newMessage,'messages',[userForMsg,day,choiceTime])
+                setTimeout(function() {
+                    if (currentlyViewing == userForMsg) {
+                        var autoTarget = 'message';
+                        choiceControls.create(choices.choiceId,'messagesCont','message','',choices.choice1,choices.choice2,choices.choice3,autoTarget);
+                    }  
+                },timer);
+            } else if (nextOne != 0) {
+                gameUpdate('removeMessages','settings',lastMessage);
+                if (noFighting != 1) {
+                    setTimeout(function() {askForAnother(nextOne,noNote);},timer);
+                }
+            } else {
+                gameUpdate('removeMessages','settings',lastMessage);
+            }
         }
     }
     loopMessages()
@@ -1333,7 +1348,7 @@ navigationControls.change = function(page) {
         $('body').attr('id','');
         if (page == 'messages') {
             currentPage = 'messages';
-            $('#feedContent').html('<div class="messagesBox" id="messagesBox"><div class="messageList" id="messageList"></div><div class="messages" id="messages"><div class="mobile messageTitle"></div><div class="messagesCont" id="messagesCont"></div></div></div>');
+            $('#feedContent').html('<div class="messagesBox" id="messagesBox"><div class="messageList" id="messageList"><div class="messageLoad"><img src="img/gears_large.gif" alt="gearLoading" /></div></div><div class="messages" id="messages"><div class="mobile messageTitle"></div><div class="messagesCont" id="messagesCont"></div></div></div>');
             $('body').attr('id','messagesPage');
             //gameUpdate('updateNotifications','settings','messages',1);
             messages.init();

@@ -156,7 +156,12 @@ function processMessage(receivedMessages,nonote,day) {
                 gameUpdate('updateTimer','data',receivedMessages.messageItem.messages[0].toId,receivedMessages.messageItem.ttl,receivedMessages.messageItem.ttlTarget,receivedMessages.messageItem.ttlId);
             }
         }
-        messages.packed(messageGroup,receivedMessages.choices,nonote,nextMsg,difference,day,noFighting);
+        debugNotice(receivedMessages);
+        var result = '';
+        if (receivedMessages.messageItem.result != undefined) {
+            result = receivedMessages.messageItem.result;
+        }
+        messages.packed(messageGroup,receivedMessages.choices,nonote,nextMsg,difference,day,noFighting,result);
         gameUpdate('updateMessages','settings',receivedMessages.messageItem.messageId);
     }
     if (updating == 1) {

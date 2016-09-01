@@ -708,7 +708,7 @@ iframe {
   padding: 0; }
 
 #messagesPage .sideBar {
-  padding-top: 61px; }
+  padding-top: 10px; }
 
 #messagesPage .mainContent {
   padding-top: 0px;
@@ -817,6 +817,24 @@ iframe {
   font-size: 1.5em;
   color: #910101; }
 
+.messageLoad {
+  height: 100%;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.7);
+  display: none;
+  position: absolute;
+  z-index: 3; }
+
+.messageLoad img {
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto; }
+
 .messageUserList.current {
   background: #910101;
   border-bottom: 1px solid #910101; }
@@ -856,7 +874,13 @@ iframe {
 .typing {
   color: #999;
   padding-left: 50px;
-  padding-bottom: 20px; }
+  padding-bottom: 20px;
+  margin-top: -12px; }
+
+.isTyping {
+  position: relative;
+  top: 8px;
+  margin-right: 6px; }
 
 audio {
   margin: 15px 10px 0; }
@@ -1702,7 +1726,8 @@ input[type="text"] {
     padding-top: 58px;
     transform: translateX(150%);
     margin-left: 0;
-    left: auto; }
+    left: auto;
+    padding-top: 61px !important; }
 
   #feedContent {
     transition: all 300ms ease-in;
@@ -1795,9 +1820,6 @@ input[type="text"] {
   #messagesPage .mobileFix {
     overflow-y: hidden; }
 
-  #messagesPage .sideBar {
-    top: 0; }
-
   .feedControl {
     border: 3px solid #312828; }
 
@@ -1886,47 +1908,47 @@ input[type="text"] {
 
 @keyframes noise-anim {
   0% {
-    clip: rect(9px, 9999px, 29px, 0); }
+    clip: rect(26px, 9999px, 21px, 0); }
   5% {
-    clip: rect(18px, 9999px, 27px, 0); }
+    clip: rect(26px, 9999px, 25px, 0); }
   10% {
-    clip: rect(9px, 9999px, 25px, 0); }
+    clip: rect(9px, 9999px, 9px, 0); }
   15.0% {
-    clip: rect(26px, 9999px, 18px, 0); }
+    clip: rect(28px, 9999px, 2px, 0); }
   20% {
-    clip: rect(5px, 9999px, 30px, 0); }
+    clip: rect(17px, 9999px, 30px, 0); }
   25% {
-    clip: rect(16px, 9999px, 14px, 0); }
+    clip: rect(26px, 9999px, 6px, 0); }
   30.0% {
-    clip: rect(1px, 9999px, 23px, 0); }
+    clip: rect(3px, 9999px, 12px, 0); }
   35% {
-    clip: rect(11px, 9999px, 17px, 0); }
+    clip: rect(8px, 9999px, 15px, 0); }
   40% {
-    clip: rect(7px, 9999px, 6px, 0); }
+    clip: rect(10px, 9999px, 26px, 0); }
   45% {
-    clip: rect(15px, 9999px, 22px, 0); }
+    clip: rect(24px, 9999px, 4px, 0); }
   50% {
-    clip: rect(24px, 9999px, 24px, 0); }
+    clip: rect(20px, 9999px, 25px, 0); }
   55.0% {
-    clip: rect(18px, 9999px, 21px, 0); }
+    clip: rect(23px, 9999px, 20px, 0); }
   60.0% {
-    clip: rect(16px, 9999px, 2px, 0); }
+    clip: rect(22px, 9999px, 27px, 0); }
   65% {
-    clip: rect(23px, 9999px, 23px, 0); }
+    clip: rect(20px, 9999px, 10px, 0); }
   70% {
-    clip: rect(20px, 9999px, 1px, 0); }
+    clip: rect(29px, 9999px, 1px, 0); }
   75% {
-    clip: rect(14px, 9999px, 12px, 0); }
+    clip: rect(9px, 9999px, 23px, 0); }
   80% {
-    clip: rect(14px, 9999px, 4px, 0); }
+    clip: rect(18px, 9999px, 4px, 0); }
   85.0% {
-    clip: rect(11px, 9999px, 25px, 0); }
+    clip: rect(29px, 9999px, 22px, 0); }
   90% {
-    clip: rect(28px, 9999px, 15px, 0); }
+    clip: rect(10px, 9999px, 23px, 0); }
   95% {
-    clip: rect(13px, 9999px, 7px, 0); }
+    clip: rect(2px, 9999px, 23px, 0); }
   100% {
-    clip: rect(13px, 9999px, 16px, 0); } }
+    clip: rect(30px, 9999px, 26px, 0); } }
 .glitching:after {
   content: attr(data-text);
   position: absolute;
@@ -1941,47 +1963,47 @@ input[type="text"] {
 
 @keyframes noise-anim-2 {
   0% {
-    clip: rect(23px, 9999px, 18px, 0); }
+    clip: rect(4px, 9999px, 4px, 0); }
   5% {
-    clip: rect(6px, 9999px, 9px, 0); }
+    clip: rect(16px, 9999px, 12px, 0); }
   10% {
-    clip: rect(18px, 9999px, 19px, 0); }
+    clip: rect(11px, 9999px, 8px, 0); }
   15.0% {
-    clip: rect(5px, 9999px, 5px, 0); }
+    clip: rect(14px, 9999px, 26px, 0); }
   20% {
-    clip: rect(17px, 9999px, 13px, 0); }
+    clip: rect(13px, 9999px, 26px, 0); }
   25% {
-    clip: rect(18px, 9999px, 3px, 0); }
+    clip: rect(9px, 9999px, 1px, 0); }
   30.0% {
-    clip: rect(18px, 9999px, 28px, 0); }
+    clip: rect(25px, 9999px, 20px, 0); }
   35% {
-    clip: rect(15px, 9999px, 7px, 0); }
+    clip: rect(5px, 9999px, 9px, 0); }
   40% {
-    clip: rect(14px, 9999px, 23px, 0); }
+    clip: rect(21px, 9999px, 24px, 0); }
   45% {
-    clip: rect(8px, 9999px, 23px, 0); }
+    clip: rect(18px, 9999px, 16px, 0); }
   50% {
-    clip: rect(19px, 9999px, 13px, 0); }
+    clip: rect(2px, 9999px, 6px, 0); }
   55.0% {
-    clip: rect(17px, 9999px, 23px, 0); }
+    clip: rect(29px, 9999px, 26px, 0); }
   60.0% {
-    clip: rect(11px, 9999px, 5px, 0); }
+    clip: rect(8px, 9999px, 11px, 0); }
   65% {
-    clip: rect(26px, 9999px, 20px, 0); }
+    clip: rect(14px, 9999px, 7px, 0); }
   70% {
-    clip: rect(16px, 9999px, 17px, 0); }
+    clip: rect(18px, 9999px, 27px, 0); }
   75% {
-    clip: rect(1px, 9999px, 10px, 0); }
+    clip: rect(18px, 9999px, 17px, 0); }
   80% {
-    clip: rect(29px, 9999px, 5px, 0); }
+    clip: rect(21px, 9999px, 24px, 0); }
   85.0% {
-    clip: rect(15px, 9999px, 24px, 0); }
+    clip: rect(22px, 9999px, 17px, 0); }
   90% {
-    clip: rect(23px, 9999px, 5px, 0); }
+    clip: rect(14px, 9999px, 30px, 0); }
   95% {
-    clip: rect(8px, 9999px, 1px, 0); }
+    clip: rect(26px, 9999px, 21px, 0); }
   100% {
-    clip: rect(2px, 9999px, 2px, 0); } }
+    clip: rect(27px, 9999px, 27px, 0); } }
 .glitching:before {
   content: attr(data-text);
   position: absolute;

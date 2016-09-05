@@ -513,8 +513,10 @@ users.makeFriends = function(friend) {
         $('#overlayData').html('');
         $('#overlay').hide();
         //$('#overlay').hide();
-        gameUpdate('addFriend','data',2);
-        feed.create('feedContent',localStorage.getObject('gameData').posts,1,1);
+        gameUpdate('addFriend','data',friend);
+        if (currentPage == 'feed') {
+            feed.create('feedContent',localStorage.getObject('gameData').posts,1,1);
+        }
         users.load(); 
     });
 }
@@ -905,7 +907,9 @@ messages.packed = function(messageArray,choices,noNote,nextOne,difference,day,no
                 debugNotice("Result received");
                 switch(result) {
                     case "friend":
-                        users.makeFriends(messageArray[counter-1].fromId)
+                        setTimeout(function() {
+                            users.makeFriends(messageArray[counter-1].fromId);
+                        },1200);
                         debugNotice("Friend time!");
                         break;
                     default:
@@ -1357,6 +1361,7 @@ navigationControls.change = function(page) {
             $('#feedContent').fadeIn();
             $('#messagesCont').on('scroll', $.debounce(100,unreadDebouncer));
         } else if (page == 'feed') {
+            $('#feedContent').html(loading+loading+loading+loading);
             currentPage = 'feed';
              userPage = 0;
             $('.sponsored').html('<div class="trending"><div class="sideHeader">Trending</div><div id="trendingSection"></div><div class="games"><div class="sideHeader">New games</div><div class="gameBlock"><div class="gameImg"></div></div><div class="gameBlock"><div class="gameImg"></div></div></div></div>')       

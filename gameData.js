@@ -23,9 +23,20 @@ module.exports = {
 	    115:{postId:115,fromId:1,date:940,day:0,text:'Does anyone know if Marcel has gone out of town?',image:'',caption:'',video:'',likes:3,autoTarget:'',autoId:0},
 	    116:{postId:116,fromId:1,date:1140,day:0,text:'Marcel, last call if you want to travel to the party together.',image:'',caption:'',video:'',likes:3,autoTarget:'',autoId:0},
 	    117:{postId:117,fromId:1,date:1212,day:0,text:'Nothing like some old good friends and some dear drinks to take the edge off a mystery',image:'',caption:'',video:'',likes:3,autoTarget:'',autoId:0},
+	    
+	    200:{postId:200,fromId:2,date:48,day:0,text:'Ok I have reset the database one last time, hopefully this time we won\'t see the data corrupt again. I fixed an awful lot of bugs. Sorry all the old posts were lost',image:'',caption:'',video:'',likes:12,autoTarget:'comment',autoId:200},
 	    201:{postId:201,fromId:2,date:548,day:0,text:'I’ve already watched a few hours of David Attenborough, and as much as I love him, I need a change. Does anyone have any other enjoyable and stimulating suggestions?',image:'',caption:'',video:'',likes:2,autoTarget:'',autoId:0},
 	    202:{postId:202,fromId:2,date:658,day:0,text:'As much as I hate to admit it, I have completely saturated my mind with documentaries. Who is free for some real world conversation? Ambrose? Robin?',image:'',caption:'',video:'',likes:2,autoTarget:'',autoId:0},
+	    
 	    301:{postId:301,fromId:3,date:1072,day:0,text:'Robin. If you can read this, I hate to stomp all over what must be a seriously intense day of study, but could you please respond to my messages?',image:'',caption:'',video:'',likes:3,autoTarget:'',autoId:0},
+	    
+	    501:{postId:501,fromId:5,date:492,day:0,text:'Good morning beautiful people',image:'marcelSelfy5.jpg',caption:'',video:'',likes:5,autoTarget:'',autoId:0},
+	    502:{postId:502,fromId:5,date:534,day:0,text:'Ready to actual leave the house',image:'marcelSelfy1.jpg',caption:'',video:'',likes:4,autoTarget:'',autoId:0},
+	    503:{postId:503,fromId:5,date:701,day:0,text:'Shitty coffee selfies',image:'marcelSelfy3.jpg',caption:'',video:'',likes:13,autoTarget:'',autoId:0},
+	    504:{postId:504,fromId:5,date:709,day:0,text:'God I\'m vain',image:'marcelSelfy4.jpg',caption:'',video:'',likes:1,autoTarget:'',autoId:0},
+	    505:{postId:505,fromId:5,date:948,day:0,text:'I know you all just see the cool fashionable Marcel, but did you also know that I\'m and intellectual? #brainsfordays',image:'marcelSelfy2.jpg',caption:'',video:'',likes:2,autoTarget:'',autoId:0},
+	    506:{postId:506,fromId:5,date:1245,day:0,text:'So excited I\'m heading out to see Robin that I didn\'t even bother with filters #whatistheworldcomingto',image:'marcelSelfy6.jpg',caption:'',video:'',likes:9,autoTarget:'',autoId:0},
+	    
 	    1101:{postId:1101,fromId:1,date:480,day:1,text:'You know that feeling, when your mouth feels like someone rolled out a carpet across it? Then, you realise that any movement results in copious pain?<br><br>Thanks for the welcome home party guys, I had a great time<br><br>Not so much thanks for the subsequent hangover',image:'',caption:'',video:'',likes:4,autoTarget:'',autoId:0},
 	    1102:{postId:1102,fromId:1,date:510,day:1,text:'Day 2 of Neighbour watch. I know you’re all anxious to hear what has been going on. Fixed myself up some breakfast, a coffee and some orange juice and staking out the scene. Stay tuned',image:'',caption:'',likes:'',autoTarget:'',autoId:0},
 	    1103:{postId:1103,fromId:1,date:586,day:1,text:'So. I’m thinking of making myself a Investigation team. I already have my first recruit. Now accepting more recruits and name suggestions.',image:'',caption:'',video:'',likes:2,autoTarget:'',autoId:0},
@@ -107,6 +118,20 @@ module.exports = {
             autoTarget:'',
             autoId:'',
             feedId:'5'
+        },
+        200:{
+            comments:[
+                {order:1,user:4,date:52,text:'Did you fix that bug where it made me just comment the phrase PENIS PENIS PENIS',image:'',video:'',likes:2},
+                {order:1,user:2,date:57,text:'Umm.. didn\'t we just agree that that was just you?',image:'',video:'',likes:2},
+                {order:1,user:4,date:62,text:'PENIS PENIS PENIS',image:'',video:'',likes:2},
+                {order:1,user:4,date:65,text:'Oh no! The bug is still here',image:'',video:'',likes:2},
+                {order:1,user:2,date:70,text:'Sometimes I hate you so much Steve. I\'m going to get some sleep',image:'',video:'',likes:2},
+            ],
+            commentId:2,
+            day:-1,
+            autoTarget:'',
+            autoId:'',
+            feedId:'2'
         },
         10601:{
             comments:[
@@ -3000,8 +3025,7 @@ module.exports = {
                 {msgId:'1184_1',fromId:1,toId:1,timestamp:23,message:'Okay, I\'m going through the door. Still not happy about this.',image:'',video:'',from:1},
                 {type:'delay',time:'6000'},
                 {msgId:'1184_2',fromId:1,toId:1,timestamp:23,message:'Okay, I\'ve gone downstairs. It\'s pretty normal down here apart from the scattered papers. There are some books as well. I\'ll grab one of the books to take and take pictures later',image:'',video:'',from:1},
-                {msgId:'1184_3',fromId:1,toId:1,timestamp:23,message:'Okay, not so normal, there\'s a dug out tunnel in the corner. There\'s a faint light emanating from it',image:'',video:'',from:1},
-                {msgId:'1184_4',fromId:1,toId:1,timestamp:23,message:'I think I\'ve seen enough',image:'',video:'',from:1},
+                {msgId:'1184_3',fromId:1,toId:1,timestamp:23,message:'Shit.',image:'',video:'',from:1},
             ],
             day:1,
             messageId:1184,
@@ -3013,7 +3037,7 @@ module.exports = {
         },
         1185:{
             messages:[
-                {msgId:'1185_1',fromId:1,toId:1,timestamp:23,message:'No point, their all either blank or indecipherable',image:'',video:'',from:1},
+                {msgId:'1185_1',fromId:1,toId:1,timestamp:23,message:'No point, they\'re all either blank or indecipherable, but thanks for keeping me going',image:'',video:'',from:1},
             ],
             day:1,
             messageId:'1185',
@@ -3034,7 +3058,7 @@ module.exports = {
                 {msgId:'1186_5',fromId:1,toId:1,timestamp:23,message:'There\'s a larger piece of the same stuff in the middle, which looks kind of like a spiral. It doesn\'t look like it\'s been cut out of the rock, more like it grew',image:'',video:'',from:1},
                 {msgId:'1186_6',fromId:1,toId:1,timestamp:23,message:'Around the floor in front of me are pieces of paper, weighed down in some places, with symbols drawn across them to connect. There\'s some kind of light source, I think a candle, which is casting flickering orange light around the outskirts. Oh fuck.',image:'',video:'',from:1},
                 {type:'effect',effect:'static',value:1},
-                {msgId:'1186_7',fromId:1,toId:1,timestamp:23,message:'He\'s here. That strange hum just picked up a pitch he\'s in the middle of it',image:'',video:'',from:1},
+                {msgId:'1186_7',fromId:1,toId:1,timestamp:23,message:'That bastard is here. That strange hum just picked up a pitch. He\'s in the center of the room.',image:'',video:'',from:1},
             ],
             day:1,
             messageId:1186,
@@ -3046,7 +3070,7 @@ module.exports = {
         },
         1187:{
             messages:[
-                {msgId:'1187_1',fromId:1,toId:1,timestamp:23,message:'Yeah, I\'m pretty sure',image:'',video:'',from:1},
+                {msgId:'1187_1',fromId:1,toId:1,timestamp:23,message:'Yeah, I\'m pretty sure, I\'m pretty shaken up',image:'',video:'',from:1},
                 {msgId:'1187_2',fromId:1,toId:1,timestamp:23,message:'So, I have a problem. There\'s symbols glowing around the doors. I\'ve tried the front door and the back door but they aren\'t opening at all.',image:'',video:'',from:1},
                 {msgId:'1187_3',fromId:1,toId:1,timestamp:23,message:'I don\'t even want to try the window, there\'s a weird soft darkness outside. I think this might be HIS doing',image:'',video:'',from:1},
                 {msgId:'1187_4',fromId:1,toId:1,timestamp:23,message:'I\'m going to go down below',image:'',video:'',from:1},
@@ -3104,7 +3128,8 @@ module.exports = {
         },
         1191:{
             messages:[
-                {msgId:'1191_1',fromId:1,toId:1,timestamp:23,message:'I don\'t want to risk being seen, so I\'m staying completely still',image:'',video:'',from:1},
+                {msgId:'1191_1',fromId:1,toId:1,timestamp:23,message:'I don\'t want to risk being seen, so I\'m staying completely still. I think there might be danger here. Well, we have evidence of that. After what happened to M',image:'',video:'',from:1},
+                {msgId:'1191_2',fromId:1,toId:1,timestamp:23,message:'Never mind',image:'',video:'',from:1},
             ],
             day:1,
             messageId:1191,
@@ -3142,9 +3167,10 @@ module.exports = {
                 {type:'effect',effect:'lowStatic',value:0},
                 {msgId:'1193_6',fromId:1,toId:1,timestamp:23,message:'Sorry, I couldn\'t message I was more concerned with the act of running for my life.',image:'',video:'',from:1},
                 {msgId:'1193_7',fromId:1,toId:1,timestamp:23,message:'I\'m back at my house now. There was all these shapes with bat-like wings appearing from nowhere, and there were rips appearing in the air. I couldn\'t see what was in the rips, my memory of what was through there is a blank. But yeah, I thought winged things, the air ripping to pieces. Yeah, I just ran.',image:'',video:'',from:1},
-                {msgId:'1193_8',fromId:1,toId:1,timestamp:23,message:'Fuck, I\'m exhausted. Once I got outside the bounds of the house, all that stuff seemed to stop. I guess it\'s somehow caught within the house. Look, I\'m going to just sleep for like, a day.',image:'',video:'',from:1},
-                {msgId:'1193_9',fromId:1,toId:1,timestamp:23,message:'We\'ll talk about all of this tomorrow, k?',image:'',video:'',from:1},
-                {msgId:'1193_10',fromId:1,toId:1,timestamp:23,message:'&lt; ENDING 2, ROBIN SURVIVED, BUT COULD OF SEEN MORE. ROBIN SHOULD HAVE SEEN MORE &gt;',image:'',video:'',from:1},
+                {msgId:'1193_8',fromId:1,toId:1,timestamp:23,message:'Fuck, I\'m exhausted. Once I got outside the bounds of the house, all that stuff seemed to stop. I guess it\'s somehow caught within the house.',image:'',video:'',from:1},
+                {msgId:'1193_9',fromId:1,toId:1,timestamp:23,message:'Shit. I nearly forgot about Marcel. Those last moments completely took it from my mind. I\'m going to have to tell Cal and Ambrose about him, won\'t I? Can you promise not to talk to them about it before I do? I need to think about how to break the news. Oh, Marcel...',image:'',video:'',from:1},
+                {msgId:'1193_10',fromId:1,toId:1,timestamp:23,message:'Look, I\'m just going to sleep. We\'ll talk about all of this tomorrow, k?',image:'',video:'',from:1},
+                {msgId:'1193_11',fromId:1,toId:1,timestamp:23,message:'&lt; ENDING 2, ROBIN SURVIVED, BUT COULD OF SEEN MORE. ROBIN SHOULD HAVE SEEN MORE &gt;',image:'',video:'',from:1},
             ],
             day:1,
             messageId:1193,
@@ -3155,7 +3181,7 @@ module.exports = {
         1194:{
             messages:[
                 {type:'effect',effect:'lowStatic',value:5},
-                {msgId:'1194_1',fromId:1,toId:1,timestamp:23,message:'That was my plan',image:'',video:'',from:1},
+                {msgId:'1194_1',fromId:1,toId:1,timestamp:23,message:'I\'m staying where I am.',image:'',video:'',from:1},
                 {type:'effect',effect:'static',value:3},
                 {msgId:'1194_2',fromId:1,toId:1,timestamp:23,message:'Okay, something is forming in the middle. It looks.. like a woman? I\'m saying that very tentatively, because there\'s something off. Her body isn\'t right. The joints in her legs and arms seem to be facing the wrong way and the knobs in her back are a little too prominent.',image:'',video:'',from:1},
             ],
@@ -3178,13 +3204,14 @@ module.exports = {
                 {type:'effect',effect:'static',value:3},
                 {msgId:'1195_5',fromId:1,toId:1,timestamp:23,message:'She came here, for us. To show us the truth behind our reality',image:'',video:'',from:1},
                 {msgId:'1195_6',fromId:1,toId:1,timestamp:23,message:'How thin it can be',image:'',video:'',from:1},
+                {msgId:'1195_7',fromId:1,toId:1,timestamp:23,message:'She showed Marcel',image:'',video:'',from:1},
                 {type:'effect',effect:'static',value:3},
-                {msgId:'1195_7',fromId:1,toId:1,timestamp:23,message:'Do you want to see too?',image:'',video:'',from:1},
-                {msgId:'1195_8',fromId:1,toId:1,timestamp:23,message:'We can show you',image:'',video:'',from:1},
+                {msgId:'1195_8',fromId:1,toId:1,timestamp:23,message:'Do you want to see too?',image:'',video:'',from:1},
+                {msgId:'1195_9',fromId:1,toId:1,timestamp:23,message:'We can show you',image:'',video:'',from:1},
                 {type:'effect',effect:'lowStatic',value:0},
-                {msgId:'1195_9',fromId:1,toId:1,timestamp:23,message:'We\'ll be seeing you very soon.',image:'',video:'',from:1},
+                {msgId:'1195_10',fromId:1,toId:1,timestamp:23,message:'We\'ll be seeing you very soon.',image:'',video:'',from:1},
                 {type:'effect',effect:'static',value:3},
-                {msgId:'1195_10',fromId:1,toId:1,timestamp:23,message:'<ROBIN IS A SLAVE TO AN OTHERWORDLY CREATURE. GOOD WORK, IDIOT>',image:'',video:'',from:1},
+                {msgId:'1195_11',fromId:1,toId:1,timestamp:23,message:'&lt; ROBIN IS A SLAVE TO AN OTHERWORDLY CREATURE. GOOD WORK, IDIOT &gt;',image:'',video:'',from:1},
                 
             ],
             day:1,
@@ -3206,7 +3233,9 @@ module.exports = {
                 {type:'effect',effect:'lowStatic',value:0},
                 {msgId:'1196_5',fromId:1,toId:1,timestamp:23,message:'Okay, I\'m home now. Sorry about that, I thought running for my life took priority over messaging. Still, things got really bad towards the end there. I started running and there were ripping noises around me. They\'d nearly caught up to me just as I left the house, and then it just seemed to stop. Look, thank you for helping me out there.',image:'',video:'',from:1},
                 {msgId:'1196_6',fromId:1,toId:1,timestamp:23,message:'Well, I\'m going to sleep for a full 24 hours, I think we\'ll need to talk about this when I wake up. I don\'t think the human mind is equipped to see what I just saw',image:'',video:'',from:1},
-                {msgId:'1196_7',fromId:1,toId:1,timestamp:23,message:'Chat later',image:'',video:'',from:1},
+                {msgId:'1196_7',fromId:1,toId:1,timestamp:23,message:'Oh god, Marcel is dead, isn\'t he? I almost thankfully forgot in the middle of all that. Something, or someone, killed him. I hope Marcel didn\'t suffer. I\'m going to have to tell Ambrose and Cal, won\'t I? I\'m going to have to think about how  to do that. Promise me something. Please, don\'t tell them about this until I do.',image:'',video:'',from:1},
+                {msgId:'1196_8',fromId:1,toId:1,timestamp:23,message:'I need to sleep.',image:'',video:'',from:1},
+                {msgId:'1196_9',fromId:1,toId:1,timestamp:23,message:'&lt; ROBIN SURVIVED, AND LEARNT THINGS &gt;',image:'',video:'',from:1},
             ],
             day:1,
             messageId:1196,
@@ -3253,6 +3282,63 @@ module.exports = {
             messageId:1199,
             autoTarget:'message',
             autoId:'1184',
+            /*ttl:'50',
+            ttlTarget:'message',
+            ttlId:'1154'*/
+        },
+        1200:{
+            messages:[
+                {msgId:'1200_1',fromId:1,toId:1,timestamp:23,message:'There\'s a bunch of clothes wadded up in the corner',image:'',video:'',from:1},
+                {msgId:'1200_2',fromId:1,toId:1,timestamp:23,message:'I kinda smelled it when I come down here, like dirty iron. Is that right? Sorry, I\'m freaking out',image:'',video:'',from:1},
+                {msgId:'1200_3',fromId:1,toId:1,timestamp:23,message:'There\'s blood all around the clothes, spreading out across a large part of the floor',image:'',video:'',from:1},
+                {msgId:'1200_4',fromId:1,toId:1,timestamp:23,message:'The thing is. The last time I saw Marcel, those were the clothes he was wearing',image:'',video:'',from:1},
+                {msgId:'1200_5',fromId:1,toId:1,timestamp:23,message:'I think ',image:'',video:'',from:1},
+                {msgId:'1200_6',fromId:1,toId:1,timestamp:23,message:'I think Marcel is dead',image:'',video:'',from:1}
+            ],
+            day:1,
+            messageId:1200,
+            autoTarget:'choice',
+            autoId:'1200',
+            /*ttl:'50',
+            ttlTarget:'message',
+            ttlId:'1154'*/
+        },
+        1201:{
+            messages:[
+                {msgId:'1201_1',fromId:1,toId:1,timestamp:23,message:'No, I can\'t leave now',image:'',video:'',from:1},
+            ],
+            day:1,
+            messageId:1201,
+            autoTarget:'message',
+            autoId:'1202',
+            /*ttl:'50',
+            ttlTarget:'message',
+            ttlId:'1154'*/
+        },
+        1202:{
+            messages:[
+                {msgId:'1202_1',fromId:1,toId:1,timestamp:23,message:'It\'s okay, I\'m okay. I might not be later, but for now, I need to find out who did this to Marcel',image:'',video:'',from:1},
+                {msgId:'1202_2',fromId:1,toId:1,timestamp:23,message:'I have to keep going.',image:'',video:'',from:1},
+            ],
+            day:1,
+            messageId:1202,
+            autoTarget:'choice',
+            autoId:'1202',
+            /*ttl:'50',
+            ttlTarget:'message',
+            ttlId:'1154'*/
+        },
+        1203:{
+            messages:[
+                {msgId:'1203_1',fromId:1,toId:1,timestamp:23,message:'Thanks, I need someone to be in on this right now',image:'',video:'',from:1},
+                {msgId:'1203_2',fromId:1,toId:1,timestamp:23,message:'I guess I\'ll just keep describing the room before I continue on',image:'',video:'',from:1},
+                {msgId:'1203_3',fromId:1,toId:1,timestamp:23,message:'The only way forward seems to be a passage through the wall. There\'s a light emanating from it',image:'',video:'',from:1},
+                {msgId:'1203_4',fromId:1,toId:1,timestamp:23,message:'Maybe I should go back.',image:'',video:'',from:1},
+            ],
+            day:1,
+            messageId:1203,
+            autoTarget:'choice',
+            autoId:'1203',
             /*ttl:'50',
             ttlTarget:'message',
             ttlId:'1154'*/
@@ -3355,15 +3441,16 @@ module.exports = {
         1175: {choiceId:1175,choice1:'Wait, check the fridge',choice2:'Are fridges supposed to hum?',choice3:'Check out the rest of the room first',resultType:'message',result1:1176,result2:1178,result3:1177,ttl:''},
         1178: {choiceId:1178,choice1:'I think you should check it out',choice2:'This doesn\'t sound safe, maybe you should go',choice3:'Well, you\'ve come this far',resultType:'message',result1:1180,result2:1179,result3:1180,ttl:''},
         1180: {choiceId:1180,choice1:'Go through the door',choice2:'This is your chance to find out the truth',choice3:'Maybe you should go',resultType:'message',result1:1184,result2:1184,result3:1181,ttl:''},
-        
         1181: {choiceId:1181,choice1:'Run around the right side of the house',choice2:'Run around the left side of the house',choice3:'Run back inside',resultType:'message',result1:1198,result2:1198,result3:1183,ttl:''},
-        
-        1184: {choiceId:1184,choice1:'Go through, you\'ll never get another chance like this',choice2:'Take some pictures of the papers',choice3:'Time to leave, if you\'re sure',resultType:'message',result1:1186,result2:1185,result3:1187,ttl:''},
+        1184: {choiceId:1184,choice1:'What is it?',choice2:'Did you find something?',choice3:'Are you okay',resultType:'message',result1:1200,result2:1200,result3:1200,ttl:''},
         1186: {choiceId:1186,choice1:'Get a bit closer',choice2:'Walk in there',choice3:'That\'s sounding bad',resultType:'message',result1:1190,result2:1189,result3:1188,ttl:''},
         1190: {choiceId:1190,choice1:'Just keep watching',choice2:'It might be time to think about leaving',choice3:'Take a picture',resultType:'message',result1:1194,result2:1192,result3:1191,ttl:''},
         1192: {choiceId:1192,choice1:'Okay, just keep watching',choice2:'Well, it\'s your choice',choice3:'I really think you should go',resultType:'message',result1:1194,result2:1194,result3:1193,ttl:''},
         1194: {choiceId:1194,choice1:'Okay Robin, I really think it\'s time to go now',choice2:'Maybe stay just a little bit longer',choice3:'You\'ve gotten all that you need, I think you should leave',resultType:'message',result1:1196,result2:1195,result3:1196,ttl:''},
         1198: {choiceId:1198,choice1:'Keep running',choice2:'Get through that window!',resultType:'message',result1:1182,result2:1199,ttl:''},
+        1200: {choiceId:1200,choice1:'Holy shit',choice2:'Are you okay?',choice3:'You should go',resultType:'message',result1:1202,result2:1202,result3:1201,ttl:''},
+        1202: {choiceId:1202,choice1:'If you\'re sure',choice2:'I guess I\'ll stick around for the rest of this',choice3:'I\'m here for you',resultType:'message',result1:1203,result2:1203,result3:1203,ttl:''},
+        1203: {choiceId:1203,choice1:'Go through, you\'ll never get another chance to find out what happened to Marcel',choice2:'Take some pictures of the papers, you might find evidence',choice3:'Time to leave, if you\'re sure',resultType:'message',result1:1186,result2:1185,result3:1187,ttl:''},
     },
     directionObject: {
         1: {directionId:1,attribute:'storyEvent1',operator:'=',value:'1',trueTarget:'message',trueId:'3',falseTarget:'message',falseId:'4'},
@@ -3383,11 +3470,18 @@ module.exports = {
     },
     events: {
         0: {
+            48:{object:'feedObjects',id:'200'},
+            492:{object:'feedObjects',id:'501'},
+            534:{object:'feedObjects',id:'502'},
             600:{object:'feedObjects',id:'1'},
             680:{object:'feedObjects',id:'2'},
+            701:{object:'feedObjects',id:'503'},
+            709:{object:'feedObjects',id:'504'},
             800:{object:'feedObjects',id:'3'},
             820:{object:'feedObjects',id:'4'},
+            948:{object:'feedObjects',id:'505'},
             1200:{object:'feedObjects',id:'5'},
+            1245:{object:'feedObjects',id:'506'},
         },
         1: {
             3:{object:'feedObjects',id:'104'},

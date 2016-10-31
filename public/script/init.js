@@ -22,7 +22,7 @@ var rebootIfError = setTimeout(function() {
 },20000);
 
 
-/*    FIX OLD DATA FORMAT   */
+/*    FIX OLD DATA FORMAT YAY  */
 
 if (localStorage.getObject('gameData').posts != undefined && localStorage.getObject('gameData').posts[0].date != undefined) {
     window.localStorage.clear();

@@ -31,10 +31,10 @@ module.exports = {
 	    301:{postId:301,fromId:3,date:1072,day:0,text:'Robin. If you can read this, I hate to stomp all over what must be a seriously intense day of study, but could you please respond to my messages?',image:'',caption:'',video:'',likes:3,autoTarget:'',autoId:0},
 	    
 	    501:{postId:501,fromId:5,date:492,day:0,text:'Good morning beautiful people',image:'marcelSelfy5.jpg',caption:'',video:'',likes:5,autoTarget:'',autoId:0},
-	    502:{postId:502,fromId:5,date:534,day:0,text:'Ready to actual leave the house',image:'marcelSelfy1.jpg',caption:'',video:'',likes:4,autoTarget:'',autoId:0},
+	    502:{postId:502,fromId:5,date:534,day:0,text:'Ready to actually leave the house',image:'marcelSelfy1.jpg',caption:'',video:'',likes:4,autoTarget:'',autoId:0},
 	    503:{postId:503,fromId:5,date:701,day:0,text:'Shitty coffee selfies',image:'marcelSelfy3.jpg',caption:'',video:'',likes:13,autoTarget:'',autoId:0},
 	    504:{postId:504,fromId:5,date:709,day:0,text:'God I\'m vain',image:'marcelSelfy4.jpg',caption:'',video:'',likes:1,autoTarget:'',autoId:0},
-	    505:{postId:505,fromId:5,date:948,day:0,text:'I know you all just see the cool fashionable Marcel, but did you also know that I\'m and intellectual? #brainsfordays',image:'marcelSelfy2.jpg',caption:'',video:'',likes:2,autoTarget:'',autoId:0},
+	    505:{postId:505,fromId:5,date:948,day:0,text:'I know you all just see the cool fashionable Marcel, but did you also know that I\'m an intellectual? #brainsfordays',image:'marcelSelfy2_2.jpg',caption:'',video:'',likes:2,autoTarget:'',autoId:0},
 	    506:{postId:506,fromId:5,date:1245,day:0,text:'So excited I\'m heading out to see Robin that I didn\'t even bother with filters #whatistheworldcomingto',image:'marcelSelfy6.jpg',caption:'',video:'',likes:9,autoTarget:'',autoId:0},
 	    
 	    1101:{postId:1101,fromId:1,date:480,day:1,text:'You know that feeling, when your mouth feels like someone rolled out a carpet across it? Then, you realise that any movement results in copious pain?<br><br>Thanks for the welcome home party guys, I had a great time<br><br>Not so much thanks for the subsequent hangover',image:'',caption:'',video:'',likes:4,autoTarget:'',autoId:0},

@@ -1287,6 +1287,10 @@ input[type="text"] {
 .md-close {
   color: #fff; }
 
+.md-effect-13 {
+  height: 710px;
+  width: 700px; }
+
 #overlay {
   background: rgba(0, 0, 0, 0.4);
   position: fixed;
@@ -1891,7 +1895,20 @@ input[type="text"] {
 @media screen and (max-width: 550px) {
   .md-modal {
     width: 100%;
-    height: 100%; } }
+    height: 100%; }
+
+  .md-content {
+    height: 100%; }
+
+  .md-content h3 {
+    width: 100%;
+    position: absolute;
+    z-index: 4; }
+
+  .md-content > div {
+    height: 100%;
+    padding-top: 70px;
+    overflow: auto; } }
 @media screen and (max-width: 500px) {
   .sideBar {
     width: 100%;
@@ -1908,47 +1925,47 @@ input[type="text"] {
 
 @keyframes noise-anim {
   0% {
-    clip: rect(26px, 9999px, 21px, 0); }
+    clip: rect(1px, 9999px, 28px, 0); }
   5% {
-    clip: rect(26px, 9999px, 25px, 0); }
+    clip: rect(7px, 9999px, 30px, 0); }
   10% {
-    clip: rect(9px, 9999px, 9px, 0); }
+    clip: rect(17px, 9999px, 24px, 0); }
   15.0% {
-    clip: rect(28px, 9999px, 2px, 0); }
+    clip: rect(27px, 9999px, 9px, 0); }
   20% {
-    clip: rect(17px, 9999px, 30px, 0); }
+    clip: rect(17px, 9999px, 13px, 0); }
   25% {
-    clip: rect(26px, 9999px, 6px, 0); }
+    clip: rect(3px, 9999px, 1px, 0); }
   30.0% {
-    clip: rect(3px, 9999px, 12px, 0); }
+    clip: rect(29px, 9999px, 25px, 0); }
   35% {
-    clip: rect(8px, 9999px, 15px, 0); }
+    clip: rect(9px, 9999px, 17px, 0); }
   40% {
-    clip: rect(10px, 9999px, 26px, 0); }
+    clip: rect(10px, 9999px, 22px, 0); }
   45% {
-    clip: rect(24px, 9999px, 4px, 0); }
+    clip: rect(25px, 9999px, 13px, 0); }
   50% {
-    clip: rect(20px, 9999px, 25px, 0); }
+    clip: rect(15px, 9999px, 17px, 0); }
   55.0% {
-    clip: rect(23px, 9999px, 20px, 0); }
+    clip: rect(3px, 9999px, 22px, 0); }
   60.0% {
-    clip: rect(22px, 9999px, 27px, 0); }
+    clip: rect(16px, 9999px, 5px, 0); }
   65% {
-    clip: rect(20px, 9999px, 10px, 0); }
+    clip: rect(3px, 9999px, 5px, 0); }
   70% {
-    clip: rect(29px, 9999px, 1px, 0); }
+    clip: rect(15px, 9999px, 25px, 0); }
   75% {
-    clip: rect(9px, 9999px, 23px, 0); }
+    clip: rect(16px, 9999px, 30px, 0); }
   80% {
-    clip: rect(18px, 9999px, 4px, 0); }
+    clip: rect(19px, 9999px, 24px, 0); }
   85.0% {
-    clip: rect(29px, 9999px, 22px, 0); }
+    clip: rect(6px, 9999px, 22px, 0); }
   90% {
-    clip: rect(10px, 9999px, 23px, 0); }
+    clip: rect(16px, 9999px, 22px, 0); }
   95% {
-    clip: rect(2px, 9999px, 23px, 0); }
+    clip: rect(26px, 9999px, 27px, 0); }
   100% {
-    clip: rect(30px, 9999px, 26px, 0); } }
+    clip: rect(5px, 9999px, 16px, 0); } }
 .glitching:after {
   content: attr(data-text);
   position: absolute;
@@ -1963,47 +1980,47 @@ input[type="text"] {
 
 @keyframes noise-anim-2 {
   0% {
-    clip: rect(4px, 9999px, 4px, 0); }
+    clip: rect(25px, 9999px, 7px, 0); }
   5% {
-    clip: rect(16px, 9999px, 12px, 0); }
+    clip: rect(18px, 9999px, 5px, 0); }
   10% {
-    clip: rect(11px, 9999px, 8px, 0); }
+    clip: rect(2px, 9999px, 20px, 0); }
   15.0% {
-    clip: rect(14px, 9999px, 26px, 0); }
+    clip: rect(1px, 9999px, 6px, 0); }
   20% {
-    clip: rect(13px, 9999px, 26px, 0); }
+    clip: rect(6px, 9999px, 4px, 0); }
   25% {
-    clip: rect(9px, 9999px, 1px, 0); }
+    clip: rect(30px, 9999px, 2px, 0); }
   30.0% {
-    clip: rect(25px, 9999px, 20px, 0); }
+    clip: rect(7px, 9999px, 25px, 0); }
   35% {
-    clip: rect(5px, 9999px, 9px, 0); }
+    clip: rect(17px, 9999px, 8px, 0); }
   40% {
-    clip: rect(21px, 9999px, 24px, 0); }
-  45% {
-    clip: rect(18px, 9999px, 16px, 0); }
-  50% {
-    clip: rect(2px, 9999px, 6px, 0); }
-  55.0% {
-    clip: rect(29px, 9999px, 26px, 0); }
-  60.0% {
-    clip: rect(8px, 9999px, 11px, 0); }
-  65% {
-    clip: rect(14px, 9999px, 7px, 0); }
-  70% {
-    clip: rect(18px, 9999px, 27px, 0); }
-  75% {
-    clip: rect(18px, 9999px, 17px, 0); }
-  80% {
-    clip: rect(21px, 9999px, 24px, 0); }
-  85.0% {
-    clip: rect(22px, 9999px, 17px, 0); }
-  90% {
-    clip: rect(14px, 9999px, 30px, 0); }
-  95% {
     clip: rect(26px, 9999px, 21px, 0); }
+  45% {
+    clip: rect(25px, 9999px, 17px, 0); }
+  50% {
+    clip: rect(15px, 9999px, 6px, 0); }
+  55.0% {
+    clip: rect(2px, 9999px, 5px, 0); }
+  60.0% {
+    clip: rect(26px, 9999px, 7px, 0); }
+  65% {
+    clip: rect(23px, 9999px, 3px, 0); }
+  70% {
+    clip: rect(29px, 9999px, 27px, 0); }
+  75% {
+    clip: rect(8px, 9999px, 27px, 0); }
+  80% {
+    clip: rect(27px, 9999px, 30px, 0); }
+  85.0% {
+    clip: rect(18px, 9999px, 11px, 0); }
+  90% {
+    clip: rect(17px, 9999px, 14px, 0); }
+  95% {
+    clip: rect(29px, 9999px, 4px, 0); }
   100% {
-    clip: rect(27px, 9999px, 27px, 0); } }
+    clip: rect(1px, 9999px, 22px, 0); } }
 .glitching:before {
   content: attr(data-text);
   position: absolute;

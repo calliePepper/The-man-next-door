@@ -1,48 +1,61 @@
+
 <!DOCTYPE html>
 <html> 
     <head> 
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
         <meta name="viewport" content="width=device-width, initial-scale=1">   
-        <title>The Man Next Door</title>
+        <title>Twaddle - A social media for the everyman</title>
+        <link rel="icon" href="img/favicon.ico" type="image/x-icon" />
         <link href="css/style.css" rel="stylesheet" type="text/css" />
         <link href="css/font-awesome.min.css" rel="stylesheet" />
     </head>
-    <body id="frontPage" class="frontPage">
-        <div class="infoBox">
-            <h1>The man next door</h1>
-            <p>The man next door is an interactive narrative, set on a fictional social media network. There are a couple of things you should know before you start:</p>
-            <ol>
-                <li>Please be aware this site uses some techniques which <strong class="colouredText">may trigger epileptic attacks</strong></li>
-                <li><strong class="colouredText">This narrative runs in real time</strong>. From the moment you hit start the story will unfold at its own pace, not yours</li>
-                <li>Occasionally, <strong class="colouredText">the page may play sounds</strong>. These sounds are not controllable, but muting the page will not cause you to miss out on any important information</li>
-            </ol>
-            <p>If you have understood all of this, please feel free to enter your name below, upload a thumbnail (optional) and then click the start button</p>
-            <div class="halfer">
-                <label for="name"><strong>Your name:</strong></label><br><input type="text" id="name" name="name" />
-            </div>
-            <div class="halfer">
-                <label for="file"><strong>Your thumbnail:</strong></label><br><span id="putThumbHere"></span><input type="file" name="file" id="file" />
-            </div>  
-            <div>
-                <label><strong>Debug options</strong></label><br>
-                    <div class="inputIndex">
-                        Start from day <br>
-                        <input type="radio" name="dayStart" checked='checked' value=0> Day 0
-                        <input type="radio" name="dayStart" value=1> Day 1
-                        <input type="radio" name="dayStart" value=2> Day 2
-                        <input type="radio" name="dayStart" value=3> Day 3
-                        <input type="radio" name="dayStart" value=4> Day 4
-                        <input type="radio" name="dayStart" value=5> Day 5
+    <body style="overflow:auto;">
+        <canvas id="canvasFront" width="400px" height="400px"></canvas>
+        <div id="overlay" class="md-overlay md-show">
+            <div id="clickToClose"></div>
+            <div id="overlayData" class="md-modal md-effect-13 md-show" style="display:block;">
+               <div class="welcome md-content">
+                    <h3>The man next door</h3>
+                    <div class="overlayContent">
+                        <div id="firstInfo">
+                            <p>The man next door is an interactive narrative, set on a fictional social media network. There are a couple of things you should know before you start:</p>
+                            <ol>
+                                <li>Please be aware this site uses some techniques which <strong class="colouredText">may trigger epileptic attacks</strong></li>
+                                <li><strong class="colouredText">This narrative runs in real time</strong>. From the moment you hit start the story will unfold at its own pace, not yours</li>
+                                <li>Occasionally, <strong class="colouredText">the page may play sounds</strong>. These sounds are not controllable, but muting the page will not cause you to miss out on any important information</li>
+                            </ol>
+                            <p>If you have understood all of this, please feel free to enter your name below, upload a thumbnail (optional) and then click the start button</p>
+                            <div class="halfer">
+                                <label for="name"><strong>Your name:</strong></label><br><input type="text" id="name" name="name" />
+                            </div>
+                            <div class="halfer">
+                                <label for="file"><strong>Your thumbnail:</strong></label><br><span id="putThumbHere"></span><input type="file" name="file" id="file" />
+                            </div>  
+                            <div>
+                                <label><strong>Debug options</strong></label><br>
+                                    <div class="inputIndex">
+                                        Start from day <br>
+                                        <input type="radio" name="dayStart" checked='checked' value=0> Day 0
+                                        <input type="radio" name="dayStart" value=1> Day 1
+                                        <input type="radio" name="dayStart" value=2> Day 2
+                                        <input type="radio" name="dayStart" value=3> Day 3
+                                        <input type="radio" name="dayStart" value=4> Day 4
+                                        <input type="radio" name="dayStart" value=5> Day 5
+                                    </div>
+                            </div>
+                            
+                            <div class="startBlock">
+                                <div id="loadBtn" class="btn loadBtn"><img src="img/loading.gif" class="loadingImage" /></div>
+                                <div id="startBtn" class="btn startBtn">Click here to start</div>   
+                            </div>
+                        </div>
                     </div>
+                </div>
             </div>
-            
-            <div class="startBlock">
-                <div id="loadBtn" class="btn loadBtn"><img src="img/loading.gif" class="loadingImage" /></div>
-                <div id="startBtn" class="btn startBtn">Click here to start</div>   
-                <div id="retryBtn" class="btn startBtn">Retry Load</div>   
+            <div id="underlayData" class="loadingSection">
+
             </div>
-    	    
-        </div>
+        </div><!-- the overlay element -->
         <script>
             Storage.prototype.setObject = function(key, value) {
                 this.setItem(key, JSON.stringify(value));
@@ -58,49 +71,19 @@
         <script type="text/javascript" src="script/data.js"></script>
         <script type="text/javascript" src="script/glitchText.js"></script>
         <script type="text/javascript" src="script/socket.io.js"></script>
-        <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+
         <script>
         
-            var socket = io('https://the-man-next-door-soldevifae.c9.io');
             var isLoad = 0;
-            
-            $('#retryBtn').show();
-            
-            var noLoad = setTimeout(function() {
-                 $('#startBtn').html('Load failed, using backup data');
-                 if (localStorage.getObject('dataCache') != undefined) {
-                    $('#startBtn').css('display','inline-block');
-                    $('.loadBtn').hide();
-                                
-                   var ua = navigator.userAgent.toLowerCase();
-                    var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
-                    var app = document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1;
-                    
-                    if(isAndroid) {
-                        
-                    } else {
-        
-                    }
-                }
-            },6000);
-            
-            function triggerLoad() {
-                socket.emit('dataMeUp');  
-            }
-            
-            $('#retryBtn').on('click touch', function() {
-               triggerLoad(); 
-            });
-            
-            socket.on('requestStatus', function(data) {
-                triggerLoad() 
-            });
-            
-            socket.on('systemUpdate', function(updateData) {
-                console.log(updateData.data);
+
+           $.ajax({
+              type: 'GET',
+              url: 'newData.json',
+              dataType: 'json',
+              success: function(data) {
+                console.log('Data retrieved!');
                 isLoad = 1;
-                clearTimeout(noLoad)
-                localStorage.setObject('dataCache',updateData.data);
+                localStorage.setObject('dataCache',data);
                 
                 $('.startBtn').css('display','inline-block');
                 $('#retryBtn').hide();
@@ -115,6 +98,13 @@
                 } else {
     
                 }
+              },
+              error: function(fuck1,fuck2,fuck3) {
+                alert('Error loading data');
+                console.log(fuck1);
+                console.log(fuck2);
+                console.log(fuck3);
+              }
             });
             
             $('h1').glitch({minint:1, maxint:3, maxglitch:15, hoffset:10, voffset:3, direction:'random'});
@@ -219,37 +209,6 @@
                     $('#name').addClass('badInput');
                 }
             });
-            
-            var background = $('#frontPage').css('background-image');
-            var backgroundi = background.substring(background.length, background.length - 11);
-            backgroundi = backgroundi.substring(0, backgroundi.length - 5) + '_i.jpg';
-            
-            $('<img/>')[0].src = 'img/'+backgroundi;
-            
-            function setFlicker() {
-                console.log('Setting flicker up')
-                setTimeout(
-                    function() {
-                        $('#frontPage').css('background-image','url(img/'+backgroundi+')');
-                        $('<img/>')[0].src = 'img/'+backgroundi;
-                        console.log('Flickering!');
-                        setTimeout(
-                            function() {
-                                $('#frontPage').css('background-image',background);        
-                                setFlicker();
-                            }
-                        ,200);
-                    },getRandomInt(6000,12000)
-                );    
-            }
-            
-            function getRandomInt(min, max) {
-                return Math.floor(Math.random() * (max - min + 1)) + min;
-            }  
-            
-            //setTimeout(setFlicker(),20000);
-            
-            //testSound();
         </script>
     </body>	
 </html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html> 
+    <head> 
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">   
+        
+        <title>Twaddle - A social media for the everyman</title>
+        
+        <link rel="icon" href="img/favicon.ico" type="image/x-icon" />
+        <link href="css/style.css" rel="stylesheet" type="text/css" />
+        <link href="css/font-awesome.min.css" rel="stylesheet" />
+        
+        <script type="text/javascript" src="../public/script/jquery.min.js"></script>
+        <script type="text/javascript" src="../public/script/ko.js"></script>
+        <script type="text/javascript" src="../public/script/debounce.js"></script>
+        <script type="text/javascript" src="../public/script/socket.io.js"></script>
+        <script type="text/javascript" src="../public/script/cordova.js"></script>
+
+    </head>
+    <body>
+        <canvas id="canvasFront" width="400px" height="400px"></canvas>
+        <div id="overlay" class="md-overlay md-show" data-bind="visible: overlayState() != ''">
+            <div id="clickToClose"></div>
+            <div id="overlayData" class="md-modal md-effect-11 md-show" data-bind="visible: overlayState() == 'twaddleintro'">
+               <div class="welcome md-content">
+                    <h3>Welcome to twaddle!</h3>
+                    <div class="overlayContent">
+                        <div id="firstInfo">
+                            <p>You have been sent an invite to Twaddle by Robin Creed. Don't worry, we have already added them to your friends list!</p>
+                            <div class="friendAvatar"><img id="friendPortrait" src="img/samAvatar.png" alt="Robin's avatar" /></div>
+                            <p>Do your best to make more friends, the more you have the better you are as a person!</p>
+                            <div class="btnCont">
+                                <button id="moreInfoBtn" class="btn">What is twadde?</button><button id="endWelcome" class="endWelcome btn">Thanks!</button>
+                            </div>
+                        </div>
+                        <div id="moreInfo">
+                            <p>Twaddle is a student project and just an experiment. I made this for close friends and family, although people around the neighbourhood have started using it.</p><p>I totally don't support any localisation so I guess this system is primarily for use in <span class="cityMarker">the local area</span>.</p><p>If you have any issues message me on the network.<br><br>-Cal</p>
+                            <div class="btnCont">
+                                <button id="endWelcome" class="endWelcome btn">Thanks!</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="underlayData" class="loadingSection" data-bind="visible: overlayState() == 'loading'">
+                 <div class="twaddleLoad">
+                    <div class="logoText glitchable">Twaddle</div>
+                </div>
+            </div>
+        </div><!-- the overlay element -->
+        <div class="sideBar" id="sideBar">
+            <a id="newsFeedLink" class="feed sideLink current">
+                <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-rss fa-stack-1x fa-inverse"></i></span>
+                <i id="feedIcon" class="desktop fa fa-rss"></i>News Feed<span class="totalNew"></span>
+            </a>
+            <a id="messagesLink" class="feed sideLink">
+                <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i></span>
+                <i id="feedIcon" class="desktop fa fa-envelope-o"></i>Messaging<span class="totalNew"></span>
+            </a>
+            <div class="sideHeader">Friends</div>
+            <div id="friendContainer">
+                
+            </div>
+            <div class="sideHeader">Admin</div>
+            <a id="debugLink" class="feed sideLink">
+                <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-bug fa-stack-1x fa-inverse"></i></span>
+                <i id="feedIcon" class="desktop fa fa-bug"></i>Report Break
+            </a>
+            <a id="restartLink" class="feed sideLink">
+                <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-fire fa-stack-1x fa-inverse"></i></span>
+                <i id="feedIcon" class="desktop fa fa-fire"></i>Restart Game
+            </a>
+            <a id="addCal" class="feed sideLink">
+                <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-child fa-stack-1x fa-inverse"></i></span>
+                <i id="feedIcon" class="desktop fa fa-child"></i>Friend Cal
+            </a>
+            <a id="crackLink" class="feed sideLink">
+                <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-heart fa-stack-1x fa-inverse"></i></span>
+                <i id="feedIcon" class="desktop fa fa-heart"></i>Toggle effects
+            </a>
+        </div>
+        <div id="contentAim">
+            <div class="mobileFix">
+            	<header>
+                    <div class="wrapper">
+                        <div id="logo" class="logo glitchable">Twaddle</div>
+                        <div class="mobileNav">
+                            <i id="mobileNav" class="fa fa-bars fa-2x"></i>
+                        </div>
+                    </div>
+                </header>
+                <div class="wrapper mainWrapper">
+                    
+                    <feed params=""></feed>
+
+                </div>
+            </div>
+        </div>
+        
+    <!-- DEFINE COMPONENTS --> 
+    
+    <!-- mnd.feed.js html component -->
+    <script type="text/html" id="feed">
+    
+        <div id="feedContent" class="mainContent" style="display: block;">
+            <div id="feed_1110" class="feedObject">
+                <div class="innerFeed">
+                    <div class="feedHeader">
+                        <div class="feedAvatar avatar_1"><img class="avatar" src="img/samAvatar.png" alt="Robin's Avatar"></div>
+                        <div class="postedBy userLink username_1">Robin Creed</div>
+                        <div class="date dateUpdate" data-date="1489485600">59 days ago</div>
+                    </div>
+                    <p>Does anyone have a black hoodie and black jeans?</p>
+                </div>
+                <div class="feedControls">
+                    <span class="feedControl likeControl usableControls" id="like_1110"><i class="fa fa-thumbs-up"></i>Like</span><span id="comment_1110" class="feedControl commentControl  "><i class="fa fa-comment"></i>Comment</span>
+                </div>
+                <div class="likedSection"><span class="colouredText">4</span> people like this</div>
+                <div class="comments" id="comments_1110">
+                    <div class="comment">
+                        <div class="commentAvatar avatar_3"><img class="avatar" src="img/ambroseAvatar.jpg" alt="Ambrose's Avatar"></div>
+                        <span class="commentBy username_3 userLink">Ambrose Mitchell</span>
+                        <span class="commentContent">You’re not looking to do some kind of recon on a certain next door neighbour, are you?</span>
+                        <div class="commentFooter dateUpdate" data-date="1489485900">59 days ago</div>
+                    </div>
+                    <div class="comment">
+                        <div class="commentAvatar avatar_1"><img class="avatar" src="img/samAvatar.png" alt="Robin's Avatar"></div>
+                        <span class="commentBy username_1 userLink">Robin Creed</span>
+                        <span class="commentContent">Not in the slightest. Just something for a cosplay.</span>
+                        <div class="commentFooter dateUpdate" data-date="1489486200">59 days ago</div>
+                    </div>
+                </div>
+            </div>
+            <div class="sponsored">
+                <div class="trending">
+                    <div class="sideHeader">Trending</div>
+                    <div id="trendingSection">
+                        <div class="trender">
+                            <span class="colouredText">Netherworld vacation:</span> Are you tired of your boring existance? Think you deserve a great vacation? We show you paths that the guides don't want you to know about
+                        </div>
+                        <div class="trender">
+                            <span class="colouredText">Get the body you have always wanted:</span> We know where you buried it. We can lend you a shovel.
+                        </div>
+                        <div class="trender">
+                            <span class="colouredText">Puppy love:</span> A puppy is a small regional zoo has made friends with a zebra, and they are the most unlikeliest of companions!</div>
+                    </div>
+                    <div class="games">
+                        <div class="sideHeader">New games</div>
+                        <div class="gameBlock">
+                            <div class="gameImg"></div>
+                        </div>
+                        <div class="gameBlock">
+                            <div class="gameImg"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="sponsored">
+            <div class="trending">
+                <div class="sideHeader">Trending</div>
+                <div id="trendingSection">
+                </div>
+                <div class="games">
+                    <div class="sideHeader">New games</div>
+                    <div class="gameBlock"><div class="gameImg"></div></div>
+                    <div class="gameBlock"><div class="gameImg"></div></div>
+                </div>
+            </div>
+        </div>
+        
+    </script>
+    
+        <script type="text/javascript" src="js/component/mnd.component.feed.js"></script>
+        <script type="text/javascript" src="js/mnd.utils.js"></script>
+        <!-- always call main last --> 
+        <script type="text/javascript" src="js/mnd.main.js"></script>
+
+        <!--
+        <script type="text/javascript" src="script/shared.js"></script>
+        <script type="text/javascript" charset="utf-8" src="pushNotifications.js"></script>
+        <script type="text/javascript" src="script/init.js"></script>
+        <script type="text/javascript" src="script/dataServery.js"></script>
+        <script type="text/javascript" src="script/glitch.js"></script>
+        <script type="text/javascript" src="script/glitchText.js"></script>
+        <script>
+            $.ajax({
+                type:"GET",
+                url:"http://ip-api.com/json",
+                dataType:"json",
+                crossDoman: true,
+                success:function(res) {
+                    console.log('LOCATION');
+                    console.log(res.city);
+                    $('.cityMarker').html(res.city);
+                },
+                error:function(res,text,error) {
+                    $('.cityMarker').html('your local area');
+                }
+            })
+            var pageId = getQueryVariable('page');
+            if (pageId == 'feed') {
+              navigationControls.change('feed');
+            } else if (pageId == 'messages') {
+                if (getQueryVariable('id') != undefined) {
+                    var messageId = getQueryVariable('id');
+                } else {
+                    var messageId = 0;
+                }
+                navigationControls.change('messages',messageId);
+            } else if (pageId == 'robin') {
+                navigationControls.change('robin');
+            } else if (pageId == 'cal') {
+                navigationControls.change('cal');
+            } else {
+                navigationControls.change('feed');
+            }
+        </script>
+        
+        -->
+        <div id="scratchCover" class="scratchCover">
+            <div class="outer-scratch ng-scope"><div class="inner-scratch"></div></div>
+            <div class="hard-scratch ng-scope"></div>
+            <div class="staticOverlay"></div>
+        </div>
+    </body>	
+</html>

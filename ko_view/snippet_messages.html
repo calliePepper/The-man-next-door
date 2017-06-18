@@ -1,0 +1,188 @@
+<body id="messagesPage">
+        <canvas id="canvasFront" width="400px" height="400px"></canvas>
+        <div id="overlay" class="md-overlay md-show" style="display: none;">
+            <div id="overlayData">
+               <div class="welcome md-content">
+                    <h3>Welcome to twaddle!</h3>
+                    <div class="overlayContent">
+                        <div id="firstInfo">
+                            <p>You have been sent an invite to Twaddle by Robin Creed. Don't worry, we have already added them to your friends list!</p>
+                            <div class="friendAvatar"><img id="friendPortrait" src="img/samAvatar.png" alt="Robin's avatar"></div>
+                            <p>Do your best to make more friends, the more you have the better you are as a person!</p>
+                            <div class="btnCont">
+                                <button id="moreInfoBtn" class="btn">What is twadde?</button><button id="endWelcome" class="endWelcome btn">Thanks!</button>
+                            </div>
+                        </div>
+                        <div id="moreInfo">
+                            <p>Twaddle is a student project and just an experiment. I made this for close friends and family, although people around the neighbourhood have started using it.</p><p>I totally don't support any localisation so I guess this system is primarily for use in <span class="cityMarker">Gold Coast</span>.</p><p>If you have any issues message me on the network.<br><br>-Cal</p>
+                            <div class="btnCont">
+                                <button id="endWelcome" class="endWelcome btn">Thanks!</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="underlayData" class="" style="display: none;"></div>
+        </div><!-- the overlay element -->
+        <div id="contentAim">
+            <div class="mobileFix">
+        	<header>
+                <div class="wrapper">
+                    <div id="logo" class="logo">Twaddle</div>
+                    <div class="mobileNav">
+                        <i id="mobileNav" class="fa fa-bars fa-2x"></i>
+                    </div>
+                </div>
+            </header>
+                <div class="wrapper mainWrapper">
+                    <div class="sideBar" id="sideBar">
+                        <a id="newsFeedLink" class="feed sideLink">
+                            <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-rss fa-stack-1x fa-inverse"></i></span>
+                            <i id="feedIcon" class="desktop fa fa-rss"></i>News Feed<span class="totalNew"></span>
+                        </a>
+                        <a id="messagesLink" class="feed sideLink">
+                            <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i></span>
+                            <i id="feedIcon" class="desktop fa fa-envelope-o"></i>Messaging<span class="totalNew">44</span>
+                        </a>
+                        <div class="sideHeader">Friends</div>
+                        <div id="friendContainer"><a id="Robin" class="friend sideLink"><img src="img/samAvatar.png" class="navAvatar mobile" alt="Navigation avatar"><i id="userIcon" class="desktop fa fa-user"></i>Robin Creed</a></div>
+                        <div class="sideHeader">Admin</div>
+                        <a id="debugLink" class="feed sideLink">
+                            <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-bug fa-stack-1x fa-inverse"></i></span>
+                            <i id="feedIcon" class="desktop fa fa-bug"></i>Report Break
+                        </a>
+                        <a id="restartLink" class="feed sideLink">
+                            <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-fire fa-stack-1x fa-inverse"></i></span>
+                            <i id="feedIcon" class="desktop fa fa-fire"></i>Restart Game
+                        </a>
+                        <a id="addCal" class="feed sideLink">
+                            <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-child fa-stack-1x fa-inverse"></i></span>
+                            <i id="feedIcon" class="desktop fa fa-child"></i>Friend Cal
+                        </a>
+                        <a id="crackLink" class="feed sideLink">
+                            <span class="fa-stack fa-lg mobile"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-heart fa-stack-1x fa-inverse"></i></span>
+                            <i id="feedIcon" class="desktop fa fa-heart"></i>Toggle effects
+                        </a>
+                    </div>
+                    <div id="feedContent" class="mainContent noSponsored" style="display: block;">
+                        <div class="messagesBox" id="messagesBox">
+                            <div class="messageList flipped" id="messageList">
+                                <div class="messageUserList current" id="messageLink_1">
+                                    <div class="chooseUser">&gt;</div>
+                                    <img class="messageAvatar" src="img/samAvatar.png" alt="Robin's Avatar">
+                                    <div class="sentOn">13/5/2017</div>
+                                    <div class="messageName">Robin Creed</div>
+                                    <div class="messageContents">Have a shitty l...</div>
+                                </div>
+                                <div class="messageUserList" id="messageLink_2">
+                                    <div class="chooseUser">&gt;</div>
+                                    <img class="messageAvatar" src="img/calAvatar.jpg" alt="Cal's Avatar">
+                                    <div class="sentOn">14/3/2017</div>
+                                    <div class="messageName">Cal Ransom</div>
+                                    <div class="messageContents">Seriously, I ne...</div>
+                                </div>
+                                <div class="messageUserList" id="messageLink_5">
+                                    <div class="chooseUser">&gt;</div>
+                                    <img class="messageAvatar" src="img/marcelAvatar.jpg" alt="Marcel's Avatar">
+                                    <div class="sentOn">14/3/2017</div>
+                                    <div class="messageName">Marcel Artur</div>
+                                    <div class="messageContents">Hey there, you ...</div>
+                                </div>
+                            </div>
+                            <div class="messages flipped" id="messages">
+                                <div class="mobile messageTitle">&lt; Robin Creed</div>
+                                <div class="messagesCont" id="messagesCont">
+                                    <div class="messagesStart">Conversation started</div>
+                                    <div class="messageCont" id="message-0_1">
+                                        <img class="messageAvatar" src="img/samAvatar.png" alt="Robin's Avatar">
+                                        <div class="sentOn" data-date="1489365680"><i class="fa fa-mobile"></i><span class="sentFrom">Sent from mobile</span>13/3/2017 10:41</div>
+                                        <div class="messageName">Robin Creed</div>
+                                        <div class="messageContents">Hey, are you there?</div>
+                                    </div>
+                                    <div class="messageCont" id="message-0">
+                                        <img class="messageAvatar" src="img/userAvatar.jpg" alt="Fae's Avatar">
+                                        <div class="sentOn" data-date="1489365689"><i class="fa fa-mobile"></i><span class="sentFrom">Sent from mobile</span>13/3/2017 10:41</div>
+                                        <div class="messageName">Fae </div>
+                                        <div class="messageContents">Hello?</div>
+                                    </div>
+                                    <div class="messageCont" id="message-1155_3">
+                                        <img class="messageAvatar" src="img/samAvatar.png" alt="Robin's Avatar">
+                                        <div class="sentOn" data-date="1489488182"><i class="fa fa-mobile"></i><span class="sentFrom">Sent from mobile</span>14/3/2017 20:43</div>
+                                        <div class="messageName">Robin Creed</div>
+                                        <div class="messageContents">I'm going to get some answers, but I need someone objective to talk me through it.</div>
+                                    </div>
+                                    <div id="choiceBlock_1155" data-remove="" data-choiceid="1155" data-targettype="message" class="choiceBlock">
+                                        <div id="choice1" class="choice btn">So you want me to be your guide?</div>
+                                        <div id="choice2" class="choice btn">Are you sure this is a good idea?</div>
+                                        <div id="choice3" class="choice btn">I'm in</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sponsored"></div>
+                </div>
+            </div>
+        </div>
+        <script>
+          window.onerror = function (message, file, line, col, error) {
+               console.log("Error occured: " + error.message);
+               return false;
+            };
+            window.addEventListener("error", function (e) {
+               console.log("Error occured: " + e.error.message);
+               return false;
+            })
+
+        </script>
+        <script type="text/javascript" src="script/jquery.min.js"></script>
+        <script type="text/javascript" src="script/debounce.js"></script>
+        <script type="text/javascript" src="script/socket.io.js"></script>
+        <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+        <script type="text/javascript" src="script/shared.js"></script>
+        <script type="text/javascript" src="script/data.js"></script>
+        <script type="text/javascript" charset="utf-8" src="pushNotifications.js"></script>
+        <script type="text/javascript" src="script/init.js"></script>
+        <script type="text/javascript" src="script/dataServery.js"></script>
+        <script type="text/javascript" src="script/glitch.js"></script>
+        <script type="text/javascript" src="script/glitchText.js"></script>
+        <script>
+            $.ajax({
+                type:"GET",
+                url:"http://ip-api.com/json",
+                dataType:"json",
+                crossDoman: true,
+                success:function(res) {
+                    console.log('LOCATION');
+                    console.log(res.city);
+                    $('.cityMarker').html(res.city);
+                },
+                error:function(res,text,error) {
+                    $('.cityMarker').html('your local area');
+                }
+            })
+            var pageId = getQueryVariable('page');
+            if (pageId == 'feed') {
+              navigationControls.change('feed');
+            } else if (pageId == 'messages') {
+                if (getQueryVariable('id') != undefined) {
+                    var messageId = getQueryVariable('id');
+                } else {
+                    var messageId = 0;
+                }
+                navigationControls.change('messages',messageId);
+            } else if (pageId == 'robin') {
+                navigationControls.change('robin');
+            } else if (pageId == 'cal') {
+                navigationControls.change('cal');
+            } else {
+                navigationControls.change('feed');
+            }
+        </script>
+        <div id="scratchCover" class="scratchCover">
+            <div class="outer-scratch ng-scope"><div class="inner-scratch"></div></div>
+            <div class="hard-scratch ng-scope"></div>
+            <div class="staticOverlay"></div>
+        </div>
+    	
+</body>
